@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Member;
+use App\Models\Intern;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         view()->composer('users.Member.layouts.app', function ($view) {
-            $view->with(['userData' => User::where('id', Auth::id())->first(), 'memberData' => Member::where('user_id', Auth::id())->first()]);
+            $view->with(['userData' => User::where('id', Auth::id())->first(), 'memberData' => Intern::where('user_id', Auth::id())->first()]);
         });
         view()->composer('Users.Member.layouts.app', function ($view) {
             $view->with(['userData' => User::where('id', Auth::id())->first(), 'memberData' => Member::where('user_id', Auth::id())->first()]);

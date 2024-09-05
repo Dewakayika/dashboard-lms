@@ -9,10 +9,11 @@ use App\Models\DonationFee;
 use App\Models\Driver;
 use App\Models\Feedback;
 use App\Models\Meal;
-use App\Models\Member;
+use App\Models\Intern;
 use App\Models\Order;
-use App\Models\Partner;
+use App\Models\Talent;
 use App\Models\Volunteer;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
@@ -23,36 +24,16 @@ class AdminController extends Controller
     //Admin Dashboard
     public function index()
     {
-        $feedback_data = Feedback::paginate(10);
+        
         $user_data = User::count();
-        $meal_data = Meal::count();
-        $volunteer_data = Volunteer::count();
-        $member_data = Member::count();
-        $partner_data = Partner::count();
-        $order_data = Order::count();
-        $driver_data = Driver::count();
-        $campaign_data = Campaign::count();
-        $price_data = DonationFee::sum('amount');
+        $intern_data = Intern::count();
+        $talent_data = Talent::count();
 
-        $suffix = ['', 'K', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y'];
-        $power = floor(log($price_data, 1000));
-        if ($price_data == 0) {
-            $price_data = $price_data;
-        } else {
-            $price_data = round($price_data / (1000 ** $power), 1, PHP_ROUND_HALF_EVEN) . $suffix[$power];
-        }
 
         return view('users.Admin.adminIndex')->with([
             'userData' => $user_data,
-            'mealData' => $meal_data,
-            'memberData' => $member_data,
-            'partnerData' => $partner_data,
-            'priceData' => $price_data,
-            'volunteerData' => $volunteer_data,
-            'driverData' => $driver_data,
-            'orderData' => $order_data,
-            'campaignData' => $campaign_data,
-            'feedbackData' => $feedback_data
+            'internData' => $intern_data,
+            'talentData' => $talent_data
         ]);;
     }
 
@@ -265,8 +246,8 @@ class AdminController extends Controller
     // Member Role
     public function listMember()
     {
-        $member_data = Member::paginate(10);
-        return view('users.Admin.listMember')->with(['memberData' => $member_data]);
+        $intern_data = Intern::paginate(10);
+        return view('users.Admin.listMember')->with(['internData' => $intern_data]);
     }
 
     // Admin Delete Member

@@ -22,7 +22,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div>hallo </div>
+<div>hallo</div>
 
 </script>
 
