@@ -7,14 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     @vite('resources/css/app.css')
-    @vite('resources/css/welcome.css')
-    @vite('resources/css/swiper-bundle.min.css')
+    <!-- @vite('resources/css/swiper-bundle.min.css') -->
     <title>
         @yield('title')
     </title>
 </head>
 
-<body class="font-mow">
+
+
+
+<!-- <body class="font-mow">
 <body class="h-screen overflow-hidden flex items-center justify-center">
     <body class="bg-blue-500">
 	<nav class="relative px-4 py-4 flex justify-between items-center bg-white">
@@ -78,12 +80,9 @@
 			</div>
 		</nav>
 	</div>
-</body>
+</body> -->
 
-
-
-
-    <!-- Content -->
+<body>
     <section class="">
         <div>
             @yield('content')
@@ -148,6 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-</script>
+</script> 
 </html>
 
