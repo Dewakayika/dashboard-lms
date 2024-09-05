@@ -10,9 +10,9 @@ module.exports = {
     ],
     theme: {
         extend: {
-            fontFamily:{
-                'mow':["'Poppins', sans-serif"],
-            },
+            // fontFamily:{
+            //     'mow':["'Poppins', sans-serif"],
+            // },
             colors: {
                 'mow-red':'#cc1020',
                 'mow-shine-yellow':'#fcc404',

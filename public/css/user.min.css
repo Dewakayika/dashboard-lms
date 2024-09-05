@@ -1,0 +1,581 @@
+
+
+button {
+	cursor: pointer;
+	border: none;
+}
+
+.testimonial-list {
+	display: flex;
+	overflow: hidden;
+}
+
+.testimonial {
+	flex: 1 0 100%;
+	text-align: center;
+	padding: 20px;
+	transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.testimonial .bi-quote {
+	font-size: 4rem;
+	color: var(--sunglow);
+	opacity: 0.75;
+}
+
+.testimonial blockquote {
+	font-size: 1.25rem;
+	margin-inline: 20px;
+}
+
+.user-info {
+	margin-top: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.user-info img {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+}
+
+.user-details {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.user-details .name {
+	font-size: 1.15rem;
+	font-weight: 500;
+	color: var(--dark-cyan);
+}
+
+.user-details .company {
+	color: var(--muted-color);
+}
+
+/* button navigation */
+
+.nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 42px;
+	height: 42px;
+	font-size: 1.5rem;
+	border-radius: 50%;
+	background-color: var(--light-color);
+	color: var(--paynes-gray);
+	transition: 0.3s;
+	opacity: 0;
+}
+
+.testimonial-slider:hover .nav {
+	opacity: 1;
+}
+
+.nav:hover {
+	background-color: var(--dark-cyan);
+	color: var(--light-color);
+}
+
+.nav.prev {
+	left: 10px;
+}
+
+.nav.next {
+	right: 10px;
+}
+
+/* dot navigation */
+
+.dots-container {
+	text-align: center;
+}
+
+.dot {
+	width: 10px;
+	height: 10px;
+	display: inline-block;
+	border-radius: 5px;
+	margin-inline: 5px;
+	background-color: var(--dot-color);
+	transition: width 0.5s;
+}
+
+.dot.active {
+	width: 30px;
+	background-color: var(--paynes-gray);
+}
+
+.swipper-banner-container,
+.editing-animation-col {
+	position: relative;
+	display: none;
+}
+
+/* Video services webtoon */
+.floating-video-mobile {
+	margin-top: 48px;
+}
+
+.youtube-container {
+	position: relative;
+	width: 100%;
+	padding-bottom: 56.25%;
+}
+
+.floating-video-mobile iframe,
+.floating-video-desktop iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+@media screen and (min-width: 1200px) {
+	.floating-video-mobile {
+		display: none;
+		
+	}
+
+	.swipper-banner-container,
+	.editing-animation-col {
+		display: unset;
+	}
+
+	.swipper-banner-container .floating-video-desktop {
+		position: absolute;
+		width: 80%;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 2;
+	}
+
+	.floating-video-desktop {
+		position: absolute;
+		width: 80%;
+		top: 50%;
+		right: 50%;
+		transform: translate(50%, -50%);
+		z-index: 2;
+	}
+}
+
+/* video editing */
+@media screen and (min-width: 1200px){
+	.video-tittle {
+		text-align: left;
+	}
+}
+
+@media (max-width: 1200px) {
+	.video-tittle {
+		text-align: center;
+		margin: auto;
+		width: 100%;
+		padding: 10px;
+	}
+}
+@media (max-width: 500px) {
+	.video-tittle {
+		text-align: center;
+	}
+}
+
+.img-arrow{
+	position: absolute;
+	top: 40%;
+	right: 95%;
+
+}
+.img-arrow-last{
+	position: absolute;
+	bottom: 90%;
+	rotate: 90%;
+	left: 40%;	
+}
+.img-arrow-left{
+	position: absolute;
+	top: 40%;
+	right: 95%;
+}
+
+
+/* Position the image container (needed to position the left and right arrows) */
+.container {
+	position: relative;
+  }
+  
+  /* Hide the images by default */
+  .mySlides {
+	display: none;
+  }
+  
+  /* Add a pointer when hovering over the thumbnail images */
+  .cursor {
+	cursor: pointer;
+  }
+  
+  /* Next & previous buttons */
+  .prev,
+  .next {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	padding: 16px;
+	margin-top: -22px;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+	transition: 0.6s ease;
+	border-radius: 0 3px 3px 0;
+	user-select: none;
+	-webkit-user-select: none;
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+	right: 0;
+	border-radius: 3px 0 0 3px;
+  }
+  
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover,
+  .next:hover {
+	background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Number text (1/3 etc) */
+  .numbertext {
+	color: #f2f2f2;
+	font-size: 12px;
+	padding: 8px 12px;
+	position: absolute;
+	top: 0;
+  }
+  
+  /* Container for image text */
+  .caption-container {
+	text-align: center;
+	background-color: #222;
+	padding: 2px 16px;
+	color: white;
+  }
+  
+  .row:after {
+	content: "";
+	display: table;
+	clear: both;
+  }
+  
+  /* Four columns side by side */
+  .column {
+	float: left;
+	width: 25%;
+	padding: 5px;
+  }
+  
+  /* Add a transparency effect for thumbnail images */
+  .demo {
+	opacity: 0.6;
+	width: 100%;
+  }
+  
+  .active,
+  .demo:hover {
+	opacity: 1;
+  }
+  
+  .mySlides iframe {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 600px;
+    border: 0;
+}
+  
+  /* Responsive layout - make the columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 1200px) {
+	.mySlides iframe {
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 400px;
+		border: 0;
+	}
+  }
+  
+
+  @media screen and (max-width: 600px) {
+	.column {
+	  width: 100%;
+	}
+	.mySlides iframe {
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 300px;
+		border: 0;
+	}
+  }
+  
+  @media screen and (max-width: 400px) {
+	.column {
+	  width: 100%;
+	}
+	.prev, .next {
+	  font-size: 14px;
+	  padding: 12px;
+	}
+	.mySlides iframe {
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 250px;
+		border: 0;
+	}
+  }
+
+  .why-padma{
+	text-align: right;
+  }
+
+  /* why padma responsive */
+
+  @media screen and (max-width: 400px) {
+	.why-padma {
+		text-align: left;
+		align-items: start;
+		
+	}
+	
+  }
+
+  /* responsive our process */
+  
+  @media screen and (max-width: 500px) {
+	.process-web{
+		display: none;
+	}
+	
+  }
+
+  @media screen and (min-width: 500px) {
+	.process-mob{
+		display: none;
+	}
+	
+  }
+
+  /* Modal */
+  /* Modal Background */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgba(0, 0, 0, 0.792); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+	background-color: #fefefe;
+	margin: 3% auto; /* 15% from the top and centered */
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%; /* Could be more or less, depending on screen size */
+	z-index: 1;
+  }
+  
+  /* Close Button */
+  .close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+  }
+
+  /* article modal */
+  .blog-post {
+    margin-bottom: 40px;
+}
+
+.blog-title {
+    margin-bottom: 10px;
+}
+
+.blog-meta {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+
+.blog-content p {
+	text-align: left;
+}
+  
+  .close:hover,
+  .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+  }
+
+  .title-webtoon{
+	position: absolute;
+	bottom: 5%;
+	text-align: left;
+	padding-left: 30px;
+  }
+
+  .layer-background{
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+	width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    z-index: 1;
+    pointer-events: none; 
+	opacity: 80%;
+  }
+
+  div.scroll-container {
+	overflow: auto;
+	white-space: nowrap;
+	padding: 10px;
+  }
+  
+  div.scroll-container img {
+	padding: 10px;
+  }
+  
+
+  .scroll-content {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+  @media screen and (max-width: 600px) {
+	.modal-content{
+		top: 2%;
+		width: 100%;
+	}
+	.div.scroll-container img {
+	  padding: 10px;
+	  height: 200px;
+	}
+  }
+  
+  @media screen and (max-width: 400px) {
+	.div.scroll-container img {
+		padding: 10px;
+		height: 100px;
+	  }
+  }
+
+  @media screen and (max-width: 700px) {
+	.call-action {
+		text-align: left;
+		align-items: start;
+		padding-left: 20px;
+		padding-right: 20px;
+	  }
+  }
+
+
+/* pop up modal */
+.modal-content {
+    background-color: #f0f0f0; /* Warna latar belakang */
+}
+
+.modal-title {
+    color: #333; /* Warna judul */
+}
+
+.modal-body {
+    color: #555; /* Warna teks isi */
+}
+
+.modal-footer {
+    justify-content: center; /* Pusatkan tombol tutup */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Warna tombol tutup */
+    color: #fff; /* Warna teks tombol tutup */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Warna latar belakang saat dihover */
+}
+
+
+/* porfolio editing */
+
+@media screen and (min-width: 900px) {
+	.portfolio-mobile {
+		display: none;
+		
+	  }
+	.portfolio-mobile iframe{
+		width: 90%;
+    	height: 250px;
+	}
+
+  }
+
+  @media screen and (max-width: 900px) {
+	.portfolio-desktop {
+		display: none;
+	  }
+
+  }
+
+  
+
+
+  /* Card Services */
+
+
+  /* Add the following CSS to your stylesheet */
+
+.card-container {
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-container:hover {
+    transform: scale(1.05);
+}
+
+
+.card-text-container {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.card-container:hover .card-text-container {
+    background-color: #555;
+}
+
+
+
+
+
+
+
