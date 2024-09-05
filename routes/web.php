@@ -7,7 +7,7 @@ use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EvaluationController;
-use App\Http\Controllers\MemberController;
+use App\Http\Controllers\InternController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DonorController;
 
@@ -48,12 +48,12 @@ Route::get('/donorPayment', [DonorController::class, 'donorPayment'])->name('don
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     if (Auth::check()) {
 
-        if (Auth::user()->role == 'partner') {
+        if (Auth::user()->role == 'tallent') {
             return redirect()->route('partner#index');
         } else if (Auth::user()->role == 'volunteer') {
             return redirect()->route('volunteer#index');
-        } else if (Auth::user()->role == 'member') {
-            return redirect()->route('member#index');
+        } else if (Auth::user()->role == 'intern') {
+            return redirect()->route('intern#index');
         } else if (Auth::user()->role == 'admin') {
             return redirect()->route('admin#index');
         } else if (Auth::user()->role == 'driver') {
@@ -174,20 +174,20 @@ Route::group(['middleware' => 'role:volunteer', 'prefix' => 'volunteer'], functi
 });
 
 // Member
-Route::group(['middleware' => 'role:member', 'prefix' => 'member'], function () {
-    Route::get('/', [MemberController::class, 'index'])->name('member#index'); //Member dashboard
-    Route::get('/mealList', [MemberController::class, 'memberFoodList'])->name('member#memberFoodList'); //Member dashboard
-    Route::get('/details/{id}', [MemberController::class, 'mealDetails'])->name('member#mealDetails'); //Member meal details
-    Route::get('/profile', [MemberController::class, 'profile'])->name('member#memberProfile'); //Profile Member
-    Route::get('/orderDetails/{id}', [MemberController::class, 'orderDetails'])->name('member#orderDetails'); //Member order details
-    Route::post('/orderSave/{id}', [OrderController::class, 'orderSave'])->name('member#orderSave'); //Member Order
-    Route::get('/orderList', [MemberController::class, 'orderList'])->name('member#orderList'); //Order List Member
-    Route::get('/ratingMeals/{id}', [EvaluationController::class, 'ratingMeals'])->name('member#ratingMeals'); // Show rating form
-    Route::post('/saveRating/{id}', [EvaluationController::class, 'saveRating'])->name('member#saveRating'); //Member save rating
-    Route::get('/editProfile', [MemberController::class, 'editProfile'])->name('member#editProfile'); //edit profile
-    Route::post('/updateMember', [MemberController::class, 'updateMember'])->name('member#updateMember'); //Update profile function
-    Route::get('/memberFeedback', [EvaluationController::class, 'memberFeedback'])->name('member#memberFeedback'); //Member Feedback
-    Route::get('/memberFoodList', [MemberController::class, 'memberFoodList'])->name('member#memberFoodList'); //Member Food List
+Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () {
+    Route::get('/', [InternController::class, 'index'])->name('intern#index'); //Member dashboard
+    // Route::get('/mealList', [MemberController::class, 'memberFoodList'])->name('member#memberFoodList'); //Member dashboard
+    // Route::get('/details/{id}', [MemberController::class, 'mealDetails'])->name('member#mealDetails'); //Member meal details
+    // Route::get('/profile', [MemberController::class, 'profile'])->name('member#memberProfile'); //Profile Member
+    // Route::get('/orderDetails/{id}', [MemberController::class, 'orderDetails'])->name('member#orderDetails'); //Member order details
+    // Route::post('/orderSave/{id}', [OrderController::class, 'orderSave'])->name('member#orderSave'); //Member Order
+    // Route::get('/orderList', [MemberController::class, 'orderList'])->name('member#orderList'); //Order List Member
+    // Route::get('/ratingMeals/{id}', [EvaluationController::class, 'ratingMeals'])->name('member#ratingMeals'); // Show rating form
+    // Route::post('/saveRating/{id}', [EvaluationController::class, 'saveRating'])->name('member#saveRating'); //Member save rating
+    // Route::get('/editProfile', [MemberController::class, 'editProfile'])->name('member#editProfile'); //edit profile
+    // Route::post('/updateMember', [MemberController::class, 'updateMember'])->name('member#updateMember'); //Update profile function
+    // Route::get('/memberFeedback', [EvaluationController::class, 'memberFeedback'])->name('member#memberFeedback'); //Member Feedback
+    // Route::get('/memberFoodList', [MemberController::class, 'memberFoodList'])->name('member#memberFoodList'); //Member Food List
 });
 
 // Driver
