@@ -10,14 +10,14 @@ module.exports = {
     ],
     theme: {
         extend: {
-            // fontFamily:{
-            //     'mow':["'Poppins', sans-serif"],
-            // },
-            colors: {
-                'mow-red':'#cc1020',
-                'mow-shine-yellow':'#fcc404',
-                'mow-dark-yellow':'#d3a407',
+            fontFamily: {
+                "-apple-system": ["'BlinkMacSystemFont', 'sans-serif'"],
             },
+            // colors: {
+            //     "--black-color": "#000",
+            //     "--white-color": "#fff",
+            //     "--red-color": "#d1001f",
+            // },
         },
     },
     plugins: [],

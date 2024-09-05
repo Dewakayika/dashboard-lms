@@ -1,0 +1,44 @@
+:root {
+    --black-color: #000;
+    --white-color: #fff;
+    --red-color: #d1001f;
+}
+
+nav {
+    color: var(--white-color);
+    background-color: var(--black-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0px 20px;
+}
+nav .right-nav {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+nav .auth,
+nav .menu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+nav .auth form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+nav .auth form .button {
+    text-decoration: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
