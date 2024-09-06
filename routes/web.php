@@ -176,6 +176,7 @@ Route::group(['middleware' => 'role:volunteer', 'prefix' => 'volunteer'], functi
 // Member
 Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () {
     Route::get('/', [InternController::class, 'index'])->name('intern#index'); //Member dashboard
+    Route::get('/course/introduction', [InternController::class, 'intro'])->name('course#introduction');
     // Route::get('/mealList', [MemberController::class, 'memberFoodList'])->name('member#memberFoodList'); //Member dashboard
     // Route::get('/details/{id}', [MemberController::class, 'mealDetails'])->name('member#mealDetails'); //Member meal details
     // Route::get('/profile', [MemberController::class, 'profile'])->name('member#memberProfile'); //Profile Member

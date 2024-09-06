@@ -398,7 +398,7 @@
                         INTRO
                     </p>
                     <a
-                        href="#"
+                        href="{{ route('course#introduction') }}"
                         class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Intro Webtoon Background Design</a>
                     <p class="text-gray-700 text-sm ">Lorem ipsum dolor sit amet, consectetur
                         adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
@@ -429,7 +429,7 @@
                         #CHAPTER 1
                     </p>
                     <a
-                        href="#"
+                        href="{{ route('course#introduction') }}"
                         class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Comic and Webtoon Introduction </a>
                     <p class="text-gray-700 text-sm">Lorem ipsum dolor sit amet, consectetur
                         adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
