@@ -47,33 +47,27 @@
                     <th>No.</th>
                     <th>Member Id</th>
                     <th>User Id</th>
-                    <th>Member Caregiver Name</th>
-                    <th>Member Caregiver Relation</th>
-                    <th>Member Caregiver Number</th>
-                    <th>Member Medical Conditions</th>
+                    <th>Intern Job</th>
                     <th>Action</th>
 
                 </tr>
             </thead>
 
             <tbody>
-                @foreach ($memberData as $member)
+                @foreach ($internData as $intern)
                     <tr>
-                        <td>{{ ($memberData->currentPage() - 1) * $memberData->perPage() + $loop->iteration }}</td>
-                        <td>{{ $member->id }}</td>
-                        <td>{{ $member->user_id }}</td>
-                        <td>{{ $member->member_caregiver_name }}</td>
-                        <td>{{ $member->member_caregiver_relation }}</td>
-                        <td>{{ $member->member_caregiver_number }}</td>
-                        <td>{{ $member->member_medical_condition }}</td>
+                        <td>{{ ($internData->currentPage() - 1) * $internData->perPage() + $loop->iteration }}</td>
+                        <td>{{ $intern->id }}</td>
+                        <td>{{ $intern->user_id }}</td>
+                        <td>{{ $intern->job }}</td>
                         <td class="border px-4 py-2">
-                            <a href="{{ route('admin#editMember', $member->id) }}">
+                            <a href="{{ route('admin#editMember', $intern->id) }}">
                                 <button type="button"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                     id="details">
                                     Edit</button>
                             </a>
-                            <a href="{{ route('admin#deleteMember', $member->user_id) }}">
+                            <a href="{{ route('admin#deleteMember', $intern->user_id) }}">
                                 <button type="button"
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                     id="details">
@@ -84,7 +78,7 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $memberData->links() }}
+        {{ $internData->links() }}
 
     </div>
 
