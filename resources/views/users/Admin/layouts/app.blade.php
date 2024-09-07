@@ -158,7 +158,7 @@
         <!-- Section: Links  -->
 
         <!-- Copyright -->
-        <div class="text-center p-4" style="background-color: rgba(215, 3, 3, 0.025);">
+        <div class="text-center p-4" style="">
             © 2021 Copyright:
             <a class="text-reset fw-bold" href="">Meals On Wheels</a>
         </div>

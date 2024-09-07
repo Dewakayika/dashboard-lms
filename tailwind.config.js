@@ -10,9 +10,7 @@ module.exports = {
     ],
     theme: {
         extend: {
-            fontFamily: {
-                "-apple-system": ["'BlinkMacSystemFont', 'sans-serif'"],
-            },
+            fontFamily: {},
             // colors: {
             //     "--black-color": "#000",
             //     "--white-color": "#fff",

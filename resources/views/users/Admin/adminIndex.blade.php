@@ -1,3 +1,4 @@
+@vite('resources/css/users/admin/admin-index.css')
 
 @section('title')
     Admin Dashboard
@@ -6,24 +7,61 @@
 @extends('Users.Admin.layouts.app')
 
 @section('content')
-    <!-- Start breadcrumb -->
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Admin Dashboard</li>
-            </ol>
-        </nav>
-    </div>
+    <body>
+        <header>
+            <div class="title">
+                Admin Dashboard
+            </div>
+        </header>
 
-    <!-- END breadcrumb -->
-    <style>
+        <div class="main-container">
+            <div class="row">
+                <div class="card-content">
+                    <a href="{{ route('admin#listUser') }}">
+                        <div class="card">
+                            <div class="card-title">Users Registered</div>
+                            <div class="card-body">
+                                <h2>{{ $userData }}</h2>
+                                <p>Compare to last month</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+     
+                <div class="card-content">
+                    <a href="{{ route('admin#listPartner') }}">
+                        <div class="card">
+                            <div class="card-title">Talent Role</div>
+                            <div class="card-body">
+                                <h2>{{ $talentData }}</h2>
+                                <p>Compare to last month</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="card-content">
+                    <a href="{{ route('admin#listMember') }}">
+                        <div class="card last">
+                            <div class="card-title">Intern Role</div>
+                            <div class="card-body">
+                                <h2>{{ $internData }}</h2>
+                                <p>Compare to last month</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <!-- <style>
         .card-body {
             background-color: white;
         }
-    </style>
+    </style> -->
     <!-- Start content -->
-    <div class="bg-slate-50">
+    <!-- <div >
         <div class="container pb-10">
             <h2 class="text-3xl pt-10 font-medium mb-10 text-mow-red">Admin Dashboard</h2>
             <div class="container w-full flex justify-center">
@@ -83,5 +121,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 @endsection

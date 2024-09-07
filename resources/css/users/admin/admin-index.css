@@ -1,0 +1,100 @@
+* {
+    font-family: BlinkMacSystemFont, sans-serif;
+}
+
+:root {
+    --black-color: #000;
+    --grey-color: #f4f5f7;
+    --text-color: #606163;
+    --white-color: #fff;
+    --red-color: #d1001f;
+    --hover-color: #e6e9f0;
+
+    --tran-02: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+
+    --font-size-l: 24px;
+    --font-size-h1: 22px;
+    --font-size-h2: 18px;
+    --font-size-h3: 14px;
+    --font-size-body: 14px;
+    --font-size-desc: 12px;
+}
+
+header .title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 17px;
+}
+
+.main-container {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.row {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+}
+
+.row .card-content {
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+}
+
+.row .card {
+    border: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-left: 10px;
+    padding-bottom: 0;
+    display: flex;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+.row .card.last {
+    border-right: none;
+}
+
+.row a {
+    text-decoration: none;
+}
+
+.row .card:hover,
+.row .card.last:hover {
+    background-color: var(--hover-color);
+}
+
+.row .card-title {
+    color: var(--text-color);
+    letter-spacing: -0.3px;
+    font-size: var(--font-size-body);
+}
+
+.row .card-body {
+    display: flex;
+    padding-top: 10px;
+    flex-direction: column;
+    margin: 0;
+    padding-left: 0;
+}
+
+.row .card-body h2 {
+    font-size: var(--font-size-l);
+    font-weight: bold;
+}
+
+.row .card-body p {
+    font-size: var(--font-size-desc);
+    color: var(--text-color);
+    padding-top: 5px;
+}

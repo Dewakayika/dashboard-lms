@@ -1,11 +1,12 @@
 @vite('resources/css/sidebar/admin-sidebar.css')
 @vite('resources/js/sidebar/admin-sidebar.js')
+
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-<div class="sidebar">
+<div class="sidebar font-apple-system">
     <div class="sidebar-header">
         <div class="profile-pic">
-            <img src="images/kurir.png" alt="">
+            <img src="images/padma-black.png" alt="">
         </div>
         <div class="profile-desc">
             <h3>{{ $adminData->name }}</h3>
@@ -16,7 +17,7 @@
         <div class="menu">
             <div class="title"></div>
             <ul>
-                <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin#index') ? 'active' : '' }}">
                     <a href="{{ route('admin#index') }}">
                         <i class="icon bx bxs-home"></i>
                         <span class="text">Dashboard</span>
@@ -49,7 +50,30 @@
             </ul>
         </div>
     </div>
+    <div class="menu">
+    <ul>
+                <li>
+                    <a href="#">
+                        <i class="icon bx bx-user"></i>
+                        <span class="text"> {{ __('Profile') }} </span>
+                    </a>
+                </li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf  
 
+                        <a href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                                        
+                            <i class="icon log-out bx bx-log-out"></i>
+                            <span class="text log-out">{{ __('Logout') }}</span>
+                        </a>
+                    </form>
+                    
+                </li>
+            </ul>
+    </div>
 </div>
 
 
