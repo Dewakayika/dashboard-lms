@@ -1,153 +1,188 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <!-- Bootstrap CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous">
 
-    @vite('resources/css/app.css')
-    @vite('resources/css/member.css')
-    <title>
-        @yield('title')
-    </title>
+        @vite('resources/css/app.css') 
+        @vite('resources/css/member.css')
+        <title>
+            @yield('title')
+        </title>
 
-    <!------------CSS-------------->
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('main/css/style.css')}}"> --}}
+        <!------------CSS-------------->
+        {{-- <link rel="stylesheet" type="text/css" href="{{ asset('main/css/style.css')}}"> --}}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="icon"
-        href="https://cdn.discordapp.com/attachments/1018894859832148009/1025031221799043102/meals_on_wheels.png">
-    <script src="https://kit.fontawesome.com/bf49ffd5fb.js" crossorigin="anonymous"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link
+            rel="icon"
+            href="https://cdn.discordapp.com/attachments/1018894859832148009/1025031221799043102/meals_on_wheels.png">
+        <script src="https://kit.fontawesome.com/bf49ffd5fb.js" crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+            defer="defer"></script>
+            <script
+        src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+        <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous">
+                <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
 
-</head>
+    </head>
 
-<body>
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
+    <body>  
+        <!-- Option 1: Bootstrap Bundle with Popper -->
 
-    <nav
-        class="relative w-full flex flex-wrap py-4 bg-dark text-gray-500 hover:text-gray-700 focus:text-white navbar navbar-expand-lg shadow-md">
-        <div class="container w-full flex flex-wrap items-center justify-between">
-            <div class="items-between gap-4 flex collapse navbar-collapse" id="navbarSupportedContent">
-                <a href="{{ url('/dashboard') }}" >
-                    <img src="{{ url('images/padma.png') }}" alt="" srcset="" width="20px">
-                    
-                </a>
-                <p class="text-white">Padma Learning Center</p>
-                <!-- Left links -->
-                <div>
+
+        <nav x-data="{ open: false }" class="relative w-full bg-black text-white">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="{{ url('/dashboard') }}" class="flex items-center">
+                        <img src="{{ url('images/padma.png') }}" alt="" width="20" class="mr-2">
+                        <p>Padma Learning Center</p>
+                    </a>
                 </div>
-                <!-- Left links -->
-            </div>
-            <!-- Collapsible wrapper -->
 
-            <!-- Right elements -->
-            <div class="items-between relative flex gap-4">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-white ">Dashboard</a>
-                        <!-- component -->
-                        <div x-data="{ open: false }" class="">
-                            <div @click="open = !open" class="relative border-b-2 pb-1 border-transparent z-50"
-                                :class="{ 'border-mow-shine-yellow transform transition duration-300 ': open }"
-                                x-transition:enter-end="transform opacity-100 scale-100"
-                                x-transition:leave="transition ease-in duration-75"
-                                x-transition:leave-start="transform opacity-100 scale-100">
-                                <div class="flex justify-center items-center space-x-3 font-semibold cursor-pointer">
-                                    <div class="text-white">
-                                        <div class="cursor-pointer"><i class="fas fa-xl fa-user-alt"> &nbsp;
-                                            </i>{{ $internData->users->name }}</div>
-                                    </div>
-                                </div>
-                                <div x-show="open" x-transition:enter="transition ease-out duration-100"
-                                    x-transition:enter-start="transform opacity-0 scale-95"
-                                    x-transition:enter-end="transform opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-75"
-                                    x-transition:leave-start="transform opacity-100 scale-100"
-                                    x-transition:leave-end="transform opacity-0 scale-95"
-                                    class="absolute w-48 py-3 bg-white -ml-4 rounded-md shadow border mt-2">
-                                    <ul class="space-y-3 px-3 text-slate-700">
-                                        <li class="font-medium">
-                                            <a href=""
-                                                class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-mow-shine-yellow hover:text-mow-dark-yellow">
-                                                <div class="mr-3">
-                                                    <i class="fas fa-user-alt"></i>
-                                                </div>
-                                                User
-                                            </a>
-                                        </li>
-                                        <hr />
-                                        <li class="font-medium">
-                                            <a href="#"
-                                                class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-red-700 hover:text-red-700">
-                                                <div class="mr-3 text-red-700">
-                                                    <i class="fas fa-sign-out-alt"></i>
-                                                </div>
-                                                <form action="{{ route('logout') }}" method="post">
-                                                    @csrf
-                                                    <button type="submit" class=""
-                                                        style="button:focus { outline: none; }">
-                                                        Logout </button>
-                                                </form>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                <!-- Hamburger menu button -->
+                <button
+                    @click="open = !open"
+                    class="lg:hidden focus:outline-none"
+                    aria-label="Toggle navigation">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewbox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
+                <!-- Full-screen menu -->
+                <div
+                    x-show="open"
+                    class="fixed inset-0 z-50 bg-black bg-opacity-90 flex flex-col items-center justify-center">
+                    <button @click="open = false" class="absolute top-4 right-4 text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-8 w-8"
+                            fill="none"
+                            viewbox="0 0 24 24"
+                            stroke="currentColor">
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    <div class="text-left space-y-6">
+                        @if (Route::has('login')) @auth
+                        <div x-data="{ userOpen: false }" class="relative">
+                            <button @click="userOpen = !userOpen" class="text-2xl hover:text-gray-300">
+                                {{ $internData->users->name }}
+                            </button>
+                            <div
+                                class="mt-2 py-2">
+                                <a href="#" class="text-2xl hover:text-gray-300">User</a>
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="text-2xl hover:text-red-500 mt-2">
+                                        Logout
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                        {{-- @foreach ($mealData as $users)
-                            <a href="{{ url('#') }}" class="text-gray-700 dark:text-gray-500 ">{{ $users-> }}</a>
-                        @endforeach --}}
-                    @else
-                        <p>{{ Auth::check() }}</p>
-
-                        <ul class="navbar-nav flex pl-0 list-style-none text-lg font-medium mr-auto">
-                            <li class="nav-item p-2">
-                                <a class="nav-link link text-gray-500 hover:text-gray-900 focus:text-gray-700 p-0"
-                                    href="{{ route('register') }}">SIGN UP</a>
-                            </li>
-                            <li class="nav-item p-2">
-                                <a class="nav-link link text-gray-500 hover:text-gray-900 focus:text-gray-700 p-0"
-                                    href="{{ route('login') }}">SIGN IN</a>
-                            </li>
-                        </ul>
+                        @else
+                        <a href="{{ route('register') }}" class="block text-2xl hover:text-gray-300">Sign Up</a>
+                        <a href="{{ route('login') }}" class="block text-2xl hover:text-gray-300">Sign In</a>
+                        @endauth @endif
+                    </div>
                 </div>
-                @endif
-            @endauth
-            <!-- Right elements -->
-        </div>
-    </nav>
 
+                <!-- Desktop menu -->
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="{{ url('/dashboard') }}" class="hover:text-gray-300">Dashboard</a>
+                    @if (Route::has('login')) @auth
+                    <div x-data="{ open: false }" class="relative">
+                        <button
+                            @click="open = !open"
+                            class="flex items-center space-x-2 hover:text-gray-300 focus:outline-none">
+                            <span>{{ $internData->users->name }}</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                viewbox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div
+                            x-show="open"
+                            @click.away="open = false"
+                            class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">User</a>
+                            <form action="{{ route('logout') }}" method="post">
+                                @csrf
+                                <button
+                                    type="submit"
+                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    @else
+                    <a href="{{ route('register') }}" class="hover:text-gray-300">Sign Up</a>
+                    <a href="{{ route('login') }}" class="hover:text-gray-300">Sign In</a>
+                    @endauth @endif
+                </div>
+            </div>
+        </nav>
 
-    <!-- Content -->
-    <section class="">
-        <div>
-            @yield('content')
-        </div>
-    </section>
-    <!-- End Content -->
+        <!-- Content -->
+        <section class="">
+            <div>
+                @yield('content')
+            </div>
+        </section>
+        <!-- End Content -->
 
-    <!-- Footer -->
-    <footer class="text-center text-lg-start bg-white text-muted ">
-        <hr>
-        <!-- Copyright -->
-        <div class="text-center p-4" style="background-color: rgba(215, 3, 3, 0.025);">
-            © 2021 Copyright:
-            <a class="text-reset fw-bold" href="">Padma Studio</a>
-        </div>
-        <!-- Copyright -->
-    </footer>
+        <!-- Footer -->
+        <footer class="text-center text-lg-start bg-white text-muted ">
+            <hr>
+            <!-- Copyright -->
+            <div class="text-center p-4" style="background-color: rgba(215, 3, 3, 0.025);">
+                © 2024 Copyright:
+                <a class="text-reset fw-bold" href="">Padma Studio</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
 
-    <!-- Footer -->
+        <!-- Footer -->
 
-</body>
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+    </body>
+
 
 </html>
