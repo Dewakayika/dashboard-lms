@@ -22,7 +22,7 @@
     <div class="container">
         <div class="mb-4">
             <h1 class="text-2xl font-bold text-center">
-                Partner List
+                Talent List
             </h1>
         </div>
         @if (Session::has('partnerCreated'))
@@ -47,29 +47,33 @@
                     <th>No.</th>
                     <th>Partner Id</th>
                     <th>User Id</th>
-                    <th>Partner Organization</th>
-                    <th>Partner Timeline</th>
+                    <th>Talent School</th>
+                    <th>Date of Birth</th>
+                    <th>Bank Name</th>
+                    <th>Bank Account</th>
                     <th>Action</th>
 
                 </tr>
             </thead>
 
             <tbody>
-                @foreach ($partnerData as $partner)
+                @foreach ($talentData as $talent)
                     <tr>
-                        <td>{{ ($partnerData->currentPage() - 1) * $partnerData->perPage() + $loop->iteration }}</td>
-                        <td>{{ $partner->id }}</td>
-                        <td>{{ $partner->user_id }}</td>
-                        <td>{{ $partner->partner_organization }}</td>
-                        <td>{{ $partner->partnership_timeline }}</td>
+                        <td>{{ ($talentData->currentPage() - 1) * $talentData->perPage() + $loop->iteration }}</td>
+                        <td>{{ $talent->id }}</td>
+                        <td>{{ $talent->user_id }}</td>
+                        <td>{{ $talent->school }}</td>
+                        <td>{{ $talent->date_of_birth }}</td>
+                        <td>{{ $talent->bank_name }}</td>
+                        <td>{{ $talent->bank_account }}</td>
                         <td class="border px-4 py-2">
-                            <a href="{{ route('admin#editPartner', $partner->id)}}">
+                            <a href="{{ route('admin#editPartner', $talent->id)}}">
                                 <button type="button"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                     id="details">
                                     Edit</button>
                             </a>
-                            <a href="{{ route('admin#deletePartner', $partner->user_id) }}">
+                            <a href="{{ route('admin#deletePartner', $talent->user_id) }}">
                                 <button type="button"
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                     id="details">
@@ -80,7 +84,7 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $partnerData->links() }}
+        {{ $talentData->links() }}
     </div>
 
     <!-- End content-->
