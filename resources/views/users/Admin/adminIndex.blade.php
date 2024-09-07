@@ -29,7 +29,7 @@
                 </div>
      
                 <div class="card-content">
-                    <a href="{{ route('admin#listPartner') }}">
+                    <a href="{{ route('admin#listTalent') }}">
                         <div class="card">
                             <div class="card-title">Talent Role</div>
                             <div class="card-body">
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="card-content">
-                    <a href="{{ route('admin#listMember') }}">
+                    <a href="{{ route('admin#listIntern') }}">
                         <div class="card last">
                             <div class="card-title">Intern Role</div>
                             <div class="card-body">
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="{{ route('admin#listMember') }}" class="text-slate-800 group rounded-sm"
+                    <a href="{{ route('admin#listIntern') }}" class="text-slate-800 group rounded-sm"
                         style="max-width: 20rem;">
                         <div class="card-body group-hover:text-white hover:bg-mow-shine-yellow shadow-md rounded">
                             <h5 class="card-title font-semibold">Members Role</h5>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="{{ route('admin#listPartner') }}" class="text-slate-800 group rounded-sm"
+                    <a href="{{ route('admin#listTalent') }}" class="text-slate-800 group rounded-sm"
                         style="max-width: 20rem;">
                         <div class="card-body group-hover:text-white hover:bg-mow-shine-yellow shadow-md rounded">
                             <h5 class="card-title font-semibold">Partner Role</h5>

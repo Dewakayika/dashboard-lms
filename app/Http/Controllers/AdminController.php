@@ -199,10 +199,10 @@ class AdminController extends Controller
     }
 
     //Partner Role
-    public function listPartner()
+    public function listTalent()
     {
-        $partner_data = Partner::paginate(10);
-        return view('users.Admin.listPartner')->with(['partnerData' => $partner_data]);
+        $talent_data = Talent::paginate(10);
+        return view('users.Admin.listPartner')->with(['talentData' => $talent_data]);
     }
 
     // Admin Delete Partner
@@ -244,7 +244,7 @@ class AdminController extends Controller
     }
 
     // Member Role
-    public function listMember()
+    public function listIntern()
     {
         $intern_data = Intern::paginate(10);
         return view('users.Admin.listMember')->with(['internData' => $intern_data]);

@@ -119,12 +119,12 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('editMeal/{id}', [AdminController::class, 'editMeal'])->name('admin#editMeal'); //Edit Meal
     Route::post('updateMeal/{id}', [AdminController::class, 'updateMeal'])->name('admin#updateMeal'); //Update Meal
 
-    Route::get('/partnerlist', [AdminController::class, 'listPartner'])->name('admin#listPartner'); //Partner List
+    Route::get('/talentlist', [AdminController::class, 'listTalent'])->name('admin#listTalent'); //Partner List
     Route::get('deletePartner/{id}', [AdminController::class, 'deletePartner'])->name('admin#deletePartner'); //Partner Delete
     Route::get('editPartner/{id}', [AdminController::class, 'editPartner'])->name('admin#editPartner'); //Edit partner
     Route::post('updatePartner/{id}', [AdminController::class, 'updatePartner'])->name('admin#updatePartner'); //Update Partner
 
-    Route::get('/memberlist', [AdminController::class, 'listMember'])->name('admin#listMember'); //Member List
+    Route::get('/internlist', [AdminController::class, 'listIntern'])->name('admin#listIntern'); //Member List
     Route::get('deleteMember/{id}', [AdminController::class, 'deleteMember'])->name('admin#deleteMember'); //Member Delete
     Route::get('editMember/{id}', [AdminController::class, 'editMember'])->name('admin#editMember'); //Edit Member
     Route::post('updateMember/{id}', [AdminController::class, 'updateMember'])->name('admin#updateMember'); //Update Member
