@@ -1,226 +1,163 @@
-@section('title')
-    Login
-@endsection
+@section('title') Login @endsection @extends('layouts.app') @section('content')
+<body>
+    <section class="bg-white">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            <div
+                class=" h-screen relative flex items-end px-4 pb-10 pt-60 sm:pb-16 md:justify-center lg:pb-24 bg-gray-50 sm:px-6 lg:px-8">
+                <div class="absolute inset-0">
+                    <img
+                        class="object-cover object-top w-full h-full"
+                        src="https://cdn.rareblocks.xyz/collection/celebration/images/signin/4/girl-thinking.jpg"
+                        alt=""/>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
 
-@extends('layouts.app')
-@section('content')
-    <body>
-    <div class="min-h-screen flex flex-col items-center justify-center">
-  <div class="flex flex-col bg-white px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
-    <div>
-        <div class="font-medium self-center text-m sm:text-2xl  text-gray-800">Welcome Back!</div>
-        <p class="font-xs self-center text-m sm:text-xs  text-gray-800 mt-2">Input your credentials</p>
-    </div>
-    <div class="relative mt-5 h-px bg-gray-300">
-    </div>
-    <div class="mt-10">
-      <form method="POST" action="{{ route('login') }}">
-        @csrf
-        <div class="flex flex-col mb-6">
-          <label for="email" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-500">E-Mail Address:</label>
-          <div class="relative">
-            <div class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-              <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-              </svg>
+                <div class="relative">
+                    <div class="w-full max-w-xl xl:w-full xl:mx-auto xl:pr-24 xl:max-w-xl">
+                        <h3 class="text-4xl font-bold text-white">Padma Learning Center
+                            <br class="hidden text-xl xl:block"/>Your creative partner</h3>
+                        <!-- <ul class="grid grid-cols-1 mt-10 sm:grid-cols-2 gap-x-8 gap-y-4"> <li
+                        class="flex items-center space-x-3"> <div class="inline-flex items-center
+                        justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full"> <svg
+                        class="w-3.5 h-3.5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0
+                        20 20" fill="currentColor"> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010
+                        1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0
+                        011.414 0z" clip-rule="evenodd"></path> </svg> </div> <span class="text-lg
+                        font-medium text-white"> Commercial License </span> </li> <li class="flex
+                        items-center space-x-3"> <div class="inline-flex items-center justify-center
+                        flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full"> <svg class="w-3.5 h-3.5
+                        text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor"> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010
+                        1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0
+                        011.414 0z" clip-rule="evenodd"></path> </svg> </div> <span class="text-lg
+                        font-medium text-white"> Unlimited Exports </span> </li> <li class="flex
+                        items-center space-x-3"> <div class="inline-flex items-center justify-center
+                        flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full"> <svg class="w-3.5 h-3.5
+                        text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor"> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010
+                        1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0
+                        011.414 0z" clip-rule="evenodd"></path> </svg> </div> <span class="text-lg
+                        font-medium text-white"> 120+ Coded Blocks </span> </li> <li class="flex
+                        items-center space-x-3"> <div class="inline-flex items-center justify-center
+                        flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full"> <svg class="w-3.5 h-3.5
+                        text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor"> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010
+                        1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0
+                        011.414 0z" clip-rule="evenodd"></path> </svg> </div> <span class="text-lg
+                        font-medium text-white"> Design Files Included </span> </li> </ul> -->
+                    </div>
+                </div>
             </div>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="E-Mail Address" class="text-s sm:text-base placeholder-gray-200 pl-10 pr-4 rounded border border-gray-200 w-full py-2 focus:outline-none focus:border-blue-400 @error('email') is-invalid @enderror" />
-          </div>
-          @error('email')
-            <p class="invalid-feedback" role="alert" >
-                <p style="padding-top: 10px;color: red;">{{ $message }}</p>
-            </p>
-            @enderror
-        </div>
-        <div class="flex flex-col mb-6">
-          <label for="password" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-500">Password:</label>
-          <div class="relative">
-            <div class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-              <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
+
+            <div
+                class="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
+                <div class="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
+                    <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign in</h2>
+                    <p class="mt-2 text-base text-gray-600">Don’t have an account?
+                        <a
+                            href="{{ route('register') }}"
+                            title=""
+                            class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">Create a free account</a>
+                    </p>
+
+                    <form action="{{ route('login') }}" method="POST" class="mt-8">
+                        @csrf
+                        <div class="space-y-5">
+                            <div>
+                                <label for="email" class="text-base font-medium text-gray-900">
+                                    Email address
+                                </label>
+                                <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
+                                    <div
+                                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg
+                                            class="w-5 h-5"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewbox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                                        </svg>
+                                    </div>
+
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        value="{{ old('email') }}"
+                                        placeholder="Enter email to get started"
+                                        class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('email') is-invalid @enderror"/>
+                                </div>
+                                @error('email')
+                                <p class="invalid-feedback" role="alert">
+                                    <p style="padding-top: 10px;color: red;">{{ $message }}</p>
+                                </p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <label for="password" class="text-base font-medium text-gray-900">
+                                        Password
+                                    </label>
+
+                                    <a
+                                        href="{{ route('password.request') }}"
+                                        title=""
+                                        class="text-sm font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
+                                        Forgot password?
+                                    </a>
+                                </div>
+                                <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
+                                    <div
+                                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg
+                                            class="w-5 h-5"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewbox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/>
+                                        </svg>
+                                    </div>
+
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        placeholder="Enter your password"
+                                        class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('password') is-invalid @enderror"/>
+                                </div>
+                                @error('password')
+                                <p class="invalid-feedback" role="alert">
+                                    <p>{{ $message }}</p>
+                                </p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <button
+                                    type="submit"
+                                    style="background-color: #2e2e2e"
+                                    class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md  focus:outline hover:opacity-80 focus:opacity-80">
+                                    Log in
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
             </div>
-            <input id="password" type="password" name="password" required placeholder="Password" class="text-sm sm:text-base placeholder-gray-200 pl-10 pr-4 rounded border border-gray-200 w-full py-2 focus:outline-none focus:border-blue-400 @error('password') is-invalid @enderror" />
-          </div>
-          @error('password')
-            <p class="invalid-feedback" role="alert">
-               <p>{{ $message }}</p>
-            </p>
-            @enderror
         </div>
+    </section>
 
-        <div class="flex items-center mb-6 -mt-4">
-          <div class="flex ml-auto">
-            <a href="{{ route('password.request') }}" class="inline-flex text-xs sm:text-sm text-blue-500 hover:text-blue-700">Forgot Your Password?</a>
-          </div>
-        </div>
-
-        <div class="flex w-full">
-          <button type="submit" class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in">
-            <h5 class="mr-2 uppercase">Login</h5>
-          </button>
-        </div>
-      </form>
-    </div>
-    <div class="flex justify-center items-center mt-6">
-      <a href="#" target="_blank" class="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center">
-        <span>
-        </span>
-        <p class="ml-2">You don't have an account?</p>
-      </a>
-    </div>
-  </div>
-</div>
-
-    </body>
+</body>
 @endsection
-
-
-<section class="bg-white">
-  <div class="grid grid-cols-1 lg:grid-cols-2">
-      <div class="relative flex items-end px-4 pb-10 pt-60 sm:pb-16 md:justify-center lg:pb-24 bg-gray-50 sm:px-6 lg:px-8">
-          <div class="absolute inset-0">
-              <img class="object-cover object-top w-full h-full" src="https://cdn.rareblocks.xyz/collection/celebration/images/signin/4/girl-thinking.jpg" alt="" />
-          </div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-
-          <div class="relative">
-              <div class="w-full max-w-xl xl:w-full xl:mx-auto xl:pr-24 xl:max-w-xl">
-                  <h3 class="text-4xl font-bold text-white">Join 35k+ web professionals & <br class="hidden xl:block" />build your website</h3>
-                  <ul class="grid grid-cols-1 mt-10 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      <li class="flex items-center space-x-3">
-                          <div class="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                              <svg class="w-3.5 h-3.5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                              </svg>
-                          </div>
-                          <span class="text-lg font-medium text-white"> Commercial License </span>
-                      </li>
-                      <li class="flex items-center space-x-3">
-                          <div class="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                              <svg class="w-3.5 h-3.5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                              </svg>
-                          </div>
-                          <span class="text-lg font-medium text-white"> Unlimited Exports </span>
-                      </li>
-                      <li class="flex items-center space-x-3">
-                          <div class="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                              <svg class="w-3.5 h-3.5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                              </svg>
-                          </div>
-                          <span class="text-lg font-medium text-white"> 120+ Coded Blocks </span>
-                      </li>
-                      <li class="flex items-center space-x-3">
-                          <div class="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                              <svg class="w-3.5 h-3.5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                              </svg>
-                          </div>
-                          <span class="text-lg font-medium text-white"> Design Files Included </span>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-      </div>
-
-      <div class="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
-          <div class="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
-              <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign in to Celebration</h2>
-              <p class="mt-2 text-base text-gray-600">Don’t have an account? <a href="#" title="" class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">Create a free account</a></p>
-
-              <form action="#" method="POST" class="mt-8">
-                  <div class="space-y-5">
-                      <div>
-                          <label for="" class="text-base font-medium text-gray-900"> Email address </label>
-                          <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
-                              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                  <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                                  </svg>
-                              </div>
-
-                              <input
-                                  type="email"
-                                  name=""
-                                  id=""
-                                  placeholder="Enter email to get started"
-                                  class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                              />
-                          </div>
-                      </div>
-
-                      <div>
-                          <div class="flex items-center justify-between">
-                              <label for="" class="text-base font-medium text-gray-900"> Password </label>
-
-                              <a href="#" title="" class="text-sm font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline"> Forgot password? </a>
-                          </div>
-                          <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
-                              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                  <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"
-                                      />
-                                  </svg>
-                              </div>
-
-                              <input
-                                  type="password"
-                                  name=""
-                                  id=""
-                                  placeholder="Enter your password"
-                                  class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                              />
-                          </div>
-                      </div>
-
-                      <div>
-                          <button
-                              type="submit"
-                              class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 focus:outline-none hover:opacity-80 focus:opacity-80"
-                          >
-                              Log in
-                          </button>
-                      </div>
-                  </div>
-              </form>
-
-              <div class="mt-3 space-y-3">
-                  <button
-                      type="button"
-                      class="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 bg-white border-2 border-gray-200 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
-                  >
-                      <div class="absolute inset-y-0 left-0 p-4">
-                          <svg class="w-6 h-6 text-rose-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                              <path
-                                  d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"
-                              ></path>
-                          </svg>
-                      </div>
-                      Sign in with Google
-                  </button>
-
-                  <button
-                      type="button"
-                      class="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 bg-white border-2 border-gray-200 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
-                  >
-                      <div class="absolute inset-y-0 left-0 p-4">
-                          <svg class="w-6 h-6 text-[#2563EB]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
-                          </svg>
-                      </div>
-                      Sign in with Facebook
-                  </button>
-              </div>
-          </div>
-      </div>
-  </div>
-</section>
-
-
-
