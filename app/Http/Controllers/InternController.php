@@ -26,12 +26,35 @@ class InternController extends Controller
         // return view('users.Intern.internIndex');
 
     }
+    public function basicWebtoon()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        return view('users.Member.courseBasicWebtoon')->with(['internData' => $intern_data, 'userData' => $user]);;
+    }
     public function intro()
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
         return view('users.Member.courseIntroduction')->with(['internData' => $intern_data, 'userData' => $user]);;
+    }
+
+    public function basicSketchup()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        return view('users.Member.courseIntroSketchup')->with(['internData' => $intern_data, 'userData' => $user]);;
+    }
+    public function sketchupPhotoshop()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        return view('users.Member.courseSketchupPhotoshop')->with(['internData' => $intern_data, 'userData' => $user]);;
+
     }
 
     // /**
