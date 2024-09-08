@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             'gender' => '1',
             'phone' => '+62811421',
             'address' => 'Jalan Buntu',
-            'role' => 'Talent',
+            'role' => 'talent',
             'email' => 'talent@gmail.com',
             'password' => Hash::make('123123'),
         ]);

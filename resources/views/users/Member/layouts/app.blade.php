@@ -167,20 +167,7 @@
                 @yield('content')
             </div>
         </section>
-        <!-- End Content -->
 
-        <!-- Footer -->
-        <footer class="text-center text-lg-start bg-white text-muted ">
-            <hr>
-            <!-- Copyright -->
-            <div class="text-center p-4" style="background-color: rgba(215, 3, 3, 0.025);">
-                © 2024 Copyright:
-                <a class="text-reset fw-bold" href="">Padma Studio</a>
-            </div>
-            <!-- Copyright -->
-        </footer>
-
-        <!-- Footer -->
 
     </body>
 
