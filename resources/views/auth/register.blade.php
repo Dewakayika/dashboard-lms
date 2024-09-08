@@ -390,3 +390,171 @@
         </div>
     </div>
 </section>
+
+
+
+<body>
+    <section class="relative py-10 bg-gray-900 sm:py-16 lg:py-24">
+        <div class="absolute inset-0">
+            <img class="object-cover w-full h-full" src="https://cdn.rareblocks.xyz/collection/celebration/images/signup/2/woman-working-laptop.jpg" alt="" />
+        </div>
+        <div class="absolute inset-0 bg-gray-900/20"></div>
+
+        <div class="relative max-w-lg px-4 mx-auto sm:px-0">
+            <div class="overflow-hidden bg-white rounded-md shadow-md">
+                <div class="px-4 py-6 sm:px-8 sm:py-7">
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold text-gray-900">Create an account</h2>
+                        <p class="mt-2 text-base text-gray-600">Already joined? <a href="#" title="" class="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700">Sign in now</a></p>
+                    </div>
+
+                    <form action="{{ route('register') }}" method="POST" class="mt-8">
+                        @csrf
+                        <div class="space-y-5">
+                            <div>
+                                <label for="name" class="text-base font-medium text-gray-900">Name</label>
+                                <div class="mt-2.5">
+                                    <input type="text" name="name" id="name" placeholder="Enter your full name" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" required />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class="text-base font-medium text-gray-900">Email address</label>
+                                <div class="mt-2.5">
+                                    <input type="email" name="email" id="email" placeholder="Enter email to get started" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" required />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="password" class="text-base font-medium text-gray-900">Password</label>
+                                <div class="mt-2.5">
+                                    <input type="password" name="password" id="password" placeholder="Enter your password" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" required />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="phone" class="text-base font-medium text-gray-900">Phone Number</label>
+                                <div class="mt-2.5">
+                                    <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" maxlength="11" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" required />
+                                </div>
+                            </div>
+
+                            <div class="hidden">
+                                <input type="text" name="lat" />
+                            </div>
+
+                            <div class="hidden">
+                                <input type="text" name="long" />
+                            </div>
+
+                            <div>
+                                <label for="address" class="text-base font-medium text-gray-900">Address</label>
+                                <div class="mt-2.5">
+                                    <input type="text" name="address" id="address" placeholder="Enter your address" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" required />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="role" class="text-base font-medium text-gray-900">Role</label>
+                                <div class="mt-2.5">
+                                    <select id="role" name="role" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" required>
+                                        <option value="">Please Select Role</option>
+                                        <option value="intern">Intern</option>
+                                        <option value="talent">Talent</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="intern box hidden">
+                                <div>
+                                    <label for="job" class="text-base font-medium text-gray-900">Job</label>
+                                    <div class="mt-2.5">
+                                        <input type="text" name="job" id="job" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="talent box hidden">
+                                <div>
+                                    <label for="school" class="text-base font-medium text-gray-900">School</label>
+                                    <div class="mt-2.5">
+                                        <input type="text" name="school" id="school" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="date_of_birth" class="text-base font-medium text-gray-900">Date of Birth</label>
+                                    <div class="mt-2.5">
+                                        <input type="date" name="date_of_birth" id="date_of_birth" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="bank_name" class="text-base font-medium text-gray-900">Bank Name</label>
+                                    <div class="mt-2.5">
+                                        <input type="text" name="bank_name" id="bank_name" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="bank_account" class="text-base font-medium text-gray-900">Bank Account</label>
+                                    <div class="mt-2.5">
+                                        <input type="number" name="bank_account" id="bank_account" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit" class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">Register</button>
+                            </div>
+
+                            <div>
+                                <button type="reset" class="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 bg-white border-2 border-gray-200 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none">
+                                    <div class="absolute inset-y-0 left-0 p-4">
+                                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M6 2C6 1.44772 6.44772 1 7 1H17C17.5523 1 18 1.44772 18 2V2C18 2.55228 17.5523 3 17 3H7C6.44772 3 6 2.55228 6 2V2ZM4 2C4 0.89543 4.89543 0 6 0H18C19.1046 0 20 0.89543 20 2V2C20 3.10457 19.1046 4 18 4H6C4.89543 4 4 3.10457 4 2V2Z" />
+                                            <path d="M4 5H20C21.1046 5 22 5.89543 22 7V17C22 18.1046 21.1046 19 20 19H4C2.89543 19 2 18.1046 2 17V7C2 5.89543 2.89543 5 4 5ZM4 7V17H20V7H4Z" />
+                                        </svg>
+                                    </div>
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <p class="max-w-xs mx-auto mt-5 text-sm text-center text-gray-600">
+                        This site is protected by reCAPTCHA and the Google <a href="#" title="" class="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700">Privacy Policy</a> &
+                        <a href="#" title="" class="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function() {
+            $('#role').change(function() {
+                var optionValue = $(this).val();
+                if (optionValue) {
+                    $(".box").not("." + optionValue).hide().find(".form-control").prop("required", false);
+                    $("." + optionValue).show().find(".form-control").prop("required", true);
+                } else {
+                    $(".box").hide();
+                }
+            }).change();
+
+            getLocation();
+        });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            $("[name='lat']").val(position.coords.latitude);
+            $("[name='long']").val(position.coords.longitude);
+        }
+    </script>
+</body>
+

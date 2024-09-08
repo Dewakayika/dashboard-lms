@@ -197,9 +197,7 @@
                             <a
                                 href="{{ route('course#introduction') }}"
                                 class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Intro Webtoon Background Design</a>
-                            <p class="text-gray-700 text-sm ">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">This course provides a comprehensive introduction to becoming a webtoon background designer, utilizing SketchUp for 3D modeling and Photoshop for post-production and refinement. </p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img
@@ -226,12 +224,10 @@
                                 #CHAPTER 1
                             </p>
                             <a
-                                href="{{ route('course#introduction') }}"
+                                href="{{ route('course#basic') }}"
                                 class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Comic and Webtoon Introduction
                             </a>
-                            <p class="text-gray-700 text-sm">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">The Webtoon Fundamentals course is designed for aspiring creators who want to develop their skills in visual storytelling, focusing on essential elements like storyboarding, shot composition, and camera angles.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img
@@ -258,11 +254,9 @@
                                 #CHAPTER 2
                             </p>
                             <a
-                                href="#"
+                                href="{{ route('course#basicSketchup') }}"
                                 class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Introduction in to Sketchup</a>
-                            <p class="text-gray-700 text-sm">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling for webtoon background design. </p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img
@@ -289,11 +283,9 @@
                                 #CHAPTER 3
                             </p>
                             <a
-                                href="#"
+                                href="{{ route('course#sketchupPhotoshop')}}"
                                 class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Sketchup to Photoshop</a>
-                            <p class="text-gray-700 text-sm">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">This specialized course focuses on mastering the seamless workflow between SketchUp and Photoshop to create high-quality, detailed webtoon backgrounds. </p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img
@@ -302,7 +294,7 @@
                                 alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
                                 <a
-                                    href="#"
+                                    href=""
                                     class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
                             </div>

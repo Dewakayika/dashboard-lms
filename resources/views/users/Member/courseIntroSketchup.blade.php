@@ -1,7 +1,7 @@
 @extends('users.Member.layouts.app')
 
 @section('title')
-    Course | Introduction
+    Course | Introduction SketchUp
 @endsection
 
 @section('content')
@@ -156,6 +156,42 @@
                                     <span>Introduction</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="tool-introduction">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Tools Introduction</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="selection">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Selection</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="grouping">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Grouping</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="component">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Component</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -164,7 +200,7 @@
             <!-- Main content -->
             <main class="flex-1 p-4 md:p-8 overflow-y-auto">
                 <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-                    <h1 class="text-2xl font-bold mb-2">Course Introduction</h1>
+                    <h1 class="text-2xl font-bold mb-2">Introduction to SketchUp</h1>
                 </header>
                 <div class="bg-white rounded-lg shadow-md p-4">
                     <div class="video-container mt-4">
@@ -175,7 +211,7 @@
                         <!-- Video Overview content will be injected here dynamically -->
                     </div>
                     <div class="video-material">
-                        <a href="https://drive.google.com/file/d/14DZZ4fEjw78oXb46vBb5TdCUHQ9K5Uww/view?usp=drive_link"  target="_blank">Download Material</a>
+                        <a href="https://drive.google.com/file/d/14nEkkR9AuvofG-8LLttTWkcIXNJlA2-4/view?usp=sharing"  target="_blank">Download Material</a>
                     </div>
                 </div>
             </main>
@@ -215,12 +251,52 @@
                     let videoUrl, title, overviewContent;
                     switch(videoId) {
                         case 'introduction':
-                            videoUrl = 'https://drive.google.com/file/d/1IjacTcsDBe0FFm1MdVoWifG5jIwEdWV8/preview';
+                            videoUrl = 'https://drive.google.com/file/d/1oOKyeJcrM229N9XHbl-DcKX7tTl5Dw25/preview';
                             title = 'Introduction';
                             overviewContent = `
-                                <span class="overview-title">Duration: 0:54 minute | Beginner</span>
+                                <span class="overview-title">Duration: 1:22 minute | Beginner</span>
                                 <hr>
-                                <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                            `;
+                            break;
+                        case 'tool-introduction':
+                            videoUrl = 'https://drive.google.com/file/d/1QJ7hAgsLZl0nwqK-ZJd5N6vcEdlG7bBr/preview';
+                            title = 'Tools Introduction';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 6:45 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Understanding Tools</span>
+                            `;
+                            break;
+                        case 'selection':
+                            videoUrl = 'https://drive.google.com/file/d/19RJDeBVcMSPUdDe0FjR3QgB9FQzCWko7/preview';
+                            title = 'Selection';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 4:45 seconds | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Understanding Selection</span>
+                            `;
+                            break;
+                        case 'grouping':
+                            videoUrl = 'https://drive.google.com/file/d/1nzp-p4fElcSGHhQiRMxaa7f0jtGvT6B5/preview';
+                            title = 'Grouping';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 7:50 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Understanding Grouping</span>
+                            `;
+                            break;
+                        case 'component':
+                            videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
+                            title = 'Component';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Understanding Component</span>
                             `;
                             break;
                     }
