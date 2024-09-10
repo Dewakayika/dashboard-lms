@@ -1,3 +1,6 @@
+@section('title')
+    Padma Community | Dashboard
+@endsection
 @vite('resources/css/navbar.css') 
 @vite('resources/css/welcome.css')
 @extends('layouts.app')

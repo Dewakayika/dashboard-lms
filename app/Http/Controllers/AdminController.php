@@ -13,6 +13,7 @@ use App\Models\Intern;
 use App\Models\Order;
 use App\Models\Talent;
 use App\Models\Volunteer;
+use App\Models\Roles;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -28,13 +29,88 @@ class AdminController extends Controller
         $user_data = User::count();
         $intern_data = Intern::count();
         $talent_data = Talent::count();
+        $role_count = Roles::count();
+        $role_data = Roles::paginate(10);
 
 
         return view('users.Admin.adminIndex')->with([
             'userData' => $user_data,
             'internData' => $intern_data,
-            'talentData' => $talent_data
+            'talentData' => $talent_data,  
+            'countRole' => $role_count, 
+            'roleData' => $role_data
         ]);;
+    }
+
+    // Create Role and Registration Code | View
+    public function createRole(){
+
+        return view('users.Admin.createRole');
+    }
+
+    // Create new Role and Registration Code | Function
+    public function store(Request $request)
+    {
+        // Validasi data input
+        $request->validate([
+            'registration_code' => 'required|string|max:255|unique:roles,registration_code',
+            'role_types' => 'required|string|max:255',
+        ]);
+
+        // Simpan data role ke database
+        Roles::create([
+            'registration_code' => $request->registration_code,
+            'role_types' => $request->role_types,
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin#index')->with('roleCreated', 'Registration Code successfully created!');
+    }
+
+    // Admin Delete Role & Registration Code
+    public function deleteRole($id)
+    {
+        Roles::where('id', $id)->delete();
+        return back()->with(['roleDeleted' => 'Registation Has Been Deleted Successfully!']);
+    }
+
+    // Admin Edit Role & Registration Code
+    public function editRole($id)
+    {
+        $role_data = Roles::where('id', $id)->first();
+        return view('users.Admin.updateRole')->with(['editRole' => $role_data]);
+    }
+
+    // Admin Update Role
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateRole(Request $request, $id)
+    {
+        // Validasi agar registration_code unik
+        $request->validate([
+            'registration_code' => 'required|unique:roles,registration_code,' . $id,
+            'role_types' => 'required',
+        ]);
+
+        $update_role = $this->requestUpdateRole($request);
+        Roles::where('id', $id)->update($update_role);
+
+        return redirect(route('admin#index'))->with(['userUpdated' => 'Registration Code Has Been Updated Successfully!']);
+    }
+    private function requestUpdateRole($request)
+    {
+        $arr = [
+            'registration_code' => $request->registration_code,
+            'role_types' => $request->role_types,
+            'updated_at' => Carbon::now(),
+        ];
+
+        return $arr;
     }
 
     // Admin Profile
