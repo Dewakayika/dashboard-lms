@@ -59,5 +59,14 @@ class DatabaseSeeder extends Seeder
 
         Admin::factory()->create();
 
+        Roles::factory()->create([
+            'registration_code' => 'PADMA2024',
+            'role_types' => 'intern',
+        ]);
+
+        Roles::factory()->create([
+            'registration_code' => 'PADMA2025',
+            'role_types' => 'talent',
+        ]);
     }
 }

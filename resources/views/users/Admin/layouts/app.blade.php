@@ -159,8 +159,8 @@
 
         <!-- Copyright -->
         <div class="text-center p-4" style="">
-            © 2021 Copyright:
-            <a class="text-reset fw-bold" href="">Meals On Wheels</a>
+            © 2024 Copyright:
+            <a class="text-reset fw-bold" href="">Padma Creative Studio</a>
         </div>
         <!-- Copyright -->
     </footer>

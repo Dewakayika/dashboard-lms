@@ -6,11 +6,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     @vite('resources/css/app.css')
     <!-- @vite('resources/css/swiper-bundle.min.css') -->
     <title>
         @yield('title')
     </title>
+
+    <link rel="icon" href="{{ url('images/padma-black.png') }}" type="image/png">
+
+
 </head>
 
 
