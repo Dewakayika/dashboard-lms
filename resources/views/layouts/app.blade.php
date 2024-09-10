@@ -14,6 +14,10 @@
     <title>
         @yield('title')
     </title>
+
+    <link rel="icon" href="{{ url('images/padma-black.png') }}" type="image/png">
+
+
 </head>
 
 

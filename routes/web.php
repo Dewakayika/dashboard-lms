@@ -129,30 +129,12 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('editMember/{id}', [AdminController::class, 'editMember'])->name('admin#editMember'); //Edit Member
     Route::post('updateMember/{id}', [AdminController::class, 'updateMember'])->name('admin#updateMember'); //Update Member
 
-    Route::get('/volunteerlist', [AdminController::class, 'listVolunteer'])->name('admin#listVolunteer'); //Volunteer List
-    Route::get('deleteVolunteer/{id}', [AdminController::class, 'deleteVolunteer'])->name('admin#deleteVolunteer'); //Volunteer Delete
-    Route::get('editVolunteer/{id}', [AdminController::class, 'editVolunteer'])->name('admin#editVolunteer'); //Edit Volunteer
-    Route::post('updateVolunteer/{id}', [AdminController::class, 'updateVolunteer'])->name('admin#updateVolunteer'); //Update Volunteer
+    Route::get('/admin/roles/create', [AdminController::class, 'createRole'])->name('admin#createRole');
+    Route::post('/admin/roles', [AdminController::class, 'store'])->name('admin#storeRole');
+    Route::get('deleteRole/{id}', [AdminController::class, 'deleteRole'])->name('admin#deleteRole');
+    Route::get('editRole/{id}', [AdminController::class, 'editRole'])->name('admin#editRole'); //Edit Code
+    Route::put('updateRole/{id}', [AdminController::class, 'updateRole'])->name('admin#updateRole'); //Update Code
 
-    Route::get('/donationlist', [AdminController::class, 'listDonation'])->name('admin#listDonation'); //Donation List
-    Route::get('deleteDonation/{id}', [AdminController::class, 'deleteDonation'])->name('admin#deleteDonation'); //Donation Delete
-    Route::get('editDonation/{id}', [AdminController::class, 'editDonation'])->name('admin#editDonation'); //Edit Donation
-    Route::post('updateDonation/{id}', [AdminController::class, 'updateDonation'])->name('admin#updateDonation'); //Update Donation
-
-    Route::get('/driverlist', [AdminController::class, 'listDriver'])->name('admin#listDriver'); //Driver List
-    Route::get('deleteDriver/{id}', [AdminController::class, 'deleteDriver'])->name('admin#deleteDriver'); //Driver Delete
-    Route::get('editDriver/{id}', [AdminController::class, 'editDriver'])->name('admin#editDriver'); //Edit Driver
-    Route::post('updateDriver/{id}', [AdminController::class, 'updateDriver'])->name('admin#updateDriver'); //Update Driver
-
-    Route::get('/orderlist', [AdminController::class, 'listOrder'])->name('admin#listOrder'); //Order List
-    Route::get('deleteOrder/{id}', [AdminController::class, 'deleteOrder'])->name('admin#deleteOrder'); //Order Delete
-    Route::get('editOrder/{id}', [AdminController::class, 'editOrder'])->name('admin#editOrder'); //Edit Order
-    Route::post('updateOrder/{id}', [AdminController::class, 'updateOrder'])->name('admin#updateOrder'); //Update Order
-    
-    Route::get('/campaignlist', [AdminController::class, 'listCampaign'])->name('admin#listCampaign'); //Campaign List
-    Route::get('deleteCampaign/{id}', [AdminController::class, 'deleteCampaign'])->name('admin#deleteCampaign'); //Campaign Delete
-    Route::get('editCampaign/{id}', [AdminController::class, 'editCampaign'])->name('admin#editCampaign'); //Edit Campaign
-    Route::post('updateCampaign/{id}', [AdminController::class, 'updateCampaign'])->name('admin#updateCampaign'); //Update Cmapaign
 });
 
 
