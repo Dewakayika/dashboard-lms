@@ -18,14 +18,39 @@ class InternController extends Controller
 
     public function index()
     {
-        $intern_data = Intern::where('user_id', Auth::id())->first();
-        $user = User::where('id', $intern_data->user_id)->first();
 
-        return view('users.Member.internIndex')->with(['internData' => $intern_data, 'userData' => $user]);;
+        $user = auth()->user();
 
-        // return view('users.Intern.internIndex');
+        
+         // Cek apakah user dengan role intern memiliki data di tabel interns
+        if (!Intern::where('user_id', $user->id)->exists()) {
+        return view('users.Member.register-intern');
+        }
+        else {
+            $intern_data = Intern::where('user_id', Auth::id())->first();
+            $user = User::where('id', $intern_data->user_id)->first();
+
+            return view('users.Member.internIndex')->with(['internData' => $intern_data, 'userData' => $user]);;
+        }
 
     }
+
+    public function additionalInfo(){
+        return view('users.Member.register-intern');
+    }
+
+    public function submitForm(Request $request){
+
+        $user = Auth::user();
+
+        $intern = new Intern();
+        $intern->job = $request->input('job');
+        $intern->user_id = $user->id;
+        $intern->save();
+
+        return redirect()->route('intern#index');
+    }
+
     public function basicWebtoon()
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
