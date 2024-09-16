@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use App\Models\Intern;
 use App\Models\Talent;
+use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,26 @@ class CreateNewUser implements CreatesNewUsers
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
+            'registration_code' => ['required', 'string', 'exists:roles,registration_code'],
         ])->validate();
+
+        // Cari role berdasarkan kode registrasi
+        $role = Roles::where('registration_code', $input['registration_code'])->first();
+
+        if (!$role) {
+            // Handle error jika kode registrasi tidak valid
+            throw new \Exception('Invalid registration code');
+        }
+
+        // $user = User::create([
+        //     'name' => $input['name'],
+        //     'email' => $input['email'],
+        //     'phone' => $input['phone'],
+        //     'address' => $input['address'],
+        //     'gender' => $input['gender'],
+        //     'role' => $role->role_type,
+        //     'password' => Hash::make($input['password']),
+        // ]);
 
         $user = new User();
         $user->name = $input['name'];
@@ -35,18 +55,18 @@ class CreateNewUser implements CreatesNewUsers
         $user->phone = $input['phone'];
         $user->address = $input['address'];
         $user->gender = $input['gender'];
-        $user->role = $input['role'];
+        $user->role = $role->role_types;
         $user->password = Hash::make($input['password']);
         $user->save();
 
-        if ($input['role'] == 'intern') {
+        if ($role->role_type == 'intern') {
             $intern = new Intern();
             $intern->job = $input['job'];
             $intern->user_id = $user->id;
             $intern->save();
         }
 
-        if ($input['role'] == 'talent') {
+        if ($role->role_type == 'talent') {
             $talent = new Talent();
             $talent->school = $input['school'];
             $talent->date_of_birth = $input['date_of_birth'];
@@ -56,5 +76,14 @@ class CreateNewUser implements CreatesNewUsers
             $talent->save();
         }
         return $user;
+
+    //     // Log the user in
+    // Auth::login($user);
+
+
+        // $this->guard()->login($user);
+
+        // // Redirect to additional info page based on role
+        // return redirect()->route('register.additional-info');
     }
 }
