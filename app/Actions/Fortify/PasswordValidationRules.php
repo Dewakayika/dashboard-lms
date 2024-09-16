@@ -11,8 +11,8 @@ trait PasswordValidationRules
      *
      * @return array
      */
-    // protected funaction passwordRules()
-    // {
-    //     return ['required', 'string', new Password, 'confirmed'];
-    // }
+    protected function passwordRules()
+    {
+        return ['required', 'string', new Password, 'confirmed'];
+    }
 }
