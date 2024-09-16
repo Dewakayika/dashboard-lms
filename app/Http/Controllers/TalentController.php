@@ -18,11 +18,73 @@ class TalentController extends Controller
 {
     //
     public function index()
-    {
-        $talent_data = Talent::where('user_id', Auth::id())->first();
-        $user = User::where('id', $talent_data->user_id)->first();
-        return view('users.Partner.talentIndex')->with([ 'talentData' => $talent_data, 'userData' => $user]);
+    {   
+        $user = auth()->user();
+
+        if(!Talent::where('user_id', $user->id)->exists()){
+            return view('users.Partner.register-talent');
+        }else{
+            $talent_data = Talent::where('user_id', Auth::id())->first();
+            $user = User::where('id', $talent_data->user_id)->first();
+            return view('users.Partner.talentIndex')->with([ 'talentData' => $talent_data, 'userData' => $user]);
+        }
     }
+
+    public function additionalInfo(){
+        return view ('users.Partner.register-talent');
+    }
+
+    public function submitForm(Request $request){
+        $user = Auth::user();
+
+        $request->validate([
+            'school' => ['required', 'string'],
+            'date_of_birth' => ['required', 'date'],
+            'bank_name' => ['required', 'string'],
+            'bank_account' => ['required', 'string'],
+        ]);
+
+        $talent = new Talent();
+        $talent->school = $request->input('school');
+        $talent->date_of_birth = $request->input('date_of_birth');
+        $talent->bank_name = $request->input('bank_name');
+        $talent->bank_account = $request->input('bank_account');
+        $talent->user_id = $user->id;
+        $talent->save();
+
+        return redirect()->route('talent#index');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.

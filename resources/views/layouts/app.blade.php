@@ -95,22 +95,7 @@
             @yield('content')
         </div>
     </section>
-    <!-- End Content -->
 
-    <!-- Footer -->
-    <hr>
-    <footer class="text-center text-lg-start bg-white text-muted">
-        <!-- Section: Social media -->
-
-        <!-- Copyright -->
-        <div class="text-center p-4" style="background-color: rgba(215, 3, 3, 0.025);">
-            © 2024 Copyright:
-            <a class="text-reset fw-bold" href="">Padma Creative Studio</a>
-        </div>
-        <!-- Copyright -->
-    </footer>
-
-    <!-- Footer -->
 </body>
 
 <script>
