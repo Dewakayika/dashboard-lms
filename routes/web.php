@@ -10,6 +10,7 @@ use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DonorController;
+use App\Http\Controllers\TalentCVController;
 use App\Http\Controllers\AdditionalInfoController;
 
 /*
@@ -41,6 +42,11 @@ Route::get('/contact', function () {
 Route::get('/terms', function () {
     return view('terms');
 })->name('terms'); //Terms
+
+Route::get('/talent-cv', function () {
+    return view('cv.talent_cv');
+});
+Route::post('/talent-cv/submit', [TalentCVController::class, 'store'])->name('talent#cvSubmit');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
