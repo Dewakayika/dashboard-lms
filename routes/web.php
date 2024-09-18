@@ -82,6 +82,9 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('editFeedback/{id}', [AdminController::class, 'editFeedback'])->name('admin#editFeedback'); // Edit Feedback
     Route::post('updateFeedback/{id}', [AdminController::class, 'updateFeedback'])->name('admin#updateFeedback'); //Update Feedback
 
+    Route::get('/talent-cv', [AdminController::class, 'talentCV'])->name('admin#talentCVList');
+    Route::get('deleteCV/{id}', [AdminController::class, 'deleteCV'])->name('admin#deleteCV');
+
     Route::get('/userlist', [AdminController::class, 'listUser'])->name('admin#listUser'); //User List
     Route::get('deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('admin#deleteUser'); //Delete User
     Route::get('editUser/{id}', [AdminController::class, 'editUser'])->name('admin#editUser'); // Edit User

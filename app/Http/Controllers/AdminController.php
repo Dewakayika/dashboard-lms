@@ -14,6 +14,7 @@ use App\Models\Order;
 use App\Models\Talent;
 use App\Models\Volunteer;
 use App\Models\Roles;
+use App\Models\TalentCV;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -680,4 +681,20 @@ class AdminController extends Controller
         }
         return $array;
     }
+
+    public function talentCV(){
+
+        $talent_cv = TalentCV::paginate(10);
+        return view('users.Admin.listTalentCV')->with(['talentCV' => $talent_cv]);
+
+    }
+
+    // Admin Delete User
+    public function deleteCV($id)
+    {
+        TalentCV::where('id', $id)->delete();
+        return back()->with(['CVDeleted' => 'Talent CV Has Been Deleted Successfully!']);
+    }
+
+
 }

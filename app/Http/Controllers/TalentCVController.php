@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TalentCV;
+use App\Mail\TalentCVUploaded;
+use Illuminate\Support\Facades\Mail;
 
 class TalentCVController extends Controller
 {
@@ -33,6 +35,13 @@ class TalentCVController extends Controller
             'phone_number' => $request->phone_number,
             'cv_file' => $cvFileName,
         ]);
+
+        // Kirim email dengan CC
+        Mail::to($request->email)
+        ->cc(['kayikadewa@gmail.com', 'okadharmawan3@gmail.com']) 
+        ->send(new TalentCVUploaded($request->name));
+
+
 
         // return view ('cv.sucess-cv');
         return redirect()->back()->with('success', 'CV uploaded successfully.');

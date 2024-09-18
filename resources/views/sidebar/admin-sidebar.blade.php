@@ -47,6 +47,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="{{ request()->routeIs('admin#talentCVList') ? 'active' : '' }}">
+                    <a href="{{ route('admin#talentCVList') }}">
+                        <i class="fa-solid fa-file"></i>
+                        <span class="text">Talent CV</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
