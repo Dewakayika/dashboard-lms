@@ -92,7 +92,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'cotrend.padma@gmail.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'office@padmastudio.io'),
         'name' => env('MAIL_FROM_NAME', 'Hello User!'),
     ],
 

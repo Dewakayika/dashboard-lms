@@ -77,7 +77,7 @@
 
                                             <td class="p-3">
                                                 <img src="{{ asset('uploads/meal/' . $meal->meal_image) }}"
-                                                    class="img-thumbnail" width="150px" height="150px" alt="Images">
+                                                    class="img-thumbnail" width="150px" height="150px" alt="    Images">
                                             </td>
                                             <td class="p-3">{{ $meal->meal_description }}</td>
                                             <td class="p-3 flex">
