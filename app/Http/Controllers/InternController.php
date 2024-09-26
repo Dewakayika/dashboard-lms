@@ -41,14 +41,34 @@ class InternController extends Controller
 
     public function submitForm(Request $request){
 
+        // Validasi input dari form
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
+            'phone_number' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'gender' => 'required|string|max:10',
+            'school_name' => 'required|string|max:255',
+        ]);
+
         $user = Auth::user();
 
+        // Handle upload foto profil
+        if ($request->hasFile('profile_photo')) {
+            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
+
+        // Simpan data intern ke database
         $intern = new Intern();
-        $intern->job = $request->input('job');
         $intern->user_id = $user->id;
+        $intern->profile_photo = $profilePhotoPath;
+        $intern->phone_number = $request->input('phone_number');
+        $intern->address = $request->input('address');
+        $intern->gender = $request->input('gender');
+        $intern->school_name = $request->input('school_name');
         $intern->save();
 
-        return redirect()->route('intern#index');
+        return redirect()->route('intern#index')->with('success', 'Register Data successfully submitted');
+
     }
 
     public function basicWebtoon()

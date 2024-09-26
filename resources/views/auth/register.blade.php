@@ -46,13 +46,13 @@
                         <div class="space-y-5">
                             <!-- Name Input -->
                             <div>
-                                <label for="name" class="text-base font-medium text-gray-900">Name</label>
+                                <label for="name" class="text-base font-medium text-gray-900">Full Name</label>
                                 <div class="mt-2.5 relative">
                                     <input
                                         type="text"
                                         name="name"
                                         id="name"
-                                        placeholder="Enter your name"
+                                        placeholder="Enter your full name"
                                         class="block w-full py-4 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('name') is-invalid @enderror"
                                     />
                                     @error('name')
@@ -61,25 +61,6 @@
                                 </div>
                             </div>
 
-                            <!-- Gender Input -->
-                            <div>
-                                <label for="gender" class="text-base font-medium text-gray-900">Gender</label>
-                                <div class="mt-2.5 relative">
-                                    <select
-                                        class="block w-full py-4 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('gender') is-invalid @enderror"
-                                        name="gender"
-                                        id="gender"
-                                        required
-                                    >
-                                        <option value="">Please Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                    </select>
-                                    @error('gender')
-                                    <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
 
                             <!-- Email Input -->
                             <div>
@@ -127,41 +108,6 @@
                                         class="block w-full py-4 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('registration_code') is-invalid @enderror"
                                     />
                                     @error('registration_code')
-                                    <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Phone Number Input -->
-                            <div>
-                                <label for="phone" class="text-base font-medium text-gray-900">Phone Number</label>
-                                <div class="mt-2.5 relative">
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        id="phone"
-                                        placeholder="Enter your phone number"
-                                        maxlength="12"
-                                        class="block w-full py-4 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('phone') is-invalid @enderror"
-                                    />
-                                    @error('phone')
-                                    <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Address Input -->
-                            <div>
-                                <label for="address" class="text-base font-medium text-gray-900">Address</label>
-                                <div class="mt-2.5 relative">
-                                    <input
-                                        type="text"
-                                        name="address"
-                                        id="address"
-                                        placeholder="Enter your address"
-                                        class="block w-full py-4 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('address') is-invalid @enderror"
-                                    />
-                                    @error('address')
                                     <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
                                     @enderror
                                 </div>

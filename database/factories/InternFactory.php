@@ -22,7 +22,12 @@ class InternFactory extends Factory
         return [
 
             'user_id' => '1',
-            'job' => 'Student',
+            'profile_photo' => 'Student.jpg',
+            'phone_number' => '081337618811',
+            'address' => 'Jalan Jalan',
+            'gender' => 'male',
+            'school_name' => 'IT Global',
+
         ];
     }
 }

@@ -1,4 +1,8 @@
-@section('title') Login @endsection @extends('layouts.app') @section('content')
+@section('title') Login @endsection 
+@extends('layouts.app') 
+
+@section('content')
+
 <body>
     <section class="bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-2">

@@ -118,21 +118,24 @@
                     <a href="{{ url('/dashboard') }}" class="hover:text-gray-300">Dashboard</a>
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
-                        <button
-                            @click="open = !open"
-                            class="flex items-center space-x-2 hover:text-gray-300 focus:outline-none">
-                            <span>{{ $internData->users->name }}</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                viewbox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"/>
-                            </svg>
-                        </button>
+                        <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">
+                            <img src="{{ asset('storage/' .$internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <button
+                                @click="open = !open"
+                                class="flex items-center fw-bold space-x-2 hover:text-gray-300 focus:outline-none">
+                                <span>{{ $internData->users->name }}</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5"
+                                    viewbox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
                         <div
                             x-show="open"
                             @click.away="open = false"
