@@ -38,6 +38,8 @@
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+        
+        <link rel="icon" href="{{ url('images/padma-black.png') }}" type="image/png">
     </head>
 
     <body>
@@ -140,7 +142,7 @@
                             x-show="open"
                             @click.away="open = false"
                             class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">User</a>
+                            <a href=" {{ route('intern#internProfile')}} " class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button

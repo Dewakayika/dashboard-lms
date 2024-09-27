@@ -119,6 +119,10 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
     Route::get('/additional/data-intern',[InternController::class, 'additionalInfo'])->name('intern#additionalData');
     Route::post('/additional/submit', [InternController::class, 'submitForm'])->name('intern#submitData');
 
+    Route::get('/internProfile', [InternController::class, 'profile'])->name('intern#internProfile');
+    Route::post('/update/profile', [InternController::class, 'updateIntern'])->name('intern#editIntern');
+    Route::post('/update/profile-picture', [InternController::class, 'updateProfilePicture'])->name('intern#updateProfilePicture');
+
     Route::get('/course/basic-webtoon', [InternController::class, 'basicWebtoon'])->name('course#basic');
     Route::get('/course/introduction', [InternController::class, 'intro'])->name('course#introduction');
     Route::get('/course/basic-sketchup', [InternController::class, 'basicSketchup'])->name('course#basicSketchup'); 

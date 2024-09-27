@@ -39,6 +39,7 @@
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+        <link rel="icon" href="{{ url('images/padma-black.png') }}" type="image/png">
 
     </head>
 
@@ -123,26 +124,29 @@
                     <a href="{{ url('/dashboard') }}" class="hover:text-gray-300">Dashboard</a>
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
-                        <button
-                            @click="open = !open"
-                            class="flex items-center space-x-2 hover:text-gray-300 focus:outline-none">
-                            <span>{{ $internData->users->name }}</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                viewbox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"/>
-                            </svg>
-                        </button>
+                        <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">
+                            <img src="{{ asset('storage/' .$internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <button
+                                @click="open = !open"
+                                class="flex items-center fw-bold space-x-2 hover:text-gray-300 focus:outline-none">
+                                <span>{{ $internData->users->name }}</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5"
+                                    viewbox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
                         <div
                             x-show="open"
                             @click.away="open = false"
                             class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">User</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button
