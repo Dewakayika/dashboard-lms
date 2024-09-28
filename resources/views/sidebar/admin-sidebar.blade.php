@@ -1,12 +1,13 @@
-@vite('resources/css/sidebar/admin-sidebar.css')
-@vite('resources/js/sidebar/admin-sidebar.js')
+<link rel="stylesheet" href="{{ asset('css/sidebar/admin-sidebar.css') }}">
+<script src="{{ asset('js/sidebar/admin-sidebar.js') }}"></script>
+
 
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 <div class="sidebar font-apple-system">
     <div class="sidebar-header">
         <div class="profile-pic">
-            <img src="images/padma-black.png" alt="">
+            <img src="{{url('images/padma-black.png')}}" alt="">
         </div>
         <div class="profile-desc">
             <h3>{{ $adminData->name }}</h3>
@@ -81,6 +82,7 @@
             </ul>
     </div>
 </div>
+
 
 
 
