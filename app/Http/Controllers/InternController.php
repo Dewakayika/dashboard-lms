@@ -152,23 +152,29 @@ class InternController extends Controller
     {
         $request->validate([
             'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'profile_photo.required' => 'Profile photo is required.',
+            'profile_photo.image' => 'The file must be an image.',
+            'profile_photo.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
+            'profile_photo.max' => 'The image size must not exceed 2MB.', // Custom error message for size
         ]);
-
+    
         $user = Auth::user();
         $intern = Intern::where('user_id', $user->id)->first();
-
+    
         // Delete old profile photo if exists
         if ($intern->profile_photo) {
             Storage::delete('public/' . $intern->profile_photo);
         }
-
+    
         // Store the new profile photo
         $filePath = $request->file('profile_photo')->store('profile_photos', 'public');
-
+    
         // Update intern profile photo path
         $intern->profile_photo = $filePath;
         $intern->save();
-
+    
         return redirect()->back()->with('success', 'Profile picture updated successfully!');
     }
+    
 }

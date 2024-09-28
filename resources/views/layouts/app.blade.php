@@ -8,9 +8,9 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite('resources/css/app.css') 
-    @vite('resources/css/swiper-bundle.min.css')
+    @vite('resources/css/swiper-bundle.min.css') --}}
 
     <title>
         @yield('title')

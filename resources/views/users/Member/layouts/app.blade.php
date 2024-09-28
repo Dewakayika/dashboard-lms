@@ -12,9 +12,11 @@
             rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous">
+        
+            <script src="https://cdn.tailwindcss.com"></script>
 
-        @vite('resources/css/app.css') 
-        @vite('resources/css/member.css')
+        {{-- @vite('resources/css/app.css') 
+        @vite('resources/css/member.css') --}}
         <title>
             @yield('title')
         </title>

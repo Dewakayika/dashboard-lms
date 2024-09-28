@@ -2,7 +2,7 @@
     use Carbon\Carbon;
 @endphp
 @section('title')
-    Intern Profile
+    Padma Community | Intern Profile
 @endsection
 
 @extends('users.Member.layouts.app')
@@ -25,6 +25,21 @@
                 <p class="text-m text-gray-500 py-1">{{ Carbon::now()->toFormattedDateString() }} </p>
                 </div>
             </header>
+            @if ($errors->any())
+                <div id="error-alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">
+                        {{ $errors->first('profile_photo') }}
+                    </span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3 close-alert" onclick="closeAlert()">
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <title>Close</title>
+                            <path d="M14.348 14.849a1 1 0 01-1.415 0L10 11.414l-2.933 3.435a1 1 0 01-1.415-1.415l3.435-2.933-3.435-2.933a1 1 0 011.415-1.415L10 8.586l2.933-3.435a1 1 0 011.415 1.415L11.414 10l3.435 2.933a1 1 0 010 1.415z"/>
+                        </svg>
+                    </span>
+                </div>
+            @endif
+        
     
             <div class="bg-white shadow rounded border">
                 <div class="py-16 bg-blue-500 rounded-t background-banner"></div>
@@ -91,6 +106,7 @@
                         <div class="px-4 py-5 sm:p-6">
                             <h3 class="text-lg leading-6 font-bold text-gray-900 text-left">New Profile Picture</h3>
                             <p class="text-sm text-gray-600 text-left mb-2">Upgrade your profile picture</p>
+                            
                             <form action="{{ route('intern#updateProfilePicture') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
@@ -113,6 +129,12 @@
                                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Upload</button>
                                 </div>
                             </form>
+
+
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -165,6 +187,12 @@
                     reader.readAsDataURL(file);
                 }
             });
+        </script>
+        <script>
+            function closeAlert() {
+                var alertElement = document.getElementById('error-alert');
+                alertElement.style.display = 'none';  // Hide the alert
+            }
         </script>
         
     </body>

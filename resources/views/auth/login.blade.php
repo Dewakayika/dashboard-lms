@@ -1,4 +1,4 @@
-@section('title') Login @endsection 
+@section('title') Padma Community | Login @endsection 
 @extends('layouts.app') 
 
 @section('content')
@@ -29,36 +29,44 @@
                 class="flex items-center justify-center min-h-screen px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
                 <div class="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
                     @if(session('message'))
-                    <div id="toast-danger" class="flex items-center w-full max-w-xs p-4 mb-4 text-red-700 bg-red-50 rounded-lg shadow" role="alert">
+                    <div id="toast-danger" class="flex items-center w-full max-w-sm p-4 mb-4 text-red-700 bg-red-50 rounded-lg shadow" role="alert">
                         <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-600 bg-red-100 rounded-lg">
                             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
                             </svg>
                             <span class="sr-only">Error icon</span>
                         </div>
-                        <div class="ms-3 text-sm font-normal">{{session('message') }}</div>
+                        <div class="ms-3 text-sm font-normal">{{ session('message') }} message</div>
+                        <button type="button" class="ms-auto -mx-1.5 -my-1.5  text-red-400 hover:text-red-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#toast-danger" aria-label="Close">
+                            <span class="sr-only">Close</span>
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                        </button>
                     </div>
-
+                    
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
                             const toast = document.getElementById('toast-danger');
-                            
+                            const closeButton = document.querySelector('[data-dismiss-target="#toast-danger"]');
+                    
                             // Show the toast with fade-in effect
                             setTimeout(() => {
                                 toast.classList.remove('opacity-0', 'translate-y-2');
                                 toast.classList.add('opacity-100', 'translate-y-0');
                             }, 100); // Delay to ensure the animation plays
                     
-                            // Automatically hide the toast after 10 seconds
-                            setTimeout(() => {
+                            // Hide toast on close button click
+                            closeButton.addEventListener('click', () => {
                                 toast.classList.add('opacity-0', 'translate-y-2'); // Fade out animation
                                 setTimeout(() => {
-                                    toast.remove(); // Remove from DOM after animation
+                                    toast.remove(); // Remove from DOM after fade-out animation
                                 }, 500); // Time for the fade-out animation to complete
-                            }, 5000); // 10 seconds delay before hiding
+                            });
                         });
                     </script>
-                    @endif                   
+                    @endif
+                                      
 
                     
                     <h3 class="text-3xl font-bold leading-tight text-black sm:text-3xl">Welcome Dashboard!👋</h3>

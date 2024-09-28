@@ -26,7 +26,7 @@ class Role
         if (is_null($request->user()->role)) {
             // Logout pengguna dan redirect ke halaman login jika role null
             Auth::logout();
-            return redirect('/login')->with('message', 'Your session has expired. Please log in again.');
+            return redirect('/login')->with('message', 'Your session has expired. Please log in again!');
         }
         
         if ($request->user()->role != $role) {
