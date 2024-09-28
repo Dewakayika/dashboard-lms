@@ -24,11 +24,6 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'gender',
-        'phone',
-        'address',
-        'long',
-        'lat',
         'role',
         'email',
         'password'
@@ -63,4 +58,10 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getCourseProgressAttribute()
+    {
+        return json_decode($this->attributes['course_progress'], true) ?? [];
+    }
+ 
 }

@@ -13,6 +13,7 @@ class TalentCVController extends Controller
         return view('cv.talent_cv');
     }
 
+    
     public function store(Request $request)
     {
         // Validate the form data

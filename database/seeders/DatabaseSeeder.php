@@ -23,9 +23,6 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'id' => '1',
             'name' => 'Intern',
-            'gender' => '1',
-            'phone' => '+62811421',
-            'address' => 'Jalan Buntu',
             'role' => 'intern',
             'email' => 'intern@gmail.com',
             'password' => Hash::make('123123'),
@@ -36,9 +33,6 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'id' => '2',
             'name' => 'Talent',
-            'gender' => '1',
-            'phone' => '+62811421',
-            'address' => 'Jalan Buntu',
             'role' => 'talent',
             'email' => 'talent@gmail.com',
             'password' => Hash::make('123123'),
@@ -49,9 +43,6 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'id' => '3',
             'name' => 'Admin',
-            'gender' => '1',
-            'phone' => '+62811421',
-            'address' => 'Jalan Buntu',
             'role' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('123123'),

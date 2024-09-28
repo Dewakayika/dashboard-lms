@@ -21,7 +21,11 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('job');
+            $table->string('profile_photo');
+            $table->string('phone_number');
+            $table->string('address');
+            $table->string('gender');
+            $table->string('school_name');
             $table->timestamps();
         });
     }
