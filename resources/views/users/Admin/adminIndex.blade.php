@@ -1,4 +1,4 @@
-@vite('resources/css/users/admin/admin-index.css')
+<link rel="stylesheet" href="{{ asset('css/admin-index.css') }}">
 
 @section('title')
     Admin Dashboard

@@ -12,6 +12,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DonorController;
 use App\Http\Controllers\TalentCVController;
 use App\Http\Controllers\AdditionalInfoController;
+use App\Http\Controllers\CourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,6 +119,12 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
     Route::get('/', [InternController::class, 'index'])->name('intern#index'); //Member dashboard
     Route::get('/additional/data-intern',[InternController::class, 'additionalInfo'])->name('intern#additionalData');
     Route::post('/additional/submit', [InternController::class, 'submitForm'])->name('intern#submitData');
+
+    Route::get('/internProfile', [InternController::class, 'profile'])->name('intern#internProfile');
+    Route::post('/update/profile', [InternController::class, 'updateIntern'])->name('intern#editIntern');
+    Route::post('/update/profile-picture', [InternController::class, 'updateProfilePicture'])->name('intern#updateProfilePicture');
+
+    Route::post('/update-progress', [CourseController::class, 'updateProgress'])->name('update.progress');
 
     Route::get('/course/basic-webtoon', [InternController::class, 'basicWebtoon'])->name('course#basic');
     Route::get('/course/introduction', [InternController::class, 'intro'])->name('course#introduction');

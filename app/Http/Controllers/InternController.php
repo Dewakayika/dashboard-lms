@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Exists;
+use Illuminate\Support\Facades\Storage;
+
 
 class InternController extends Controller
 {
@@ -32,7 +34,6 @@ class InternController extends Controller
 
             return view('users.Member.internIndex')->with(['internData' => $intern_data, 'userData' => $user]);;
         }
-
     }
 
     public function additionalInfo(){
@@ -41,14 +42,34 @@ class InternController extends Controller
 
     public function submitForm(Request $request){
 
+        // Validasi input dari form
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
+            'phone_number' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'gender' => 'required|string|max:10',
+            'school_name' => 'required|string|max:255',
+        ]);
+
         $user = Auth::user();
 
+        // Handle upload foto profil
+        if ($request->hasFile('profile_photo')) {
+            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
+
+        // Simpan data intern ke database
         $intern = new Intern();
-        $intern->job = $request->input('job');
         $intern->user_id = $user->id;
+        $intern->profile_photo = $profilePhotoPath;
+        $intern->phone_number = $request->input('phone_number');
+        $intern->address = $request->input('address');
+        $intern->gender = $request->input('gender');
+        $intern->school_name = $request->input('school_name');
         $intern->save();
 
-        return redirect()->route('intern#index');
+        return redirect()->route('intern#index')->with('success', 'Register Data successfully submitted');
+
     }
 
     public function basicWebtoon()
@@ -79,135 +100,81 @@ class InternController extends Controller
         $user = User::where('id', $intern_data->user_id)->first();
 
         return view('users.Member.courseSketchupPhotoshop')->with(['internData' => $intern_data, 'userData' => $user]);;
-
     }
 
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function mealDetails($id)
-    // {
-    //     $user_data = User::where('id', Auth::id())->first();
-    //     $member_data = Member::where('user_id', Auth::id())->first();
-    //     $mealData = Meal::with('ratings')->where('id', $id)->first();
-    //     $partner_data = Partner::where('id', $mealData->partner_id)->first();
-    //     return view('users.Member.mealDetails')->with(['mealData' => $mealData,  'partnerData' => $partner_data, 'userData' => $user_data, 'memberData' => $member_data]);
-    // }
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 
-    // public function profile()
-    // {
-    //     $member_data = Member::where('user_id', Auth::id())->first();
-    //     $user = User::where('id', $member_data->user_id)->first();
-    //     $end_date = $member_data->member_end_service;
-    //     $dateCount = Carbon::parse(now())->diffInDays($end_date, false);
-    //     return view('users.Member.memberProfile')->with(['memberData' => $member_data, 'dateCount' => $dateCount, 'userData' => $user]);;
-    // }
+    public function profile()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
 
-    // public function editProfile()
-    // {
-    //     $member_data = Member::where('user_id', Auth::id())->first();
-    //     return view('users.Member.updateMember')->with(['memberData' =>  $member_data]);
-    // }
+        return view('users.Member.internProfile')->with(['internData' => $intern_data, 'userData' => $user]);;
+    }
 
-    // public function updateMember(Request $request)
-    // {
-    //     $update_member = $this->requestUpdateMember($request);
-    //     $update_user = $this->requestUpdateUser($request);
-    //     $member_data = Member::where('user_id', Auth::id())->first();
+    // Update intern profile information
+    public function updateIntern(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'gender' => 'required|string|max:10',
+            'phone_number' => 'required|string|max:15',
+            'school_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ]);
 
-    //     Member::where('user_id', Auth::id())->first()->update($update_member);
-    //     User::where('id', $member_data->users->id)->update($update_user);
+        $intern = Intern::where('user_id', Auth::id())->first();
+        $user = User::find(Auth::id());
 
-    //     return redirect()->route('member#memberProfile');
-    // }
+        // Update User information
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
 
-    // private function requestUpdateMember($request)
-    // {
-    //     $arr = [
-    //         'member_caregiver_name' => $request->member_caregiver_name,
-    //         'member_caregiver_number' => $request->member_caregiver_number,
-    //         'member_medical_condition' => $request->member_medical_condition,
-    //         'member_caregiver_relation' => $request->member_caregiver_relation,
-    //     ];
-    //     return $arr;
-    // }
+        // Update Intern information
+        $intern->gender = $request->gender;
+        $intern->phone_number = $request->phone_number;
+        $intern->school_name = $request->school_name;
+        $intern->address = $request->address;
+        $intern->save();
 
-    // private function requestUpdateUser($request)
-    // {
-    //     $arr = [
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'phone' => $request->phone,
-    //         'address' => $request->address,
-    //     ];
-    //     return $arr;
-    // }
+        return redirect()->back()->with('success', 'Profile updated successfully!');
+    }
 
-    // public static function vincentyGreatCircleDistance(
-    //     $latitudeFrom,
-    //     $longitudeFrom,
-    //     $latitudeTo,
-    //     $longitudeTo,
-    //     $earthRadius = 6371000
-    // ) {
-        
-    //     $latFrom = deg2rad($latitudeFrom);
-    //     $lonFrom = deg2rad($longitudeFrom);
-    //     $latTo = deg2rad($latitudeTo);
-    //     $lonTo = deg2rad($longitudeTo);
-
-    //     $lonDelta = $lonTo - $lonFrom;
-    //     $a = pow(cos($latTo) * sin($lonDelta), 2) +
-    //         pow(cos($latFrom) * sin($latTo) - sin($latFrom) * cos($latTo) * cos($lonDelta), 2);
-    //     $b = sin($latFrom) * sin($latTo) + cos($latFrom) * cos($latTo) * cos($lonDelta);
-
-    //     $angle = atan2(sqrt($a), $b);
-    //     return $angle * $earthRadius / 1000;
-    // }
-
-    // public function orderDetails($id)
-    // {
-    //     $member_data = Member::where('user_id', Auth::id())->first();
-    //     $mealData = Meal::where('id', $id)->first();
-    //     $partner_data = Partner::where('id', $mealData->partner_id)->first();
-    //     $user_data = User::where('id', Auth::id())->first();
-
-    //     $this->latUser = $user_data->lat;
-    //     $this->longUser = $user_data->long;
-
-    //     $distance_data = self::vincentyGreatCircleDistance(
-    //         Meal::find($id)->partners->users->lat,
-    //         Meal::find($id)->partners->users->long,
-    //         $this->latUser,
-    //         $this->longUser
-    //     );
-    //     $distance = floor($distance_data);
-    //     return view('users.Member.orderDetails')->with(['distanceData' => $distance, 'mealData' => $mealData, 'memberData' => $member_data, 'partnerData' => $partner_data, 'userData' => $user_data]);
-    // }
-
-    // public function orderList()
-    // {
-    //     $user_data = User::where('id', Auth::id())->first();
-    //     $member_data = Member::where('user_id', Auth::id())->first();
-    //     $order_data = Order::where('member_id', $member_data->id)->paginate(5);
-    //     $rating_data = Rating::where('member_id', $member_data->id)->get();
-    //     return view('users.Member.mealOrder')->with(['orderData' => $order_data, 'memberData' => $member_data,  'userData' => $user_data, 'ratingData' => $rating_data]);
-    // }
-
-    // public function memberFoodList(){
-    //     $project = Meal::query();
-    //     if (request('search')) {
-    //         $project->where('meal_title', 'Like', '%' . request('search') . '%');
-    //     }
-    //     $project_data = $project->orderBy('meal_title', 'ASC')->paginate(10);
-    //     return view('users.Member.memberFoodList')->with(['mealData' => $project_data]);
-
-    //     // $meal_data = Meal::paginate(10);
-    //     // $meal_search =
-    //     // $member_data = Member::where('user_id', Auth::id())->first();
-    //     //return view('users.Member.memberFoodList')->with(['memberData' => $member_data, 'mealData' => $meal_data]);
-    // }
+    // Update profile picture
+    public function updateProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'profile_photo.required' => 'Profile photo is required.',
+            'profile_photo.image' => 'The file must be an image.',
+            'profile_photo.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
+            'profile_photo.max' => 'The image size must not exceed 2MB.', // Custom error message for size
+        ]);
+    
+        $user = Auth::user();
+        $intern = Intern::where('user_id', $user->id)->first();
+    
+        // Delete old profile photo if exists
+        if ($intern->profile_photo) {
+            Storage::delete('public/' . $intern->profile_photo);
+        }
+    
+        // Store the new profile photo
+        $filePath = $request->file('profile_photo')->store('profile_photos', 'public');
+    
+        // Update intern profile photo path
+        $intern->profile_photo = $filePath;
+        $intern->save();
+    
+        return redirect()->back()->with('success', 'Profile picture updated successfully!');
+    }
+    
 }
