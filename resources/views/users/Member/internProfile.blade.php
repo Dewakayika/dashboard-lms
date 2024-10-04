@@ -46,7 +46,7 @@
                 <div class="p-6">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
                         <div class="flex items-center mb-4">
-                            <img src="{{ asset('storage/' . $internData->profile_photo) }}" alt="Profile" id="profile-picture" class="w-16 h-16 rounded-full mr-4 ring-2 ring-gray-300 p-1 dark:ring-gray-200 cursor-pointer">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" id="profile-picture" class="w-16 h-16 rounded-full mr-4 ring-2 ring-gray-300 p-1 dark:ring-gray-200 cursor-pointer">
                             <div>
                                 <h2 class="text-xl font-semibold">{{ $userData->name }}</h2>
                                 <p class="text-gray-600">{{ $userData->email }}</p>

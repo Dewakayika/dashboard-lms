@@ -40,37 +40,43 @@ class InternController extends Controller
         return view('users.Member.register-intern');
     }
 
-    public function submitForm(Request $request){
+    public function submitForm(Request $request)
+    {
+    // Validasi input dari form
+    $request->validate([
+        'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB size limit
+        'phone_number' => 'required|string|max:15',
+        'address' => 'required|string|max:255',
+        'gender' => 'required|string|max:10',
+        'school_name' => 'required|string|max:255',
+    ]);
 
-        // Validasi input dari form
-        $request->validate([
-            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
-            'phone_number' => 'required|string|max:15',
-            'address' => 'required|string|max:255',
-            'gender' => 'required|string|max:10',
-            'school_name' => 'required|string|max:255',
-        ]);
+    $user = Auth::user();
 
-        $user = Auth::user();
+    // Handle upload foto profil
+    if ($request->hasFile('profile_photo')) {
+        $image = $request->file('profile_photo');
+        $imageName = time() . '_' . $image->getClientOriginalName(); // Create a unique file name
 
-        // Handle upload foto profil
-        if ($request->hasFile('profile_photo')) {
-            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
-        }
+        // Move the image to the 'public/images/profile' folder
+        $image->move(public_path('images/profile'), $imageName);
 
-        // Simpan data intern ke database
-        $intern = new Intern();
-        $intern->user_id = $user->id;
-        $intern->profile_photo = $profilePhotoPath;
-        $intern->phone_number = $request->input('phone_number');
-        $intern->address = $request->input('address');
-        $intern->gender = $request->input('gender');
-        $intern->school_name = $request->input('school_name');
-        $intern->save();
-
-        return redirect()->route('intern#index')->with('success', 'Register Data successfully submitted');
-
+        // Save the file path to store in the database
+        $profilePhotoPath = 'images/profile/' . $imageName;
     }
+
+    // Simpan data intern ke database
+    $intern = new Intern();
+    $intern->user_id = $user->id;
+    $intern->profile_photo = $profilePhotoPath;
+    $intern->phone_number = $request->input('phone_number');
+    $intern->address = $request->input('address');
+    $intern->gender = $request->input('gender');
+    $intern->school_name = $request->input('school_name');
+    $intern->save();
+
+    return redirect()->route('intern#index')->with('success', 'Register Data successfully submitted');
+    }  
 
     public function basicWebtoon()
     {
@@ -148,33 +154,42 @@ class InternController extends Controller
     }
 
     // Update profile picture
-    public function updateProfilePicture(Request $request)
-    {
-        $request->validate([
-            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ], [
-            'profile_photo.required' => 'Profile photo is required.',
-            'profile_photo.image' => 'The file must be an image.',
-            'profile_photo.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'profile_photo.max' => 'The image size must not exceed 2MB.', // Custom error message for size
-        ]);
-    
-        $user = Auth::user();
-        $intern = Intern::where('user_id', $user->id)->first();
-    
-        // Delete old profile photo if exists
-        if ($intern->profile_photo) {
-            Storage::delete('public/' . $intern->profile_photo);
-        }
-    
-        // Store the new profile photo
-        $filePath = $request->file('profile_photo')->store('profile_photos', 'public');
-    
-        // Update intern profile photo path
-        $intern->profile_photo = $filePath;
-        $intern->save();
-    
-        return redirect()->back()->with('success', 'Profile picture updated successfully!');
+public function updateProfilePicture(Request $request)
+{
+    $request->validate([
+        'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10 MB limit
+    ], [
+        'profile_photo.required' => 'Profile photo is required.',
+        'profile_photo.image' => 'The file must be an image.',
+        'profile_photo.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
+        'profile_photo.max' => 'The image size must not exceed 10MB.', // Custom error message for size
+    ]);
+
+    $user = Auth::user();
+    $intern = Intern::where('user_id', $user->id)->first();
+
+    // Delete old profile photo if exists
+    if ($intern->profile_photo) {
+        // Delete the old photo from the public/images/profile directory
+        Storage::delete('public/' . $intern->profile_photo);
     }
+
+    // Handle new profile photo upload
+    if ($request->hasFile('profile_photo')) {
+        $image = $request->file('profile_photo');
+        $imageName = time() . '_' . $image->getClientOriginalName(); // Create a unique file name
+
+        // Move the image to the 'public/images/profile' folder
+        $image->move(public_path('images/profile'), $imageName);
+
+        // Update intern profile photo path
+        $intern->profile_photo = 'images/profile/' . $imageName; // Store the relative path
+    }
+
+    $intern->save();
+
+    return redirect()->back()->with('success', 'Profile picture updated successfully!');
+}
+
     
 }

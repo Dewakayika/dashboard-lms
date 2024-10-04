@@ -105,7 +105,16 @@
     </style>
 
     <div class="bg-gray-100">
-        <button class="hamburger" onclick="toggleSidebar()">
+        <button class="hamburger" onclick="toggleSidebar()"  style="            
+            position: fixed;
+            top: 90%;
+            padding: 15px;
+            margin-left: -15px;
+            background: rgb(141, 141, 141);
+            /* border-image: round; */
+            border-radius: 5px;
+            color: white;
+            ">
             <i class="fa-solid fa-bars"></i>    
         </button>
         <div class="overlay" onclick="toggleSidebar()"></div>
@@ -147,7 +156,6 @@
                     <div class="video-material">
                         <a href="https://drive.google.com/file/d/14DZZ4fEjw78oXb46vBb5TdCUHQ9K5Uww/view?usp=drive_link" target="_blank">Download Material</a>
                     </div>
-                    <button id="finish-button" class="btn btn-primary" disabled>Finish Course</button>
                 </div>
                 
             </main>

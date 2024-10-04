@@ -98,17 +98,22 @@
                     <div class="text-left space-y-6">
                         @if (Route::has('login')) @auth
                         <div x-data="{ userOpen: false }" class="relative">
-                            <button @click="userOpen = !userOpen" class="text-2xl hover:text-gray-300">
-                                {{ $internData->users->name }}
+                            <div class="flex gap-2 px-2 py-1">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <button
+                                @click="open = !open"
+                                class="flex items-center fw-bold space-x-2 text-2xl">
+                                <span>{{ $internData->users->name }}</span>
                             </button>
-                            <div
-                                class="mt-2 py-2">
-                                <a href="#" class="text-2xl hover:text-gray-300">User</a>
+                        </div>
+
+                            <div class="mt-2 py-2 px-5">
+                                <a href="{{ route('intern#internProfile')}}" class="text-2xl text-gray-200 hover:text-gray-300">My Profile</a>
                                 <form action="{{ route('logout') }}" method="post">
                                     @csrf
                                     <button
                                         type="submit"
-                                        class="text-2xl hover:text-red-500 mt-2">
+                                        class="text-2xl text-red-500 hover:text-red-500 mt-2">
                                         Logout
                                     </button>
                                 </form>
@@ -127,7 +132,7 @@
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
                         <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">
-                            <img src="{{ asset('storage/' .$internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
                             <button
                                 @click="open = !open"
                                 class="flex items-center fw-bold space-x-2 hover:text-gray-300 focus:outline-none">
@@ -148,12 +153,12 @@
                             x-show="open"
                             @click.away="open = false"
                             class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                            <a href="{{ route('intern#internProfile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button
                                     type="submit"
-                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none">
+                                    class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 focus:outline-none">
                                     Logout
                                 </button>
                             </form>

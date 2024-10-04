@@ -46,8 +46,8 @@
 
     <body>
         <!-- Navbar -->
-        <nav x-data="{ open: false }" class="relative w-full bg-black text-white">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center ">
+        <nav x-data="{ open: false }" class="relative w-full bg-black text-white z-50">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center">
                     <a href="{{ url('/dashboard') }}" class="flex items-center">
                         <img src="{{ url('images/padma.png') }}" alt="" width="20" class="mr-2">
@@ -92,21 +92,27 @@
                                 d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
-                    <div class="text-center space-y-6">
-                        <a href="{{ url('/dashboard') }}" class="block text-2xl hover:text-gray-300">Dashboard</a>
+                    <div class="text-left space-y-6">
                         @if (Route::has('login')) @auth
                         <div x-data="{ userOpen: false }" class="relative">
-                            <button @click="userOpen = !userOpen" class="text-2xl hover:text-gray-300">{{ $internData->users->name }}</button>
-                            <div
-                                x-show="userOpen"
-                                @click.away="userOpen = false"
-                                class="mt-2 py-2 bg-white rounded-md shadow-xl">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">User</a>
+                            <div class="flex gap-2 px-2 py-1">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <button
+                                @click="open = !open"
+                                class="flex items-center fw-bold space-x-2 text-2xl">
+                                <span>{{ $internData->users->name }}</span>
+                            </button>
+                        </div>
+
+                            <div class="mt-2 py-2 px-5">
+                                <a href="{{ route('intern#internProfile')}}" class="text-2xl text-gray-200 hover:text-gray-300">My Profile</a>
                                 <form action="{{ route('logout') }}" method="post">
                                     @csrf
                                     <button
                                         type="submit"
-                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none">Logout</button>
+                                        class="text-2xl text-red-500 hover:text-red-500 mt-2">
+                                        Logout
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -123,10 +129,7 @@
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
                         <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">
-                            <img
-                                src="{{ asset('storage/' .$internData->profile_photo) }}"
-                                alt="Profile"
-                                class="w-7 h-7 rounded-full object-cover">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
                             <button
                                 @click="open = !open"
                                 class="flex items-center fw-bold space-x-2 hover:text-gray-300 focus:outline-none">
@@ -147,14 +150,14 @@
                             x-show="open"
                             @click.away="open = false"
                             class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl">
-                            <a
-                                href=" {{ route('intern#internProfile')}} "
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                            <a href="{{ route('intern#internProfile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button
                                     type="submit"
-                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none">Logout</button>
+                                    class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 focus:outline-none">
+                                    Logout
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -166,34 +169,29 @@
             </div>
         </nav>
 
-        <div
-            class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32 h-99vh"
-            style="z-index: -1;">
+        <div class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32 h-99vh">
             <div class="absolute inset-0">
                 <img
                     class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left"
                     src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/5/girl-working-on-laptop.jpg"
                     alt=""/>
             </div>
-            <div
-                class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent "></div>
+            <div class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent "></div>
             <div class="absolute inset-0 block bg-black/60 md:hidden h-screen"></div>
 
-            <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+            <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl z-20">
                 <div class="md:w-2/3 lg:w-1/2 xl:w-1/2 text-left">
                     <h2 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">Padma Community</h2>
                     <p class="mt-3 text-base text-gray-200">Where creators, designers, and
                         enthusiasts come together to delve into the intricacies of webtoon background
                         design. Our community is dedicated to exploring every facet of the background
                         creation process, from initial concept development to final implementation.</p>
-                    <div class="mt-4">
-                        <a
-                            href="https://discord.com/"
-                            target="_blank"
-                            class="rounded-s bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Join Discord Channel</a>
+                    <div class="mt-4 ">
+                        <a href="https://discord.gg/n7kVTUJcrd" target="_blank" class="rounded-s bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-800">Join Discord Channel</a>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
