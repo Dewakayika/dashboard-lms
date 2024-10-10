@@ -12,7 +12,7 @@
             rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous">
-        
+            <link rel="stylesheet" href="css/app.css">
             <script src="https://cdn.tailwindcss.com"></script>
 
         {{-- @vite('resources/css/app.css') 
@@ -42,6 +42,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
         <link rel="icon" href="{{ url('images/padma-black.png') }}" type="image/png">
+        
 
     </head>
 

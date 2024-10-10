@@ -6,6 +6,7 @@
 
 @section('content')
     <style type="text/css">
+    
         /* Styles remain unchanged */
         #volunteer {
             max-width: 600px;
@@ -19,8 +20,7 @@
             color: white;
         }
         .video-overview {
-            font-size: 0.875rem;
-            color: #555;
+            font-size: 0.875rem;s
             margin-top: 4px;
         }
         .video-overview .overview-title {
@@ -130,12 +130,15 @@
                     <div class="mb-4">
                         <ul class="space-y-2">
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="introduction">
+                                    <i class="fa-solid fa-play"></i>
                                     <span>Introduction</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    <span>Assignment Submission</span>
                                 </a>
                             </li>
                         </ul>
@@ -152,12 +155,34 @@
                         <iframe id="video-placeholder" frameborder="0" allowfullscreen></iframe>
                     </div>
                     <h2 id="video-title" class="text-2xl font-bold mt-2">Title Course</h2>
-                    <div id="video-overview" class="video-overview"></div>
+                    <div id="video-overview" class="video-overview text-gray-600"></div>
                     <div class="video-material">
                         <a href="https://drive.google.com/file/d/14DZZ4fEjw78oXb46vBb5TdCUHQ9K5Uww/view?usp=drive_link" target="_blank">Download Material</a>
                     </div>
                 </div>
-                
+
+                <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
+                    <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. If you need to change any submitted information, please contact your mentor or administrator directly.
+
+                    </p>
+                    <form action="{{ route('submission_course.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="course_name" value="{{$courseName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm hidden-sm border rounded-md px-2 py-2 mt-2"> 
+                        <input type="hidden" name="chapter_name" value="{{$chapterName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                    
+                        <div class="mb-4">
+                            <input type="hidden" name="user_id" id="user_id" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        </div>
+                    
+                        <div class="mb-4">
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File (Link)</label>
+                            <input type="text" name="submission_file" id="submission_file" class=" mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white caret-black-600">
+                        </div>
+                    
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
+                    </form>                    
+                </div>
             </main>
         </div>
 
@@ -203,25 +228,23 @@
                                 <hr>
                                 <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'submission':
+                            videoUrl = 'https://drive.google.com/file/d/1IjacTcsDBe0FFm1MdVoWifG5jIwEdWV8/preview';
+                            title = 'Submission';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 0:54 minute | Beginner</span>
+                                <hr>
+                                <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
+                            `;
+                            document.getElementById('submission').style.display = 'block';
                             break;
                     }
 
                     videoTitle.textContent = title;
                     videoPlaceholder.src = videoUrl;
                     videoOverview.innerHTML = overviewContent;
-
-                    // Reset watched time
-                    watchedTime = 0;
-                    document.getElementById('finish-button').disabled = true; // Disable button initially
-
-                    // Start a timer
-                    const timerInterval = setInterval(() => {
-                        watchedTime++;
-                        if (watchedTime >= 60) { // 60 seconds = 1 minute
-                            document.getElementById('finish-button').disabled = false; // Enable the finish button
-                            clearInterval(timerInterval); // Stop the timer
-                        }
-                    }, 1000); // Check every second
                 }
             });
 
@@ -235,25 +258,6 @@
                 }
             }
 
-            document.getElementById('finish-button').addEventListener('click', () => {
-                fetch('{{ route('update.progress') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': '{{ csrf_token() }}',
-                    },
-                    body: JSON.stringify({
-                        user_id: {{ auth()->id() }},
-                        progress: 'done',
-                        watched_time: watchedTime
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Tampilkan status baru di card course atau berikan notifikasi
-                    console.log(data);
-                });
-            });
         </script>
     </div>
 @endsection

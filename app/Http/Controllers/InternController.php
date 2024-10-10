@@ -6,6 +6,7 @@ use App\Models\Delivery;
 use App\Models\Talent;
 use App\Models\Intern;
 use App\Models\User;
+use App\Models\SubmissionCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
@@ -20,21 +21,29 @@ class InternController extends Controller
 
     public function index()
     {
-
         $user = auth()->user();
-
-        
-         // Cek apakah user dengan role intern memiliki data di tabel interns
+    
+        // Cek apakah user dengan role intern memiliki data di tabel interns
         if (!Intern::where('user_id', $user->id)->exists()) {
-        return view('users.Member.register-intern');
-        }
-        else {
-            $intern_data = Intern::where('user_id', Auth::id())->first();
-            $user = User::where('id', $intern_data->user_id)->first();
-
-            return view('users.Member.internIndex')->with(['internData' => $intern_data, 'userData' => $user]);;
+            return view('users.Member.register-intern');
+        } else {
+            // Ambil data dari tabel interns
+            $intern_data = Intern::where('user_id', $user->id)->first();
+            $userData = User::where('id', $intern_data->user_id)->first();
+    
+            // Ambil daftar course yang sudah diselesaikan user
+            $completedCourses = SubmissionCourse::where('user_id', $user->id)
+                                    ->pluck('course_name')
+                                    ->toArray();
+    
+            return view('users.Member.internIndex')->with([
+                'internData' => $intern_data, // Data intern
+                'userData' => $userData, // Data user
+                'completedCourses' => $completedCourses
+            ]);
         }
     }
+    
 
     public function additionalInfo(){
         return view('users.Member.register-intern');
@@ -82,16 +91,72 @@ class InternController extends Controller
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
-
-        return view('users.Member.courseBasicWebtoon')->with(['internData' => $intern_data, 'userData' => $user]);;
+    
+        // Cek apakah "Introduction" ada di submission_course
+        $submitted = SubmissionCourse::where('user_id', Auth::id())
+            ->where('course_name', 'Introduction')
+            ->exists(); // Menggunakan exists untuk memeriksa keberadaan
+    
+        // Cek jika course_name tidak ditemukan
+        if (!$submitted) {
+            return redirect()->back()->with('error','You must complete the "Introduction" course to access this.');
+        }
+    
+        return view('users.Member.courseBasicWebtoon')->with([
+            'internData' => $intern_data,
+            'userData' => $user,
+            'canAccess' => $submitted, // Menyediakan informasi akses
+        ]);
     }
-    public function intro()
+    
+    
+
+    // Introduction Course
+    public function intro(Request $request)
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
-        return view('users.Member.courseIntroduction')->with(['internData' => $intern_data, 'userData' => $user]);;
+        $courseName = 'Introduction';
+        $chapterName = 'Chapter_Introduction';
+
+        return view('users.Member.courseIntroduction', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
     }
+
+    // Store data Submission
+    public function store(Request $request)
+    {
+    $user = Auth::user();
+
+    $request->validate([
+        'submission_file' => 'required|string',
+        'course_name' => 'required|string',
+        'chapter_name' => 'required|string',
+    ]);
+
+    // Cek apakah sudah ada submission untuk course dan chapter yang sama
+    $existingSubmission = SubmissionCourse::where('user_id', $user->id)
+        ->where('course_name', $request->course_name)
+        ->where('chapter_name', $request->chapter_name)
+        ->first();
+
+    if ($existingSubmission) {
+        return redirect()->back()->with('error', "You're already submitted this assignment.");
+    }
+
+    // Simpan data submission course ke database
+    $submission = new SubmissionCourse();
+    $submission->user_id = $user->id; // Menyimpan ID pengguna yang sedang login
+    $submission->course_name = $request->input('course_name');
+    $submission->chapter_name = $request->input('chapter_name');
+    $submission->submission_file = $request->input('submission_file'); // Ambil dari input
+    $submission->submission_date = now(); // Tanggal saat ini
+    $submission->save(); // Simpan data ke database
+
+    return redirect()->back()->with('success', 'Assignment successfully submitted!');
+    }
+
+
 
     public function basicSketchup()
     {
