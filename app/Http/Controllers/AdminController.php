@@ -20,28 +20,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class AdminController extends Controller
 {
-    //Admin Dashboard
+    // Admin Dashboard
     public function index()
     {
-        
+        // Hitung total user, intern, talent, dan role
         $user_data = User::count();
         $intern_data = Intern::count();
         $talent_data = Talent::count();
         $role_count = Roles::count();
         $role_data = Roles::paginate(10);
 
+        // Ambil data leaderboard (total submission per user)
+        $leaderboard = DB::table('users')
+            ->leftJoin('Submission_Course', 'users.id', '=', 'Submission_Course.user_id')
+            ->select('users.id', 'users.name', 'users.email', DB::raw('COUNT(Submission_Course.id) as total_submissions'), DB::raw('MIN(Submission_Course.submission_date) as first_submission_date'))
+            ->groupBy('users.id', 'users.name', 'users.email')
+            ->orderBy('total_submissions', 'DESC') // Urutkan berdasarkan jumlah submission terbanyak
+            ->orderBy('first_submission_date', 'ASC') // Kemudian urutkan berdasarkan tanggal submission paling awal
+            ->paginate(5);
 
+        // Return ke view dengan data yang telah diambil
         return view('users.Admin.adminIndex')->with([
             'userData' => $user_data,
             'internData' => $intern_data,
-            'talentData' => $talent_data,  
-            'countRole' => $role_count, 
-            'roleData' => $role_data
-        ]);;
+            'talentData' => $talent_data,
+            'countRole' => $role_count,
+            'roleData' => $role_data,
+            'leaderboard' => $leaderboard // Tambahkan leaderboard di sini
+        ]);
     }
+
+
 
     // Create Role and Registration Code | View
     public function createRole(){

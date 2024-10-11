@@ -46,8 +46,8 @@
 
     <body>
         <!-- Navbar -->
-        <nav x-data="{ open: false }" class="relative w-full bg-black text-white">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center ">
+        <nav x-data="{ open: false }" class="relative w-full bg-black text-white z-50">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center">
                     <a href="{{ url('/dashboard') }}" class="flex items-center">
                         <img src="{{ url('images/padma.png') }}" alt="" width="20" class="mr-2">
@@ -92,21 +92,27 @@
                                 d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
-                    <div class="text-center space-y-6">
-                        <a href="{{ url('/dashboard') }}" class="block text-2xl hover:text-gray-300">Dashboard</a>
+                    <div class="text-left space-y-6">
                         @if (Route::has('login')) @auth
                         <div x-data="{ userOpen: false }" class="relative">
-                            <button @click="userOpen = !userOpen" class="text-2xl hover:text-gray-300">{{ $internData->users->name }}</button>
-                            <div
-                                x-show="userOpen"
-                                @click.away="userOpen = false"
-                                class="mt-2 py-2 bg-white rounded-md shadow-xl">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">User</a>
+                            <div class="flex gap-2 px-2 py-1">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <button
+                                @click="open = !open"
+                                class="flex items-center fw-bold space-x-2 text-2xl">
+                                <span>{{ $internData->users->name }}</span>
+                            </button>
+                        </div>
+
+                            <div class="mt-2 py-2 px-5">
+                                <a href="{{ route('intern#internProfile')}}" class="text-2xl text-gray-200 hover:text-gray-300">My Profile</a>
                                 <form action="{{ route('logout') }}" method="post">
                                     @csrf
                                     <button
                                         type="submit"
-                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none">Logout</button>
+                                        class="text-2xl text-red-500 hover:text-red-500 mt-2">
+                                        Logout
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -123,10 +129,7 @@
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
                         <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">
-                            <img
-                                src="{{ asset('storage/' .$internData->profile_photo) }}"
-                                alt="Profile"
-                                class="w-7 h-7 rounded-full object-cover">
+                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
                             <button
                                 @click="open = !open"
                                 class="flex items-center fw-bold space-x-2 hover:text-gray-300 focus:outline-none">
@@ -147,14 +150,14 @@
                             x-show="open"
                             @click.away="open = false"
                             class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl">
-                            <a
-                                href=" {{ route('intern#internProfile')}} "
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                            <a href="{{ route('intern#internProfile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button
                                     type="submit"
-                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none">Logout</button>
+                                    class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 focus:outline-none">
+                                    Logout
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -166,34 +169,29 @@
             </div>
         </nav>
 
-        <div
-            class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32 h-99vh"
-            style="z-index: -1;">
+        <div class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32 h-99vh">
             <div class="absolute inset-0">
                 <img
                     class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left"
                     src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/5/girl-working-on-laptop.jpg"
                     alt=""/>
             </div>
-            <div
-                class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent "></div>
+            <div class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent "></div>
             <div class="absolute inset-0 block bg-black/60 md:hidden h-screen"></div>
 
-            <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+            <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl z-20">
                 <div class="md:w-2/3 lg:w-1/2 xl:w-1/2 text-left">
                     <h2 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">Padma Community</h2>
                     <p class="mt-3 text-base text-gray-200">Where creators, designers, and
                         enthusiasts come together to delve into the intricacies of webtoon background
                         design. Our community is dedicated to exploring every facet of the background
                         creation process, from initial concept development to final implementation.</p>
-                    <div class="mt-4">
-                        <a
-                            href="https://discord.com/"
-                            target="_blank"
-                            class="rounded-s bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Join Discord Channel</a>
+                    <div class="mt-4 ">
+                        <a href="https://discord.gg/n7kVTUJcrd" target="_blank" class="rounded-s bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-800">Join Discord Channel</a>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
@@ -236,164 +234,210 @@
                     </div>
                 </div>
 
-                <div
-                    class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
+                
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Introduction', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
                     <img src="{{ url('images/Basic.png') }}" class="w-full mb-3">
-                    <div class="p-4 pt-2">
+                    <div class="p-4 pt-2 relative z-0">
                         <div class="mb-8">
                             <p class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 1
                             </p>
-                            <a
-                                href="{{ route('course#basic') }}"
-                                class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Comic and Webtoon Introduction
+                            <a href="{{ route('course#basic') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Comic and Webtoon Introduction
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">The Webtoon Fundamentals course is
-                                designed for aspiring creators who want to develop their skills in visual
-                                storytelling, focusing on essential elements like storyboarding, shot
-                                composition, and camera angles.</p>
+                            <p class="text-gray-700 text-sm text-justify">The Webtoon Fundamentals course is designed for aspiring creators who want to develop their skills in visual storytelling, focusing on essential elements like storyboarding, shot composition, and camera angles.</p>
                         </div>
                         <div class="flex items-center">
-                            <a href="#"><img
-                                class="w-10 h-10 rounded-full mr-4"
-                                src="{{ url('images/padma-black.png') }}"
-                                alt="Avatar of Jonathan Reinink"></a>
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
-                                <a
-                                    href="#"
-                                    class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Webtoon_introduction', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
                     <img src="{{ url('images/sketchup.png') }}" class="w-full mb-3">
-                    <div class="p-4 pt-2">
+                    <div class="p-4 pt-2 relative z-0">
                         <div class="mb-8">
                             <p class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 2
                             </p>
-                            <a
-                                href="{{ route('course#basicSketchup') }}"
-                                class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Introduction in to Sketchup</a>
+                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Introduction in to Sketchup
+                            </a>
                             <p class="text-gray-700 text-sm text-justify">This introductory course on
                                 SketchUp Fundamentals is designed for beginners looking to master the essential
-                                tools and techniques of 3D modeling for webtoon background design.
-                            </p>
+                                tools and techniques of 3D modeling for webtoon background design.</p>
                         </div>
                         <div class="flex items-center">
-                            <a href="#"><img
-                                class="w-10 h-10 rounded-full mr-4"
-                                src="{{ url('images/padma-black.png') }}"
-                                alt="Avatar of Jonathan Reinink"></a>
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
-                                <a
-                                    href="#"
-                                    class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Introduction_to_sketchup', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
                     <img src="{{ url('images/photosop.png') }}" class="w-full mb-3">
-                    <div class="p-4 pt-2">
+                    <div class="p-4 pt-2 relative z-0">
                         <div class="mb-8">
                             <p class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 3
                             </p>
-                            <a
-                                href="{{ route('course#sketchupPhotoshop')}}"
-                                class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Sketchup to Photoshop</a>
+                            <a href="{{ route('course#sketchupPhotoshop') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Sketchup to Photoshop
+                            </a>
                             <p class="text-gray-700 text-sm text-justify">This specialized course focuses on
                                 mastering the seamless workflow between SketchUp and Photoshop to create
-                                high-quality, detailed webtoon backgrounds.
-                            </p>
+                                high-quality, detailed webtoon backgrounds.</p>
                         </div>
                         <div class="flex items-center">
-                            <a href="#"><img
-                                class="w-10 h-10 rounded-full mr-4"
-                                src="{{ url('images/padma-black.png') }}"
-                                alt="Avatar of Jonathan Reinink"></a>
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
-                                <a
-                                    href=""
-                                    class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
+
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Sketchup_to_photoshop', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
                     <img src="{{ url('images/advance.png') }}" class="w-full mb-3">
-                    <div class="p-4 pt-2">
+                    <div class="p-4 pt-2 relative z-0">
                         <div class="mb-8">
                             <p class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 4
                             </p>
-                            <a
-                                href="#"
-                                class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">Advance Tools Webtoon Design</a>
-                            <p class="text-gray-700 text-sm">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Advance Tools Webtoon Design
+                            </a>
+                            <p class="text-gray-700 text-sm text-justify">This specialized course focuses on
+                                mastering the seamless workflow between SketchUp and Photoshop to create
+                                high-quality, detailed webtoon backgrounds.</p>
                         </div>
                         <div class="flex items-center">
-                            <a href="#"><img
-                                class="w-10 h-10 rounded-full mr-4"
-                                src="{{ url('images/padma-black.png') }}"
-                                alt="Avatar of Jonathan Reinink"></a>
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
-                                <a
-                                    href="#"
-                                    class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Advance_webtoon_design', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
                     <img src="{{ url('images/industry.png') }}" class="w-full mb-3">
-                    <div class="p-4 pt-2">
+                    <div class="p-4 pt-2 relative z-0">
                         <div class="mb-8">
                             <p class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 5
                             </p>
-                            <a
-                                href="#"
-                                class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">standard industry Practise</a>
-                            <p class="text-gray-700 text-sm">Lorem ipsum dolor sit amet, consectetur
+                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Standard Industry Practise
+                            </a>
+                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
                                 adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
                                 exercitationem praesentium nihil.</p>
                         </div>
                         <div class="flex items-center">
-                            <a href="#"><img
-                                class="w-10 h-10 rounded-full mr-4"
-                                src="{{ url('images/padma-black.png') }}"
-                                alt="Avatar of Jonathan Reinink"></a>
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
-                                <a
-                                    href="#"
-                                    class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Advance_webtoon_design', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
+                    <img src="{{ url('images/banner-5.png') }}" class="w-full mb-3">
+                    <div class="p-4 pt-2 relative z-0">
+                        <div class="mb-8">
+                            <p class="text-sm text-gray-600 flex items-center">
+                                <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
+                                #CHAPTER 6
+                            </p>
+                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Introduction Snaptoon 3D Rendering
+                            </a>
+                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
+                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
+                                exercitationem praesentium nihil.</p>
+                        </div>
+                        <div class="flex items-center">
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
+                            <div class="text-sm">
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <p class="text-gray-600">Sept 06</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 

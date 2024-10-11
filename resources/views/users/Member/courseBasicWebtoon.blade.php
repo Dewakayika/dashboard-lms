@@ -192,6 +192,12 @@
                                     <span>Conclutions Camera and Shots</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    <span>Assignment Submission</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -213,6 +219,34 @@
                     <div class="video-material">
                         <a href="https://drive.google.com/drive/folders/1XTYMZqVjHHGQRm6jW61EiW8crtd9qJJU?usp=drive_link"  target="_blank">Download Material</a>
                     </div>
+                </div>
+
+                <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
+                    <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course. For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
+                    <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
+                    <br>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
+                        Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
+                        If you need to change any submitted information, please contact your mentor or administrator directly.
+                    </p>                    
+                    
+                    <form action="{{ route('submission_course.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="course_name" value="{{$courseName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm hidden-sm border rounded-md px-2 py-2 mt-2"> 
+                        <input type="hidden" name="chapter_name" value="{{$chapterName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                    
+                        <div class="mb-4">
+                            <input type="hidden" name="user_id" id="user_id" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        </div>
+                    
+                        <div class="mb-4">
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File (Link)</label>
+                            <input type="text" name="submission_file" id="submission_file" class=" mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white caret-black-600">
+                        </div>
+                    
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
+                    </form>                   
                 </div>
             </main>
         </div>
@@ -258,6 +292,7 @@
                                 <hr>
                                 <span>Before you can start drawing your comic, you need to know the basics of shot composition and camera angles, and why they're crucial to successfully telling your story on the page. Ben talks about the rule of thirds, wide shots, full shots, medium shots, close-ups, and more. He also demonstrates the importance of following the action in the same direction throughout any given scene. Storyboarding may not always be associated with comics, but the same rules apply. Knowing and understanding these concepts can strengthen your work.</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'whatstoryboard':
                             videoUrl = 'https://drive.google.com/file/d/1s0c5Tu9oMiFMoHhiRCO3_uPbMUE1YKs6/preview';
@@ -268,6 +303,7 @@
                                 <span>A storyboard is a visual representation of a film, animation, or comic book's sequence of events. It consists of a series of sketches or illustrations that depict the flow of action, camera angles, and pacing of the story. The purpose of a storyboard is to provide a visual guide that outlines how a story will unfold, scene by scene.</span>
                                 <span>Skills Covered: storyboarding</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'understanding-aspec-ratio':
                             videoUrl = 'https://drive.google.com/file/d/1YKAnlfapBaPLTVUqAq-4BZaxlsFdLh6v/preview';
@@ -279,6 +315,7 @@
                                 <span>The Rule of Thirds is a fundamental principle of composition that divides an image into nine equal parts using two equally spaced horizontal lines and two equally spaced vertical lines. By placing key elements along these lines or at their intersections, you create a more balanced, engaging, and visually appealing composition.</span>
                                 <span>Skills Covered: Understanding Aspect Ratio</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'rule-of-third':
                             videoUrl = 'https://drive.google.com/file/d/1Fo-bTmD09_a9rDs8n6cVQ3FPFHimTnwx/preview';
@@ -289,6 +326,7 @@
                                 <span>Understanding the different types of shots is crucial for storyboarding, as each type serves a specific purpose in conveying the story, setting the scene, and highlighting character actions and emotions. </span>
                                 <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'conclution-camera-shots':
                             videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
@@ -299,6 +337,17 @@
                                 <span>Understanding the different types of shots is crucial for storyboarding, as each type serves a specific purpose in conveying the story, setting the scene, and highlighting character actions and emotions. </span>
                                 <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'submission':
+                            videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
+                            title = 'Submission';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 0:54 minute | Beginner</span>
+                                <hr>
+                                <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
+                            `;
+                            document.getElementById('submission').style.display = 'block';
                             break;
                     }
 
@@ -320,6 +369,45 @@
                 }
             }
         </script>
+
+    <script>
+    document.getElementById('dropzone-file').addEventListener('change', function(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const fileNameElement = document.getElementById('file-name');
+        
+        // Validasi file kosong
+        if (!file) {
+            fileNameElement.textContent = "No file selected.";
+            fileNameElement.classList.add('text-red-500');
+            return;
+        }
+        
+        // Validasi tipe file
+        const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+        if (!allowedExtensions.exec(file.name)) {
+            fileNameElement.textContent = "Invalid file type. Only PDF, DOC, and DOCX are allowed.";
+            fileNameElement.classList.add('text-red-500');
+            fileInput.value = ''; // Reset file input
+            return;
+        }
+        
+        // Validasi ukuran file (maksimal 2MB)
+        const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+        if (file.size > maxSizeInBytes) {
+            fileNameElement.textContent = "File size exceeds 2MB limit.";
+            fileNameElement.classList.add('text-red-500');
+            fileInput.value = ''; // Reset file input
+            return;
+        }
+        
+        // Tampilkan nama file jika valid
+        fileNameElement.textContent = `Selected file: ${file.name}`;
+        fileNameElement.classList.remove('text-red-500');
+        fileNameElement.classList.add('text-green-500');
+    });
+    </script>
+    
     </div>
     <!-- End content -->
 @endsection
