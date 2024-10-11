@@ -129,17 +129,33 @@
                                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Upload</button>
                                 </div>
                             </form>
-
-
-
-
-
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="container mx-auto p-4">
+            <h1 class="text-gray-800 font-bold">Course History</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-3">
+                @foreach ($submission as $submissionItem)
+                <div class="bg-white p-4 rounded shadow flex justify-between">
+                    <div class="flex gap-3">
+                        {{-- <i class="fa-solid fa-medal mt-2 text-yellow-500"></i> --}}
+                        <div class="gap-3">
+                            <p class="hidden">{{ $submissionItem->id }}</p>
+                            <h3 class="font-semibold text-lg text-gray-700">{{ $submissionItem->course_name }}</h3>
+                            <p class="text-gray-400 text-sm font-regular">{{ $submissionItem->chapter_name }} | {{ $submissionItem->submission_date }}</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-green-500"></i>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        
 
         <script>
             const profilePicture = document.getElementById('profile-picture');

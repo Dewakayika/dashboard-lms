@@ -123,15 +123,19 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
     Route::get('/internProfile', [InternController::class, 'profile'])->name('intern#internProfile');
     Route::post('/update/profile', [InternController::class, 'updateIntern'])->name('intern#editIntern');
     Route::post('/update/profile-picture', [InternController::class, 'updateProfilePicture'])->name('intern#updateProfilePicture');
-
     Route::post('/update-progress', [CourseController::class, 'updateProgress'])->name('update.progress');
 
-    Route::get('/course/basic-webtoon', [InternController::class, 'basicWebtoon'])->name('course#basic');
 
-
+    // Route untuk menyimpan submission course Chapter Intro
     Route::get('/course/introduction', [InternController::class, 'intro'])->name('course#introduction');
-    // Route untuk menyimpan submission course
     Route::post('/submission-course/intro', [InternController::class, 'store'])->name('submission_course.store');
+
+
+    // Route untuk menyimpan submission course Chapter 1
+    Route::get('/course/basic-webtoon', [InternController::class, 'basicWebtoon'])->name('course#basic');
+    Route::post('/submission-course/basic-webtoon', [InternController::class, 'storeBasicWebtoon'])->name('submission#basicWebtoon');
+
+
 
     Route::get('/course/basic-sketchup', [InternController::class, 'basicSketchup'])->name('course#basicSketchup'); 
     Route::get('/course/sketchup-photoshop', [InternController::class, 'sketchupPhotoshop'])->name('course#sketchupPhotoshop');

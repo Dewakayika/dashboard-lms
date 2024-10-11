@@ -44,6 +44,7 @@ class InternController extends Controller
         }
     }
     
+    
 
     public function additionalInfo(){
         return view('users.Member.register-intern');
@@ -87,30 +88,9 @@ class InternController extends Controller
     return redirect()->route('intern#index')->with('success', 'Register Data successfully submitted');
     }  
 
-    public function basicWebtoon()
-    {
-        $intern_data = Intern::where('user_id', Auth::id())->first();
-        $user = User::where('id', $intern_data->user_id)->first();
-    
-        // Cek apakah "Introduction" ada di submission_course
-        $submitted = SubmissionCourse::where('user_id', Auth::id())
-            ->where('course_name', 'Introduction')
-            ->exists(); // Menggunakan exists untuk memeriksa keberadaan
-    
-        // Cek jika course_name tidak ditemukan
-        if (!$submitted) {
-            return redirect()->back()->with('error','You must complete the "Introduction" course to access this.');
-        }
-    
-        return view('users.Member.courseBasicWebtoon')->with([
-            'internData' => $intern_data,
-            'userData' => $user,
-            'canAccess' => $submitted, // Menyediakan informasi akses
-        ]);
-    }
-    
-    
 
+
+    // Chapter Intro
     // Introduction Course
     public function intro(Request $request)
     {
@@ -123,7 +103,6 @@ class InternController extends Controller
         return view('users.Member.courseIntroduction', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
     }
 
-    // Store data Submission
     public function store(Request $request)
     {
     $user = Auth::user();
@@ -134,7 +113,6 @@ class InternController extends Controller
         'chapter_name' => 'required|string',
     ]);
 
-    // Cek apakah sudah ada submission untuk course dan chapter yang sama
     $existingSubmission = SubmissionCourse::where('user_id', $user->id)
         ->where('course_name', $request->course_name)
         ->where('chapter_name', $request->chapter_name)
@@ -144,18 +122,31 @@ class InternController extends Controller
         return redirect()->back()->with('error', "You're already submitted this assignment.");
     }
 
-    // Simpan data submission course ke database
     $submission = new SubmissionCourse();
-    $submission->user_id = $user->id; // Menyimpan ID pengguna yang sedang login
+    $submission->user_id = $user->id; 
     $submission->course_name = $request->input('course_name');
     $submission->chapter_name = $request->input('chapter_name');
-    $submission->submission_file = $request->input('submission_file'); // Ambil dari input
-    $submission->submission_date = now(); // Tanggal saat ini
-    $submission->save(); // Simpan data ke database
+    $submission->submission_file = $request->input('submission_file'); 
+    $submission->submission_date = now(); 
+    $submission->save();
 
     return redirect()->back()->with('success', 'Assignment successfully submitted!');
     }
 
+
+
+    // Chapter #1
+    // Basic Webtoon
+    public function basicWebtoon()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        $courseName = 'Webtoon_introduction';
+        $chapterName = 'Chapter_1';    
+    
+        return view('users.Member.courseBasicWebtoon', compact('courseName', 'chapterName'))->with([ 'internData' => $intern_data, 'userData' => $user]);
+    } 
 
 
     public function basicSketchup()
@@ -163,14 +154,20 @@ class InternController extends Controller
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
-        return view('users.Member.courseIntroSketchup')->with(['internData' => $intern_data, 'userData' => $user]);;
+        $courseName = 'Introduction_to_sketchup';
+        $chapterName = 'Chapter_2';
+
+        return view('users.Member.courseIntroSketchup', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
     }
     public function sketchupPhotoshop()
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
-        return view('users.Member.courseSketchupPhotoshop')->with(['internData' => $intern_data, 'userData' => $user]);;
+        $courseName = 'Sketchup_to_photoshop';
+        $chapterName = 'Chapter_3';
+
+        return view('users.Member.courseSketchupPhotoshop', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
     }
 
     /**
@@ -180,13 +177,25 @@ class InternController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function profile()
-    {
-        $intern_data = Intern::where('user_id', Auth::id())->first();
-        $user = User::where('id', $intern_data->user_id)->first();
-
-        return view('users.Member.internProfile')->with(['internData' => $intern_data, 'userData' => $user]);;
-    }
+     public function profile()
+     {
+         // Ambil data intern berdasarkan user_id dari Auth
+         $intern_data = Intern::where('user_id', Auth::id())->first();
+     
+         // Ambil data user langsung dari Auth, tidak perlu query lagi
+         $user = Auth::user();
+     
+         // Ambil semua submission dari user yang sedang login
+         $submissionCourse = SubmissionCourse::where('user_id', Auth::id())->get();
+     
+         // Mengirim data ke view
+         return view('users.Member.internProfile')->with([
+             'internData' => $intern_data,
+             'userData' => $user,
+             'submission' => $submissionCourse
+         ]);
+     }
+     
 
     // Update intern profile information
     public function updateIntern(Request $request)
@@ -219,8 +228,8 @@ class InternController extends Controller
     }
 
     // Update profile picture
-public function updateProfilePicture(Request $request)
-{
+    public function updateProfilePicture(Request $request)
+    {
     $request->validate([
         'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10 MB limit
     ], [

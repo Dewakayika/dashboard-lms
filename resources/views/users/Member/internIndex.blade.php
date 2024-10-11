@@ -318,7 +318,7 @@
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 3
                             </p>
-                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                            <a href="{{ route('course#sketchupPhotoshop') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Sketchup to Photoshop
                             </a>
                             <p class="text-gray-700 text-sm text-justify">This specialized course focuses on
@@ -389,6 +389,40 @@
                             </p>
                             <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Standard Industry Practise
+                            </a>
+                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
+                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
+                                exercitationem praesentium nihil.</p>
+                        </div>
+                        <div class="flex items-center">
+                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
+                            <div class="text-sm">
+                                <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
+                                <p class="text-gray-600">Sept 06</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
+                    @if(!in_array('Advance_webtoon_design', $completedCourses)) 
+                    <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
+                        <div class="justify-center text-center">                        
+                            <i class="fa-solid fa-lock text-white text-4xl"></i>
+                            <h3 class="text-white text-xl font-bold mt-2">Please finish the previous <br> chapter first</h3>
+                        </div>
+                    </div>
+                    @endif
+                
+                    <img src="{{ url('images/banner-5.png') }}" class="w-full mb-3">
+                    <div class="p-4 pt-2 relative z-0">
+                        <div class="mb-8">
+                            <p class="text-sm text-gray-600 flex items-center">
+                                <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
+                                #CHAPTER 6
+                            </p>
+                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                                Introduction Snaptoon 3D Rendering
                             </a>
                             <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
                                 adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
