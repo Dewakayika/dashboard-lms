@@ -16,7 +16,7 @@
 </header>
 
 <div
-    class="grid lg:grid-cols-4 md:grid-cols-2 gap-3 w-full max-w-6xl mt-4 mb-4">
+    class="grid lg:grid-cols-4 md:grid-cols-2 gap-3 w-full max-w-6xl mt-4 mb-4 ">
     <!-- Tile 1 -->
     <a
         href="{{ route('admin#listUser') }}"
@@ -81,6 +81,7 @@
 
 </div>
 
+
 {{-- <div class="main-container">
             <div class="row">
                 <div class="card-content">
@@ -132,32 +133,102 @@
 <!-- Start content -->
 
 
-<div class="container">
-    <div class="mb-4 w-full mx-auto  sm:flex sm:items-center sm:justify-between ">
-        <h1 class="text-xl font-bold text-left mt-3">
-            Registration Code
-        </h1>
-        <a
-            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-            href="{{ route('admin#createRole') }}">
-            <i class="fa-solid fa-plus text-white"></i>
-            New Record
-        </a>
-    </div>
-    @if (Session::has('roleCreated'))
-    <div class="alert alert-warning animate-box" role="alert">
-        {{ Session::get('roleCreated') }}
-    </div>
-    @endif @if (Session::has('roleDeleted'))
-    <div class="alert alert-warning animate-box" role="alert">
-        {{ Session::get('roleDeleted') }}
-    </div>
-    @endif @if (Session::has('userUpdated'))
-    <div class="alert alert-warning animate-box" role="alert">
-        {{ Session::get('userUpdated') }}
-    </div>
-    @endif
+    <div class="container p-4">
+        <div class="mb-4 w-full mx-auto  sm:flex sm:items-center sm:justify-between ">
+            <h1 class="text-xl font-bold text-left mt-3">
+                Registration Code
+            </h1>
+            <a
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                href="{{ route('admin#createRole') }}">
+                <i class="fa-solid fa-plus text-white"></i>
+                New Record
+            </a>
+        </div>
+        @if (Session::has('roleCreated'))
+        <div class="alert alert-warning animate-box" role="alert">
+            {{ Session::get('roleCreated') }}
+        </div>
+        @endif @if (Session::has('roleDeleted'))
+        <div class="alert alert-warning animate-box" role="alert">
+            {{ Session::get('roleDeleted') }}
+        </div>
+        @endif @if (Session::has('userUpdated'))
+        <div class="alert alert-warning animate-box" role="alert">
+            {{ Session::get('userUpdated') }}
+        </div>
+        @endif
 
+        <div class="flex flex-col">
+            <div class="-m-1.5 overflow-x-auto">
+                <div class="p-1.5 min-w-full inline-block align-middle">
+                    <div class="border rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">No.</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase hidden">Role ID</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Registration Code</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Role Type</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase hidden">Created Date</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Updated Date</th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @foreach ($roleData as $role)
+                                <tr>
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ ($roleData->currentPage() - 1) * $roleData->perPage() + $loop->iteration }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 hidden">{{ $role->id }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->registration_code }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->role_types }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 hidden">{{ $role->created_at }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->updated_at }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-center text-sm font-medium ">
+                                        <a href="{{ route('admin#editRole', $role->id) }}">
+                                            <button
+                                                type="button"
+                                                class="inline-flex items-center gap-x-2 text-sm font-semibold p-2">
+                                                <i class="fa-solid fa-pen-to-square text-blue-600 hover:text-blue-800"></i>
+                                            </button>
+                                        </a>
+                                        <a href="{{ route('admin#deleteRole', $role->id) }}" class="btn-delete">
+                                            <button type="button" class="inline-flex items-center gap-x-2 text-sm p-2">
+                                                <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ $roleData->links() }}
+    </div>
+
+
+    <div class="container mt-3 p-4">
+        <h1 class="text-xl font-bold text-left mb-3">
+            Leaderboard
+        </h1>
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
@@ -165,53 +236,29 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">No.</th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase hidden">Role ID</th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Registration Code</th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Role Type</th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Created Date</th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Updated Date</th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase">Action</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">No.</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase hidden">User ID</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Username</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Email</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Total Submissions</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Status</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            @foreach ($roleData as $role)
+                            @foreach($leaderboard as $user)
                             <tr>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ ($roleData->currentPage() - 1) * $roleData->perPage() + $loop->iteration }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 hidden">{{ $role->id }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->registration_code }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->role_types }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->created_at }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->updated_at }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-center text-sm font-medium ">
-                                    <a href="{{ route('admin#editRole', $role->id) }}">
-                                        <button
-                                            type="button"
-                                            class="inline-flex items-center gap-x-2 text-sm font-semibold p-2">
-                                            <i class="fa-solid fa-pen-to-square text-blue-600 hover:text-blue-800"></i>
-                                        </button>
-                                    </a>
-                                    <a href="{{ route('admin#deleteRole', $role->id) }}" class="btn-delete">
-                                        <button type="button" class="inline-flex items-center gap-x-2 text-sm p-2">
-                                            <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
-                                        </button>
-                                    </a>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ ($leaderboard->currentPage() - 1) * $leaderboard->perPage() + $loop->iteration }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 hidden">{{ $user->id }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->name }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->email }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->total_submissions }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">
+                                    @if($user->total_submissions == 7)
+                                        <span class="text-green-500 p-2 bg-green-100 text-xs "style="border-radius: 50px">Completed</span>
+                                    @else
+                                        <span class="text-red-500 p-2 bg-red-100 text-xs " style="border-radius: 50px">Incomplete</span>
+                                    @endif
                                 </td>
-
                             </tr>
                             @endforeach
                         </tbody>
@@ -220,8 +267,15 @@
             </div>
         </div>
     </div>
-    {{ $roleData->links() }}
+    
+    <!-- Tautan Pagination -->
+    <div class="mt-4">
+        {{ $leaderboard->links() }} <!-- Tautan pagination -->
+    </div>
 </div>
+    
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document

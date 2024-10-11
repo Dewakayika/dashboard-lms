@@ -192,6 +192,12 @@
                                     <span>Component</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    <span>Assignment Submission</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -214,6 +220,34 @@
                         <a href="https://drive.google.com/file/d/14nEkkR9AuvofG-8LLttTWkcIXNJlA2-4/view?usp=sharing"  target="_blank">Download Material</a>
                     </div>
                 </div>
+                
+                <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
+                <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
+                <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course. For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
+                <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
+                <br>
+                <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
+                    Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
+                    If you need to change any submitted information, please contact your mentor or administrator directly.
+                </p>                    
+                
+                <form action="{{ route('submission_course.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="course_name" value="{{$courseName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm hidden-sm border rounded-md px-2 py-2 mt-2"> 
+                    <input type="hidden" name="chapter_name" value="{{$chapterName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                
+                    <div class="mb-4">
+                        <input type="hidden" name="user_id" id="user_id" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                    </div>
+                
+                    <div class="mb-4">
+                        <label for="submission_file" class="text-base font-medium text-gray-900">Submission File (Link)</label>
+                        <input type="text" name="submission_file" id="submission_file" class=" mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white caret-black-600">
+                    </div>
+                
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
+                </form>                   
+            </div>
             </main>
         </div>
 
@@ -258,6 +292,7 @@
                                 <hr>
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'tool-introduction':
                             videoUrl = 'https://drive.google.com/file/d/1QJ7hAgsLZl0nwqK-ZJd5N6vcEdlG7bBr/preview';
@@ -268,6 +303,7 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Understanding Tools</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'selection':
                             videoUrl = 'https://drive.google.com/file/d/19RJDeBVcMSPUdDe0FjR3QgB9FQzCWko7/preview';
@@ -278,6 +314,7 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Understanding Selection</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'grouping':
                             videoUrl = 'https://drive.google.com/file/d/1nzp-p4fElcSGHhQiRMxaa7f0jtGvT6B5/preview';
@@ -288,6 +325,7 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Understanding Grouping</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
                             break;
                         case 'component':
                             videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
@@ -298,6 +336,17 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Understanding Component</span>
                             `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'submission':
+                            videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
+                            title = 'Submission';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 0:54 minute | Beginner</span>
+                                <hr>
+                                <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
+                            `;
+                            document.getElementById('submission').style.display = 'block';
                             break;
                     }
 
