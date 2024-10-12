@@ -138,7 +138,7 @@
                             <li>
                                 <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
                                     <i class="fa-solid fa-file-arrow-up"></i>
-                                    <span>Assignment Submission</span>
+                                    <span>Assignment</span>
                                 </a>
                             </li>
                         </ul>
@@ -150,19 +150,27 @@
                 <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
                     <h1 class="text-2xl font-bold mb-2">Course Introduction</h1>
                 </header>
-                <div class="bg-white rounded-lg shadow-md p-4">
+                <div id="videoCourse" class="bg-white rounded-lg shadow-md p-4">
                     <div class="video-container mt-4" id="video">
                         <iframe id="video-placeholder" frameborder="0" allowfullscreen></iframe>
                     </div>
                     <h2 id="video-title" class="text-2xl font-bold mt-2">Title Course</h2>
                     <div id="video-overview" class="video-overview text-gray-600"></div>
                     <div class="video-material">
-                        <a href="https://drive.google.com/file/d/14DZZ4fEjw78oXb46vBb5TdCUHQ9K5Uww/view?usp=drive_link" target="_blank">Download Material</a>
+                        <a href="https://drive.google.com/file/d/1CJjFbf1q2PzW3WZekCoyPPv3eTFJ9TxH/view?usp=drive_link" target="_blank">Download Material</a>
                     </div>
                 </div>
 
                 <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
                     <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">The first task in this introduction is to create a short, creative, and engaging 30-second introduction video. The assignment should be following :</p>
+                    <ul  class="list-disc list-inside text-base text-gray-800 space-y-2">
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Introduce your name</li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Mention where you're from</li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Share your hobbies</li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Introduce yourself in English</li>
+                    </ul>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Once completed, upload the video to Google Drive and ensure the settings allow it to be publicly shared. Then, upload the video link in the <span class="font-bold">submit section</span> below.</p>
                     <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. If you need to change any submitted information, please contact your mentor or administrator directly.
 
                     </p>
@@ -176,7 +184,7 @@
                         </div>
                     
                         <div class="mb-4">
-                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File (Link)</label>
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
                             <input type="text" name="submission_file" id="submission_file" class=" mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white caret-black-600">
                         </div>
                     
@@ -221,7 +229,7 @@
                     let videoUrl, title, overviewContent;
                     switch(videoId) {
                         case 'introduction':
-                            videoUrl = 'https://drive.google.com/file/d/1IjacTcsDBe0FFm1MdVoWifG5jIwEdWV8/preview';
+                            videoUrl = 'https://drive.google.com/file/d/1oKEB_gGGRPUE9ky2OzakPGNkfz43zIB9/preview';
                             title = 'Introduction';
                             overviewContent = `
                                 <span class="overview-title">Duration: 0:54 minute | Beginner</span>
@@ -238,6 +246,7 @@
                                 <hr>
                                 <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
                             `;
+                            document.getElementById('videoCourse').style.display = 'none';
                             document.getElementById('submission').style.display = 'block';
                             break;
                     }

@@ -20,7 +20,7 @@ class Role
         // Periksa apakah pengguna terautentikasi
         if (!auth()->check()) {
             // Jika belum login, redirect ke halaman login
-            return redirect('/login')->with('message', 'Please provide your login details to access your account!');
+            return redirect('/login')->with('message', 'Your session has expired. Please log in again!');
         }
 
         if (is_null($request->user()->role)) {

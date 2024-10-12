@@ -208,7 +208,7 @@
                 <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
                     <h1 class="text-2xl font-bold mb-2">Introduction to SketchUp</h1>
                 </header>
-                <div class="bg-white rounded-lg shadow-md p-4">
+                <div id="videoCourse" class="bg-white rounded-lg shadow-md p-4">
                     <div class="video-container mt-4">
                         <iframe id="video-placeholder" frameborder="0" allowfullscreen></iframe>
                     </div>
@@ -224,8 +224,10 @@
                 <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
                 <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
                 <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course. For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
-                <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
-                <br>
+                <p class="font-bold">Assignment 1</p>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
+                    <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
+                    <br>
                 <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
                     Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
                     If you need to change any submitted information, please contact your mentor or administrator directly.
@@ -346,6 +348,7 @@
                                 <hr>
                                 <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
                             `;
+                            document.getElementById('videoCourse').style.display = 'none';
                             document.getElementById('submission').style.display = 'block';
                             break;
                     }
