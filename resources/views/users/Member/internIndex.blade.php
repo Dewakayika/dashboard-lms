@@ -46,8 +46,8 @@
 
     <body>
         <!-- Navbar -->
-        <nav x-data="{ open: false }" class="relative w-full bg-black text-white z-50">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <nav x-data="{ open: false }" class="relative w-full bg-black text-white z-50 ">
+            <div class="container py-4 flex justify-between">
                 <div class="flex items-center">
                     <a href="{{ url('/dashboard') }}" class="flex items-center">
                         <img src="{{ url('images/padma.png') }}" alt="" width="20" class="mr-2">
@@ -75,8 +75,7 @@
                 </button>
 
                 <!-- Full-screen menu -->
-                <div
-                    x-show="open"
+                <div x-show="open"
                     class="fixed inset-0 z-50 bg-black bg-opacity-90 flex flex-col items-center justify-center">
                     <button @click="open = false" class="absolute top-4 right-4 text-white">
                         <svg
@@ -196,12 +195,11 @@
 
         <div class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
             <div class="mb-4">
-                <h1 class="text-xl font-bold mb-4">Learning Course
-                </h1>
+                <h1 class="text-xl font-bold mb-4">Learning Course</h1>
                 <hr>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-4">
                 <div
                     class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
                     <img src="{{ url('images/Intro.png') }}" class="w-full mb-0">
@@ -319,11 +317,10 @@
                                 #CHAPTER 3
                             </p>
                             <a href="{{ route('course#sketchupPhotoshop') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
-                                Sketchup to Photoshop
+                                Sketchup to Photoshop Post Processing
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">This specialized course focuses on
-                                mastering the seamless workflow between SketchUp and Photoshop to create
-                                high-quality, detailed webtoon backgrounds.</p>
+                            <p class="text-gray-700 text-sm text-justify">This specialized course focuses on practice to creating scene and import scene in to photoshop 
+                                to understand post processing workflow from sketchup to photoshop.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>

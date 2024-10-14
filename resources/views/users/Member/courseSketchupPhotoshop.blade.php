@@ -146,130 +146,178 @@
                 </a>
                 <nav>   
                     <div class="mb-4">
-                        <ul class="space-y-2">
+                        <ul id="sidebarMenu" class="space-y-2">
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu1">
+                                    <span class="font-bold">1. Scene Setup in SketchUp </span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Introduction</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu1" class="pl-3 space-y-2 hidden gap-3 py-2"> 
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Introduction</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="model-overview">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Model Overview</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="layer-overview">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Layer Overview</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="scene">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Scene Setup</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="export">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Export Sketchup</span>
+                                        </a>
+                                    </li>      
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="layer-overview">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu2">
+                                    <span class="font-bold">2. Post-Processing </span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Layer Overview</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu2" class="pl-3 space-y-2 hidden gap-3 py-2"> 
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="import">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Import File Photoshop</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="layer-organization">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Photoshop Layer Organization</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="color-overlay">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Based Color Overlay</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="shadow-setting">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Shadows Setting</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="linework">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Linework Adjustments</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="entourage-adjustment">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Entourage Adjustments</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="color-texture">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Color & Texture Effects</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="color-wash">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Color Wash</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="final">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Final Adjustments</span>
+                                        </a>
+                                    </li>      
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="scene">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu3">
+                                    <span class="font-bold">Asignment</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Scene Setup</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu3" class="pl-3 space-y-2 hidden gap-3 py-2"> 
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                            <i class="fa-solid fa-file-arrow-up"></i>
+                                            <span>Assignment Submission</span>
+                                        </a>
+                                    </li>    
+                                </ul>
                             </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="export">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Export Sketchup</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="import">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Import File Photoshop</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="layer-organization">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Photoshop Layer Organization</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="color-overlay">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Based Color Overlay</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="shadow-setting">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Shadows Setting</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="linework">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Linework Adjustments</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="entourage-adjustment">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Entourage Adjustments</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="color-texture">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Color & Texture Effects</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="color-wash">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Color Wash</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="final">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Final Adjustments</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
-                                    <i class="fa-solid fa-file-arrow-up"></i>
-                                    <span>Assignment Submission</span>
-                                </a>
-                            </li>
+
+                            <hr>
+
                         </ul>
                     </div>
                 </nav>
@@ -368,6 +416,17 @@
                                 <span class="overview-title">Duration: 1:17 minute | Beginner</span>
                                 <hr>
                                 <span>This specialized course focuses on mastering the seamless workflow between SketchUp and Photoshop to create high-quality, detailed webtoon backgrounds. You'll learn how to export 3D models from SketchUp with optimal settings and refine them in Photoshop using powerful tools like adjustment layers</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'model-overview':
+                            videoUrl = 'https://drive.google.com/file/d/1LfKd9EnpXt-N9plgjiM-vX-sHi8pmUST/preview';
+                            title = 'Model Overview';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 1:09 minute | Beginner</span>
+                                <hr>
+                                <span>This specialized course focuses on mastering the seamless workflow between SketchUp and Photoshop to create high-quality, detailed webtoon backgrounds. You'll learn how to export 3D models from SketchUp with optimal settings and refine them in Photoshop using powerful tools like adjustment layers</span>
+                                <span>Skills Covered: Understanding Tools</span>
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
@@ -534,6 +593,28 @@
                 }
             }
         </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const sidebarMenu = document.getElementById('sidebarMenu');
+
+                sidebarMenu.addEventListener('click', function (event) {
+                    // Check if the clicked element has the class 'dropdown-button'
+                    if (event.target.closest('.dropdown-button')) {
+                        const button = event.target.closest('.dropdown-button');
+                        const targetMenuId = button.getAttribute('data-target');
+                        const targetMenu = document.getElementById(targetMenuId);
+                        const icon = button.querySelector('.dropdown-icon');
+
+                        // Toggle dropdown menu visibility
+                        if (targetMenu) {
+                            targetMenu.classList.toggle('hidden');
+                            icon.classList.toggle('rotate-180');
+                        }
+                    }
+                });
+            });
+        </script>
+        
     </div>
     <!-- End content -->
 @endsection

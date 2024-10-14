@@ -146,57 +146,503 @@
                 </a>
                 <nav>   
                     <div class="mb-4">
-                        <ul class="space-y-2">
+                        <ul id="sidebarMenu" class="space-y-2">
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu1">
+                                    <span class="font-bold">1. Quick Start</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Introduction</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu1" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Introduction</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="navigating">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Learning Navigating</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="pillars">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Copying Pillars</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="component">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Component</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="inferences">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Building the Platform Using Inferences</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="array">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Array the Bars</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="arc-circle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Arcs and Circles</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="create-steps">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Creating the Steps</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="building-slide">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Building the Slide</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="final">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Final Applying Color</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="tool-introduction">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu2">
+                                    <span class="font-bold">2. Core Concept</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Tools Introduction</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu2" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="edges-surface">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Edges and Surfaces</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="Inferences">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Inferences</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="inference-challenge">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Inference Challenge</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="blue-axis">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Blue Axis</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="selection">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu3">
+                                    <span class="font-bold">3. Push Pull</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Selection</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu3" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="push-pull">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Push and Pull</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="grouping">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu4">
+                                    <span class="font-bold">4. Accuracy</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Grouping</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu4" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="accuracy">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Accuracy in SketchUp</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="tape-measure">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Tape Measure Tool</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="component">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu5">
+                                    <span class="font-bold">5. Drawing Tools</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Component</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu5" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="drawing-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Circle</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="drawing-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Arcs</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="drawing-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Rectangles</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="drawing-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Freehand</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="drawing-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Offset</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="drawing-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Eraser</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
-                                    <i class="fa-solid fa-file-arrow-up"></i>
-                                    <span>Assignment Submission</span>
-                                </a>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu6">
+                                    <span class="font-bold">6. Selections</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu6" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="selections">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Selection Methods</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu7">
+                                    <span class="font-bold">7. Grouping</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu7" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="grouping">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Grouping</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu8">
+                                    <span class="font-bold">8. Component</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu8" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="component">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Component</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+                     
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu9">
+                                    <span class="font-bold">9. Tags or Layers</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu9" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="tag-layers">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Tags or Layers</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu10">
+                                    <span class="font-bold">10. The Versatile Move Tool</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu10" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="move-tool-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Move Tool</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="move-tool-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Manipulate Geometri</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="move-tool-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>What is Auto-fold?</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="move-tool-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Copy and Array using Move</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu11">
+                                    <span class="font-bold">11. Follow Me</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu11" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="follow-me-tool-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Follow Me Tool</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="follow-me-tool-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Follow Me as a Lathe</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="follow-me-tool-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Follow Me: Practise Exercises</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu12">
+                                    <span class="font-bold">12. Inference Locking</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu12" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="inference-locking-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Inference Locking Basics</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="inference-locking-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Inference Locking: Practice</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu13">
+                                    <span class="font-bold">13. Assignment</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu13" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                            <i class="fa-solid fa-file-arrow-up"></i>
+                                            <span>Assignment Submission</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -296,50 +742,440 @@
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
-                        case 'tool-introduction':
+                        case 'navigating':
                             videoUrl = 'https://drive.google.com/file/d/1QJ7hAgsLZl0nwqK-ZJd5N6vcEdlG7bBr/preview';
-                            title = 'Tools Introduction';
+                            title = 'Learning Navigating';
                             overviewContent = `
                                 <span class="overview-title">Duration: 6:45 minute | Beginner</span>
                                 <hr>
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
-                                <span>Skills Covered: Understanding Tools</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
-                        case 'selection':
-                            videoUrl = 'https://drive.google.com/file/d/19RJDeBVcMSPUdDe0FjR3QgB9FQzCWko7/preview';
-                            title = 'Selection';
+                        case 'pillars':
+                            videoUrl = 'https://drive.google.com/file/d/1OaosBCPI5E6VZQXHtI83JJcHNCBR1JoG/preview';
+                            title = 'Copying Pillars';
                             overviewContent = `
                                 <span class="overview-title">Duration: 4:45 seconds | Beginner</span>
                                 <hr>
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
-                                <span>Skills Covered: Understanding Selection</span>
-                            `;
-                            document.getElementById('submission').style.display = 'none';
-                            break;
-                        case 'grouping':
-                            videoUrl = 'https://drive.google.com/file/d/1nzp-p4fElcSGHhQiRMxaa7f0jtGvT6B5/preview';
-                            title = 'Grouping';
-                            overviewContent = `
-                                <span class="overview-title">Duration: 7:50 minute | Beginner</span>
-                                <hr>
-                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
-                                <span>Skills Covered: Understanding Grouping</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
                         case 'component':
-                            videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
+                            videoUrl = 'https://drive.google.com/file/d/1sXeqUR64YRl2Dl49CEMaXRKUK3rEsq4G/preview';
+                            title = 'Component Bases';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 7:50 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'inferences':
+                            videoUrl = 'https://drive.google.com/file/d/1P-jyD4hB4tnwlZ_zClQw2LOllky72nMS/preview';
                             title = 'Component';
                             overviewContent = `
                                 <span class="overview-title">Duration: 8:21 minute | Beginner</span>
                                 <hr>
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
-                                <span>Skills Covered: Understanding Component</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                        break;
+                            case 'arc-circle':
+                            videoUrl = 'https://drive.google.com/file/d/1vYweuFN517EEnOFP3NvFEw48Zjl9fwGm/preview';
+                            title = 'Arc and Circle';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
+                        case 'array':
+                            videoUrl = 'https://drive.google.com/file/d/1FhGQeJx795ENJev9we_Q9QMVgitM2Kmy/preview';
+                            title = 'Array the Bars';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'creating-steps':
+                            videoUrl = 'https://drive.google.com/file/d/1u5haEHi8e_4iSrtM-phMXAK6AvApYJMH/preview';
+                            title = 'Create the Steps';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'building-slide':
+                            videoUrl = 'https://drive.google.com/file/d/1OIsiaoG0muV4k-KsySGqu_EeHw1zd9tr/preview';
+                            title = 'Building the Steps';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'final':
+                            videoUrl = 'https://drive.google.com/file/d/1ckX1tosuaAPksCcMqF9JNwGPrYB62Ipk/preview';
+                            title = 'Final Applying Color';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        // ================================================================================================================================
+
+                        case 'edges-surface':
+                            videoUrl = 'https://drive.google.com/file/d/19szkQcR3-FonJv5wCgVHYhTUMbP_mm_v/preview';
+                            title = 'Edges and Surfaces';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'Inferences':
+                            videoUrl = 'https://drive.google.com/file/d/1zMKsvixzjrfE-Mk2PVF28-7oyr6V3MdC/preview';
+                            title = 'Inferences';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'inference-challenge':
+                            videoUrl = 'https://drive.google.com/file/d/1ElltS22RohMbJX0TB81pXi1sjUPaJ-2q/preview';
+                            title = 'Inferences Challenge';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        case 'blue-axis':
+                            videoUrl = 'https://drive.google.com/file/d/1dwgpinNLh_7yXHIgqkEuTkyhFRvHR1xS/preview';
+                            title = 'Inferences Challenge';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ====================================================================================================================================================================
+
+                        case 'push-pull':
+                            videoUrl = 'https://drive.google.com/file/d/1IQ8Y9WGuf-Vq-U9KFwkmxwi6TzybYae-/preview';
+                            title = 'Push and Pull';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ================================================================================================================================================================================
+
+                        case 'accuracy':
+                            videoUrl = 'https://drive.google.com/file/d/1oYGQmvcq-nR7ma0CgJY4U6yC-Ce5BK6h/preview';
+                            title = 'Accuracy in Sketchup';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'tape-measure':
+                            videoUrl = 'https://drive.google.com/file/d/1tg8yy5fm8QLtNAuMK5JljmRo8713dVrk/preview';
+                            title = 'Tape Measure Tool';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        // ======================================================================================================================================================================
+
+                        case 'drawing-1':
+                            videoUrl = 'https://drive.google.com/file/d/1HCgdvup1nfN78X6kZHXih4qnc5Wen4Fn/preview';
+                            title = 'Circles';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 3 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'drawing-2':
+                            videoUrl = 'https://drive.google.com/file/d/1ia5gCjaG9TeaT5wNBgSjFo_NTOkBCeoI/preview';
+                            title = 'Arcs';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 4 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'drawing-3':
+                            videoUrl = 'https://drive.google.com/file/d/1vHeKjCnk9HfAkvazyM5l0tRr24sqF5eO/preview';
+                            title = 'Rectangles';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        case 'drawing-4':
+                            videoUrl = 'https://drive.google.com/file/d/1D3Yp1nIlpZJxslrxgorv0xIXOiY-XpQx/preview';
+                            title = 'Freehand';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 1 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'drawing-5':
+                            videoUrl = 'https://drive.google.com/file/d/1PVmUKh5QKeIAOwdz8eAQCoGYNN45xdu7/preview';
+                            title = 'Offset';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        case 'drawing-6':
+                            videoUrl = 'https://drive.google.com/file/d/1HeastCBcKRE5CEGeZv-oFVAgjjN4lCLN/preview';
+                            title = 'Eraser';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+
+                        // =====================================================================================================================================================================
+
+                        case 'selections':
+                            videoUrl = 'https://drive.google.com/file/d/11SBGzTyBL5WGVzJQJz6C5UvP-QEKJLb8/preview';
+                            title = 'Selections Methods';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ======================================================================================================================================================================
+
+                        case 'grouping':
+                            videoUrl = 'https://drive.google.com/file/d/1RFAl5qSyZTnoPH3_X-3iKpFqb__z-6Hr/preview';
+                            title = 'Grouping';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ===================================================================================================================================================================
+
+                        case 'component':
+                            videoUrl = 'https://drive.google.com/file/d/13JjpqzaNzjPP02gAUFAPUWwvlcKm8ytF/preview';
+                            title = 'Component';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // =================================================================================================================================================================
+
+                        case 'tag-layer':
+                            videoUrl = 'https://drive.google.com/file/d/1tAgROb-uJ3wn1cfiKDSq3qel7XwIJrYU/preview';
+                            title = 'Tag or Layers';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ===============================================================================================================================================================================
+
+                        case 'move-tool-1':
+                            videoUrl = 'https://drive.google.com/file/d/1HlGfjzGVbrIdoGkBlbkkwblUYzgLDHfr/preview';
+                            title = 'Move Tool';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'move-tool-2':
+                            videoUrl = 'https://drive.google.com/file/d/1g5ETYX4Bf9qLA3Hh8ZzjDD2fERhpxaqp/preview';
+                            title = 'Manipulate Geometri';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'move-tool-3':
+                            videoUrl = 'https://drive.google.com/file/d/1jkArViZkbCUaMTIA6j84_rOgTLS5wvjC/preview';
+                            title = 'What is Auto-fold?';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        case 'move-tool-4':
+                            videoUrl = 'https://drive.google.com/file/d/1YMntqoG_W3ZVk2ADWUgD8s8gk8jS2WKQ/preview';
+                            title = 'Copy and Array using Move';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // =================================================================================================================================================
+
+                        case 'follow-me-tool-1':
+                            videoUrl = 'https://drive.google.com/file/d/1j-vj4NJv5Pv2TmwChmiQOmKPR0S2diAA/preview';
+                            title = 'Follow Me Tool';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'follow-me-tool-2':
+                            videoUrl = 'https://drive.google.com/file/d/1KlFXUoqMWrgalf7atUP09sMit_jW0VWV/preview';
+                            title = 'Follow Me as a Lathe';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'follow-me-tool-3':
+                            videoUrl = 'https://drive.google.com/file/d/16LBoGLvUSyfanxLRFslYX59V3CcatUcH/preview';
+                            title = 'Follow Me: Practise Exercises';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ====================================================================================================================================================================
+
+                        case 'inference-locking-1':
+                            videoUrl = 'https://drive.google.com/file/d/1VUlpgvmv7GghJk6qrvbq09EjWj44bxBm/preview';
+                            title = 'Inference Locking Basics';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'inference-locking-2':
+                            videoUrl = 'https://drive.google.com/file/d/18bDbYPsTM_6e6eUvBvAL_f_S2K1FzPTm/preview';
+                            title = 'Inference Locking: Practice';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 5 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        // ====================================================================================================================================================================
+
                         case 'submission':
                             videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
                             title = 'Submission';
@@ -352,7 +1188,6 @@
                             document.getElementById('submission').style.display = 'block';
                             break;
                     }
-
                     videoTitle.textContent = title;
                     videoPlaceholder.src = videoUrl;
                     videoOverview.innerHTML = overviewContent;
@@ -370,6 +1205,28 @@
                     overlay.style.display = 'none';
                 }
             }
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const sidebarMenu = document.getElementById('sidebarMenu');
+
+                sidebarMenu.addEventListener('click', function (event) {
+                    // Check if the clicked element has the class 'dropdown-button'
+                    if (event.target.closest('.dropdown-button')) {
+                        const button = event.target.closest('.dropdown-button');
+                        const targetMenuId = button.getAttribute('data-target');
+                        const targetMenu = document.getElementById(targetMenuId);
+                        const icon = button.querySelector('.dropdown-icon');
+
+                        // Toggle dropdown menu visibility
+                        if (targetMenu) {
+                            targetMenu.classList.toggle('hidden');
+                            icon.classList.toggle('rotate-180');
+                        }
+                    }
+                });
+            });
         </script>
     </div>
     <!-- End content -->
