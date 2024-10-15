@@ -170,6 +170,17 @@ class InternController extends Controller
         return view('users.Member.courseSketchupPhotoshop', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
     }
 
+    public function advanceTool()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        $courseName = 'Advance Webtoon Design';
+        $chapterName = 'Chapter_4';
+
+        return view('users.Member.courseAdvanceTool', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

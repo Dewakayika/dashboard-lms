@@ -141,5 +141,8 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
     Route::get('/course/sketchup-photoshop', [InternController::class, 'sketchupPhotoshop'])->name('course#sketchupPhotoshop');
 
 
+    Route::get('/course/advance-tool', [InternController::class, 'advanceTool'])->name('course#advanceTool');
+
+
 });
 
