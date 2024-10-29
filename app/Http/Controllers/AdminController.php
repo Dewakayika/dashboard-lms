@@ -22,6 +22,10 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use App\Mail\DeclineEmail;
+use App\Mail\ApproveEmail;
+use Illuminate\Support\Facades\Mail;
+
 
 class AdminController extends Controller
 {
@@ -696,12 +700,31 @@ class AdminController extends Controller
         return $array;
     }
 
-    public function talentCV(){
+    public function talentCV(Request $request)
+    {
+        // Dapatkan nilai status dari request, defaultnya adalah null
+        $status = $request->input('status');
+    
+        // Query CV dengan filter status jika status diberikan
+        $query = TalentCV::query();
+        if ($status) {
+            $query->where('status', $status);
+        }
+    
+        // Paginate hasil query
+        $talent_cv = $query->paginate(10);
 
-        $talent_cv = TalentCV::paginate(10);
-        return view('users.Admin.listTalentCV')->with(['talentCV' => $talent_cv]);
+        $registrationCodes = Roles::all();
+    
+        // Mengirimkan status yang dipilih ke view untuk form filter
+        return view('users.Admin.listTalentCV')->with([
+            'talentCV' => $talent_cv,
+            'status' => $status,
+            'registrationCodes' => $registrationCodes,
 
+        ]);
     }
+    
 
     // Admin Delete User
     public function deleteCV($id)
@@ -709,6 +732,59 @@ class AdminController extends Controller
         TalentCV::where('id', $id)->delete();
         return back()->with(['CVDeleted' => 'Talent CV Has Been Deleted Successfully!']);
     }
+
+
+    public function declineCV($id){
+
+        $cv = TalentCV::find($id);
+
+        if ($cv) {
+            // Ambil email dari data TalentCV
+            $userEmail = $cv->email; // Asumsikan email ada di TalentCV
+    
+            // Kirim email penolakan
+            Mail::to($userEmail)->send(new DeclineEmail());
+
+            $cv->status = 'decline';
+            $cv->save();
+    
+    
+            return redirect()->back()->with('success', 'CV declined and user notified.');
+        }
+
+        return redirect()->back()->with('error', 'CV not found.');
+
+    }
+
+    public function approveCV(Request $request, $id)
+    {
+        // Validasi kode registrasi
+        $request->validate([
+            'registration_code' => 'required|exists:roles,registration_code',
+        ]);
+
+        // Ambil data CV berdasarkan ID
+        $cv = TalentCV::find($id);
+
+        if ($cv) {
+            // Update status menjadi approved
+            $cv->status = 'approve';
+            $cv->save();
+
+            // Ambil kode registrasi yang dipilih
+            $registrationCode = $request->input('registration_code');
+
+            // Kirim email pemberitahuan persetujuan dengan kode registrasi
+            Mail::to($cv->email)->send(new ApproveEmail($registrationCode));
+
+            return redirect()->back()->with('success', 'CV approved, registration code sent to user.');
+        }
+
+        return redirect()->back()->with('error', 'CV not found.');
+    }
+
+
+
 
 
 }

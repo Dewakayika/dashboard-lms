@@ -40,6 +40,17 @@
             </div>
         @endif
 
+        <form method="GET" action="{{ route('admin#talentCVList') }}">
+            <label for="status">Filter by Status:</label>
+            <select name="status" id="status" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="" {{ request('status') == '' ? 'selected' : '' }}>Pending</option>
+                <option value="approve" {{ request('status') == 'approve' ? 'selected' : '' }}>Approved</option>
+                <option value="decline" {{ request('status') == 'decline' ? 'selected' : '' }}>Declined</option>
+            </select>
+        </form>
+        
+
         <!-- Table with updated style -->
         <div class="flex flex-col">
             <div class="-mx-4 overflow-x-auto">
@@ -64,10 +75,7 @@
                                         CV Files
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">
-                                        Created At
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">
-                                        Updated At
+                                        Status
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase">
                                         Action
@@ -89,14 +97,40 @@
                                         <td class="p-3 whitespace-nowrap text-sm text-blue-800 underline ">    
                                             <a href="{{ asset('laravel/storage/app/public/' . $CV->cv_file) }}" target="_blank" cl>Download PDF</a>
                                         </td>
-                                        
                             
-                                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $CV->created_at }}</td>
-                                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $CV->updated_at }}</td>
+                                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">
+                                            @if($CV->status=='approve')
+
+                                                <span class="text-green-500 p-2 bg-green-100 text-xs "style="border-radius: 50px">{{ $CV->status }}</span>
+
+                                            @elseif($CV->status=='decline')
+                                                <span class="text-red-500 p-2 bg-red-100 text-xs "style="border-radius: 50px">{{ $CV->status }}</span>
+
+                                            @else
+                                                <span class="text-blue-500 p-2 bg-blue-100 text-xs "style="border-radius: 50px">Pending</span>
+
+                                            @endif
+
+                                        </td>
+
                                         <td class="px-6 py-3 whitespace-nowrap text-center text-sm font-medium">
-                                            <a href="{{ route('admin#editPartner', $CV->id) }}" class="text-blue-600 hover:text-blue-800">
-                                                <i class="fa-solid fa-pen-to-square text-blue-600 hover:text-blue-800"></i>
-                                            </a>
+                                            <form action="{{ route('cv#decline', $CV->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Decline</button>
+                                            </form>
+
+                                            <form action="{{ route('approveCV', $CV->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <label for="registration_code">Select Registration Code:</label>
+                                                <select class="text-black" name="registration_code" required>
+                                                    <option value="">-- Select Code --</option>
+                                                    @foreach ($registrationCodes as $code)
+                                                        <option class="text-black" value="{{ $code->registration_code  }}">{{ $code->registration_code  }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="submit" class="btn btn-success">Approve</button>
+                                            </form>
+                                            
                                             <a href="{{ route('admin#deleteCV', $CV->id) }}" class="btn-delete">
                                                 <button type="button" class="inline-flex items-center gap-x-2 text-sm p-2">
                                                     <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>

@@ -15,6 +15,7 @@ class TalentCV extends Model
         'email',
         'phone_number',
         'cv_file',
+        'status',
     ];
 
 

@@ -22,6 +22,7 @@ class TalentCVController extends Controller
             'email' => 'required|email|max:255|unique:talent_c_v_s,email',
             'phone_number' => 'required|string|max:15',
             'cv_file' => 'required|mimes:pdf,doc,docx|max:2048',
+            'status'=>'nullable|string'
         ], [
             'email.unique' => 'The email address has already been registered. Please use a different email.',
         ]);
@@ -35,14 +36,13 @@ class TalentCVController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'cv_file' => $cvFileName,
+            'status' => $request->status ?? null, // Default to null if no status provided
         ]);
 
         // Kirim email dengan CC
         Mail::to($request->email)
         ->cc(['kayikadewa@gmail.com', 'okadharmawan3@gmail.com']) 
         ->send(new TalentCVUploaded($request->name));
-
-
 
         // return view ('cv.sucess-cv');
         return redirect()->back()->with('success', 'CV uploaded successfully.');
