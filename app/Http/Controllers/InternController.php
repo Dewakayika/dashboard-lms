@@ -173,6 +173,25 @@ class InternController extends Controller
     
         return redirect()->back()->with('success', 'Assignment successfully submitted!');
     }
+
+    public function destroy($id)
+    {
+        // Find the submission by ID
+        $submission = SubmissionCourse::findOrFail($id);
+
+        if (!$submission) {
+            return redirect()->back()->with('error', 'Submission not found');
+        }
+
+        // Delete the submission
+        $submission->delete();
+
+        // Redirect or return a response
+        return redirect()->back()->with('success', 'Submission deleted successfully.');
+    }
+
+
+
     
   
 
@@ -467,7 +486,7 @@ class InternController extends Controller
 
         // Cek jika user sudah pernah vote sebelumnya
         if ($submission->votes()->where('voter_id', $userId)->exists()) {
-            return back()->with(['error' => 'Anda sudah memberikan vote untuk karya ini.']);
+            return back()->with(['error' => 'You already vote this assignment.']);
         }
 
         // Simpan vote
@@ -476,6 +495,6 @@ class InternController extends Controller
             'vote_value' => $request->input('vote_value'),
         ]);
 
-        return back()->with('success', 'Vote berhasil diberikan.');
+        return back()->with('success', 'Vote succesfully given.');
     }
 }

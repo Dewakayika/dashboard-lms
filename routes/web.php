@@ -124,6 +124,8 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
     Route::post('/update/profile', [InternController::class, 'updateIntern'])->name('intern#editIntern');
     Route::post('/update/profile-picture', [InternController::class, 'updateProfilePicture'])->name('intern#updateProfilePicture');
     Route::post('/update-progress', [CourseController::class, 'updateProgress'])->name('update.progress');
+    Route::delete('/submissions/{id}', [InternController::class, 'destroy'])->name('submissions#destroy');
+
 
 
     // Route untuk menyimpan submission course Chapter Intro
