@@ -95,7 +95,7 @@
                         @if (Route::has('login')) @auth
                         <div x-data="{ userOpen: false }" class="relative">
                             <div class="flex gap-2 px-2 py-1">
-                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <img src="{{ asset('/laravel/public/'. $internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
                             <button
                                 @click="open = !open"
                                 class="flex items-center fw-bold space-x-2 text-2xl">
@@ -266,7 +266,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Webtoon_introduction', $completedCourses)) 
+                    @if(!in_array('Comic and Webtoon Introduction', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -300,7 +300,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Introduction_to_sketchup', $completedCourses)) 
+                    @if(!in_array('Introduction in to Sketchup', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -334,7 +334,7 @@
 
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Sketchup_to_photoshop', $completedCourses)) 
+                    @if(!in_array('Sketchup to Photoshop Post Processing', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -368,7 +368,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Advance Webtoon Design', $completedCourses)) 
+                    @if(!in_array('Advance Tools Webtoon Design', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -402,7 +402,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Advance_webtoon_design', $completedCourses)) 
+                    @if(!in_array('Standard Industry Practise', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>

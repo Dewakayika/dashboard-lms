@@ -356,22 +356,51 @@
                         If you need to change any submitted information, please contact your mentor or administrator directly.
                     </p>                    
                     
-                    <form action="{{ route('submission_course.store') }}" method="POST">
+                    @if (!$submissionExists)
+                    <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="course_name" value="{{$courseName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm hidden-sm border rounded-md px-2 py-2 mt-2"> 
-                        <input type="hidden" name="chapter_name" value="{{$chapterName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        <input type="hidden" name="course_name" value="{{ $courseName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        <input type="hidden" name="chapter_name" value="{{ $chapterName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
                     
-                        <div class="mb-4">
-                            <input type="hidden" name="user_id" id="user_id" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        <div class="flex items-center justify-center w-full mt-4">
+                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg id="icon-upload" class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p id="upload-text" class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload assignment thumbnail</span></p>
+                                    <p id="upload-info" class="text-xs text-gray-500">PNG, JPG, or GIF</p>
+                                    <img id="image-preview" src="" alt="" class="hidden max-w-full max-h-40 mt-2">
+                                    <p id="file-name" class="hidden mt-2 text-sm text-gray-600"></p>
+                                    <p id="change-text" class="hidden text-sm text-blue-500 cursor-pointer">Click to Change</p>
+                                </div>
+                                <input id="dropzone-file" type="file" name="thumbnail" class="hidden" accept="image/png, image/jpeg, image/gif" required />
+                            </label>
                         </div>
+                        @error('thumbnail')
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                    
+                        <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
                     
                         <div class="mb-4">
-                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File (Link)</label>
-                            <input type="text" name="submission_file" id="submission_file" class=" mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white caret-black-600">
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
+                            <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
                         </div>
                     
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
-                    </form>                   
+                    </form>
+
+                    @else
+                        <!-- Display alternative message if submission already exists -->
+                        <div class=" text-center text-gray-600 mt-6">
+                            <div class="flex justify-center items-center">
+                                <img class=" h-56" src="{{ url('images/ilustration/success.png') }}" alt="success-icons">
+                            </div>
+                            <p class="text-m italic">Your submission for <span class="font-semibold">{{ $courseName }}</span> has already been submitted.</p>
+                            <p class="text-sm italic">If you need to make changes, check on <a class="underline" href="{{route('intern#internProfile')}}">submission history</a></p>
+                        </div>
+                    @endif                     
                 </div>
             </main>
         </div>
@@ -614,6 +643,64 @@
                 });
             });
         </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('dropzone-file');
+    const imagePreview = document.getElementById('image-preview');
+    const fileLabel = document.querySelector('.file-input-border');
+    const uploadText = document.getElementById('upload-text');
+    const uploadInfo = document.getElementById('upload-info');
+    const iconUpload = document.getElementById('icon-upload');
+    const fileNameDisplay = document.getElementById('file-name');
+    const changeText = document.getElementById('change-text');
+
+    // Add event listener for file input change
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            // Display preview on image load
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+                fileLabel.classList.add('border-blue-500'); // Add blue border on active
+                fileLabel.classList.add('bg-gray-50'); // Light background for preview
+
+                // Hide upload text, icon, and info
+                uploadText.classList.add('hidden');
+                uploadInfo.classList.add('hidden');
+                iconUpload.classList.add('hidden');
+
+                // Show file name and "Change" option
+                fileNameDisplay.textContent = file.name;
+                fileNameDisplay.classList.remove('hidden');
+                changeText.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Event listener for change button to reset the input
+    changeText.addEventListener('click', function() {
+        fileInput.value = ''; // Clear file input
+        imagePreview.classList.add('hidden'); // Hide preview
+        fileLabel.classList.remove('border-blue-500'); // Remove blue border
+        fileLabel.classList.remove('bg-gray-50'); // Reset background
+
+        // Show upload text, icon, and info
+        uploadText.classList.remove('hidden');
+        uploadInfo.classList.remove('hidden');
+        iconUpload.classList.remove('hidden');
+
+        // Hide file name and "Change" option
+        fileNameDisplay.classList.add('hidden');
+        changeText.classList.add('hidden');
+    });
+});
+
+</script>
         
     </div>
     <!-- End content -->

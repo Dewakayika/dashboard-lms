@@ -87,17 +87,9 @@
                             
                                         <!-- Tampilkan file PDF -->
                                         <td class="p-3 whitespace-nowrap text-sm text-blue-800 underline ">    
-                                            <a href="{{ asset('storage/' . $CV->cv_file) }}" target="_blank" cl>Download PDF</a>
+                                            <a href="{{ asset('laravel/storage/app/public/' . $CV->cv_file) }}" target="_blank" cl>Download PDF</a>
                                         </td>
                                         
-                                        {{-- <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">
-                                            @if ($CV->cv_file)
-
-                                                <embed src="{{ asset('storage/app/public/cv_files/' . $CV->cv_file) }}" width="150px" height="150px" type="application/pdf" />
-                                            @else
-                                                <span class="text-red-500">No CV Uploaded</span>
-                                            @endif
-                                        </td> --}}
                             
                                         <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $CV->created_at }}</td>
                                         <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $CV->updated_at }}</td>

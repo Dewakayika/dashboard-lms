@@ -100,7 +100,7 @@
                         @if (Route::has('login')) @auth
                         <div x-data="{ userOpen: false }" class="relative">
                             <div class="flex gap-2 px-2 py-1">
-                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <img src="{{ asset('/laravel/public/'. $internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
                             <button
                                 @click="open = !open"
                                 class="flex items-center fw-bold space-x-2 text-2xl">

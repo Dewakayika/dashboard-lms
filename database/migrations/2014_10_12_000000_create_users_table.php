@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->json('course_progress')->nullable();
+            $table->string('registration_code');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -34,7 +34,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('course_progress'); 
+        //
     });
     }
 };
