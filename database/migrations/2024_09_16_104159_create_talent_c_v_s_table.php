@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone_number');
             $table->string('cv_file'); // To store the uploaded file path
-            $table->string('status')->nullable;
+            $table->string('status')->default('In Review')->nullable();
             $table->timestamps();
         });
           

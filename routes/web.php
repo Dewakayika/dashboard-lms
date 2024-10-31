@@ -88,6 +88,10 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::post('/cv/decline/{id}', [AdminController::class, 'declineCV'])->name('cv#decline');
     Route::post('/approve-cv/{id}', [AdminController::class, 'approveCV'])->name('approveCV');
 
+    Route::post('/admin/send-invitation/{id}', [AdminController::class, 'sendInvitationToUser'])->name('sendInvitationToUser');
+    Route::post('/booking/{id}', [AdminController::class, 'booking'])->name('booking.submit');
+
+
 
 
     Route::get('/userlist', [AdminController::class, 'listUser'])->name('admin#listUser'); //User List

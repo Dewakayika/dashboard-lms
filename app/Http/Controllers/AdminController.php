@@ -26,6 +26,16 @@ use App\Mail\DeclineEmail;
 use App\Mail\ApproveEmail;
 use Illuminate\Support\Facades\Mail;
 
+use Spatie\GoogleCalendar\Event;
+use App\Mail\MeetingInvitation;
+
+use Google\Service\Calendar\Event as GoogleEvent;
+use Google\Service\Calendar; // For Calendar service
+use Google\Service\Calendar\EventDateTime; // For EventDateTime class
+use Google\Service\Calendar\ConferenceData; // For ConferenceData class
+use Google\Service\Calendar\ConferenceDataCreateRequest; // For ConferenceDataCreateRequest class
+use Google\Service\Calendar\ConferenceSolutionKey; 
+
 
 class AdminController extends Controller
 {
@@ -749,10 +759,10 @@ class AdminController extends Controller
             $cv->save();
     
     
-            return redirect()->back()->with('success', 'CV declined and user notified.');
+            return redirect()->back()->with(['successCV' => 'CV declined and user notified.']);
         }
 
-        return redirect()->back()->with('error', 'CV not found.');
+        return redirect()->back()->with(['errorCV' => 'CV not found.']);
 
     }
 
@@ -777,13 +787,60 @@ class AdminController extends Controller
             // Kirim email pemberitahuan persetujuan dengan kode registrasi
             Mail::to($cv->email)->send(new ApproveEmail($registrationCode));
 
-            return redirect()->back()->with('success', 'CV approved, registration code sent to user.');
+            return redirect()->back()->with(['successCV' =>'CV approved, registration code sent to user.']);
         }
 
-        return redirect()->back()->with('error', 'CV not found.');
+        return redirect()->back()->with(['errorCV' => 'CV not found.']);
     }
 
 
+    public function booking(Request $request, $id)
+    {
+        try {
+            // Set timezone to Bali
+            $timezone = 'Asia/Makassar';
+
+            // Parse input date and time and set Bali time zone
+            $startTime = Carbon::createFromFormat('Y-m-d H:i', $request->input('meeting_date') . ' ' . $request->input('meeting_time'), $timezone);
+
+            // Add one hour for the end time in Bali time
+            $endTime = (clone $startTime)->addHour();
+
+            // Convert to UTC for Google Calendar
+            $startDateTimeUTC = $startTime->copy()->setTimezone('UTC');
+            $endDateTimeUTC = $endTime->copy()->setTimezone('UTC');
+
+            // Create event in Google Calendar with UTC times
+            Event::create([
+                'name' => $request->input('name'),
+                'startDateTime' => $startDateTimeUTC,
+                'endDateTime' => $endDateTimeUTC,
+            ]);
+
+            // Retrieve specific emails from input
+            $selectedEmails = $request->input('selected_emails');
+
+            // Send invitation emails with Bali time
+            foreach ($selectedEmails as $email) {
+                Mail::to($email)->send(new MeetingInvitation($startTime, $endTime));
+            }
+
+            // If emails were sent successfully, update CV status to "Interview Process"
+            $cv = TalentCV::find($id);
+            if ($cv) {
+                $cv->status = 'Interview Process';
+                $cv->save();
+            } else {
+                return redirect()->back()->with(['error' => 'CV not found']);
+            }
+
+            return redirect()->back()->with(['successCV' => 'The invitation has been successfully sent, and the CV status has been updated.']);
+
+        } catch (\Exception $e) {
+            \Log::error("Error in booking function: " . $e->getMessage());
+            return redirect()->back()->with(['errorCV' => 'An error occurred while sending the invitation.']);
+        }
+    }
 
 
 

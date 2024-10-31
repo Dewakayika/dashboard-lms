@@ -36,7 +36,7 @@ class TalentCVController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'cv_file' => $cvFileName,
-            'status' => $request->status ?? null, // Default to null if no status provided
+            'status' => $request->status ?? 'In Review', // Default to null if no status provided
         ]);
 
         // Kirim email dengan CC
