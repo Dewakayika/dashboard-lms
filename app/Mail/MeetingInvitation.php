@@ -27,14 +27,14 @@ class MeetingInvitation extends Mailable
     public function build()
     {
         $meetingData = [
-            'title' => 'Undangan Meeting',
-            'description' => 'Anda diundang untuk menghadiri meeting.',
+            'title' => 'Invitation to Interview for Background Webtoon Designer Position',
             'startDateTime' => $this->startTime, // Bali time zone
             'endDateTime' => $this->endTime,     // Bali time zone
             'googleMeetLink' => 'https://meet.google.com/kpp-tyfw-oex', // Replace with generated link if available
         ];
 
         return $this->view('emails.meeting_invitation')
-                    ->with('meetingData', $meetingData);
+                    ->with('meetingData', $meetingData)
+                    ->subject('Update Invitation to Interview for Background Webtoon Designer Position');
     }
 }

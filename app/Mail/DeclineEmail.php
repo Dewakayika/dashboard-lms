@@ -17,20 +17,19 @@ class DeclineEmail extends Mailable
     /**
      * Create a new message instance.
      *
+     * @param string $userName
      * @return void
      */
-    public function __construct()
+    public function __construct($userName)
     {
-        //
+        $this->userName = $userName;
     }
 
     public function build()
     {
         return $this->view('emails.decline')
-                    ->subject('Pemberitahuan Penolakan CV');
+                    ->subject('Update Information on Your Background Webtoon Designer');
     }
-
-    
 
 
 }

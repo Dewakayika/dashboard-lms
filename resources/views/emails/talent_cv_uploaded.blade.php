@@ -5,33 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Email Confirmation</title>
   <style>
-    * {
-      box-sizing: border-box;
+    /* Reset default styles */
+    body, p, h1, h2, h3, h4, h5, h6 {
       margin: 0;
       padding: 0;
-    }
-
-    body {
       font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
     }
 
+    /* Email container styles */
     .email-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       max-width: 600px;
-      width: 100%;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #f7f7f7;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    /* Header styles */
     .email-header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     .email-header img {
@@ -43,40 +37,45 @@
 
     .email-header h1 {
       font-size: 24px;
-      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
     }
 
-    .email-header p {
-      color: #6b7280;
-      font-size: 16px;
-    }
-
+    /* Content styles */
     .email-body {
-      background-color: #f9fafb;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #555;
+      background-color: #ffffff;
       padding: 20px;
       border-radius: 8px;
-      margin-top: 20px;
     }
 
     .email-body p {
-      color: #374151;
-      margin-bottom: 16px;
-      line-height: 1.6;
+      margin-bottom: 20px;
     }
 
-    .email-body strong {
+    .bold {
       font-weight: bold;
     }
 
+    /* Signature styles */
+    .signature {
+      text-align: right;
+      font-style: italic;
+      color: #888;
+    }
+
+    /* Footer styles */
     .email-footer {
       text-align: center;
-      margin-top: 30px;
       font-size: 14px;
-      color: #9ca3af;
+      color: #888;
+      margin-top: 30px;
     }
 
     .email-footer a {
-      color: #3b82f6;
+      color: #1a73e8;
       text-decoration: none;
     }
 
@@ -100,8 +99,7 @@
   <div class="email-container">
     <!-- Header -->
     <div class="email-header">
-      <img src="https://drive.google.com/drive-viewer/AKGpihaLtc9zIZp8nwaDseZHrt7OAa1Q8jUsmv9JNWaALpSNIKEnwMfB31TBUHPea3pTr7DlMjIOjFWjCKZ_EcI68_O52d48YTdvK_k=s2560" alt="Padma Studio">
-      <h2>Hi {{$name}},</h2>
+      <h1>Hi {{$name}},</h1>
       <p>Thank You for Submitting Your CV🎉</p>
     </div>
 
@@ -109,12 +107,22 @@
     <div class="email-body">
       <p>Dear {{$name}},</p>
       <p>Thank you for submitting your CV for the <strong>Background Webtoon Designer</strong> position at <strong>Padma Creative Studio</strong>. We truly appreciate your interest and effort in joining our creative team.</p>
-      <p>We are currently reviewing all applications, including yours, and we will get back to you with further information soon. Please wait for our next update regarding the recruitment process via email.</p>
+
+      <!-- Selection Process Section -->
+      <div class="process">
+        <p>We are currently reviewing all applications, including yours, and we will get back to you with further information soon. Recruitment process will be following this steps:</p>
+        <ul>
+          <li><strong>Submit CV</strong> - Initial review to shortlist candidates.</li>
+          <li><strong>Interview</strong> - An interview with our team to assess skills and suitability.</li>
+          <li><strong>Announcement</strong> - Final decision and onboarding details via email.</li>
+        </ul>
+        <p>Each stage will be communicated to you through email, so please stay tuned for updates.</p>
+      </div>
+
       <p>If you have any questions or need more information, feel free to reach out to us.</p>
       <p>Thank you for your patience and understanding.</p>
       <p>Best regards,</p>
-      <p><strong>Padma Creative Studio</strong></p>
-      <a href="mailto:office@padmastudio.io">office@padmastudio.io</a>
+      <p class="signature"><strong>Padma Creative Studio</strong><br><a href="mailto:office@padmastudio.io">office@padmastudio.io</a></p>
     </div>
 
     <!-- Footer -->

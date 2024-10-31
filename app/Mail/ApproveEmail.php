@@ -22,6 +22,7 @@ class ApproveEmail extends Mailable
     {
         return $this->subject('CV Approved')
                     ->view('emails.approve')
-                    ->with(['registrationCode' => $this->registrationCode]);
+                    ->with(['registrationCode' => $this->registrationCode])
+                    ->subject('Intern Padma Creative Studio Announcement ');
     }
 }

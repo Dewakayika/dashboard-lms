@@ -750,10 +750,11 @@ class AdminController extends Controller
 
         if ($cv) {
             // Ambil email dari data TalentCV
-            $userEmail = $cv->email; // Asumsikan email ada di TalentCV
+            $userEmail = $cv->email;
+            $userName = $cv->name;
     
             // Kirim email penolakan
-            Mail::to($userEmail)->send(new DeclineEmail());
+            Mail::to($userEmail)->send(new DeclineEmail($userName));
 
             $cv->status = 'decline';
             $cv->save();
