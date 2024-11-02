@@ -130,6 +130,8 @@
                 <!-- Desktop menu -->
                 <div class="hidden lg:flex items-center space-x-6">
                     <a href="{{ url('/dashboard') }}" class="hover:text-gray-300">Dashboard</a>
+                    <a href="{{ route('gallery#submission') }}" class="hover:text-gray-300">Vote Assignment</a>
+
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
                         <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">

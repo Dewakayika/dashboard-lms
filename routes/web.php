@@ -91,6 +91,8 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::post('/admin/send-invitation/{id}', [AdminController::class, 'sendInvitationToUser'])->name('sendInvitationToUser');
     Route::post('/booking/{id}', [AdminController::class, 'booking'])->name('booking.submit');
 
+    Route::get('/admin/user/{id}/submissions', [AdminController::class, 'getUserSubmissions'])->name('admin.user.submissions');
+
 
 
 

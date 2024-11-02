@@ -82,59 +82,8 @@
 </div>
 
 
-{{-- <div class="main-container">
-            <div class="row">
-                <div class="card-content">
-                    <a href="{{ route('admin#listUser') }}">
-                        <div class="card">
-                            <div class="card-title">Users Registered</div>
-                            <div class="card-body">
-                                <h2>{{ $userData }}</h2>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-     
-                <div class="card-content">
-                    <a href="{{ route('admin#listTalent') }}">
-                        <div class="card">
-                            <div class="card-title">Talent Role</div>
-                            <div class="card-body">
-                                <h2>{{ $talentData }}</h2>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="card-content">
-                    <a href="{{ route('admin#listIntern') }}">
-                        <div class="card">
-                            <div class="card-title">Intern Role</div>
-                            <div class="card-body">
-                                <h2>{{ $internData }}</h2>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="card-content">
-                    <a href="">
-                        <div class="card last">
-                            <div class="card-title">Register Code</div>
-                            <div class="card-body">
-                                <h2>{{ $countRole }}</h2>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div> --}}
-
-<!-- Start content -->
-
-
     <div class="container p-4">
-        <div class="mb-4 w-full mx-auto  sm:flex sm:items-center sm:justify-between ">
+        <div class="mb-2 w-full mx-auto  sm:flex sm:items-center sm:justify-between ">
             <h1 class="text-xl font-bold text-left mt-3">
                 Registration Code
             </h1>
@@ -183,7 +132,7 @@
                                         class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase hidden">Created Date</th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Updated Date</th>
+                                        class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase hidden">Updated Date</th>
                                     <th
                                         scope="col"
                                         class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase">Action</th>
@@ -192,22 +141,22 @@
                             <tbody class="divide-y divide-gray-200">
                                 @foreach ($roleData as $role)
                                 <tr>
-                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ ($roleData->currentPage() - 1) * $roleData->perPage() + $loop->iteration }}</td>
-                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 hidden">{{ $role->id }}</td>
-                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->registration_code }}</td>
-                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->role_types }}</td>
-                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 hidden">{{ $role->created_at }}</td>
-                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $role->updated_at }}</td>
-                                    <td class="px-6 py-3 whitespace-nowrap text-center text-sm font-medium ">
+                                    <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-800">{{ ($roleData->currentPage() - 1) * $roleData->perPage() + $loop->iteration }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-800 hidden">{{ $role->id }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-800">{{ $role->registration_code }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-800">{{ $role->role_types }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-800 hidden">{{ $role->created_at }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-800 hidden">{{ $role->updated_at }}</td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-center text-xs font-medium ">
                                         <a href="{{ route('admin#editRole', $role->id) }}">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center gap-x-2 text-sm font-semibold p-2">
+                                                class="inline-flex items-center gap-x-2 text-xs font-semibold p-2">
                                                 <i class="fa-solid fa-pen-to-square text-blue-600 hover:text-blue-800"></i>
                                             </button>
                                         </a>
                                         <a href="{{ route('admin#deleteRole', $role->id) }}" class="btn-delete">
-                                            <button type="button" class="inline-flex items-center gap-x-2 text-sm p-2">
+                                            <button type="button" class="inline-flex items-center gap-x-2 text-xs p-2">
                                                 <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                             </button>
                                         </a>
@@ -221,11 +170,13 @@
                 </div>
             </div>
         </div>
-        {{ $roleData->links() }}
+        <div class="mt-4">
+            {{ $roleData->links() }}
+        </div>
     </div>
 
 
-    <div class="container mt-3 p-4">
+    <div class="container mt-2 p-4">
         <h1 class="text-xl font-bold text-left mb-3">
             Leaderboard
         </h1>
@@ -241,7 +192,11 @@
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Username</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Email</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Total Submissions</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Total Vote</th>
+
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Status</th>
+                                <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Action</th>
+
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
@@ -252,12 +207,19 @@
                                 <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->name }}</td>
                                 <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->email }}</td>
                                 <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->total_submissions }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->total_votes }}</td>
+
                                 <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">
                                     @if($user->total_submissions == 7)
                                         <span class="text-green-500 p-2 bg-green-100 text-xs "style="border-radius: 50px">Completed</span>
                                     @else
                                         <span class="text-red-500 p-2 bg-red-100 text-xs " style="border-radius: 50px">Incomplete</span>
                                     @endif
+                                </td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">
+                                    <a href="{{ route('admin.user.submissions', ['id' => Crypt::encrypt($user->id)]) }}" class="text-blue-600 hover:text-blue-800">
+                                        <i class="fa-solid fa-folder-open text-blue-600 hover:text-blue-800"></i> Detail
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -270,7 +232,7 @@
     
     <!-- Tautan Pagination -->
     <div class="mt-4">
-        {{ $leaderboard->links() }} <!-- Tautan pagination -->
+        {{ $leaderboard->links() }}
     </div>
 </div>
     

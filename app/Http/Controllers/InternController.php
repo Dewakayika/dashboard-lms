@@ -237,8 +237,12 @@ class InternController extends Controller
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
-        $courseName = 'Introduction in to Sketchup';
+        $courseName = 'Assignment 3 | Introduction in to Sketchup';
         $chapterName = 'Chapter_2';
+
+        $courseName2 = 'Assignment 1 | Introduction in to Sketchup';
+
+        $courseName3 = 'Assignment 2 | Introduction in to Sketchup';
 
         // Check if a submission for this courseName by this user already exists
         $submissionExists = SubmissionCourse::where('user_id', $user->id)
@@ -259,7 +263,7 @@ class InternController extends Controller
         }
 
 
-        return view('users.Member.courseIntroSketchup', compact('courseName', 'chapterName'))->with([
+        return view('users.Member.courseIntroSketchup', compact('courseName', 'chapterName', 'courseName2', 'courseName3'))->with([
             'internData' => $intern_data, 
             'userData' => $user,
             'submissionExists' => $submissionExists,
@@ -473,8 +477,7 @@ class InternController extends Controller
         ]);
     }
     
-    
-    
+
     public function storeVote(Request $request, SubmissionCourse $submission)
     {
         // Validasi input

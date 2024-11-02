@@ -33,7 +33,7 @@ class SubmissionCourse extends Model
 
     public function votes()
     {
-        return $this->hasMany(AssignmentVote::class, 'submission_id');
+        return $this->hasMany(AssignmentVote::class, 'submission_id', 'id');
     }
 
 }

@@ -245,6 +245,18 @@
                                             <span>Final Applying Color</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="assignment-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Assignment 1</span>
+                                        </a>
+                                    </li>
+                                    
+
+                                    
                                 </ul>
                             </li>
 
@@ -630,16 +642,36 @@
 
                             <li>
                                 <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu13">
-                                    <span class="font-bold">13. Assignment</span>
+                                    <span class="font-bold">13. Assignment 2 and 3</span>
                                     <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
                                         <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
                                 <ul id="dropdownMenu13" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
                                     <li>
-                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission-2">
                                             <i class="fa-solid fa-file-arrow-up"></i>
-                                            <span>Assignment Submission</span>
+                                            <span>Assignment 2 Submission</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu14">
+                                    <span class="font-bold">14. Assignment 3</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu14" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission-3">
+                                            <i class="fa-solid fa-file-arrow-up"></i>
+                                            <span>Assignment 3 Submission</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -667,64 +699,209 @@
                     </div>
                 </div>
                 
-                <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
-                <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
-                <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course. For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
-                <p class="font-bold">Assignment 1</p>
-                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
-                    <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
-                    <br>
-                <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
-                    Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
-                    If you need to change any submitted information, please contact your mentor or administrator directly.
-                </p>                    
-                
-                @if (!$submissionExists)
-                    <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="course_name" value="{{ $courseName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
-                        <input type="hidden" name="chapter_name" value="{{ $chapterName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
-                    
-                        <div class="flex items-center justify-center w-full mt-4">
-                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg id="icon-upload" class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                    </svg>
-                                    <p id="upload-text" class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload assignment thumbnail</span></p>
-                                    <p id="upload-info" class="text-xs text-gray-500">PNG, JPG, or GIF</p>
-                                    <img id="image-preview" src="" alt="" class="hidden max-w-full max-h-40 mt-2">
-                                    <p id="file-name" class="hidden mt-2 text-sm text-gray-600"></p>
-                                    <p id="change-text" class="hidden text-sm text-blue-500 cursor-pointer">Click to Change</p>
-                                </div>
-                                <input id="dropzone-file" type="file" name="thumbnail" class="hidden" accept="image/png, image/jpeg, image/gif" required />
-                            </label>
-                        </div>
-                        @error('thumbnail')
-                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
-                        @enderror
-                    
-                        <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
-                    
-                        <div class="mb-4">
-                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
-                            <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
-                        </div>
-                    
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
-                    </form>
+                <div id="submission-1" class="bg-white rounded-lg shadow-md p-4 mt-4">
+                    <h3 class="text-xl font-bold text-gray-900">Assignment 1 Submission</h3>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment 1, you are required to upload the results of the exercises from the Quick Start section that you have learned. <br> Please upload according to the following instructions:</p>
 
-                    @else
-                        <!-- Display alternative message if submission already exists -->
-                        <div class=" text-center text-gray-600 mt-6">
-                            <div class="flex justify-center items-center">
-                                <img class=" h-56" src="{{ url('images/ilustration/success.png') }}" alt="success-icons">
+                    <br>
+                    <ul>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">1. Upload the SketchUp (.skp) file to Google Drive and ensure that the sharing link is allowed</li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">2. The format for the .skp file name is <strong>Name_Assignment1.skp.</strong></li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">3. Take a screenshot of the .skp file you created, and then upload it in the <strong>assignment Thumbnail below</strong></li>
+                    </ul>
+
+                    <br>
+
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Make sure to submit correctly according to the instructions.</p>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Happy working and happy creating!</p>
+
+                        <br>                  
+                
+                    @if (!$submissionExists)
+                        <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="course_name" value="{{ $courseName2 }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                            <input type="hidden" name="chapter_name" value="{{ $chapterName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        
+                            <div class="flex items-center justify-center w-full mt-4">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg id="icon-upload" class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                        </svg>
+                                        <p id="upload-text" class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload assignment thumbnail</span></p>
+                                        <p id="upload-info" class="text-xs text-gray-500">PNG, JPG, or GIF</p>
+                                        <img id="image-preview" src="" alt="" class="hidden max-w-full max-h-40 mt-2">
+                                        <p id="file-name" class="hidden mt-2 text-sm text-gray-600"></p>
+                                        <p id="change-text" class="hidden text-sm text-blue-500 cursor-pointer">Click to Change</p>
+                                    </div>
+                                    <input id="dropzone-file" type="file" name="thumbnail" class="hidden" accept="image/png, image/jpeg, image/gif" required />
+                                </label>
                             </div>
-                            <p class="text-m italic">Your submission for <span class="font-semibold">{{ $courseName }}</span> has already been submitted.</p>
-                            <p class="text-sm italic">If you need to make changes, check on <a class="underline" href="{{route('intern#internProfile')}}">submission history</a></p>
-                        </div>
+                            @error('thumbnail')
+                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                            @enderror
+                        
+                            <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        
+                            <div class="mb-4">
+                                <label for="submission_file" class="text-base font-medium text-gray-900">Submission Link</label>
+                                <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
+                            </div>
+                        
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
+                        </form>
+
+                        @else
+                            <!-- Display alternative message if submission already exists -->
+                            <div class=" text-center text-gray-600 mt-6">
+                                <div class="flex justify-center items-center">
+                                    <img class=" h-56" src="{{ url('images/ilustration/success.png') }}" alt="success-icons">
+                                </div>
+                                <p class="text-m italic">Your submission for <span class="font-semibold">{{ $courseName }}</span> has already been submitted.</p>
+                                <p class="text-sm italic">If you need to make changes, check on <a class="underline" href="{{route('intern#internProfile')}}">submission history</a></p>
+                            </div>
                     @endif  
-            </div>
+                </div>
+
+                <div id="submission-2" class="bg-white rounded-lg shadow-md p-4 mt-4">
+                    <h3 class="text-xl font-bold text-gray-900">Assignment Submission</h3>
+
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this Assignment 2, you are required to create a 3D project based on the layout explained in the video and to practice using the 3D Warehouse. <br> Please upload your work with the following guidelines:</p>
+
+                    <br>
+                    <ul>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">1. Upload the SketchUp (.skp) file to Google Drive and ensure that the sharing link is allowed</li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">2. The format for the .skp file name is <strong>Name_Assignment2.skp.</strong></li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">3. Take a screenshot of the .skp file you created, and then upload it in the <strong>assignment Thumbnail below</strong></li>
+                    </ul>
+
+                    <br>
+
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Make sure to submit correctly according to the instructions.</p>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Happy working and happy creating!</p>
+
+                    <br>
+                                   
+                
+                    @if (!$submissionExists)
+                        <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="course_name" value="{{ $courseName3 }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                            <input type="hidden" name="chapter_name" value="{{ $chapterName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        
+                            <div class="flex items-center justify-center w-full mt-4">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg id="icon-upload" class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                        </svg>
+                                        <p id="upload-text" class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload assignment thumbnail</span></p>
+                                        <p id="upload-info" class="text-xs text-gray-500">PNG, JPG, or GIF</p>
+                                        <img id="image-preview" src="" alt="" class="hidden max-w-full max-h-40 mt-2">
+                                        <p id="file-name" class="hidden mt-2 text-sm text-gray-600"></p>
+                                        <p id="change-text" class="hidden text-sm text-blue-500 cursor-pointer">Click to Change</p>
+                                    </div>
+                                    <input id="dropzone-file" type="file" name="thumbnail" class="hidden" accept="image/png, image/jpeg, image/gif" required />
+                                </label>
+                            </div>
+                            @error('thumbnail')
+                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                            @enderror
+                        
+                            <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        
+                            <div class="mb-4">
+                                <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
+                                <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
+                            </div>
+                        
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
+                        </form>
+
+                        @else
+                            <!-- Display alternative message if submission already exists -->
+                            <div class=" text-center text-gray-600 mt-6">
+                                <div class="flex justify-center items-center">
+                                    <img class=" h-56" src="{{ url('images/ilustration/success.png') }}" alt="success-icons">
+                                </div>
+                                <p class="text-m italic">Your submission for <span class="font-semibold">{{ $courseName }}</span> has already been submitted.</p>
+                                <p class="text-sm italic">If you need to make changes, check on <a class="underline" href="{{route('intern#internProfile')}}">submission history</a></p>
+                            </div>
+                    @endif  
+                </div>
+
+                <div id="submission-3" class="bg-white rounded-lg shadow-md p-4 mt-4">
+                    <h3 class="text-xl font-bold text-gray-900">Assignment 3 Submission</h3>
+                    
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">For Assignment 3, you are required to create a layout of your room, including its furnishings. 
+                        <br>
+                        You may use open-source assets from SketchUp Warehouse to complete the furniture elements.</p>
+
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
+                        Please upload your work following these instructions:
+                    </p>
+
+                    <br>
+                    <ul>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">1. Upload the SketchUp (.skp) file to Google Drive and ensure that the sharing link is allowed</li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">2. The format for the .skp file name is <strong>Name_Assignment3.skp.</strong></li>
+                        <li class="text-sm font-regular text-gray-600 mt-2 text-justify">3. Take a screenshot of the .skp file you created, and then upload it in the <strong>assignment Thumbnail below</strong></li>
+                    </ul>
+
+                    <br>
+
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Make sure to submit correctly according to the instructions.</p>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">Happy working and happy creating!</p>
+
+                    <br>
+                
+                    @if (!$submissionExists)
+                        <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="course_name" value="{{ $courseName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                            <input type="hidden" name="chapter_name" value="{{ $chapterName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        
+                            <div class="flex items-center justify-center w-full mt-4">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg id="icon-upload" class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                        </svg>
+                                        <p id="upload-text" class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload assignment thumbnail</span></p>
+                                        <p id="upload-info" class="text-xs text-gray-500">PNG, JPG, or GIF</p>
+                                        <img id="image-preview" src="" alt="" class="hidden max-w-full max-h-40 mt-2">
+                                        <p id="file-name" class="hidden mt-2 text-sm text-gray-600"></p>
+                                        <p id="change-text" class="hidden text-sm text-blue-500 cursor-pointer">Click to Change</p>
+                                    </div>
+                                    <input id="dropzone-file" type="file" name="thumbnail" class="hidden" accept="image/png, image/jpeg, image/gif" required />
+                                </label>
+                            </div>
+                            @error('thumbnail')
+                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                            @enderror
+                        
+                            <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        
+                            <div class="mb-4">
+                                <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
+                                <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
+                            </div>
+                        
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
+                        </form>
+
+                        @else
+                            <!-- Display alternative message if submission already exists -->
+                            <div class=" text-center text-gray-600 mt-6">
+                                <div class="flex justify-center items-center">
+                                    <img class=" h-56" src="{{ url('images/ilustration/success.png') }}" alt="success-icons">
+                                </div>
+                                <p class="text-m italic">Your submission for <span class="font-semibold">{{ $courseName }}</span> has already been submitted.</p>
+                                <p class="text-sm italic">If you need to make changes, check on <a class="underline" href="{{route('intern#internProfile')}}">submission history</a></p>
+                            </div>
+                    @endif  
+                </div>
             </main>
         </div>
 
@@ -769,7 +946,9 @@
                                 <hr>
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'navigating':
                             videoUrl = 'https://drive.google.com/file/d/1QJ7hAgsLZl0nwqK-ZJd5N6vcEdlG7bBr/preview';
@@ -780,7 +959,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'pillars':
                             videoUrl = 'https://drive.google.com/file/d/1OaosBCPI5E6VZQXHtI83JJcHNCBR1JoG/preview';
@@ -791,7 +972,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'component':
                             videoUrl = 'https://drive.google.com/file/d/1sXeqUR64YRl2Dl49CEMaXRKUK3rEsq4G/preview';
@@ -802,7 +985,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'inferences':
                             videoUrl = 'https://drive.google.com/file/d/1P-jyD4hB4tnwlZ_zClQw2LOllky72nMS/preview';
@@ -813,7 +998,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                         break;
                             case 'arc-circle':
                             videoUrl = 'https://drive.google.com/file/d/1vYweuFN517EEnOFP3NvFEw48Zjl9fwGm/preview';
@@ -824,7 +1011,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'array':
                             videoUrl = 'https://drive.google.com/file/d/1FhGQeJx795ENJev9we_Q9QMVgitM2Kmy/preview';
@@ -835,7 +1024,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'creating-steps':
                             videoUrl = 'https://drive.google.com/file/d/1u5haEHi8e_4iSrtM-phMXAK6AvApYJMH/preview';
@@ -846,7 +1037,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'building-slide':
                             videoUrl = 'https://drive.google.com/file/d/1OIsiaoG0muV4k-KsySGqu_EeHw1zd9tr/preview';
@@ -857,7 +1050,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'final':
                             videoUrl = 'https://drive.google.com/file/d/1ckX1tosuaAPksCcMqF9JNwGPrYB62Ipk/preview';
@@ -868,7 +1063,24 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
+                            break;
+
+                        case 'assignment-1':
+                            videoUrl = 'https://drive.google.com/file/d/1ckX1tosuaAPksCcMqF9JNwGPrYB62Ipk/preview';
+                            title = 'Final Applying Color';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 8:21 minute | Beginner</span>
+                                <hr>
+                                <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
+                                <span>Skills Covered: Quick Start Sketchup Fundamentals</span>
+                            `;
+                            document.getElementById('videoCourse').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'block';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         
                         // ================================================================================================================================
@@ -882,7 +1094,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'Inferences':
                             videoUrl = 'https://drive.google.com/file/d/1zMKsvixzjrfE-Mk2PVF28-7oyr6V3MdC/preview';
@@ -893,7 +1107,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'inference-challenge':
                             videoUrl = 'https://drive.google.com/file/d/1ElltS22RohMbJX0TB81pXi1sjUPaJ-2q/preview';
@@ -904,7 +1120,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         case 'blue-axis':
                             videoUrl = 'https://drive.google.com/file/d/1dwgpinNLh_7yXHIgqkEuTkyhFRvHR1xS/preview';
@@ -915,7 +1133,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ====================================================================================================================================================================
@@ -929,7 +1149,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ================================================================================================================================================================================
@@ -943,7 +1165,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'tape-measure':
@@ -955,7 +1179,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         
                         // ======================================================================================================================================================================
@@ -969,7 +1195,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'drawing-2':
@@ -981,7 +1209,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'drawing-3':
@@ -993,7 +1223,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         
                         case 'drawing-4':
@@ -1005,7 +1237,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'drawing-5':
@@ -1017,7 +1251,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         
                         case 'drawing-6':
@@ -1029,7 +1265,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
 
@@ -1044,7 +1282,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ======================================================================================================================================================================
@@ -1058,7 +1298,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ===================================================================================================================================================================
@@ -1072,7 +1314,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // =================================================================================================================================================================
@@ -1086,7 +1330,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ===============================================================================================================================================================================
@@ -1100,7 +1346,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'move-tool-2':
@@ -1112,7 +1360,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'move-tool-3':
@@ -1124,7 +1374,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
                         
                         case 'move-tool-4':
@@ -1136,7 +1388,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // =================================================================================================================================================
@@ -1150,7 +1404,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'follow-me-tool-2':
@@ -1162,7 +1418,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'follow-me-tool-3':
@@ -1174,7 +1432,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ====================================================================================================================================================================
@@ -1188,7 +1448,9 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         case 'inference-locking-2':
@@ -1200,21 +1462,39 @@
                                 <span>This introductory course on SketchUp Fundamentals is designed for beginners looking to master the essential tools and techniques of 3D modeling. Throughout the course, you will explore key features and workflows that will allow you to create, manipulate, and organize 3D objects with ease. The lessons are structured to build a strong foundation in SketchUp, from understanding the interface to creating complex designs efficiently.</span>
                                 <span>Skills Covered: Sketchup Fundamentals</span>
                             `;
-                            document.getElementById('submission').style.display = 'none';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'none';
                             break;
 
                         // ====================================================================================================================================================================
 
-                        case 'submission':
+                        case 'submission-2':
                             videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
-                            title = 'Submission';
+                            title = 'Assignment 2 Briefing';
                             overviewContent = `
-                                <span class="overview-title">Duration: 0:54 minute | Beginner</span>
+                                <span class="overview-title">Duration: 3:54 minute | Beginner</span>
                                 <hr>
-                                <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
+                                <span>Please watch and read the assignment Instruction before start creating and submmiting!</span>
+                            `;
+                            document.getElementById('videoCourse').style.display = 'block';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'block';
+                            document.getElementById('submission-3').style.display = 'none';
+                            break;
+
+                        case 'submission-3':
+                            videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
+                            title = 'Assignment 2 Briefing';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 3:54 minute | Beginner</span>
+                                <hr>
+                                <span>Please watch and read the assignment Instruction before start creating and submmiting!</span>
                             `;
                             document.getElementById('videoCourse').style.display = 'none';
-                            document.getElementById('submission').style.display = 'block';
+                            document.getElementById('submission-1').style.display = 'none';
+                            document.getElementById('submission-2').style.display = 'none';
+                            document.getElementById('submission-3').style.display = 'block';
                             break;
                     }
                     videoTitle.textContent = title;
