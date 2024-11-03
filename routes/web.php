@@ -154,6 +154,9 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
 
 
     Route::get('/course/advance-tool', [InternController::class, 'advanceTool'])->name('course#advanceTool');
+    Route::get('/course/standard-industry', [InternController::class, 'industryPractise'])->name('course#industrypractise');
+    Route::get('/course/snaptoon', [InternController::class, 'snaptoon'])->name('course#snaptoon');
+
 
     // Route to get Assiignment submission Voter
     Route::get('/gallery', [InternController::class, 'gallery'])->name('gallery#submission');

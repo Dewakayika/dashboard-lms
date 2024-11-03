@@ -385,12 +385,10 @@
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 5
                             </p>
-                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                            <a href="{{ route('course#industrypractise') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Standard Industry Practise
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">In this course you will learn more details and complete in the standard industry practice for Webtoon background design. We'll discus all requirements that required for working as webtoon designer in Padma.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
@@ -419,12 +417,10 @@
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 6
                             </p>
-                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                            <a href="{{ route('course#snaptoon') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Introduction Snaptoon 3D Rendering
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">Snaptoon is 3D Rendering tools to create realistic rendering image for webtoon background. We'll discus more about how to use snaptoon until rendering some realistic image scene for webtoon.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
