@@ -301,7 +301,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Introduction in to Sketchup', $completedCourses)) 
+                    @if(!in_array('Assignment 3 | Introduction in to Sketchup', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>

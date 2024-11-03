@@ -244,7 +244,7 @@
                         <!-- Video Overview content will be injected here dynamically -->
                     </div>
                     <div class="video-material">
-                        <a href=""  target="_blank">Download Material</a>
+                        <a href="https://drive.google.com/drive/folders/1ohXn57Etye4ShQtYKfNHzxojePVrj7RI?usp=sharing"  target="_blank">Download Material</a>
                     </div>
                 </div>
                 
@@ -252,9 +252,21 @@
                 <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
                 
                 <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
-                    Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
-                    If you need to change any submitted information, please contact your mentor or administrator directly.
-                </p>                    
+                    Assignment pada course kali ini adalah ajustment angle dari sketchup kemudian replace panel di photoshop.
+                    <br>
+                    Silakan download file PSD dan Sketchup pada link material kemudian ikuti video dari awal hingga akhir.
+                    <br>
+                    Submission file PSD, Sketchup, dan PNG yang telah selesai di upload ke drive kemudian submit link drive pada submission dibawah. !
+                </p>              
+                
+                <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
+                    Pastikan link sudah memiliki akses share ke semua orang sehingga dapat diakses oleh siapa saja.
+
+                    <br>
+                    Kerjakan tugas dengan baik, sesuai dengan instruksi dan kumpulkan tepat waktu.
+                    <br>
+                    Selamat Bekerja dan Happy Creating
+                </p>
                 
                 @if (!$submissionExists)
                     <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
@@ -284,7 +296,7 @@
                         <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
                     
                         <div class="mb-4">
-                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission Link</label>
                             <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
                         </div>
                     

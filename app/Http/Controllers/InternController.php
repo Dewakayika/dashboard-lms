@@ -236,41 +236,68 @@ class InternController extends Controller
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
+    
+        $courseName = 'Assignment 1 | Introduction in to Sketchup';
+        $courseName2 = 'Assignment 2 | Introduction in to Sketchup';
+        $courseName3 = 'Assignment 3 | Introduction in to Sketchup';
 
-        $courseName = 'Assignment 3 | Introduction in to Sketchup';
         $chapterName = 'Chapter_2';
-
-        $courseName2 = 'Assignment 1 | Introduction in to Sketchup';
-
-        $courseName3 = 'Assignment 2 | Introduction in to Sketchup';
-
-        // Check if a submission for this courseName by this user already exists
-        $submissionExists = SubmissionCourse::where('user_id', $user->id)
-            ->where('course_name', $courseName)
-            ->exists();
+    
+        // Check if a submission for each courseName by this user already exists
+        $submission1Exists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)->exists();
+    
+        $submission2Exists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName2)->exists();
+    
+        $submission3Exists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName3)->exists();
     
         // Prepare submission data if needed for the view
         $submissionData = [];
-        if ($submissionExists) {
+        
+        if ($submission1Exists) {
             $submissions = SubmissionCourse::where('user_id', $user->id)
-                ->where('course_name', $courseName)
-                ->get();
-    
+                ->where('course_name', $courseName)->get();
+        
             foreach ($submissions as $submission) {
                 $submission->alreadySubmitted = true; // Flag as submitted
                 $submissionData[$submission->course_name][] = $submission; // Group by course_name
             }
         }
-
-
+    
+        if ($submission2Exists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName2)->get();
+        
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+    
+        if ($submission3Exists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName3)->get();
+        
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+        
         return view('users.Member.courseIntroSketchup', compact('courseName', 'chapterName', 'courseName2', 'courseName3'))->with([
             'internData' => $intern_data, 
             'userData' => $user,
-            'submissionExists' => $submissionExists,
+            'submission1Exists' => $submission1Exists,
+            'submission2Exists' => $submission2Exists,
+            'submission3Exists' => $submission3Exists,
             'submissionData' => $submissionData,
-        
-        ]);;
+        ]);
     }
+    
+
+
     public function sketchupPhotoshop()
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();

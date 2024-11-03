@@ -439,7 +439,7 @@
                 </div>
 
                 <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
-                    <h3 class="text-xl font-medium text-gray-900">Assignment</h3>
+                    <h3 class="text-xl font-bold text-gray-900">Assignment</h3>
                     <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course.</p>
 
                     <p class="font-bold mt-2">Assignment 1</p>
@@ -450,7 +450,7 @@
 
                     <p class="font-bold mt-2">Assignment 2</p>
                         <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
-                            For the summary assignment, please ensure that you watch the entire video to fully understand the content. The summary should follow the format outlined below:
+                            In this assignment 2 you need to <strong>create a video summary</strong>  based on topic that you already learn. The video summary should follow the format outlined below:
                         </p>
                         <ul  class="list-disc list-inside text-base text-gray-800 space-y-2">
                             <li class="text-sm font-regular text-gray-600 mt-2 text-justify">What is Storyboarding</li>
@@ -460,14 +460,13 @@
                             <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Conclusion</li>
                         </ul>
                         <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
-                            Create your summary in a Word document and submit it in PDF format uploaded to Google Drive. Make sure the Google Drive link is set to public so that it can be accessed.
+                            Create your video summary in Bahasa Indonesia uploaded at Youtube and make it unlist. <strong>Copy the youtube unlist link and submit it bellow.</strong>
                         </p>
 
                         <br>
                     
                     <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
-                        Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
-                        If you need to change any submitted information, please contact your mentor or administrator directly.
+                        Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed.
                     </p>                   
 
                     
@@ -499,7 +498,7 @@
                         <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
                     
                         <div class="mb-4">
-                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File</label>
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission Link</label>
                             <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
                         </div>
                     
