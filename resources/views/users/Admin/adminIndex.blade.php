@@ -193,7 +193,6 @@
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Email</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Total Submissions</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Total Vote</th>
-
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Status</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Action</th>
 
@@ -210,7 +209,7 @@
                                 <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">{{ $user->total_votes }}</td>
 
                                 <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800">
-                                    @if($user->total_submissions == 7)
+                                    @if($user->total_submissions == 8)
                                         <span class="text-green-500 p-2 bg-green-100 text-xs "style="border-radius: 50px">Completed</span>
                                     @else
                                         <span class="text-red-500 p-2 bg-red-100 text-xs " style="border-radius: 50px">Incomplete</span>
