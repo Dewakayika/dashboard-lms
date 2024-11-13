@@ -146,57 +146,274 @@
                 </a>
                 <nav>   
                     <div class="mb-4">
-                        <ul class="space-y-2">
+                        <ul id="sidebarMenu" class="space-y-2">
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu1">
+                                    <span class="font-bold"> Introduction</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Introduction</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu1" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="introduction">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Introduction</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="whatstoryboard">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu2">
+                                    <span class="font-bold"> 1. What is storyboard?</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>What's Storyboard</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu2" class="pl-3 space-y-2 hidden gap-3 py-2">
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="whatstoryboard">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>What's Storyboard</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="understanding-aspec-ratio">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu3">
+                                    <span class="font-bold"> 2. Aspect Ratio</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Aspec Ratio and Type of Shots</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu3" class="pl-3 space-y-2 hidden gap-3 py-2">
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="understanding-aspec-ratio">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Understanding Aspect Ratio</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="rule-of-third">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>What is the rule of thirds?</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="rule-of-third">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu4">
+                                    <span class="font-bold"> 3. Shots</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Webtoon Type of Shots</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu4" class="pl-3 space-y-2 hidden gap-3 py-2">
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="intro-shots">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Intro to Shots in Comic</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="wide-shot">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Wide Shot</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="full-shot">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Full Shot</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="medium-shot">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Medium Shot</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="medium-up">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Close Up</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="extreme-close-up">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Extreme Close Up</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="conclution-camera-shots">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu5">
+                                    <span class="font-bold"> 4. Camera Movements</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
-                                    <span>Conclutions Camera and Shots</span>
-                                </a>
+                                </button>
+                                <ul id="dropdownMenu5" class="pl-3 space-y-2 hidden gap-3 py-2">
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="intro-camera-comic">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Intro camera in comics</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="panning">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Panning</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="zooming">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Zooming</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
-                                    <i class="fa-solid fa-file-arrow-up"></i>
-                                    <span>Assignment Submission</span>
-                                </a>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu6">
+                                    <span class="font-bold"> 5. Putting it to the Test</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu6" class="pl-3 space-y-2 hidden gap-3 py-2">
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="char-place">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Character Placement</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="conversation">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Cpnversation</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="movement">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Movement</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="action">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Action</span>
+                                        </a>
+                                    </li>
+        
+        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100" data-video="conclution">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Conclutions Camera Shots and Movements</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <hr>
+
+                            <li>
+                                <button class="dropdown-button flex items-center p-2 rounded hover:bg-gray-100 w-full" aria-expanded="false" data-target="dropdownMenu7">
+                                    <span class="font-bold"> Assignment</span>
+                                    <svg class="ml-auto transition-transform transform dropdown-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"  stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul id="dropdownMenu7" class="pl-3 space-y-2 hidden gap-3 py-2">                                        
+                                    <li>
+                                        <a href="#" class="video-link flex items-center p-2 rounded hover:bg-gray-100 gap-2" data-video="submission">
+                                            <i class="fa-solid fa-file-arrow-up"></i>
+                                            <span>Assignment Submission</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -208,7 +425,7 @@
                 <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
                     <h1 class="text-2xl font-bold mb-2">Comic and Webtoon Introduction</h1>
                 </header>
-                <div class="bg-white rounded-lg shadow-md p-4">
+                <div  id="videoCourse" class="bg-white rounded-lg shadow-md p-4">
                     <div class="video-container mt-4">
                         <iframe id="video-placeholder" frameborder="0" allowfullscreen></iframe>
                     </div>
@@ -222,31 +439,82 @@
                 </div>
 
                 <div id="submission" class="bg-white rounded-lg shadow-md p-4 mt-4">
-                    <h3 class="text-xl font-medium text-gray-900">Assignment Submission</h3>
-                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course. For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below.</p>
-                    <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
-                    <br>
+                    <h3 class="text-xl font-bold text-gray-900">Assignment</h3>
+                    <p class="text-sm font-regular text-gray-600 mt-2 text-justify">In this assignment there are 2 assignments, namely quiz via quizizz and also by submitting a summary of notes from learning this course.</p>
+
+                    <p class="font-bold mt-2">Assignment 1</p>
+                        <p class="text-sm font-regular text-gray-600 mt-2 text-justify"> For Quizz, join the class first then start quizz independently. Use the following Code  <span class="font-bold">D167361</span> to be able to join the class. or via the class link below. 
+                            <a href="https://quizizz.com/join?class=D167361" class="text-sm font-regular text-gray-600 mt-2 text-justify underline ">Join Class to take quizz</a>
+                        </p>
+                 
+
+                    <p class="font-bold mt-2">Assignment 2</p>
+                        <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
+                            In this assignment 2 you need to <strong>create a video summary</strong>  based on topic that you already learn. The video summary should follow the format outlined below:
+                        </p>
+                        <ul  class="list-disc list-inside text-base text-gray-800 space-y-2">
+                            <li class="text-sm font-regular text-gray-600 mt-2 text-justify">What is Storyboarding</li>
+                            <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Aspect Ratio</li>
+                            <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Shots</li>
+                            <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Camera Movements</li>
+                            <li class="text-sm font-regular text-gray-600 mt-2 text-justify">Conclusion</li>
+                        </ul>
+                        <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
+                            Create your video summary in Bahasa Indonesia uploaded at Youtube and make it unlist. <strong>Copy the youtube unlist link and submit it bellow.</strong>
+                        </p>
+
+                        <br>
+                    
                     <p class="text-sm font-regular text-gray-600 mt-2 text-justify">
-                        Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed. 
-                        If you need to change any submitted information, please contact your mentor or administrator directly.
-                    </p>                    
+                        Make sure to follow all the assignment requirements carefully. Please note that multiple submissions for the same assignment are not allowed.
+                    </p>                   
+
                     
-                    <form action="{{ route('submission_course.store') }}" method="POST">
+                    @if (!$submissionExists)
+                    <form action="{{ route('submission_course.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="course_name" value="{{$courseName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm hidden-sm border rounded-md px-2 py-2 mt-2"> 
-                        <input type="hidden" name="chapter_name" value="{{$chapterName}}" id="submission_file" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        <input type="hidden" name="course_name" value="{{ $courseName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
+                        <input type="hidden" name="chapter_name" value="{{ $chapterName }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md px-2 py-2 mt-2">
                     
-                        <div class="mb-4">
-                            <input type="hidden" name="user_id" id="user_id" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
+                        <div class="flex items-center justify-center w-full mt-4">
+                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100 file-input-border">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg id="icon-upload" class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p id="upload-text" class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload assignment thumbnail</span></p>
+                                    <p id="upload-info" class="text-xs text-gray-500">PNG, JPG, or GIF</p>
+                                    <img id="image-preview" src="" alt="" class="hidden max-w-full max-h-40 mt-2">
+                                    <p id="file-name" class="hidden mt-2 text-sm text-gray-600"></p>
+                                    <p id="change-text" class="hidden text-sm text-blue-500 cursor-pointer">Click to Change</p>
+                                </div>
+                                <input id="dropzone-file" type="file" name="thumbnail" class="hidden" accept="image/png, image/jpeg, image/gif" required />
+                            </label>
                         </div>
+                        @error('thumbnail')
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                    
+                        <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border rounded-md">
                     
                         <div class="mb-4">
-                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission File (Link)</label>
-                            <input type="text" name="submission_file" id="submission_file" class=" mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white caret-black-600">
+                            <label for="submission_file" class="text-base font-medium text-gray-900">Submission Link</label>
+                            <input type="text" name="submission_file" class="mt-2 block w-full py-2 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:caret-black-600 focus:bg-white">
                         </div>
                     
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded fw-bold">Submit</button>
-                    </form>                   
+                    </form>
+
+                    @else
+                        <!-- Display alternative message if submission already exists -->
+                        <div class=" text-center text-gray-600 mt-6">
+                            <div class="flex justify-center items-center">
+                                <img class=" h-56" src="{{ url('images/ilustration/success.png') }}" alt="success-icons">
+                            </div>
+                            <p class="text-m italic">Your submission for <span class="font-semibold">{{ $courseName }}</span> has already been submitted.</p>
+                            <p class="text-sm italic">If you need to make changes, check on <a class="underline" href="{{route('intern#internProfile')}}">submission history</a></p>
+                        </div>
+                    @endif                 
                 </div>
             </main>
         </div>
@@ -294,6 +562,7 @@
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
+
                         case 'whatstoryboard':
                             videoUrl = 'https://drive.google.com/file/d/1s0c5Tu9oMiFMoHhiRCO3_uPbMUE1YKs6/preview';
                             title = 'What`s Storyboarding?';
@@ -305,11 +574,12 @@
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
+
                         case 'understanding-aspec-ratio':
-                            videoUrl = 'https://drive.google.com/file/d/1YKAnlfapBaPLTVUqAq-4BZaxlsFdLh6v/preview';
-                            title = 'Aspect Ratio & Rule of Third';
+                            videoUrl = 'https://drive.google.com/file/d/1fjOQz3uXeiLl3hJe2hM14KjtEKykxsi6/preview';
+                            title = 'Understanding Aspec Ratio';
                             overviewContent = `
-                                <span class="overview-title">Duration: 5:24 seconds | Beginner</span>
+                                <span class="overview-title">Duration: 52 seconds | Beginner</span>
                                 <hr>
                                 <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
                                 <span>The Rule of Thirds is a fundamental principle of composition that divides an image into nine equal parts using two equally spaced horizontal lines and two equally spaced vertical lines. By placing key elements along these lines or at their intersections, you create a more balanced, engaging, and visually appealing composition.</span>
@@ -317,28 +587,188 @@
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
+
                         case 'rule-of-third':
-                            videoUrl = 'https://drive.google.com/file/d/1Fo-bTmD09_a9rDs8n6cVQ3FPFHimTnwx/preview';
-                            title = 'Undestanding Type of Shots';
+                            videoUrl = 'https://drive.google.com/file/d/1qw3SP4BuV7Wr8eeNl81Kohd6_i3YPqbf/preview';
+                            title = 'What is the rule of thirds?';
                             overviewContent = `
-                                <span class="overview-title">Duration: 7:02 minute | Beginner</span>
+                                <span class="overview-title">Duration: 5:24 minute | Beginner</span>
                                 <hr>
-                                <span>Understanding the different types of shots is crucial for storyboarding, as each type serves a specific purpose in conveying the story, setting the scene, and highlighting character actions and emotions. </span>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Rule of third</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        case 'intro-shots':
+                            videoUrl = 'https://drive.google.com/file/d/15ABpmEj9jGGSEPkqCPOAs6byuAeHtQCG/preview';
+                            title = 'Intro to Shots in Comic';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 37 seconds | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Shots in comic</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+                        
+                        case 'wide-shot':
+                            videoUrl = 'https://drive.google.com/file/d/1nJl8YEfWFqTmZMtBRpXSwowf9QYQvdDN/preview';
+                            title = 'Wide Shot';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2:20 minute | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
                                 <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
-                        case 'conclution-camera-shots':
-                            videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
-                            title = 'Conclutions Camera and Shots';
+
+                        case 'full-shot':
+                            videoUrl = 'https://drive.google.com/file/d/1loAsRpriaIyXrPu7oSjAN5i05ykP7fFs/preview';
+                            title = 'Full Shot';
                             overviewContent = `
-                                <span class="overview-title">Duration: 1:24 minute | Beginner</span>
+                                <span class="overview-title">Duration: 1m 19s | Beginner</span>
                                 <hr>
-                                <span>Understanding the different types of shots is crucial for storyboarding, as each type serves a specific purpose in conveying the story, setting the scene, and highlighting character actions and emotions. </span>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
                                 <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
                             `;
                             document.getElementById('submission').style.display = 'none';
                             break;
+
+                        case 'medium-shot':
+                            videoUrl = 'https://drive.google.com/file/d/1sZN7zNtOvkneUg-AtHkqHwlC-_tsuTiJ/preview';
+                            title = 'Medium Shot';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 55s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'close-up':
+                            videoUrl = 'https://drive.google.com/file/d/1_TivvCwxoaGDMNeltU4f3tP5xfIYj-eJ/preview';
+                            title = 'Close Up Shot';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 51s| Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'extreme-close-up':
+                            videoUrl = 'https://drive.google.com/file/d/1s-br7smGQo-YAcKYJItXUDMeSvcupXMZ/preview';
+                            title = 'Extreme Close Up Shot';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 1m 36s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Camera Shots, Wide Shot, Medium Shot, CloseUp Shot.</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'intro-camera-comic':
+                            videoUrl = 'https://drive.google.com/file/d/1WVdwMMDMB_5QbgC16I8BtQWdpfLAAicp/preview';
+                            title = 'Introduction Camera in Comics';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 31s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Zooming, Panning webtoon panel</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'zooming':
+                            videoUrl = 'https://drive.google.com/file/d/177tKByK_rWV57BftLNPBsaZpB7YjjWvv/preview';
+                            title = 'Zooming';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2m 9s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Zooming, Panning webtoon panel</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'panning':
+                            videoUrl = 'https://drive.google.com/file/d/1NC-7rq2BvIlwwPEgwURex61RZeIeoShR/preview';
+                            title = 'Panning';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2m 17s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Zooming, Panning webtoon panel</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'char-place':
+                            videoUrl = 'https://drive.google.com/file/d/1KCidILwo2ZzbGDtFkaXA1Nbl-8bXgAvE/preview';
+                            title = 'Character Placement';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 30s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Conversations, movements, action in comic</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'conversation':
+                            videoUrl = 'https://drive.google.com/file/d/1KjrX4rvEwBW9kclBEGWy1vAfSwWgXhKr/preview';
+                            title = 'Conversation';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2m 3s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Conversations, movements, action in comic</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'movement':
+                            videoUrl = 'https://drive.google.com/file/d/1BnO2BQhs4OoKILkGrWmr2y7IupGCc5Er/preview';
+                            title = 'Movement';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 2m 22s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Conversations, movements, action in comic</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'action':
+                            videoUrl = 'https://drive.google.com/file/d/1k-jJA7ra5dVw_Lgx7Uw_k_DUxUJkomIj/preview';
+                            title = 'Action';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 1m 16s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Conversations, movements, action in comic</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        case 'conclution':
+                            videoUrl = 'https://drive.google.com/file/d/1f_eJgLGlK-8gIq2RwHbTNKSOl5ZkYAA2/preview\`';
+                            title = 'Conclution: Camera Shots and Movement';
+                            overviewContent = `
+                                <span class="overview-title">Duration: 1m 7s | Beginner</span>
+                                <hr>
+                                <span>When it comes to conveying a story visually to readers, comic book artists can learn a lot from examining how shots are filmed in movies and television. Although comic book panels aren't always a standard rectangular frame, you can still leverage the same storyboarding concepts, rules, and methods used in film to make your comics stronger and more digestible. In this course, join comic creator Ben Bishop as he explains how to use storyboard film techniques to understand shot composition, consistency, and movement within a frame, and apply those techniques as you build your comic book panels.</span>
+                                <span>Skills Covered: Conversations, movements, action in comic</span>
+                            `;
+                            document.getElementById('submission').style.display = 'none';
+                            break;
+
+                        
                         case 'submission':
                             videoUrl = 'https://drive.google.com/file/d/1dTXTx7eERuyhhiO_xcm5Wm0rdm-XuH1n/preview';
                             title = 'Submission';
@@ -347,6 +777,7 @@
                                 <hr>
                                 <span>We're so excited to have you here with us. In this wonderful space, we'll dive deep into the world of webtoon backgrounds and explore what it takes to become a skilled webtoon background designer. Whether you're just starting out or looking to hone your craft, there's a place for you here. Let's learn, create, and grow together!</span>
                             `;
+                            document.getElementById('videoCourse').style.display = 'none';
                             document.getElementById('submission').style.display = 'block';
                             break;
                     }
@@ -370,43 +801,86 @@
             }
         </script>
 
-    <script>
-    document.getElementById('dropzone-file').addEventListener('change', function(event) {
-        const fileInput = event.target;
-        const file = fileInput.files[0];
-        const fileNameElement = document.getElementById('file-name');
-        
-        // Validasi file kosong
-        if (!file) {
-            fileNameElement.textContent = "No file selected.";
-            fileNameElement.classList.add('text-red-500');
-            return;
-        }
-        
-        // Validasi tipe file
-        const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
-        if (!allowedExtensions.exec(file.name)) {
-            fileNameElement.textContent = "Invalid file type. Only PDF, DOC, and DOCX are allowed.";
-            fileNameElement.classList.add('text-red-500');
-            fileInput.value = ''; // Reset file input
-            return;
-        }
-        
-        // Validasi ukuran file (maksimal 2MB)
-        const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
-        if (file.size > maxSizeInBytes) {
-            fileNameElement.textContent = "File size exceeds 2MB limit.";
-            fileNameElement.classList.add('text-red-500');
-            fileInput.value = ''; // Reset file input
-            return;
-        }
-        
-        // Tampilkan nama file jika valid
-        fileNameElement.textContent = `Selected file: ${file.name}`;
-        fileNameElement.classList.remove('text-red-500');
-        fileNameElement.classList.add('text-green-500');
-    });
-    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const sidebarMenu = document.getElementById('sidebarMenu');
+
+                sidebarMenu.addEventListener('click', function (event) {
+                    // Check if the clicked element has the class 'dropdown-button'
+                    if (event.target.closest('.dropdown-button')) {
+                        const button = event.target.closest('.dropdown-button');
+                        const targetMenuId = button.getAttribute('data-target');
+                        const targetMenu = document.getElementById(targetMenuId);
+                        const icon = button.querySelector('.dropdown-icon');
+
+                        // Toggle dropdown menu visibility
+                        if (targetMenu) {
+                            targetMenu.classList.toggle('hidden');
+                            icon.classList.toggle('rotate-180');
+                        }
+                    }
+                });
+            });
+        </script>
+
+                <script>
+            document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('dropzone-file');
+            const imagePreview = document.getElementById('image-preview');
+            const fileLabel = document.querySelector('.file-input-border');
+            const uploadText = document.getElementById('upload-text');
+            const uploadInfo = document.getElementById('upload-info');
+            const iconUpload = document.getElementById('icon-upload');
+            const fileNameDisplay = document.getElementById('file-name');
+            const changeText = document.getElementById('change-text');
+
+            // Add event listener for file input change
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+
+                    // Display preview on image load
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                        fileLabel.classList.add('border-blue-500'); // Add blue border on active
+                        fileLabel.classList.add('bg-gray-50'); // Light background for preview
+
+                        // Hide upload text, icon, and info
+                        uploadText.classList.add('hidden');
+                        uploadInfo.classList.add('hidden');
+                        iconUpload.classList.add('hidden');
+
+                        // Show file name and "Change" option
+                        fileNameDisplay.textContent = file.name;
+                        fileNameDisplay.classList.remove('hidden');
+                        changeText.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Event listener for change button to reset the input
+            changeText.addEventListener('click', function() {
+                fileInput.value = ''; // Clear file input
+                imagePreview.classList.add('hidden'); // Hide preview
+                fileLabel.classList.remove('border-blue-500'); // Remove blue border
+                fileLabel.classList.remove('bg-gray-50'); // Reset background
+
+                // Show upload text, icon, and info
+                uploadText.classList.remove('hidden');
+                uploadInfo.classList.remove('hidden');
+                iconUpload.classList.remove('hidden');
+
+                // Hide file name and "Change" option
+                fileNameDisplay.classList.add('hidden');
+                changeText.classList.add('hidden');
+            });
+        });
+
+        </script>
+
     
     </div>
     <!-- End content -->

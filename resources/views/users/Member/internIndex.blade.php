@@ -46,8 +46,8 @@
 
     <body>
         <!-- Navbar -->
-        <nav x-data="{ open: false }" class="relative w-full bg-black text-white z-50">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <nav x-data="{ open: false }" class="relative w-full bg-black text-white z-50 ">
+            <div class="container py-4 flex justify-between">
                 <div class="flex items-center">
                     <a href="{{ url('/dashboard') }}" class="flex items-center">
                         <img src="{{ url('images/padma.png') }}" alt="" width="20" class="mr-2">
@@ -75,8 +75,7 @@
                 </button>
 
                 <!-- Full-screen menu -->
-                <div
-                    x-show="open"
+                <div x-show="open"
                     class="fixed inset-0 z-50 bg-black bg-opacity-90 flex flex-col items-center justify-center">
                     <button @click="open = false" class="absolute top-4 right-4 text-white">
                         <svg
@@ -96,7 +95,7 @@
                         @if (Route::has('login')) @auth
                         <div x-data="{ userOpen: false }" class="relative">
                             <div class="flex gap-2 px-2 py-1">
-                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
+                            <img src="{{ asset('/laravel/public/'. $internData->profile_photo) }}" alt="Profile" class="w-7 h-7 rounded-full object-cover">
                             <button
                                 @click="open = !open"
                                 class="flex items-center fw-bold space-x-2 text-2xl">
@@ -126,6 +125,7 @@
                 <!-- Desktop menu -->
                 <div class="hidden lg:flex items-center space-x-6">
                     <a href="{{ url('/dashboard') }}" class="hover:text-gray-300">Dashboard</a>
+                    <a href="{{ route('gallery#submission') }}" class="hover:text-gray-300">Vote Assignment</a>
                     @if (Route::has('login')) @auth
                     <div x-data="{ open: false }" class="relative">
                         <div class="flex gap-2 bg-gray-900 px-2 py-1 rounded">
@@ -196,12 +196,11 @@
 
         <div class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
             <div class="mb-4">
-                <h1 class="text-xl font-bold mb-4">Learning Course
-                </h1>
+                <h1 class="text-xl font-bold mb-4">Learning Course</h1>
                 <hr>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-4">
                 <div
                     class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
                     <img src="{{ url('images/Intro.png') }}" class="w-full mb-0">
@@ -268,7 +267,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Webtoon_introduction', $completedCourses)) 
+                    @if(!in_array('Comic and Webtoon Introduction', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -302,7 +301,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Introduction_to_sketchup', $completedCourses)) 
+                    @if(!in_array('Assignment 3 | Introduction in to Sketchup', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -319,11 +318,10 @@
                                 #CHAPTER 3
                             </p>
                             <a href="{{ route('course#sketchupPhotoshop') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
-                                Sketchup to Photoshop
+                                Sketchup to Photoshop Post Processing
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">This specialized course focuses on
-                                mastering the seamless workflow between SketchUp and Photoshop to create
-                                high-quality, detailed webtoon backgrounds.</p>
+                            <p class="text-gray-700 text-sm text-justify">This specialized course focuses on practice to creating scene and import scene in to photoshop 
+                                to understand post processing workflow from sketchup to photoshop.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
@@ -337,7 +335,7 @@
 
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Sketchup_to_photoshop', $completedCourses)) 
+                    @if(!in_array('Sketchup to Photoshop Post Processing', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -353,7 +351,7 @@
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 4
                             </p>
-                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                            <a href="{{route('course#advanceTool')}}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Advance Tools Webtoon Design
                             </a>
                             <p class="text-gray-700 text-sm text-justify">This specialized course focuses on
@@ -361,7 +359,7 @@
                                 high-quality, detailed webtoon backgrounds.</p>
                         </div>
                         <div class="flex items-center">
-                            <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
+                            <a href=""><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
                             <div class="text-sm">
                                 <a href="#" class="text-gray-900 font-semibold leading-none hover:text-indigo-600">Padma Studio</a>
                                 <p class="text-gray-600">Sept 06</p>
@@ -371,7 +369,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Advance_webtoon_design', $completedCourses)) 
+                    @if(!in_array('Advance Tools Webtoon Design', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -387,12 +385,10 @@
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 5
                             </p>
-                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                            <a href="{{ route('course#industrypractise') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Standard Industry Practise
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">In this course you will learn more details and complete in the standard industry practice for Webtoon background design. We'll discus all requirements that required for working as webtoon designer in Padma.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>
@@ -405,7 +401,7 @@
                 </div>
 
                 <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal relative">
-                    @if(!in_array('Advance_webtoon_design', $completedCourses)) 
+                    @if(!in_array('Standard Industry Practise', $completedCourses)) 
                     <div class="absolute inset-0 bg-gray-500 bg-opacity-80 flex justify-center items-center z-10 hover:bg-opacity-90">
                         <div class="justify-center text-center">                        
                             <i class="fa-solid fa-lock text-white text-4xl"></i>
@@ -421,12 +417,10 @@
                                 <i class="fas fa-book fill-current text-gray-500 w-3 h-3 mr-2"></i>
                                 #CHAPTER 6
                             </p>
-                            <a href="{{ route('course#basicSketchup') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
+                            <a href="{{ route('course#snaptoon') }}" class="text-gray-900 font-bold text-lg mb-2 hover:text-indigo-600 inline-block">
                                 Introduction Snaptoon 3D Rendering
                             </a>
-                            <p class="text-gray-700 text-sm text-justify">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                                exercitationem praesentium nihil.</p>
+                            <p class="text-gray-700 text-sm text-justify">Snaptoon is 3D Rendering tools to create realistic rendering image for webtoon background. We'll discus more about how to use snaptoon until rendering some realistic image scene for webtoon.</p>
                         </div>
                         <div class="flex items-center">
                             <a href="#"><img class="w-10 h-10 rounded-full mr-4" src="{{ url('images/padma-black.png') }}" alt="Avatar of Jonathan Reinink"></a>

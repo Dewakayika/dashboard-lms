@@ -8,6 +8,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\AssignmentVote;
+use App\Models\Talent;
+use App\Models\Intern;
+use App\Models\SubmissionCourse;
+
+
 
 class User extends Authenticatable
 {
@@ -26,7 +32,8 @@ class User extends Authenticatable
         'name',
         'role',
         'email',
-        'password'
+        'password',
+        'registration_code'
     ];
 
     /**
@@ -63,5 +70,26 @@ class User extends Authenticatable
     {
         return json_decode($this->attributes['course_progress'], true) ?? [];
     }
+
+    public function votesGiven()
+    {
+        return $this->hasMany(AssignmentVote::class, 'voter_id');
+    }
+
+    public function talent()
+    {
+        return $this->hasOne(Talent::class, 'user_id');
+    }
+
+    public function intern()
+    {
+        return $this->hasOne(Intern::class, 'user_id');
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(SubmissionCourse::class, 'user_id', 'id');
+    }
+
  
 }

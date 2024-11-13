@@ -6,6 +6,7 @@ use App\Models\Delivery;
 use App\Models\Talent;
 use App\Models\Intern;
 use App\Models\User;
+use App\Models\AssignmentVote;
 use App\Models\SubmissionCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Support\Facades\Storage;
+
 
 
 class InternController extends Controller
@@ -94,46 +96,104 @@ class InternController extends Controller
     // Introduction Course
     public function intro(Request $request)
     {
-        $intern_data = Intern::where('user_id', Auth::id())->first();
-        $user = User::where('id', $intern_data->user_id)->first();
-
+        $internData = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $internData->user_id)->first();
+    
         $courseName = 'Introduction';
         $chapterName = 'Chapter_Introduction';
-
-        return view('users.Member.courseIntroduction', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
-    }
+    
+        // Check if a submission for this courseName by this user already exists
+        $submissionExists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)
+            ->exists();
+    
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        if ($submissionExists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)
+                ->get();
+    
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+    
+        return view('users.Member.courseIntroduction', compact('courseName', 'chapterName'))
+            ->with([
+                'internData' => $internData,
+                'userData' => $user,
+                'submissionExists' => $submissionExists,
+                'submissionData' => $submissionData,
+            ]);
+    }    
 
     public function store(Request $request)
     {
-    $user = Auth::user();
-
-    $request->validate([
-        'submission_file' => 'required|string',
-        'course_name' => 'required|string',
-        'chapter_name' => 'required|string',
-    ]);
-
-    $existingSubmission = SubmissionCourse::where('user_id', $user->id)
-        ->where('course_name', $request->course_name)
-        ->where('chapter_name', $request->chapter_name)
-        ->first();
-
-    if ($existingSubmission) {
-        return redirect()->back()->with('error', "You're already submitted this assignment.");
+        $user = Auth::user();
+    
+        $request->validate([
+            'submission_file' => 'required|string',
+            'course_name' => 'required|string',
+            'chapter_name' => 'required|string',
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // Ensure valid image and size
+        ]);
+    
+        $existingSubmission = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $request->course_name)
+            ->where('chapter_name', $request->chapter_name)
+            ->first();
+    
+        if ($existingSubmission) {
+            return redirect()->back()->with('error', "You've already submitted this assignment.");
+        }
+    
+        // Handle thumbnail upload
+        $thumbnailPath = null;
+        if ($request->hasFile('thumbnail')) {
+            $image = $request->file('thumbnail');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            
+            // Move the image to 'public/images/assignment_thumbnail'
+            $image->move(public_path('images/assignment_thumbnail'), $imageName);
+            
+            // Define the path for storage in the database
+            $thumbnailPath = 'images/assignment_thumbnail/' . $imageName;
+        }
+    
+        $submission = new SubmissionCourse();
+        $submission->user_id = $user->id; 
+        $submission->course_name = $request->input('course_name');
+        $submission->chapter_name = $request->input('chapter_name');
+        $submission->submission_file = $request->input('submission_file'); 
+        $submission->thumbnail = $thumbnailPath;
+        $submission->submission_date = now();
+        $submission->save();
+    
+        return redirect()->back()->with('success', 'Assignment successfully submitted!');
     }
 
-    $submission = new SubmissionCourse();
-    $submission->user_id = $user->id; 
-    $submission->course_name = $request->input('course_name');
-    $submission->chapter_name = $request->input('chapter_name');
-    $submission->submission_file = $request->input('submission_file'); 
-    $submission->submission_date = now(); 
-    $submission->save();
+    public function destroy($id)
+    {
+        // Find the submission by ID
+        $submission = SubmissionCourse::findOrFail($id);
 
-    return redirect()->back()->with('success', 'Assignment successfully submitted!');
+        if (!$submission) {
+            return redirect()->back()->with('error', 'Submission not found');
+        }
+
+        // Delete the submission
+        $submission->delete();
+
+        // Redirect or return a response
+        return redirect()->back()->with('success', 'Submission deleted successfully.');
     }
 
 
+
+    
+  
 
     // Chapter #1
     // Basic Webtoon
@@ -142,10 +202,33 @@ class InternController extends Controller
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
-        $courseName = 'Webtoon_introduction';
-        $chapterName = 'Chapter_1';    
+        $courseName = 'Comic and Webtoon Introduction';
+        $chapterName = 'Chapter_1';
+        
+        // Check if a submission for this courseName by this user already exists
+        $submissionExists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)
+            ->exists();
     
-        return view('users.Member.courseBasicWebtoon', compact('courseName', 'chapterName'))->with([ 'internData' => $intern_data, 'userData' => $user]);
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        if ($submissionExists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)
+                ->get();
+    
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+    
+        return view('users.Member.courseBasicWebtoon', compact('courseName', 'chapterName'))->with([ 
+            'internData' => $intern_data, 
+            'userData' => $user,                 
+            'submissionExists' => $submissionExists,
+            'submissionData' => $submissionData,
+        ]);
     } 
 
 
@@ -153,21 +236,205 @@ class InternController extends Controller
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
+    
+        $courseName = 'Assignment 1 | Introduction in to Sketchup';
+        $courseName2 = 'Assignment 2 | Introduction in to Sketchup';
+        $courseName3 = 'Assignment 3 | Introduction in to Sketchup';
 
-        $courseName = 'Introduction_to_sketchup';
         $chapterName = 'Chapter_2';
-
-        return view('users.Member.courseIntroSketchup', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
+    
+        // Check if a submission for each courseName by this user already exists
+        $submission1Exists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)->exists();
+    
+        $submission2Exists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName2)->exists();
+    
+        $submission3Exists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName3)->exists();
+    
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        
+        if ($submission1Exists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)->get();
+        
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+    
+        if ($submission2Exists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName2)->get();
+        
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+    
+        if ($submission3Exists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName3)->get();
+        
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+        
+        return view('users.Member.courseIntroSketchup', compact('courseName', 'chapterName', 'courseName2', 'courseName3'))->with([
+            'internData' => $intern_data, 
+            'userData' => $user,
+            'submission1Exists' => $submission1Exists,
+            'submission2Exists' => $submission2Exists,
+            'submission3Exists' => $submission3Exists,
+            'submissionData' => $submissionData,
+        ]);
     }
+    
+
+
     public function sketchupPhotoshop()
     {
         $intern_data = Intern::where('user_id', Auth::id())->first();
         $user = User::where('id', $intern_data->user_id)->first();
 
-        $courseName = 'Sketchup_to_photoshop';
+        $courseName = 'Sketchup to Photoshop Post Processing';
         $chapterName = 'Chapter_3';
 
-        return view('users.Member.courseSketchupPhotoshop', compact('courseName', 'chapterName'))->with(['internData' => $intern_data, 'userData' => $user]);;
+        // Check if a submission for this courseName by this user already exists
+        $submissionExists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)
+            ->exists();
+    
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        if ($submissionExists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)
+                ->get();
+    
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+
+        return view('users.Member.courseSketchupPhotoshop', compact('courseName', 'chapterName'))->with([
+            'internData' => $intern_data, 
+            'userData' => $user,
+            'submissionExists' => $submissionExists,
+            'submissionData' => $submissionData,
+        ]);;
+    }
+
+    public function advanceTool()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        $courseName = 'Advance Tools Webtoon Design';
+        $chapterName = 'Chapter_4';
+
+        // Check if a submission for this courseName by this user already exists
+        $submissionExists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)
+            ->exists();
+    
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        if ($submissionExists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)
+                ->get();
+    
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+
+        return view('users.Member.courseAdvanceTool', compact('courseName', 'chapterName'))->with([
+            'internData' => $intern_data, 
+            'userData' => $user,
+            'submissionExists' => $submissionExists,
+            'submissionData' => $submissionData,
+        
+        ]);;
+    }
+
+    public function industryPractise()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        $courseName = 'Standard Industry Practise';
+        $chapterName = 'Chapter_5';
+
+        // Check if a submission for this courseName by this user already exists
+        $submissionExists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)
+            ->exists();
+    
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        if ($submissionExists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)
+                ->get();
+    
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+
+        return view('users.Member.courseStandardIndustryPractise', compact('courseName', 'chapterName'))->with([
+            'internData' => $intern_data, 
+            'userData' => $user,
+            'submissionExists' => $submissionExists,
+            'submissionData' => $submissionData,
+        
+        ]);;
+    }
+
+    public function snaptoon()
+    {
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
+
+        $courseName = 'Snaptoon';
+        $chapterName = 'Chapter_6';
+
+        // Check if a submission for this courseName by this user already exists
+        $submissionExists = SubmissionCourse::where('user_id', $user->id)
+            ->where('course_name', $courseName)
+            ->exists();
+    
+        // Prepare submission data if needed for the view
+        $submissionData = [];
+        if ($submissionExists) {
+            $submissions = SubmissionCourse::where('user_id', $user->id)
+                ->where('course_name', $courseName)
+                ->get();
+    
+            foreach ($submissions as $submission) {
+                $submission->alreadySubmitted = true; // Flag as submitted
+                $submissionData[$submission->course_name][] = $submission; // Group by course_name
+            }
+        }
+
+        return view('users.Member.courseSnaptoon', compact('courseName', 'chapterName'))->with([
+            'internData' => $intern_data, 
+            'userData' => $user,
+            'submissionExists' => $submissionExists,
+            'submissionData' => $submissionData,
+        
+        ]);;
     }
 
     /**
@@ -263,7 +530,71 @@ class InternController extends Controller
     $intern->save();
 
     return redirect()->back()->with('success', 'Profile picture updated successfully!');
-}
+    }
+
+    /*
+
+    Gallery Selection
+    Gallery is page to store all submission from user in same batch (Validate based on Registration Code)
+
+    */
+    public function gallery()
+    {
+        // Mendapatkan data user
+        $intern_data = Intern::where('user_id', Auth::id())->first();
+        $user = User::where('id', $intern_data->user_id)->first();
 
     
+        $registrationCode = Auth::user()->registration_code;
+        $userId = Auth::id();
+    
+        // Query untuk mendapatkan semua hasil karya dengan registration code yang sama
+        $submissions = SubmissionCourse::whereHas('user', function ($query) use ($registrationCode) {
+                $query->where('registration_code', $registrationCode);
+            })
+            ->where('user_id', '!=', $userId) // Hindari karya sendiri
+            ->with(['votes' => function($query) {
+                $query->selectRaw('submission_id, SUM(vote_value) as total_vote_value')
+                      ->groupBy('submission_id'); // Tambahkan GROUP BY
+            }])
+            ->get();
+    
+        // Cek apakah user sudah vote pada setiap submission
+        $submissionData = [];
+        foreach ($submissions as $submission) {
+            $submission->alreadyVoted = $submission->votes()->where('voter_id', $userId)->exists();
+            $submissionData[$submission->course_name][] = $submission; // Group by course_name
+        }
+
+        $isEmpty = empty($submissionData);
+    
+        return view('users.Member.gallery', compact('submissionData', 'isEmpty'))->with([
+            'internData' => $intern_data,
+            'userData' => $user
+        ]);
+    }
+    
+
+    public function storeVote(Request $request, SubmissionCourse $submission)
+    {
+        // Validasi input
+        $request->validate([
+            'vote_value' => 'required|integer|min:1|max:10',
+        ]);
+
+        $userId = Auth::id();
+
+        // Cek jika user sudah pernah vote sebelumnya
+        if ($submission->votes()->where('voter_id', $userId)->exists()) {
+            return back()->with(['error' => 'You already vote this assignment.']);
+        }
+
+        // Simpan vote
+        $submission->votes()->create([
+            'voter_id' => $userId,
+            'vote_value' => $request->input('vote_value'),
+        ]);
+
+        return back()->with('success', 'Vote succesfully given.');
+    }
 }

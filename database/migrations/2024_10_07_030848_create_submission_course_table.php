@@ -22,6 +22,7 @@ return new class extends Migration
                     ->onDelete('cascade');
             $table->string('course_name');
             $table->string('chapter_name');
+            $table->string('thumbnail');
             $table->string('submission_file');
             $table->timestamp('submission_date');
             $table->timestamps();

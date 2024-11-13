@@ -54,6 +54,7 @@ class CreateNewUser implements CreatesNewUsers
         $user->email = $input['email'];
         $user->role = $role->role_types;
         $user->password = Hash::make($input['password']);
+        $user->registration_code = $input['registration_code'];
         $user->save();
 
         if ($role->role_type == 'intern') {

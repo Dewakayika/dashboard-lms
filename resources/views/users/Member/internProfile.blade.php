@@ -46,7 +46,7 @@
                 <div class="p-6">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
                         <div class="flex items-center mb-4">
-                            <img src="{{ asset($internData->profile_photo) }}" alt="Profile" id="profile-picture" class="w-16 h-16 rounded-full mr-4 ring-2 ring-gray-300 p-1 dark:ring-gray-200 cursor-pointer">
+                            <img src="{{ asset('/laravel/public/'. $internData->profile_photo) }}" alt="Profile" id="profile-picture" class="w-16 h-16 rounded-full mr-4 ring-2 ring-gray-300 p-1 dark:ring-gray-200 cursor-pointer">
                             <div>
                                 <h2 class="text-xl font-semibold">{{ $userData->name }}</h2>
                                 <p class="text-gray-600">{{ $userData->email }}</p>
@@ -143,16 +143,48 @@
                 @foreach ($submission as $submissionItem)
                 <div class="bg-white p-4 rounded shadow flex justify-between">
                     <div class="flex gap-3">
-                        {{-- <i class="fa-solid fa-medal mt-2 text-yellow-500"></i> --}}
                         <div class="gap-3">
                             <p class="hidden">{{ $submissionItem->id }}</p>
                             <h3 class="font-semibold text-lg text-gray-700">{{ $submissionItem->course_name }}</h3>
                             <p class="text-gray-400 text-sm font-regular">{{ $submissionItem->chapter_name }} | {{ $submissionItem->submission_date }}</p>
                         </div>
                     </div>
-                    <i class="fa-solid fa-circle-check text-green-500"></i>
+                    <div class="flex items-center gap-3">
+                        <button type="button" class="text-red-500" onclick="openDeleteModal('{{ route('submissions#destroy', $submissionItem->id) }}');">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>   
+                        
+                        <!-- Modal Background -->
+                        <div id="confirmDeleteModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+                            <div class="flex items-center justify-center min-h-screen">
+                                <div class="bg-white rounded-lg shadow-lg max-w-sm w-full">
+                                    <div class="p-4 border-b">
+                                        <h5 class="text-lg font-bold">Confirm Deletion</h5>
+                                        <button class="absolute top-0 right-0 p-2 text-gray-400 hover:text-gray-600" onclick="closeModal()">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="p-4">
+                                        <p>Are you sure you want to delete this submission?</p>
+                                    </div>
+                                    <div class="flex justify-end p-4 border-t">
+                                        <button class="mr-2 text-gray-600" onclick="closeModal()">Cancel</button>
+                                        <form id="deleteForm" action="" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+
+                        <i class="fa-solid fa-circle-check text-green-500"></i>
+                    </div>
                 </div>
                 @endforeach
+                
             </div>
         </div>
         
@@ -210,6 +242,17 @@
                 alertElement.style.display = 'none';  // Hide the alert
             }
         </script>
+        <script>
+            function openDeleteModal(actionUrl) {
+                document.getElementById('deleteForm').action = actionUrl;
+                document.getElementById('confirmDeleteModal').classList.remove('hidden');
+            }
+        
+            function closeModal() {
+                document.getElementById('confirmDeleteModal').classList.add('hidden');
+            }
+        </script>
+        
         
     </body>
 @endsection
