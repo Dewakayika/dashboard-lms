@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'intern',
             'email' => 'intern@gmail.com',
             'password' => Hash::make('123123'),
+            'registration_code' => 'PADMA',
         ]);
 
         Intern::factory()->create();
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'talent',
             'email' => 'talent@gmail.com',
             'password' => Hash::make('123123'),
+            'registration_code' => 'PADMA',
         ]);
 
         Talent::factory()->create();
@@ -46,6 +48,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('123123'),
+            'registration_code' => 'admin',
         ]);
 
         Admin::factory()->create();

@@ -20,38 +20,23 @@
             <ul>
                 <li class="{{ request()->routeIs('admin#index') ? 'active' : '' }}">
                     <a href="{{ route('admin#index') }}">
-                        <i class="icon bx bxs-home"></i>
+                        <i class="fa-solid fa-house"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="icon bx bxs-user"></i>
+
+                <li class="{{ request()->routeIs('admin#listUser') ? 'active' : '' }}">
+                    <a href="{{ route('admin#listUser') }}">
+                        <i class="fa-solid fa-users"></i>
                         <span class="text">Users</span>
-                        <i class='arrow bx bx-chevron-down'></i>
                     </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="#">
-                                <span class="text">All Users</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="text">Talent</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="text">Intern</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
+
+
                 <li class="{{ request()->routeIs('admin#talentCVList') ? 'active' : '' }}">
                     <a href="{{ route('admin#talentCVList') }}">
                         <i class="fa-solid fa-file"></i>
-                        <span class="text">Talent CV</span>
+                        <span class="text ">Talent CV</span>
                     </a>
                 </li>
             </ul>

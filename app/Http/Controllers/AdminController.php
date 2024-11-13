@@ -22,6 +22,23 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use App\Mail\DeclineEmail;
+use App\Mail\ApproveEmail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
+
+use Spatie\GoogleCalendar\Event;
+use App\Mail\MeetingInvitation;
+
+use Google\Service\Calendar\Event as GoogleEvent;
+use Google\Service\Calendar; // For Calendar service
+use Google\Service\Calendar\EventDateTime; // For EventDateTime class
+use Google\Service\Calendar\ConferenceData; // For ConferenceData class
+use Google\Service\Calendar\ConferenceDataCreateRequest; // For ConferenceDataCreateRequest class
+use Google\Service\Calendar\ConferenceSolutionKey;
+
+
+
 
 class AdminController extends Controller
 {
@@ -37,12 +54,21 @@ class AdminController extends Controller
 
         // Ambil data leaderboard (total submission per user)
         $leaderboard = DB::table('users')
-            ->leftJoin('Submission_Course', 'users.id', '=', 'Submission_Course.user_id')
-            ->select('users.id', 'users.name', 'users.email', DB::raw('COUNT(Submission_Course.id) as total_submissions'), DB::raw('MIN(Submission_Course.submission_date) as first_submission_date'))
-            ->groupBy('users.id', 'users.name', 'users.email')
-            ->orderBy('total_submissions', 'DESC') // Urutkan berdasarkan jumlah submission terbanyak
-            ->orderBy('first_submission_date', 'ASC') // Kemudian urutkan berdasarkan tanggal submission paling awal
-            ->paginate(5);
+        ->leftJoin('Submission_Course', 'users.id', '=', 'Submission_Course.user_id')
+        ->leftJoin('Assignment_Votes', 'Submission_Course.id', '=', 'Assignment_Votes.submission_id') // Join dengan tabel votes
+        ->select(
+            'users.id',
+            'users.name',
+            'users.email',
+            DB::raw('COUNT(Submission_Course.id) as total_submissions'), // Hitung jumlah submission
+            DB::raw('SUM(Assignment_Votes.vote_value) as total_votes'), // Hitung total votes
+            DB::raw('MIN(Submission_Course.submission_date) as first_submission_date')
+        )
+        ->groupBy('users.id', 'users.name', 'users.email')
+        ->orderBy('total_votes', 'DESC') // Urutkan berdasarkan total votes terbanyak
+        ->orderBy('first_submission_date', 'ASC') // Kemudian urutkan berdasarkan tanggal submission paling awal
+        ->paginate(5);
+    
 
         // Return ke view dengan data yang telah diambil
         return view('users.Admin.adminIndex')->with([
@@ -117,6 +143,7 @@ class AdminController extends Controller
 
         return redirect(route('admin#index'))->with(['userUpdated' => 'Registration Code Has Been Updated Successfully!']);
     }
+
     private function requestUpdateRole($request)
     {
         $arr = [
@@ -171,11 +198,24 @@ class AdminController extends Controller
     }
 
     //Admin List User
-    public function listUser()
+    public function listUser(Request $request)
     {
-        $user_data = User::paginate(10);
-        return view('users.Admin.listUser')->with(['userData' => $user_data]);
-    }
+        $role = $request->input('role'); // Mendapatkan role dari request (Intern atau Talent)
+        
+        if ($role == 'Intern') {
+            // Mendapatkan data Intern saja
+            $user_data = User::whereHas('intern')->with('intern')->paginate(10);
+        } elseif ($role == 'Talent') {
+            // Mendapatkan data Talent saja
+            $user_data = User::whereHas('talent')->with('talent')->paginate(10);
+        } else {
+            // Default: Mendapatkan semua data (Intern dan Talent)
+            $user_data = User::with(['talent', 'intern'])->paginate(10);
+        }
+    
+        return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role]);
+    }    
+
 
     // Admin Delete User
     public function deleteUser($id)
@@ -220,74 +260,6 @@ class AdminController extends Controller
         return $arr;
     }
 
-    //Admin List Meal
-    public function listMeal()
-    {
-        $meal_data = Meal::paginate(5);
-        return view('users.Admin.listMeal')->with(['mealData' => $meal_data]);
-    }
-
-    // Admin Delete Meal
-    public function deleteMeal($id)
-    {
-        Meal::where('id', $id)->delete();
-        return back()->with(['mealDeleted' => 'Meal Has Been Deleted Successfully!']);
-    }
-
-    // Admin Edit Meal
-    public function editMeal($id)
-    {
-        $meal_data = Meal::where('id', $id)->first();
-        $partner_data = Partner::get();
-        $user_data = User::get();
-        return view('users.Admin.updateMeal')->with(['editMeal' => $meal_data, 'partnerData' => $partner_data, 'userData' => $user_data]);
-    }
-
-    // Admin Update Meal
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateMeal(Request $request, $id)
-    {
-        $updateData = $this->requestUpdateMenuData($request);
-
-        $updateImgData = Meal::select('meal_image')->where('id', $id)->first();
-        $updateImage = $updateImgData['meal_image'];
-
-        if ($request->hasfile('meal_image')) {
-
-            if (File::exists(public_path() . '/uploads/meal/' . $updateImage)) {
-                File::delete(public_path() . '/uploads/meal/' . $updateImage);
-            }
-
-            $newImageFile = $request->file('meal_image');
-            $newImageName = uniqid() . '_' . $newImageFile->getClientOriginalName();
-            $newImageFile->move(public_path() . './uploads/meal/', $newImageName);
-
-            $updateData['meal_image'] = $newImageName;
-        }
-
-        Meal::where('id', $id)->update($updateData);
-        return redirect()->route('admin#listMeal')->with(['mealUpdated' => 'Menu Has Been Updated Sucessfully!']);
-    }
-    private function requestUpdateMenuData($request)
-    {
-        $menuArray = [
-            'meal_title' => $request->meal_title,
-            'meal_description' => $request->meal_description,
-            'meal_type' => $request->meal_type,
-            'partner_id' => $request->partner,
-            'updated_at' => Carbon::now(),
-        ];
-        if (isset($request->meal_image)) {
-            $menuArray['meal_image'] = $request->meal_image;
-        }
-        return $menuArray;
-    }
 
     //Partner Role
     public function listTalent()
@@ -383,331 +355,154 @@ class AdminController extends Controller
 
         return $array;
     }
-
-    // Volunteer Role
-    public function listVolunteer()
+    
+    public function talentCV(Request $request)
     {
-        $volunteer_data = Volunteer::paginate(10);
-        return view('users.Admin.listVolunteer')->with(['volunteerData' => $volunteer_data]);
-    }
-
-    // Admin Delete Volunteer
-    public function deleteVolunteer($id)
-    {
-        User::where('id', $id)->delete();
-        return back()->with(['volunteerDeleted' => 'Volunteer Has Been Deleted Successfully!']);
-    }
-
-    // Admin Edit Volunteer
-    public function editVolunteer($id)
-    {
-        $volunteer_data = Volunteer::where('id', $id)->first();
-        return view('users.Admin.updateVolunteer')->with(['editVolunteer' => $volunteer_data]);
-    }
-
-    // Admin Update Volunteer
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-    public function updateVolunteer(Request $request, $id)
-    {
-        $update_volunteer = $this->requestUpdateVolunteer($request);
-        Volunteer::where('id', $id)->update($update_volunteer);
-        return redirect()->route('admin#listVolunteer')->with(['volunteerUpdated' => 'Volunteer Has Been Updated Successfully!']);
-    }
-
-    private function requestUpdateVolunteer($request)
-    {
-        $array = [
-            'volunteer_time' => $request->volunteer_time,
-            'volunteer_available' => implode(', ', $request->volunteer_available),
-            'updated_at' => Carbon::now()
-        ];
-        return $array;
-    }
-
-    public function listDonation()
-    {
-        $donation_data = DonationFee::paginate(10);
-        return view('users.Admin.listDonation')->with(['donationData' => $donation_data]);
-    }
-
-    public function deleteDonation($id)
-    {
-        DonationFee::where('id', $id)->delete();
-        return back()->with(['donationDeleted' => 'Donation Has Been Deleted Successfully!']);
-    }
-
-    // Admin Edit Donation
-    public function editDonation($id)
-    {
-        $donation_data = DonationFee::where('id', $id)->first();
-        return view('users.Admin.updateDonation')->with(['editDonation' => $donation_data]);
-    }
-
-    // Admin Update Donation
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-    public function updateDonation(Request $request, $id)
-    {
-        $update_donation = $this->requestUpdateDonation($request);
-        DonationFee::where('id', $id)->update($update_donation);
-        return redirect()->route('admin#listDonation')->with(['donationUpdated' => 'Donation Has Been Updated Successfully!']);
-    }
-
-    private function requestUpdateDonation($request)
-    {
-        $array = [
-            'amount' => $request->amount,
-            'description' => $request->description,
-            'updated_at' => Carbon::now()
-        ];
-        return $array;
-    }
-
-    // List Driver
-    public function listDriver()
-    {
-        $driver_data = Driver::paginate(10);
-        return view('users.Admin.listDriver')->with(['driverData' => $driver_data]);
-    }
-
-    public function deleteDriver($id)
-    {
-        Driver::where('id', $id)->delete();
-        return back()->with(['driverDeleted' => 'Driver Has Been Deleted Successfully!']);
-    }
-
-    // Admin Edit Driver
-    public function editDriver($id)
-    {
-        $driver_data = Driver::where('id', $id)->first();
-        return view('users.Admin.updateDriver')->with(['editDriver' => $driver_data]);
-    }
-
-    // Admin Update Driver
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-    public function updateDriver(Request $request, $id)
-    {
-        $updateData = $this->requestUpdateDriver($request);
-
-        $updateImgData = Cm::select('driver_license')->where('id', $id)->first();
-        $updateImage = $updateImgData['driver_license'];
-
-        if ($request->hasfile('driver_license')) {
-
-            if (File::exists(public_path() . '/uploads/driver/' . $updateImage)) {
-                File::delete(public_path() . '/uploads/driver/' . $updateImage);
-            }
-
-            $newImageFile = $request->file('driver_license');
-            $newImageName = uniqid() . '_' . $newImageFile->getClientOriginalName();
-            $newImageFile->move(public_path() . './uploads/driver/', $newImageName);
-
-            $updateData['driver_license'] = $newImageName;
+        // Dapatkan nilai status dari request, defaultnya adalah null
+        $status = $request->input('status');
+    
+        // Query CV dengan filter status jika status diberikan
+        $query = TalentCV::query();
+        if ($status) {
+            $query->where('status', $status);
         }
+    
+        // Paginate hasil query
+        $talent_cv = $query->paginate(10);
 
-        Driver::where('id', $id)->update($updateData);
-        return redirect()->route('admin#listDriver')->with(['driverUpdated' => 'Driver Has Been Updated Sucessfully!']);
+        $registrationCodes = Roles::all();
+    
+        // Mengirimkan status yang dipilih ke view untuk form filter
+        return view('users.Admin.listTalentCV')->with([
+            'talentCV' => $talent_cv,
+            'status' => $status,
+            'registrationCodes' => $registrationCodes,
+
+        ]);
     }
-
-    private function requestUpdateDriver($request)
-    {
-        $array = [
-            'updated_at' => Carbon::now()
-        ];
-        if (isset($request->driver_license)) {
-            $array['driver_license'] = $request->driver_license;
-        }
-        return $array;
-    }
-
-    // List Order
-    public function listOrder()
-    {
-        $order_data = Order::paginate(10);
-        return view('users.Admin.listOrder')->with(['orderData' => $order_data]);
-    }
-
-    public function deleteOrder($id)
-    {
-        Order::where('id', $id)->delete();
-        return back()->with(['orderDeleted' => 'Order Has Been Deleted Successfully!']);
-    }
-
-    // Admin Edit Order
-    public function editOrder($id)
-    {
-        $order_data = Order::where('id', $id)->first();
-        return view('users.Admin.updateOrder')->with(['editOrder' => $order_data]);
-    }
-
-    // Admin Update Driver
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateOrder(Request $request, $id)
-    {
-        $update_order = $this->requestUpdateOrder($request);
-        Order::where('id', $id)->update($update_order);
-        return redirect()->route('admin#listOrder')->with(['orderUpdated' => 'Order Has Been Updated Successfully!']);
-    }
-
-    private function requestUpdateOrder($request)
-    {
-        $array = [
-            'updated_at' => Carbon::now(),
-            'member_id' => $request->member_id,
-            'meal_id' => $request->meal_id,
-            'partner_id' => $request->partner_id,
-            'volunteer_id' => $request->volunteer_id,
-            'driver_id' => $request->driver_id,
-            'start_delivery_time' => $request->start_delivery_time,
-            'delivery_status' => $request->delivery_status,
-            'order_status' => $request->order_status
-        ];
-
-        return $array;
-    }
-
-    // Admin Delete Feedback
-    public function deleteFeedback($id)
-    {
-        Feedback::where('id', $id)->delete();
-        SweetAlert()->addSuccess('Success', 'Feedback Delete Successfully');
-        return back();
-    }
-
-    // Admin Edit Feedback
-    public function editFeedback($id)
-    {
-        $feedback_data = Feedback::where('id', $id)->first();
-        return view('users.Admin.updateFeedback')->with(['editFeedback' => $feedback_data]);
-    }
-
-    // Admin Update Feedback
-    public function updateFeedback(Request $request, $id)
-    {
-        $update_feedback = $this->requestUpdateFeedback($request);
-        Feedback::where('id', $id)->update($update_feedback);
-        SweetAlert()->addSuccess('Success', 'Feedback Update Successfully');
-        return redirect()->route('admin#index')->with(['feedbackUpdated' => 'Feedback Has Been Updated Successfully!']);
-    }
-    private function requestUpdateFeedback($request)
-    {
-        $array = [
-            'feedback_subject' => $request->feedback_subject,
-            'feedback_message' => $request->feedback_message,
-            'updated_at' => Carbon::now()
-        ];
-        return $array;
-    }
-
-
-
-    //Admin Campaign
-    public function listCampaign()
-    {
-        $campaign_data = Campaign::paginate(10);
-        return view('users.Admin.listCampaign')->with(['campaignData' => $campaign_data]);
-    }
-
-    // Admin Delete Campaign
-    public function deleteCampaign($id)
-    {
-        Campaign::where('id', $id)->delete();
-        SweetAlert()->addSuccess('Success', 'Campaign Delete Successfully');
-        return back();
-    }
-
-    // Admin Edit Campaign
-    public function editCampaign($id)
-    {
-        $campaign_data = Campaign::where('id', $id)->first();
-        return view('users.Admin.updateCampaign')->with(['editCampaign' => $campaign_data]);
-    }
-
-    // Admin Update Campaign
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateCampaign(Request $request, $id)
-    {
-        $updateData = $this->requestUpdateCampaign($request);
-
-        $updateImgData = Campaign::select('campaign_image')->where('id', $id)->first();
-        $updateImage = $updateImgData['campaign_image'];
-
-        if ($request->hasfile('campaign_image')) {
-
-            if (File::exists(public_path() . '/uploads/campaign/' . $updateImage)) {
-                File::delete(public_path() . '/uploads/campaign/' . $updateImage);
-            }
-
-            $newImageFile = $request->file('campaign_image');
-            $newImageName = uniqid() . '_' . $newImageFile->getClientOriginalName();
-            $newImageFile->move(public_path() . './uploads/campaign/', $newImageName);
-
-            $updateData['campaign_image'] = $newImageName;
-        }
-
-        Campaign::where('id', $id)->update($updateData);
-        SweetAlert()->addSuccess('Success', 'Campaign Update Successfully');
-        return redirect()->route('admin#listCampaign')->with(['campaignUpdated' => 'Campaign Has Been Updated Successfully!']);
-    }
-    private function requestUpdateCampaign($request)
-    {
-        $array = [
-            'campaign_title' => $request->campaign_title,
-            'campaign_description' => $request->campaign_description,
-            'campaign_role' => $request->campaign_role,
-            'campaign_location' => $request->campaign_location,
-            'updated_at' => Carbon::now(),
-        ];
-        if (isset($request->campaign_image)) {
-            $array['campaign_image'] = $request->campaign_image;
-        }
-        return $array;
-    }
-
-    public function talentCV(){
-
-        $talent_cv = TalentCV::paginate(10);
-        return view('users.Admin.listTalentCV')->with(['talentCV' => $talent_cv]);
-
-    }
+    
 
     // Admin Delete User
     public function deleteCV($id)
     {
         TalentCV::where('id', $id)->delete();
         return back()->with(['CVDeleted' => 'Talent CV Has Been Deleted Successfully!']);
+    }
+
+
+    public function declineCV($id){
+
+        $cv = TalentCV::find($id);
+
+        if ($cv) {
+            // Ambil email dari data TalentCV
+            $userEmail = $cv->email;
+            $userName = $cv->name;
+    
+            // Kirim email penolakan
+            Mail::to($userEmail)->send(new DeclineEmail($userName));
+
+            $cv->status = 'decline';
+            $cv->save();
+    
+    
+            return redirect()->back()->with(['successCV' => 'CV declined and user notified.']);
+        }
+
+        return redirect()->back()->with(['errorCV' => 'CV not found.']);
+
+    }
+
+    public function approveCV(Request $request, $id)
+    {
+        // Validasi kode registrasi
+        $request->validate([
+            'registration_code' => 'required|exists:roles,registration_code',
+        ]);
+
+        // Ambil data CV berdasarkan ID
+        $cv = TalentCV::find($id);
+
+        if ($cv) {
+            // Update status menjadi approved
+            $cv->status = 'approve';
+            $cv->save();
+
+            // Ambil kode registrasi yang dipilih
+            $registrationCode = $request->input('registration_code');
+
+            // Kirim email pemberitahuan persetujuan dengan kode registrasi
+            Mail::to($cv->email)->send(new ApproveEmail($registrationCode));
+
+            return redirect()->back()->with(['successCV' =>'CV approved, registration code sent to user.']);
+        }
+
+        return redirect()->back()->with(['errorCV' => 'CV not found.']);
+    }
+
+
+    public function booking(Request $request, $id)
+    {
+        try {
+            // Set timezone to Bali
+            $timezone = 'Asia/Makassar';
+
+            // Parse input date and time and set Bali time zone
+            $startTime = Carbon::createFromFormat('Y-m-d H:i', $request->input('meeting_date') . ' ' . $request->input('meeting_time'), $timezone);
+
+            // Add one hour for the end time in Bali time
+            $endTime = (clone $startTime)->addHour();
+
+            // Convert to UTC for Google Calendar
+            $startDateTimeUTC = $startTime->copy()->setTimezone('UTC');
+            $endDateTimeUTC = $endTime->copy()->setTimezone('UTC');
+
+            // Create event in Google Calendar with UTC times
+            Event::create([
+                'name' => $request->input('name'),
+                'startDateTime' => $startDateTimeUTC,
+                'endDateTime' => $endDateTimeUTC,
+            ]);
+
+            // Retrieve specific emails from input
+            $selectedEmails = $request->input('selected_emails');
+
+            // Send invitation emails with Bali time
+            foreach ($selectedEmails as $email) {
+                Mail::to($email)->send(new MeetingInvitation($startTime, $endTime));
+            }
+
+            // If emails were sent successfully, update CV status to "Interview Process"
+            $cv = TalentCV::find($id);
+            if ($cv) {
+                $cv->status = 'Interview Process';
+                $cv->save();
+            } else {
+                return redirect()->back()->with(['error' => 'CV not found']);
+            }
+
+            return redirect()->back()->with(['successCV' => 'The invitation has been successfully sent, and the CV status has been updated.']);
+
+        } catch (\Exception $e) {
+            \Log::error("Error in booking function: " . $e->getMessage());
+            return redirect()->back()->with(['errorCV' => 'An error occurred while sending the invitation.']);
+        }
+    }
+
+    public function getUserSubmissions($encryptedId){
+
+        // Dekripsi ID yang diterima
+        $userId = Crypt::decrypt($encryptedId);
+
+        $user = User::with(['submissions' => function($query) {
+            $query->with(['votes' => function($query) {
+                $query->selectRaw('submission_id, SUM(vote_value) as total_vote_value')
+                      ->groupBy('submission_id'); // Tambahkan GROUP BY
+            }]);
+        }])->findOrFail($userId);
+
+        return view ('users.Admin.submission', compact('user'));
+
     }
 
 

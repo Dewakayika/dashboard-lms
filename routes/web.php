@@ -85,6 +85,16 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     Route::get('/talent-cv', [AdminController::class, 'talentCV'])->name('admin#talentCVList');
     Route::get('deleteCV/{id}', [AdminController::class, 'deleteCV'])->name('admin#deleteCV');
+    Route::post('/cv/decline/{id}', [AdminController::class, 'declineCV'])->name('cv#decline');
+    Route::post('/approve-cv/{id}', [AdminController::class, 'approveCV'])->name('approveCV');
+
+    Route::post('/admin/send-invitation/{id}', [AdminController::class, 'sendInvitationToUser'])->name('sendInvitationToUser');
+    Route::post('/booking/{id}', [AdminController::class, 'booking'])->name('booking.submit');
+
+    Route::get('/admin/user/{id}/submissions', [AdminController::class, 'getUserSubmissions'])->name('admin.user.submissions');
+
+
+
 
     Route::get('/userlist', [AdminController::class, 'listUser'])->name('admin#listUser'); //User List
     Route::get('deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('admin#deleteUser'); //Delete User
@@ -124,6 +134,8 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
     Route::post('/update/profile', [InternController::class, 'updateIntern'])->name('intern#editIntern');
     Route::post('/update/profile-picture', [InternController::class, 'updateProfilePicture'])->name('intern#updateProfilePicture');
     Route::post('/update-progress', [CourseController::class, 'updateProgress'])->name('update.progress');
+    Route::delete('/submissions/{id}', [InternController::class, 'destroy'])->name('submissions#destroy');
+
 
 
     // Route untuk menyimpan submission course Chapter Intro
@@ -139,6 +151,17 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
 
     Route::get('/course/basic-sketchup', [InternController::class, 'basicSketchup'])->name('course#basicSketchup'); 
     Route::get('/course/sketchup-photoshop', [InternController::class, 'sketchupPhotoshop'])->name('course#sketchupPhotoshop');
+
+
+    Route::get('/course/advance-tool', [InternController::class, 'advanceTool'])->name('course#advanceTool');
+    Route::get('/course/standard-industry', [InternController::class, 'industryPractise'])->name('course#industrypractise');
+    Route::get('/course/snaptoon', [InternController::class, 'snaptoon'])->name('course#snaptoon');
+
+
+    // Route to get Assiignment submission Voter
+    Route::get('/gallery', [InternController::class, 'gallery'])->name('gallery#submission');
+    Route::post('/gallery/vote/{submission}', [InternController::class, 'storeVote'])->name('vote#submit');
+
 
 
 });
