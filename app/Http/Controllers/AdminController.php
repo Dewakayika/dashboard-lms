@@ -443,6 +443,8 @@ class AdminController extends Controller
 
     public function booking(Request $request, $id)
     {
+
+
         try {
             // Set timezone to Bali
             $timezone = 'Asia/Makassar';
