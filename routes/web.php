@@ -47,6 +47,13 @@ Route::get('/terms', function () {
 Route::get('/talent-cv', function () {
     return view('cv.talent_cv');
 });
+
+
+Route::get('/test-dashboard', function () {
+    return view('dashboard');
+});
+
+
 Route::post('/talent-cv/submit', [TalentCVController::class, 'store'])->name('talent#cvSubmit');
 
 
@@ -69,7 +76,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () {
     Route::get('/', [TalentController::class, 'index'])->name('talent#index');
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
-    Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');  
+    Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
 
 });
 
@@ -149,7 +156,7 @@ Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () 
 
 
 
-    Route::get('/course/basic-sketchup', [InternController::class, 'basicSketchup'])->name('course#basicSketchup'); 
+    Route::get('/course/basic-sketchup', [InternController::class, 'basicSketchup'])->name('course#basicSketchup');
     Route::get('/course/sketchup-photoshop', [InternController::class, 'sketchupPhotoshop'])->name('course#sketchupPhotoshop');
 
 
