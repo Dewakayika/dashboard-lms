@@ -49,9 +49,7 @@ Route::get('/talent-cv', function () {
 });
 
 
-Route::get('/test-dashboard', function () {
-    return view('dashboard');
-});
+
 
 
 Route::post('/talent-cv/submit', [TalentCVController::class, 'store'])->name('talent#cvSubmit');
@@ -99,6 +97,11 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::post('/booking/{id}', [AdminController::class, 'booking'])->name('booking.submit');
 
     Route::get('/admin/user/{id}/submissions', [AdminController::class, 'getUserSubmissions'])->name('admin.user.submissions');
+
+    Route::get('/test-dashboard', function () {
+        return view('users.Admin.Dashboard');
+    })->name('dashboard#test');
+
 
 
 

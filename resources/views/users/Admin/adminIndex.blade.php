@@ -227,13 +227,13 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Tautan Pagination -->
     <div class="mt-4">
         {{ $leaderboard->links() }}
     </div>
 </div>
-    
+
 
 
 <script>
