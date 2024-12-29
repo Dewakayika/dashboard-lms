@@ -35,6 +35,6 @@ class MeetingInvitation extends Mailable
 
         return $this->view('emails.meeting_invitation')
                     ->with('meetingData', $meetingData)
-                    ->subject('Update Invitation to Interview for Background Webtoon Designer Position');
+                    ->subject('Invitation to Interview for Background Webtoon Designer Position');
     }
 }

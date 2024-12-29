@@ -195,7 +195,6 @@
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Total Vote</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Status</th>
                                 <th scope="col" class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">Action</th>
-
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
@@ -228,13 +227,13 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Tautan Pagination -->
     <div class="mt-4">
         {{ $leaderboard->links() }}
     </div>
 </div>
-    
+
 
 
 <script>
