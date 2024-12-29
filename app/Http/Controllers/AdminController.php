@@ -68,10 +68,10 @@ class AdminController extends Controller
         ->orderBy('total_votes', 'DESC') // Urutkan berdasarkan total votes terbanyak
         ->orderBy('first_submission_date', 'ASC') // Kemudian urutkan berdasarkan tanggal submission paling awal
         ->paginate(5);
-    
+
 
         // Return ke view dengan data yang telah diambil
-        return view('users.Admin.adminIndex')->with([
+        return view('users.Admin.dashboard')->with([
             'userData' => $user_data,
             'internData' => $intern_data,
             'talentData' => $talent_data,
@@ -201,7 +201,7 @@ class AdminController extends Controller
     public function listUser(Request $request)
     {
         $role = $request->input('role'); // Mendapatkan role dari request (Intern atau Talent)
-        
+
         if ($role == 'Intern') {
             // Mendapatkan data Intern saja
             $user_data = User::whereHas('intern')->with('intern')->paginate(10);
@@ -212,9 +212,9 @@ class AdminController extends Controller
             // Default: Mendapatkan semua data (Intern dan Talent)
             $user_data = User::with(['talent', 'intern'])->paginate(10);
         }
-    
+
         return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role]);
-    }    
+    }
 
 
     // Admin Delete User
@@ -355,23 +355,23 @@ class AdminController extends Controller
 
         return $array;
     }
-    
+
     public function talentCV(Request $request)
     {
         // Dapatkan nilai status dari request, defaultnya adalah null
         $status = $request->input('status');
-    
+
         // Query CV dengan filter status jika status diberikan
         $query = TalentCV::query();
         if ($status) {
             $query->where('status', $status);
         }
-    
+
         // Paginate hasil query
         $talent_cv = $query->paginate(10);
 
         $registrationCodes = Roles::all();
-    
+
         // Mengirimkan status yang dipilih ke view untuk form filter
         return view('users.Admin.listTalentCV')->with([
             'talentCV' => $talent_cv,
@@ -380,7 +380,7 @@ class AdminController extends Controller
 
         ]);
     }
-    
+
 
     // Admin Delete User
     public function deleteCV($id)
@@ -398,14 +398,14 @@ class AdminController extends Controller
             // Ambil email dari data TalentCV
             $userEmail = $cv->email;
             $userName = $cv->name;
-    
+
             // Kirim email penolakan
             Mail::to($userEmail)->send(new DeclineEmail($userName));
 
             $cv->status = 'decline';
             $cv->save();
-    
-    
+
+
             return redirect()->back()->with(['successCV' => 'CV declined and user notified.']);
         }
 
@@ -443,6 +443,8 @@ class AdminController extends Controller
 
     public function booking(Request $request, $id)
     {
+
+
         try {
             // Set timezone to Bali
             $timezone = 'Asia/Makassar';

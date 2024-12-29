@@ -84,7 +84,6 @@
       <p>Dear Participant!</p>
       <p>Thank you for applying for the position of Background Webtoon Designer at Padma Creative Studio. We were impressed by your application and would like to invite you for an interview to discuss this exciting opportunity.</p>
 
-
       <p>Interview Detail Information</p>
       <p><strong>Date:</strong> {{ $meetingData['startDateTime']->format('d M Y') }}</p>
       <p><strong>Time:</strong> {{ $meetingData['startDateTime']->format('H:i') }} - {{ $meetingData['endDateTime']->format('H:i') }} WITA</p>
