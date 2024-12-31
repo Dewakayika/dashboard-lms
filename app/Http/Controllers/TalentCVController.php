@@ -13,7 +13,7 @@ class TalentCVController extends Controller
         return view('cv.talent_cv');
     }
 
-    
+
     public function store(Request $request)
     {
         // Validate the form data
@@ -41,7 +41,7 @@ class TalentCVController extends Controller
 
         // Kirim email dengan CC
         Mail::to($request->email)
-        ->cc(['kayikadewa@gmail.com', 'okadharmawan3@gmail.com']) 
+        ->cc(['kayikadewa@gmail.com', 'okadharmawan3@gmail.com'])
         ->send(new TalentCVUploaded($request->name));
 
         // return view ('cv.sucess-cv');

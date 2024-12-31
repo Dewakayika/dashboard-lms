@@ -11,6 +11,8 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\AssignmentVote;
 use App\Models\Talent;
 use App\Models\Intern;
+use App\Models\TalentQc;
+use App\Models\Project;
 use App\Models\SubmissionCourse;
 
 
@@ -90,6 +92,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(SubmissionCourse::class, 'user_id', 'id');
     }
+    public function talentQc()
+    {
+        return $this->hasOne(TalentQc::class, 'userID');
+    }
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'talent_qc');
+    }
+    public function appliedProjects()
+    {
+        return $this->hasMany(ApplyProject::class);
+    }
 
- 
+
+
+
 }

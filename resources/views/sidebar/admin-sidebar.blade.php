@@ -52,17 +52,17 @@
                 </li>
                 <li class="">
                     <form method="POST" action="{{ route('logout') }}">
-                        @csrf  
+                        @csrf
 
                         <a href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                                        
+
                             <i class="icon log-out bx bx-log-out menu-logout"></i>
                             <span class="text log-out menu-logout">{{ __('Logout') }}</span>
                         </a>
                     </form>
-                    
+
                 </li>
             </ul>
     </div>
