@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('talent', function (Blueprint $table) {
-            $table->id();
+        Schema::create('talent_qc', function (Blueprint $table) {
+            $table->id(); // Primary key
             $table->foreignId('user_id')
-                ->reference('id')
-                ->on('users')
-                ->constrained()
-                ->onDelete('cascade');
+            ->reference('id')
+            ->on('users')
+            ->constrained()
+            ->onDelete('cascade');
             $table->string('full_name');
             $table->string('profile_photo');
             $table->string('phone_number');
@@ -42,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('talent');
+        Schema::dropIfExists('talent_qc');
     }
 };

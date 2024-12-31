@@ -8,9 +8,12 @@ use App\Models\User;
 use App\Models\Project;
 
 
-class Talent extends Model
+
+class TalentQc extends Model
 {
     use HasFactory;
+
+    protected $table = 'talent_qc';
 
     protected $fillable = [
         'user_id',
@@ -30,10 +33,11 @@ class Talent extends Model
     public function users(){
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    // Relasi ke proyek yang menjadi talent
-    public function talentProjects()
+        // Relasi ke proyek yang menjadi talent qc
+    public function qcProjects()
     {
-        return $this->hasMany(Project::class, 'talent_id');
+        return $this->hasMany(Project::class, 'talent_qc_id');
     }
+
 
 }

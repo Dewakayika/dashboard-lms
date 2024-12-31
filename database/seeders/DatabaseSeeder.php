@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Intern;
 use App\Models\Talent;
-use App\Models\Admin;;
+use App\Models\Admin;
+use App\Models\TalentQc;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -53,14 +54,18 @@ class DatabaseSeeder extends Seeder
 
         Admin::factory()->create();
 
-        Roles::factory()->create([
-            'registration_code' => 'PADMA2024',
-            'role_types' => 'intern',
+        User::factory()->create([
+            'id' => '4',
+            'name' => 'Talent Qc',
+            'role' => 'talent_qc',
+            'email' => 'talentqc@gmail.com',
+            'password' => Hash::make('123123'),
+            'registration_code' => 'admin',
         ]);
 
-        Roles::factory()->create([
-            'registration_code' => 'PADMA2025',
-            'role_types' => 'talent',
-        ]);
+        TalentQc::factory()->create();
+
+
+
     }
 }

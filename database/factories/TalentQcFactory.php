@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Partner>
  */
-class TalentFactory extends Factory
+class TalentQcFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class TalentFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'=>'2',
+            'user_id'=>'4',
             'full_name'=>'I Dewa Gede Ananda Putra Kayika',
             'Address'=> 'Payangan, Gianyar',
             'Bank_Account'=>'123456789',

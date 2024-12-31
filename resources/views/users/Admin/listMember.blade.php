@@ -79,7 +79,7 @@
                                                 <i class="fa-solid fa-pen-to-square text-blue-600 hover:text-blue-800"></i>
                                             </a>
                                             <a href="{{ route('admin#deleteMember', $intern->user_id) }}" class="text-red-600 hover:text-red-800 ml-4">
-                                                <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i> 
+                                                <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                             </a>
                                         </td>
                                     </tr>
