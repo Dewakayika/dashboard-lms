@@ -1,4 +1,4 @@
-@extends('users.Admin.layouts.auth')
+@extends('users.Admin.layouts.dashboard-app')
 
 @section('content')
 
