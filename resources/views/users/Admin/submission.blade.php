@@ -1,10 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/admin-index.css') }}">
-
-@section('title')
-    Submissions
-@endsection
-
-@extends('Users.Admin.layouts.app')
+@extends('users.Admin.layouts.dashboard-app')
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
