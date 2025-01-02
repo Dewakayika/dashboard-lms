@@ -73,14 +73,25 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //Talent
 Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () {
     Route::get('/', [TalentController::class, 'index'])->name('talent#index');
+    Route::get('/project/Overview',[TalentController::class, 'projectOverview'])->name('talent#projectOverview');
+    Route::get('/project/{id}/detail', [TalentController::class, 'detail'])->name('talent#projectDetail');
+
+
+
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
     Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
+
+
+    Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
 
 });
 
 // Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin#index'); //Admin Dashboard
+    Route::get('/admin/overview', [AdminController::class, 'overview'])->name('admin#overview'); //Admin Dashboard
+
+
     Route::get('/adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile'); //Admin Profile
     Route::get('/editProfile', [AdminController::class, 'editProfile'])->name('admin#editProfile'); //edit profile
     Route::post('/updateAdmin', [AdminController::class, 'updateAdmin'])->name('admin#updateAdmin'); //Update profile function
@@ -98,9 +109,17 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     Route::get('/admin/user/{id}/submissions', [AdminController::class, 'getUserSubmissions'])->name('admin.user.submissions');
 
-    Route::get('/test-dashboard', function () {
-        return view('users.Admin.Dashboard');
-    })->name('dashboard#test');
+    Route::get('/create-project', [AdminController::class, 'createProject'])->name('admin#createNewProject');
+    Route::post('/projects', [AdminController::class, 'storeProject'])->name('projects#store');
+
+
+
+
+    // Route::get('/create-project', function () {
+    //     $admin_data = User::where('id', Auth::id())->first();
+
+    //     return view ('users.Admin.createNewProject')->with(['adminData' => $admin_data]);
+    // })->name('admin#createNewProject');
 
 
 

@@ -18,10 +18,9 @@ class Status extends Model
         'status_type_id',
     ];
 
-    // Relasi ke Project
     public function project()
     {
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(Project::class);
     }
 
     // Relasi ke StatusType

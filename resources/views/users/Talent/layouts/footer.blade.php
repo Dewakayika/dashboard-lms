@@ -1,4 +1,4 @@
-<footer class="footer pt-3  ">
+<footer class="footer pt-3 bottom-0 ">
     <div class="container-fluid">
                 <div class="copyright text-center text-sm text-muted text-lg-start">
                     © <script>

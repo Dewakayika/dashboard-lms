@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Padma Creative Studio - Job Application</title>
+  <title>Padma Creative Studio - Apply Project Succesfully</title>
   <style>
     /* Reset some default styles */
     body, p, h1, h2, h3, h4, h5, h6 {
@@ -88,26 +88,13 @@
     </div>
 
     <div class="content">
+        <h1>Thank you for applying, {{ $userName }}!</h1>
+        <p>You have successfully applied for the project: <strong>{{ $projectName }}</strong>.</p>
+        <p>Your application was submitted on: <strong>{{ $applyDate }}</strong>.</p>
 
-      <p>Dear, Participant!</p>
-      <p> <span class="bold">Congratulations!🎉</span> After reviewing your CV, we are pleased to inform you that you have been selected to proceed with the next steps for joining Padma Creative Studio as a Intern in Padma Creative Studio</p>
+        <p>We will review your application and notify you about the next steps shortly.</p>
 
-      <p>To finalize your registration, please use the unique registration code provided below. This code will allow you to create an account and access your dashboard at Padma Creative Studio.</p>
-
-      <div class="padma"><strong>{{ $registrationCode }}</strong></div>
-
-      <p>Next Steps:</p>
-      <p>1. Visit <a href="dashboard.padmastudio.io">dashboard.padmastudio.io</a></p>
-      <p>2. Select “Register” and enter the registration code along with the necessary information.</p>
-      <p>3. Complete your profile setup once registered.</p>
-      <p>4. Join our discord channel here <a href="https://discord.gg/pPCCjWjR">Padma Community</a></p>
-
-      <p>If you have any questions or run into any issues during registration, feel free to reply to this email or reach out to us at <a href="https://wa.me/821081931708">Padma Studio WhatsApp</a></p>
-
-      <p>We look forward to welcoming you to our creative team and helping you get started on this exciting journey!</p>
-
-      <p class="signature">Best regards,<br>Padma Creative Studio</p>
-    </div>
+        <p>Thank you,<br>Project Team</p>
     <div class="footer">
       <p>Padma Creative Studio | Bali, Indonesia</p>
       <p><a href="https://padmastudio.io">padmastudio.io</a></p>

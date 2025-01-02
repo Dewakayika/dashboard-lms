@@ -25,7 +25,7 @@ class Project extends Model
     }
     public function statuses()
     {
-        return $this->hasMany(Status::class, 'project_id');
+        return $this->hasMany(Status::class);
     }
     // app/Models/Project.php
 
@@ -37,6 +37,17 @@ class Project extends Model
     {
         return $this->hasMany(ApplyProject::class);
     }
+    // In Project.php model
+    public function talentQc()
+    {
+        return $this->belongsTo(User::class, 'talent_qc'); // assuming 'talent_qc' is the foreign key in projects table
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(ProjectLog::class, 'project_id');
+    }
+
 
 
 
