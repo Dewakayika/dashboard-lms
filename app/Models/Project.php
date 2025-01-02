@@ -47,6 +47,11 @@ class Project extends Model
     {
         return $this->hasMany(ProjectLog::class, 'project_id');
     }
+    public function projectRecords()
+    {
+        return $this->hasMany(ProjectRecord::class);
+    }
+
 
 
 

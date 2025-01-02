@@ -104,6 +104,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(ApplyProject::class);
     }
+    public function projectRecords()
+    {
+        return $this->hasMany(ProjectRecord::class);
+    }
+
 
 
 

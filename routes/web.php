@@ -75,6 +75,8 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::get('/', [TalentController::class, 'index'])->name('talent#index');
     Route::get('/project/Overview',[TalentController::class, 'projectOverview'])->name('talent#projectOverview');
     Route::get('/project/{id}/detail', [TalentController::class, 'detail'])->name('talent#projectDetail');
+    Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talent#projectRecods');
+
 
 
 

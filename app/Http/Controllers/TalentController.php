@@ -13,6 +13,10 @@ use App\Models\Project;
 use App\Models\ApplyProject;
 use App\Models\Status;
 use App\Models\ProjectLog;
+use App\Models\ProjectRecord;
+
+
+
 
 
 use App\Mail\ApplyProjectMail;
@@ -185,6 +189,9 @@ class TalentController extends Controller
         // Cari proyek berdasarkan ID yang telah didekripsi
         $project = Project::findOrFail($decryptedId);
 
+        // Ambil data project Records
+        $records = ProjectRecord::findOrFail($decryptedId);
+
         // Ambil data project log berdasarkan project_id
         $projectLogs = ProjectLog::where('project_id', $decryptedId)
             ->where('user_id', $user->id)
@@ -200,8 +207,89 @@ class TalentController extends Controller
             'projectData' => $project,
             'projectLogs' => $projectLogs,
             'statuses' => $projectStatuses,
+            'projectRecords' => $records
         ]);
     }
+
+    public function projectRecord(Request $request)
+    {
+        $validatedData = $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'user_id' => 'required|exists:users,id',
+            'project_stage' => 'required|string',
+            'number_of_panel' => 'required|integer',
+            'link_google_drive' => 'required|url',
+            'agree_terms' => 'accepted',
+        ]);
+
+        // Simpan project record menggunakan instance model
+        $projectRecord = new ProjectRecord();
+        $projectRecord->project_id = $validatedData['project_id'];
+        $projectRecord->user_id = $validatedData['user_id'];
+        $projectRecord->project_stage = $validatedData['project_stage'];
+        $projectRecord->number_of_panel = $validatedData['number_of_panel'];
+        $projectRecord->link_google_drive = $validatedData['link_google_drive'];
+        $projectRecord->save();
+
+        // Ambil project yang terkait
+        $project = Project::find($request->project_id);
+
+        // Update status berdasarkan project_stage dan simpan data baru di tabel Statuses
+        $statusUpdates = [
+            'First Draft' => ['status' => 'QC First Draft', 'status_type_id' => 2],
+            'Revise 1' => ['status' => 'QC Revise 1', 'status_type_id' => 5],
+            'Revise 2' => ['status' => 'QC Revise 2', 'status_type_id' => 8],
+            'Revise 3' => ['status' => 'QC Revise 3', 'status_type_id' => 11],
+        ];
+
+        if (isset($statusUpdates[$request->project_stage])) {
+            $statusData = $statusUpdates[$request->project_stage];
+
+            // Update status di tabel Project
+            $project->update([
+                'status' => $statusData['status'],
+            ]);
+
+            // Simpan data baru ke tabel Statuses
+            Status::create([
+                'project_id' => $project->id,
+                'status_type_id' => $statusData['status_type_id'],
+            ]);
+        }
+
+        // Kirim email
+        $talentQCName = $project->talent_qc;
+        $talentQC = User::where('name', $talentQCName)->first();
+        $user = User::find($request->user_id);
+
+        if ($talentQC) {
+            // Kirim email ke Talent QC
+            Mail::send('emails.updateProjectforQc', ['projectStage' => $request->project_stage], function ($message) use ($talentQC) {
+                $message->to($talentQC->email)
+                        ->subject("Project Ready for QC");
+            });
+
+            // Kirim email ke Talent yang melakukan perubahan
+            Mail::send('emails.updateProjectStage', ['projectStage' => $request->project_stage, 'talentQC' => $talentQCName], function ($message) use ($user) {
+                $message->to($user->email)
+                        ->subject("Project Stage Submitted");
+            });
+        }
+
+        // Simpan notifikasi
+        Notification::create([
+            'email' => $user->email,
+            'subject' => "{$user->name} already submit {$request->project_stage} of {$project->name}",
+            'message' => "The project stage has been successfully submitted. Please contact {$talentQCName} for QC.",
+            'notif_type' => 'general',
+        ]);
+
+        // Alert sukses
+        return redirect()->back()->with('success', 'You have successfully Add New Records.');
+    }
+
+
+
 
 
 

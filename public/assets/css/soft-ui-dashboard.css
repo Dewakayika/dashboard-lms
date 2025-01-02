@@ -15862,8 +15862,10 @@ label {
 .bg-gradient-warning {
     background-image: linear-gradient(310deg,#FFED86,#fbcf33);
 }
-.bg-gradient-attentions {
-    background-image: linear-gradient(310deg,#FFBC92,FF7E2D);
+.bg-gradient-orange-dark {
+    background-image: linear-gradient(310deg, #B85E47, #FF7E2D);
+    background-color: #B85E47; /* Fallback for dark mode */
+    color: #ffffff;
 }
 .bg-gradient-danger {
     background-image: linear-gradient(310deg,#ea0606,#ff667c);
