@@ -1,12 +1,7 @@
-@extends('Users.Admin.layouts.app')
-
-@section('title')
-    List User Admin
-@endsection
+@extends('Users.Admin.layouts.dashboard-app')
 
 @section('content')
-    <!-- Start breadcrumb -->
-    <div class="container mx-auto px-4">
+    <div class="col-12 mx-0">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item text-xs"><a href="{{ route('admin#index') }}">Home</a></li>
@@ -15,16 +10,230 @@
             </ol>
         </nav>
     </div>
-    <!-- END breadcrumb -->
 
-    <!-- Start content -->  
-    <div class="container mx-auto px-4 ">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4 mx-0">
+                <div class="card-header pb-0">
+                    <h6 class="mb-0">Admin Data</h6>
+                </div>
+
+                @if (Session::has('userCreated'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userCreated') }}
+                    </div>
+                @endif
+                @if (Session::has('userDeleted'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userDeleted') }}
+                    </div>
+                @endif
+                @if (Session::has('userUpdated'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userUpdated') }}
+                    </div>
+                @endif
+
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-xs">No.</th>
+                                    <th class="text-xs text-center">Name</th>
+                                    <th class="text-xs text-center">Email</th>
+                                    <th class="text-xs text-center">Role</th>
+                                    <th class="text-xs text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-xs">
+                            @php $no = 1; @endphp
+                                @foreach ($userData as $user)
+                                    @if ($user->role == 'admin')
+                                        <tr>
+                                            <td class="ps-4">{{ $no }}</td>
+                                            <td class="text-center">{{ $user->name }}</td>
+                                            <td class="text-center">{{ $user->email }}</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-gradient-warning text-white">Admin</span>
+                                            </td>
+                                            <td class="text-center">
+                                            <a href="{{ route('admin#editUser', $user->id) }}" class="text-blue-600 hover:text-blue-800">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{{ route('admin#deleteUser', $user->id) }}" class="text-red-600 hover:text-red-800 ml-4">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                            </td>
+                                        </tr>
+                                        @php $no++; @endphp
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4 mx-0">
+                <div class="card-header pb-0">
+                    <h6 class="mb-0">Intern Data</h6>
+                </div>
+
+                @if (Session::has('userCreated'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userCreated') }}
+                    </div>
+                @endif
+                @if (Session::has('userDeleted'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userDeleted') }}
+                    </div>
+                @endif
+                @if (Session::has('userUpdated'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userUpdated') }}
+                    </div>
+                @endif
+
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-xs">No.</th>
+                                    <th class="text-xs text-center">Name</th>
+                                    <th class="text-xs text-center">Email</th>
+                                    <th class="text-xs text-center">Role</th>
+                                    <th class="text-xs text-center">Code</th>
+                                    <th class="text-xs text-center">Phone Number</th>
+                                    <th class="text-xs text-center">Address</th>
+                                    <th class="text-xs text-center">Gender</th>
+                                    <th class="text-xs text-center">Job</th>
+                                    <th class="text-xs text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-xs">
+                            @php $no = 1; @endphp
+                                @foreach ($userData as $user)
+                                    @if ($user->role == 'intern')
+                                        <tr>
+                                            <td class="ps-4">{{ $no }}</td>
+                                            <td class="text-center">{{ $user->name }}</td>
+                                            <td class="text-center">{{ $user->email }}</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-gradient-success text-white">Intern</span>
+                                            </td>
+                                            <td class="text-center">{{ $user->registration_code }}</td>
+                                            <td class="text-center">{{ $user->intern->phone_number }}</td>
+                                            <td class="text-center">{{ $user->intern->address }}</td>
+                                            <td class="text-center">{{ $user->intern->gender }}</td>
+                                            <td class="text-center">{{ $user->intern->job }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ route('admin#editUser', $user->id) }}" class="text-blue-600 hover:text-blue-800">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                                <a href="{{ route('admin#deleteUser', $user->id) }}" class="text-red-600 hover:text-red-800 ml-4">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @php $no++; @endphp
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4 mx-0">
+                <div class="card-header pb-0">
+                    <h6 class="mb-0">Talent Data</h6>
+                </div>
+
+                @if (Session::has('userCreated'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userCreated') }}
+                    </div>
+                @endif
+                @if (Session::has('userDeleted'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userDeleted') }}
+                    </div>
+                @endif
+                @if (Session::has('userUpdated'))
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ Session::get('userUpdated') }}
+                    </div>
+                @endif
+
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-xs">No.</th>
+                                    <th class="text-xs text-center">Name</th>
+                                    <th class="text-xs text-center">Email</th>
+                                    <th class="text-xs text-center">Role</th>
+                                    <th class="text-xs text-center">Code</th>
+                                    <th class="text-xs text-center">School</th>
+                                    <th class="text-xs text-center">Bank</th>
+                                    <th class="text-xs text-center">Acc</th>
+                                    <th class="text-xs text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-xs">
+                            @php $no = 1; @endphp
+                                @foreach ($userData as $user)
+                                    @if ($user->role == 'talent')
+                                        <tr>
+                                            <td class="ps-4">{{ $no }}</td>
+                                            <td class="text-center">{{ $user->name }}</td>
+                                            <td class="text-center">{{ $user->email }}</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-gradient-info text-white">Talent</span>
+                                            </td>
+                                            <td class="text-center">{{ $user->registration_code }}</td>
+                                            <td class="text-center">{{ $user->talent->school }}</td>
+                                            <td class="text-center">{{ $user->talent->bank }}</td>
+                                            <td class="text-center">{{ $user->talent->acc }}</td>
+                                            <td class="text-center">
+                                            <a href="{{ route('admin#editUser', $user->id) }}" class="text-blue-600 hover:text-blue-800">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{{ route('admin#deleteUser', $user->id) }}" class="text-red-600 hover:text-red-800 ml-4">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                            </td>
+                                        </tr>
+                                        @php $no++; @endphp
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="container mx-auto px-4 ">
         <div class="mb-2 w-full mx-auto  sm:flex sm:items-center sm:justify-between ">
             <h1 class="text-xl font-bold text-left mt-3">
                Users Data
             </h1>
 
-            <!-- Table with updated style -->
+
             <form method="GET" action="{{ route('admin#listUser') }}">
                 <select name="role" id="role" onchange="this.form.submit()" class="border py-2 px-2 rounded bg-gray-100 text-xs" >
                     <option value="" class="text-xs">All</option>
@@ -34,7 +243,7 @@
             </form>
         </div>
 
-        <!-- Flash messages for success -->
+     
         @if (Session::has('userCreated'))
             <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4" role="alert">
                 {{ Session::get('userCreated') }}
@@ -140,6 +349,6 @@
             </div>
         </div>
         
-    </div>
-    <!-- End content-->
+    </div> -->
+    
 @endsection

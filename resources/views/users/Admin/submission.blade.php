@@ -1,10 +1,8 @@
 @extends('users.Admin.layouts.dashboard-app')
 
 @section('content')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <body> 
-    <div class="container mx-auto px-4">
+    <div class="col-12 mx-0">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item text-xs"><a href="{{ route('admin#index') }}">Home</a></li>
@@ -14,14 +12,47 @@
         </nav>
     </div>
 
-    <header>
-        <div class="title">
-            {{$user->name}}'s Submissions
+    <div class="col-12 mt-4">
+        <div class="card mb-4">
+            <div class="card-header pb-0 p-3">
+                <h6 class="mb-1 px-3">{{$user->name}}'s Submissions</h6>
+            </div>
+            <div class="card-body p-3 d-flex flex-wrap justify-content-start">
+                @foreach($user->submissions as $users)
+                <div class="col-xl-4 col-md-6 mb-xl-0 mb-4">
+                    <div class="card card-blog card-plain d-flex justify-content-between px-3 pb-5" style="height: 100%; ">
+                        <div class="position-relative">
+                            <a class="d-block shadow-xl border-radius-xl" href="{{ asset($users->submission_file) }}">
+                                <img src="{{asset($users->thumbnail)}}" alt="card-image" class="img-fluid shadow border-radius-xl transition-transform duration-300 transform group-hover:scale-110" style="width: 100%; height: 200px; object-fit: cover;" />
+                            </a>
+                            <p class="text-gradient text-dark mb-2 text-sm pt-3">{{ \Carbon\Carbon::parse($users->submission_date)->translatedFormat('l, F Y') }}</p>
+                            <a href="#" class="d-block">
+                                <h6>{{$users->chapter_name}} | {{$users->course_name}}</h6>
+                            </a>
+                        </div>
+                        <div class="px-1 p pt-3">
+                           
+                            <div class="mt-4 d-flex align-items-center justify-content-between">
+                                <a href="{{ asset($users->submission_file) }}" class="btn btn-outline-primary btn-sm mb-0">View Project</a>
+                                <div class="d-flex justify-center align-items-center gap-2 px-2 py-1 bg-secondary rounded text-white">
+                                    <i class="fa-solid fa-medal mb-0"></i>
+                                    <p class="font-semibold text-center mb-0">                    
+                                        @php
+                                        $totalVotes = $users->votes->sum('total_vote_value');
+                                    @endphp
+                                    {{ $totalVotes }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
-    </header>
+    </div>
 
-
-    <div class="container grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 sm:grid-cols-2 gap-3 mb-4 mt-2">
+    <!-- <div class="container grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 sm:grid-cols-2 gap-3 mb-4 mt-2">
         @foreach($user->submissions as $users)
             <div class="relative flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-auto">
                 <a href="{{ asset($users->submission_file) }}" target="_blank">
@@ -56,7 +87,7 @@
 
             </div>
         @endforeach
-    </div>
+    </div> -->
 
 
 
