@@ -86,8 +86,9 @@
     <div class="header">
       <h1>Padma Creative Studio</h1>
     </div>
-    
+
     <div class="content">
+
       <p>Dear, Participant!</p>
       <p> <span class="bold">Congratulations!🎉</span> After reviewing your CV, we are pleased to inform you that you have been selected to proceed with the next steps for joining Padma Creative Studio as a Intern in Padma Creative Studio</p>
 

@@ -11,6 +11,23 @@
             </ol>
         </nav>
     </div>
+    
+            <!-- Flash messages for success -->
+        @if (Session::has('successCV'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-xs" role="alert">
+                {{ Session::get('successCV') }}
+            </div>
+        @endif
+        @if (Session::has('CVDeleted'))
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4 text-xs" role="alert">
+                {{ Session::get('CVDeleted') }}
+            </div>
+        @endif
+        @if (Session::has('errorCV'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-xs" role="alert">
+                {{ Session::get('errorCV') }}
+            </div>
+        @endif
 
     <div class="row">
         <div class="col-12">
@@ -231,144 +248,4 @@
         });
     });
     </script>
-
-    <!-- <div id="approveModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-4 w-full max-w-sm">
-            <div class="mb-4 w-auto">
-                <h3 class="text-m font-bold mb-2">Select Registration Code</h3>
-                <p class="text-xs text-gray-700">Select the registration code that will be used by users to register their data on the Padma portal.</p>
-            </div>
-
-            <form id="approveForm" action="" method="POST">
-                @csrf
-                <div>
-                    <select name="registration_code" required class="border py-2 px-2 rounded bg-gray-100 text-xs w-full">
-                        <option value="" class="border py-2 px-2 rounded bg-gray-100 text-xs w-full">Select Code</option>
-                        @foreach ($registrationCodes as $code)
-                            <option class="text-black" value="{{ $code->registration_code }}">{{ $code->registration_code }}</option>
-                        @endforeach
-                    </select>
-
-                    <div class="flex gap-2 w-full mt-4">
-                        <hr>
-                        <button type="button" class="text-white p-2 bg-red-500 text-xs rounded hover:bg-red-600 w-full" onclick="closeModal('approveModal')">Cancel</button>
-                        <button type="submit" class="text-white p-2 bg-green-500 text-xs rounded hover:bg-green-600 w-full">Approve</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> -->
-
-
-    <!-- <div id="declineModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-4 w-full max-w-sm">
-            <div class="mb-4 w-auto">
-                <h3 class="text-m font-bold mb-2 text-center">Are you sure to Decline CV?</h3>
-                <p class="text-xs text-gray-700 text-center">Declining a CV will send a notification email to the CV sender, and this action cannot be undone.</p>
-            </div>
-
-            <form id="declineForm" action="" method="POST">
-                @csrf
-                <div class="flex gap-2 w-full mt-4">
-                    <hr>
-                    <button type="button" class="text-white p-2 bg-red-500 text-xs rounded hover:bg-red-600 w-full" onclick="closeModal('declineModal')">Cancel</button>
-                    <button type="submit" class="text-white p-2 bg-green-500 text-xs rounded hover:bg-green-600 w-full">Continue Decline</button>
-                </div>
-            </form>
-        </div>
-    </div> -->
-
-
-    <!-- <div id="invitationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 d-flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-sm">
-            <div class="mb-4 w-auto">
-                <h3 class="text-m font-bold mb-2 justify-center">Meeting Invitation</h3>
-                <p class="text-xs text-gray-600">Schedule a meeting for your talent, add the meeting name mentioning the talent's name, for example, 'Interview Kayika,' along with the day and date.</p>
-            </div>
-
-            <form id="invitationForm" action="" method="POST">
-                @csrf
-                <input type="hidden" name="selected_emails[]" id="emailInput">
-
-                <div class="space-y-1 mb-3">
-                    <label for="name" class="block text-xs font-medium text-gray-900">Meeting Name</label>
-                    <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 text-sm" placeholder="Enter meeting name">
-                </div>
-
-                <div class="space-y-1 mb-3">
-                    <label for="meeting_date" class="block text-xs font-medium text-gray-900">Meeting Date</label>
-                    <input type="date" name="meeting_date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 text-sm">
-                </div>
-
-                <div class="space-y-1 mb-3">
-                    <label for="meeting_time" class="block text-xs font-medium text-gray-900">Meeting Time</label>
-                    <input type="time" name="meeting_time" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 text-sm">
-                </div>
-
-                <div class="flex gap-2 w-full mt-4">
-                    <button type="button" class="text-white p-2 bg-red-500 text-xs rounded hover:bg-red-600 w-full" onclick="closeModal('invitationModal')">Cancel</button>
-                    <button type="submit" class="text-white p-2 bg-green-500 text-xs rounded hover:bg-green-600 w-full">Send Invitation</button>
-                </div>
-            </form>
-        </div>
-    </div> -->
-
-
-<!-- <script>
-    // Open Modal Function
-    function openModal(modalId, actionUrl = '', email = '') {
-        if (actionUrl) {
-            document.getElementById(`${modalId}Form`).action = actionUrl;
-        }
-        if (email) {
-            document.getElementById('emailInput').value = email;
-        }
-        document.getElementById(modalId).classList.remove('hidden'); // Show the modal
-    }
-
-    // Close Modal Function
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.add('hidden'); // Hide the modal
-    }
-
-    // Open specific modals with their respective URLs and emails
-    function openApproveModal(actionUrl) {
-        openModal('approveModal', actionUrl);
-    }
-
-    function openDeclineModal(actionUrl) {
-        openModal('declineModal', actionUrl);
-    }
-
-    function openInvitationModal(actionUrl, email) {
-        openModal('invitationModal', actionUrl, email);
-    }
-</script> -->
-<!-- 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                const url = this.getAttribute('href');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
-                });
-            });
-        });
-    });
-</script> -->
 @endsection

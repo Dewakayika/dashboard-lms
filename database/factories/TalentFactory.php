@@ -17,11 +17,18 @@ class TalentFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => '2',
-            'school' => 'SMK TI Global',
-            'date_of_birth' => 'sekarang',
-            'bank_name' => 'BRI',
-            'bank_account' => '09866383',
+            'user_id'=>'2',
+            'full_name'=>'I Dewa Gede Ananda Putra Kayika',
+            'Address'=> 'Payangan, Gianyar',
+            'Bank_Account'=>'123456789',
+            'profile_photo'=>'photo.jpg',
+            'phone_number'=>'08133733709',
+            'gender'=>'male',
+            'date_of_birth'=>'agustus 2004',
+            'id_card'=>'11123456789',
+            'bank_name'=>'BRI',
+            'swift_code'=>'BRITAMA',
+            'subjected_tax'=>'None',
         ];
     }
 }

@@ -20,10 +20,17 @@ return new class extends Migration
                 ->on('users')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->string('school');
+            $table->string('full_name');
+            $table->string('profile_photo');
+            $table->string('phone_number');
+            $table->string('address');
+            $table->string('gender');
             $table->string('date_of_birth');
+            $table->string('id_card');
             $table->string('bank_name');
-            $table->string('bank_account');
+            $table->string('bank_Account');
+            $table->string('swift_code');
+            $table->string('subjected_tax');
             $table->timestamps();
         });
     }
