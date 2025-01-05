@@ -89,22 +89,14 @@
 
     <div class="content">
 
-      <p>Dear, Participant!</p>
-      <p> <span class="bold">Congratulations!🎉</span> After reviewing your CV, we are pleased to inform you that you have been selected to proceed with the next steps for joining Padma Creative Studio as a Intern in Padma Creative Studio</p>
-
-      <p>To finalize your registration, please use the unique registration code provided below. This code will allow you to create an account and access your dashboard at Padma Creative Studio.</p>
-
-      <div class="padma"><strong>{{ $registrationCode }}</strong></div>
-
-      <p>Next Steps:</p>
-      <p>1. Visit <a href="dashboard.padmastudio.io">dashboard.padmastudio.io</a></p>
-      <p>2. Select “Register” and enter the registration code along with the necessary information.</p>
-      <p>3. Complete your profile setup once registered.</p>
-      <p>4. Join our discord channel here <a href="https://discord.gg/pPCCjWjR">Padma Community</a></p>
-
-      <p>If you have any questions or run into any issues during registration, feel free to reply to this email or reach out to us at <a href="https://wa.me/821081931708">Padma Studio WhatsApp</a></p>
-
-      <p>We look forward to welcoming you to our creative team and helping you get started on this exciting journey!</p>
+        <p>Hello {{ $project->talent_qc }},</p>
+        <p>You have been assigned as the QC for the project "{{ $project->comic_name }}" (Chapter {{ $project->chapter_number }}).</p>
+        <p>Details:</p>
+        <ul>
+            <li>Total Panels: {{ $project->number_of_panel }}</li>
+            <li>File Link: <a href="{{ $project->file }}">{{ $project->file }}</a></li>
+        </ul>
+        <p>Thank you!</p>
 
       <p class="signature">Best regards,<br>Padma Creative Studio</p>
     </div>

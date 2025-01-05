@@ -4,28 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Project;
-use App\Models\StatusType;
 
-
-
-class Status extends Model
+class ProjectRecord extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'project_id',
-        'status_type_id',
+        'user_id',
+        'project_stage',
+        'number_of_panel',
+        'link_google_drive',
     ];
 
+    // Relasi ke Project
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    // Relasi ke StatusType
-    public function statusType()
+    // Relasi ke User
+    public function user()
     {
-        return $this->belongsTo(StatusType::class, 'status_type_id');
+        return $this->belongsTo(User::class);
     }
 }
+

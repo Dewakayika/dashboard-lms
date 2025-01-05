@@ -13,6 +13,8 @@ use App\Http\Controllers\DonorController;
 use App\Http\Controllers\TalentCVController;
 use App\Http\Controllers\AdditionalInfoController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\TalentQcController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +66,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
             return redirect()->route('intern#index');
         } else if (Auth::user()->role == 'admin') {
             return redirect()->route('admin#index');
+        } else if (Auth::user()->role == 'talent_qc') {
+           return redirect()->route('talentqc#index');
         } else {
             return view('auth.login');
         }
@@ -73,14 +77,46 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //Talent
 Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () {
     Route::get('/', [TalentController::class, 'index'])->name('talent#index');
+    Route::get('/project/Overview',[TalentController::class, 'projectOverview'])->name('talent#projectOverview');
+    Route::get('/project/{id}/detail', [TalentController::class, 'detail'])->name('talent#projectDetail');
+    Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talent#projectRecods');
+
+
+
+
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
     Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
+    Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
+
+});
+
+//TalentQc
+Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], function () {
+    Route::get('/', [TalentQcController::class, 'index'])->name('talentqc#index');
+    Route::get('/project/Overview',[TalentQcController::class, 'projectOverview'])->name('talentqc#projectOverview');
+    Route::get('/talentqc/projectDetail/{id}', [TalentQcController::class, 'detail'])->name('talentqc#projectDetail');
+    Route::post('/project-record/store', [TalentQcController::class, 'projectRecord'])->name('talentqc#projectRecods');
+    Route::get('/additional/data-talent',[TalentQcController::class, 'additionalInfo'])->name('talentqc#additionalData');
+    Route::post('/additional/submit',[TalentQcController::class, 'submitForm'])->name('talentqc#submitData');
+    Route::post('/projects/{projectId}/apply', [TalentQcController::class, 'apply'])->name('talentqc#applyProject');
+    Route::post('/sops/checklist', [TalentQcController::class, 'storeChecklist'])->name('talentqc#storeChecklist');
+    Route::get('/project-qc-overview', [TalentQcController::class, 'projectQcOverview'])->name('talentqc#projectQcOverview');
+
+    // Route to store sop
+    Route::post('/sop/store', [TalentQcController::class, 'storeSop'])->name('talentqc#storeSop');
+    Route::post('/qc-records/store', [TalentQcController::class, 'storeQcRecords'])->name('talentqc#storeQcRecords');
+
+    // Update Status Project Log
+    Route::post('/project-log/store', [TalentQcController::class, 'qcstoreProjectRecord'])->name('talentqc#storeProjectLog');
 
 });
 
 // Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin#index'); //Admin Dashboard
+    Route::get('/admin/overview', [AdminController::class, 'overview'])->name('admin#overview'); //Admin Dashboard
+
+
     Route::get('/adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile'); //Admin Profile
     Route::get('/editProfile', [AdminController::class, 'editProfile'])->name('admin#editProfile'); //edit profile
     Route::post('/updateAdmin', [AdminController::class, 'updateAdmin'])->name('admin#updateAdmin'); //Update profile function
@@ -98,9 +134,17 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     Route::get('/admin/user/{id}/submissions', [AdminController::class, 'getUserSubmissions'])->name('admin.user.submissions');
 
-    Route::get('/test-dashboard', function () {
-        return view('users.Admin.Dashboard');
-    })->name('dashboard#test');
+    Route::get('/create-project', [AdminController::class, 'createProject'])->name('admin#createNewProject');
+    Route::post('/projects', [AdminController::class, 'storeProject'])->name('projects#store');
+
+
+
+
+    // Route::get('/create-project', function () {
+    //     $admin_data = User::where('id', Auth::id())->first();
+
+    //     return view ('users.Admin.createNewProject')->with(['adminData' => $admin_data]);
+    // })->name('admin#createNewProject');
 
 
 

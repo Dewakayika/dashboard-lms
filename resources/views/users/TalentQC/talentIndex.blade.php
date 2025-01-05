@@ -1,4 +1,4 @@
-@extends('users.Talent.layouts.dashboard-app')
+@extends('users.TalentQC.layouts.dashboard-app')
 
 @section('content')
 

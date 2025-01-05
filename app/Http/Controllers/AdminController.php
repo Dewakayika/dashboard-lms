@@ -15,6 +15,10 @@ use App\Models\Talent;
 use App\Models\Volunteer;
 use App\Models\Roles;
 use App\Models\TalentCV;
+use App\Models\Project;
+use App\Models\TalentQc;
+use App\Models\Notification;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -24,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Mail\DeclineEmail;
 use App\Mail\ApproveEmail;
+use App\Mail\TalentQcAssigned;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
 
@@ -42,6 +47,75 @@ use Google\Service\Calendar\ConferenceSolutionKey;
 
 class AdminController extends Controller
 {
+    public function overview(){
+        $admin_data = User::where('id', Auth::id())->first();
+
+        $notification = Notification::get();
+        // Get Project with "Waiting Talent" status
+        $waitingProjects = Project::where('status', 'waiting talent')->paginate(10);
+
+        return view ('users.Admin.Overview')->with([
+            'adminData' => $admin_data,
+            'projectsList' => $waitingProjects,
+            'notification' => $notification
+        ]);
+    }
+
+    public function createProject()
+    {
+        $admin_data = User::where('id', Auth::id())->first();
+
+        $notification = Notification::get();
+
+        // Mendapatkan list semua user dengan role 'talent_qc'
+        $talent_qc = User::where('role', 'talent_qc')->get();
+
+        return view('users.Admin.createNewProject')->with([
+            'adminData' => $admin_data,
+            'talentQc' => $talent_qc,
+            'notification' => $notification
+        ]);
+    }
+
+    public function storeProject(Request $request)
+    {
+        $validated = $request->validate([
+            'comic_name' => 'required|string|max:255',
+            'chapter_number' => 'required|integer',
+            'talent_qc' => 'required|exists:users,id', // Pastikan ID talent QC valid
+            'number_of_panel' => 'required|integer',
+            'file' => 'required|string',
+        ]);
+
+        // Cari data user berdasarkan ID talent_qc
+        $talentQc = User::find($validated['talent_qc']);
+
+        $project = new Project();
+        $project->user_id = auth()->id();
+        $project->comic_name = $validated['comic_name'];
+        $project->chapter_number = $validated['chapter_number'];
+        $project->talent_qc = $talentQc->name; // Simpan nama talent QC
+        $project->number_of_panel = $validated['number_of_panel'];
+        $project->file = $validated['file'];
+        $project->status = 'Waiting Talent';
+        $project->save();
+
+        // Kirim email ke talent QC
+        Mail::to($talentQc->email)->send(new TalentQcAssigned($project));
+
+        // Simpan detail email yang dikirim ke tabel "notifikasi"
+        Notification::create([
+            'notif_type' => "urgent",
+            'subject' => "New Project Has been Created!",
+            'message' => "{$talentQc->email} have been assigned as QC for the project '{$project->comic_name}' (Chapter {$project->chapter_number}). Please check your dashboard for details.",
+            'email' => $talentQc->email,
+        ]);
+
+        return redirect()->route('admin#createNewProject')->with('success', 'Project created successfully, email sent to Talent QC, and notification recorded!');
+    }
+
+
+
     // Admin Dashboard
     public function index()
     {
@@ -51,6 +125,10 @@ class AdminController extends Controller
         $talent_data = Talent::count();
         $role_count = Roles::count();
         $role_data = Roles::paginate(10);
+
+        $admin_data = User::where('id', Auth::id())->first();
+
+        $notification = Notification::get();
 
         // Ambil data leaderboard (total submission per user)
         $leaderboard = DB::table('users')
@@ -72,12 +150,14 @@ class AdminController extends Controller
 
         // Return ke view dengan data yang telah diambil
         return view('users.Admin.dashboard')->with([
+            'adminData' => $admin_data,
             'userData' => $user_data,
             'internData' => $intern_data,
             'talentData' => $talent_data,
             'countRole' => $role_count,
             'roleData' => $role_data,
-            'leaderboard' => $leaderboard // Tambahkan leaderboard di sini
+            'leaderboard' => $leaderboard, // Tambahkan leaderboard di sini
+            'notification' => $notification
         ]);
     }
 
@@ -86,7 +166,9 @@ class AdminController extends Controller
     // Create Role and Registration Code | View
     public function createRole(){
 
-        return view('users.Admin.createRole');
+        $admin_data = User::where('id', Auth::id())->first();
+
+        return view('users.Admin.createRole')->with([ 'adminData' => $admin_data,]);
     }
 
     // Create new Role and Registration Code | Function
@@ -491,21 +573,26 @@ class AdminController extends Controller
         }
     }
 
-    public function getUserSubmissions($encryptedId){
+    public function getUserSubmissions($encryptedId)
+    {
+        // Ambil data admin berdasarkan ID pengguna yang login
+        $adminData = User::find(Auth::id());
 
-        // Dekripsi ID yang diterima
+        // Dekripsi ID pengguna
         $userId = Crypt::decrypt($encryptedId);
 
-        $user = User::with(['submissions' => function($query) {
-            $query->with(['votes' => function($query) {
+        // Ambil data pengguna beserta submission dan vote
+        $user = User::with(['submissions' => function ($query) {
+            $query->with(['votes' => function ($query) {
                 $query->selectRaw('submission_id, SUM(vote_value) as total_vote_value')
-                      ->groupBy('submission_id'); // Tambahkan GROUP BY
+                      ->groupBy('submission_id');
             }]);
         }])->findOrFail($userId);
 
-        return view ('users.Admin.submission', compact('user'));
-
+        // Kembalikan view dengan data yang diperlukan
+        return view('users.Admin.submission', compact('user', 'adminData'));
     }
+
 
 
 }

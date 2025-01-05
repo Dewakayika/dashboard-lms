@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/padma-black.png') }}">
     <link rel="icon" href="{{ asset('images/padma-black.png') }}" type="image/png">
     <title>
-        Padma Studio | Talent
+        Padma Studio | Talent Qc
     </title>
     <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -23,12 +23,12 @@
 
 <body class="g-sidenav-show bg-gray-100">
 
-    @include('users.Talent.layouts.sidebar')
+    @include('users.TalentQC.layouts.sidebar')
     <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg {{ (Request::is('rtl') ? 'overflow-hidden' : '') }}">
-        @include('users.Talent.layouts.nav')
+        @include('users.TalentQC.layouts.nav')
         <div class="container-fluid py-4">
             @yield('content')
-            @include('users.Talent.layouts.footer')
+            @include('users.TalentQC.layouts.footer')
         </div>
     </main>
 

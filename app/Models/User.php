@@ -104,6 +104,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(ApplyProject::class);
     }
+    public function projectRecords()
+    {
+        return $this->hasMany(ProjectRecord::class);
+    }
+    public function sopChecklists()
+    {
+        return $this->hasMany(SopChecklist::class);
+    }
+    public function qcRecords()
+    {
+        return $this->hasMany(QcRecords::class);
+    }
+
+
 
 
 
