@@ -1,8 +1,10 @@
 <!-- Navbar -->
-<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
-    <div class="container-fluid pt-2 px-3">
+<nav class="navbar navbar-main navbar-expand-lg px-0  shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+    <div class="container-fluid pt-2">
         <nav aria-label="breadcrumb">
-            <h5 class="font-weight-bold mb-0 text-black ">Good to see you, <span class="font-weight-bolder">{{ $adminData->name }}!</span></h5>
+
+            <h5 class="font-weight-bold mb-0 text-black ">Good to see you, <span class="font-weight-bolder">{{$adminData->name}}!</span></h5>
+
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex justify-content-end" id="navbar">
             <div class="ms-md-3 pe-md-3 d-flex align-items-center">

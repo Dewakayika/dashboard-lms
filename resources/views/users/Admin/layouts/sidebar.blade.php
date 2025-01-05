@@ -54,7 +54,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ (Route::is('/') ? 'active' : '') }}" href="{{ url('/') }}">
+        <a class="nav-link {{ (Route::is('admin#listUser') ? 'active' : '') }}" href="{{ route('admin#listUser') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -76,7 +76,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ (Route::is('talent#index') ? 'active' : '') }}" href="{{ url('talent#index') }}">
+        <a class="nav-link {{ (Route::is('admin#talentCVList') ? 'active' : '') }}" href="{{ route('admin#talentCVList') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>document</title>

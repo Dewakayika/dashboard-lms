@@ -82,7 +82,7 @@
           </div>
         </div>
     </div>
-
+  </div>
     <div class="row mt-4">
         @if (Session::has('roleCreated'))
         <div class="alert alert-warning animate-box" role="alert">
