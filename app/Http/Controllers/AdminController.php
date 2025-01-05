@@ -128,7 +128,9 @@ class AdminController extends Controller
 
         $admin_data = User::where('id', Auth::id())->first();
 
+
         $notification = Notification::get();
+
 
         // Ambil data leaderboard (total submission per user)
         $leaderboard = DB::table('users')
@@ -165,10 +167,10 @@ class AdminController extends Controller
 
     // Create Role and Registration Code | View
     public function createRole(){
-
         $admin_data = User::where('id', Auth::id())->first();
 
         return view('users.Admin.createRole')->with([ 'adminData' => $admin_data,]);
+
     }
 
     // Create new Role and Registration Code | Function
@@ -282,6 +284,7 @@ class AdminController extends Controller
     //Admin List User
     public function listUser(Request $request)
     {
+        $admin_data = User::where('id', Auth::id())->first();
         $role = $request->input('role'); // Mendapatkan role dari request (Intern atau Talent)
 
         if ($role == 'Intern') {
@@ -295,7 +298,7 @@ class AdminController extends Controller
             $user_data = User::with(['talent', 'intern'])->paginate(10);
         }
 
-        return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role]);
+        return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role])->with(['adminData' => $admin_data]);
     }
 
 
@@ -440,6 +443,7 @@ class AdminController extends Controller
 
     public function talentCV(Request $request)
     {
+        $admin_data = User::where('id', Auth::id())->first();
         // Dapatkan nilai status dari request, defaultnya adalah null
         $status = $request->input('status');
 
@@ -459,7 +463,7 @@ class AdminController extends Controller
             'talentCV' => $talent_cv,
             'status' => $status,
             'registrationCodes' => $registrationCodes,
-
+            'adminData' => $admin_data,
         ]);
     }
 
@@ -573,6 +577,7 @@ class AdminController extends Controller
         }
     }
 
+
     public function getUserSubmissions($encryptedId)
     {
         // Ambil data admin berdasarkan ID pengguna yang login
@@ -585,7 +590,9 @@ class AdminController extends Controller
         $user = User::with(['submissions' => function ($query) {
             $query->with(['votes' => function ($query) {
                 $query->selectRaw('submission_id, SUM(vote_value) as total_vote_value')
-                      ->groupBy('submission_id');
+
+                    ->groupBy('submission_id');
+
             }]);
         }])->findOrFail($userId);
 
