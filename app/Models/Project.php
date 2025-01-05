@@ -51,6 +51,16 @@ class Project extends Model
     {
         return $this->hasMany(ProjectRecord::class);
     }
+    public function sopChecklists()
+    {
+        return $this->hasMany(SopChecklist::class);
+    }
+    public function qcRecords()
+    {
+        return $this->hasMany(QcRecords::class);
+    }
+    
+
 
 
 

@@ -19695,12 +19695,15 @@ pre[class*=language-] {
     justify-content: center;
   }
 
+
   .modal-dialog {
     margin: 1.75rem auto;
-    max-width: 500px;
+    max-width: 900px;
+    max-height: 400px;
     margin-bottom: 10px;
     width: 90%;
   }
+
 
   .modal-content {
     border-radius: 14px;

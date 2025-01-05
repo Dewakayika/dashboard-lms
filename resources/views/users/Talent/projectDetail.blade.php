@@ -163,20 +163,35 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                            <td class="align-middle text-sm">
-                              <span class="text-sm px-3 font-weight-bold">{{$projectRecords->project_stage}}</span>
+                        @if ($projectRecords->isEmpty())
+                        <tr>
+                            <td colspan="8" class="text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div>
+                                        <img src="{{ asset('/assets/img/ilustration/NoConnection.svg')}}" class="h-auto w-11" style="width: 110px; height: auto;">
+                                        <p class="text-xs">There are no ongoing projects</p>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="align-middle text-center text-sm">
-                              <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($projectRecords->created_at)->translatedFormat('D, M Y') }}</span>
-                            </td>
-                            <td class="align-middle text-center text-sm">
-                              <span class="text-sm px-1 font-weight-bold">{{$projectRecords->number_of_panel}}</span>
-                            </td>
-                            <td class="align-middle text-center text-sm">
-                              <a href="{{$projectRecords->link_google_drive}}" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Project File</a>
-                            </td>
-                      </tr>
+                        </tr>
+                    @else
+                    @foreach ( $projectRecords as $records )
+                    <tr>
+                        <td class="align-middle text-sm">
+                            <span class="text-sm px-3 font-weight-bold">{{$records->project_stage}}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($records->created_at)->translatedFormat('D, M Y') }}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="text-sm px-1 font-weight-bold">{{$records->number_of_panel}}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <a href="{{$records->link_google_drive}}" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Project File</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                      @endif
                     </tbody>
                   </table>
                 </div>

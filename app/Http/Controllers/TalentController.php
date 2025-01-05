@@ -16,9 +16,6 @@ use App\Models\ProjectLog;
 use App\Models\ProjectRecord;
 
 
-
-
-
 use App\Mail\ApplyProjectMail;
 use App\Mail\NotifyTalentQcMail;
 
@@ -190,7 +187,7 @@ class TalentController extends Controller
         $project = Project::findOrFail($decryptedId);
 
         // Ambil data project Records
-        $records = ProjectRecord::findOrFail($decryptedId);
+        $records = ProjectRecord::where('project_id', $decryptedId)->get();
 
         // Ambil data project log berdasarkan project_id
         $projectLogs = ProjectLog::where('project_id', $decryptedId)
