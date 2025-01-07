@@ -59,6 +59,10 @@ class Project extends Model
     {
         return $this->hasMany(QcRecords::class);
     }
+    public function projectRevise()
+    {
+        return $this->hasMany(ProjectRevise::class);
+    }
     
 
 

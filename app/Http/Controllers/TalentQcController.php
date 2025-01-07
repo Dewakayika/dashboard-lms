@@ -18,6 +18,7 @@ use App\Models\TalentQc;
 use App\Models\Sop;
 use App\Models\SopChecklist;
 use App\Models\QcRecords;
+use App\Models\ProjectRevise;
 
 
 use App\Mail\ApplyProjectMail;
@@ -58,9 +59,9 @@ class TalentQcController extends Controller
         // Group project statuses by project_id
         $groupedProjectStatuses = $projectStatuses->groupBy('project_id');
 
-        // Ambil data proyek log
-        $projectLogs = ProjectLog::with('project')
-            ->where('user_id', Auth::id())
+        // Ambil data proyek log kemudian cek id proyek apakah proyek tersebut memiliki nama "talent" yang ter auth.
+        $projectLogs = ProjectLog::whereIn('project_id', $appliedProjects->pluck('project_id'))
+            ->where('talent_qc', $user->name)
             ->get();
 
         // Mengambil semua data project dengan nama talent sesuai user yang ter auth
@@ -125,12 +126,10 @@ class TalentQcController extends Controller
             'status' => $project->status, // Status proyek
         ]);
 
-        // Menyimpan deadline untuk countdown 30 jam dari timestamp
-        $deadline = Carbon::parse($log->timestamp)->addHours(30); // Deadline 30 jam setelah timestamp
 
         // Update project log dengan deadline
         $log->update([
-            'deadline' => $deadline, // Menyimpan deadline
+            'deadline' => $deadline, // Menyimpan dealdine project.
         ]);
 
         // Kirim email ke Talent yang apply
@@ -208,6 +207,10 @@ class TalentQcController extends Controller
         $qcRecords = QcRecords::where('project_id', $id)
             ->get();
 
+        // Ambil semua data revise records
+        $reviseRecords = ProjectRevise::where('project_id', $id)
+            ->get();
+
         // Kirim data proyek ke tampilan
         return view('users.TalentQC.projectDetail')->with([
             'userData' => $user,
@@ -219,6 +222,7 @@ class TalentQcController extends Controller
             'sops' => $sops,
             'sopChecklists' => $sopChecklists,
             'qcRecords' => $qcRecords,
+            'reviseRecords' => $reviseRecords,
         ]);
     }
 
@@ -516,6 +520,8 @@ class TalentQcController extends Controller
         // Alert sukses
         return redirect()->back()->with('success', 'You have successfully Add New Records.');
     }
+
+
 
 
 }

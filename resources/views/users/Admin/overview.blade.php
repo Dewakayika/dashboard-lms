@@ -4,25 +4,25 @@
 
   <div class="row">
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body bg-primary p-3 border-radius-xl">
-          <div class="row">
-            <div class="col-8">
-                <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                    <i class="fa-solid fa-award fa-xl" style="color: #ed3237;"></i>
+        <div class="card">
+          <div class="card-body bg-primary p-3 border-radius-xl">
+            <div class="row">
+              <div class="col-8">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-section">
+                      <i class="fa-solid fa-repeat fa-xl" style="color: #ed3237;"></i>
+                  </div>
+                <div class="numbers mt-4">
+                      <h5 class="font-weight-bolder text-white mb-0">
+                      1
+                      </h5>
+                  <p class="text-sm mb-0 text-white text-capitalize font-weight-light">On Going Project</p>
                 </div>
-              <div class="numbers mt-4">
-                    <h5 class="font-weight-bolder text-white mb-0">
-
-                    </h5>
-                <p class="text-sm mb-0 text-white text-capitalize font-weight-light">Community Member</p>
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
       </div>
-    </div>
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
       <div class="card">
         <div class="card-body bg-secondary p-3 border-radius-xl">
@@ -52,10 +52,9 @@
                     </div>
                 <div class="numbers mt-4">
                   <h5 class="font-weight-bolder text-white mb-0">
-
-
+                    {{ $averageDuration }}
                     </h5>
-                  <p class="text-sm mb-0 text-capitalize text-white font-weight-light">QC Talent</p>
+                  <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Average Project Durations</p>
                 </div>
               </div>
             </div>

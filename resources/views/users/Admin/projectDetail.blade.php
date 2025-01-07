@@ -1,4 +1,27 @@
-@extends('users.TalentQC.layouts.dashboard-app')
+{{--
+    DESCRIPTION: This Blade template extends the 'users.admin.layouts.dashboard-app' layout and displays detailed information about a specific project.
+    DEPENDENCIES:
+        - Carbon\Carbon for date and time manipulation.
+    SECTIONS:
+        - @section('content'): Main content section that includes:
+            - Breadcrumb navigation.
+            - Project header with background image and project details.
+            - Conditional display of project status and actions based on the latest project log.
+            - Countdown timer for project deadlines.
+            - Modal for project completion confirmation.
+            - Project information table.
+            - Project records and QC records table.
+            - Modal for adding new project revisions.
+            - Modal for sharing project details via WhatsApp.
+            - Project revision table.
+            - Modal for displaying QC messages.
+            - Project status timeline.
+    SCRIPTS:
+        - JavaScript for handling countdown timer.
+        - JavaScript for showing confirmation modal and submitting project completion form.
+        - JavaScript for sharing project details via WhatsApp.
+--}}
+@extends('users.admin.layouts.dashboard-app')
 
 @php
     use Carbon\Carbon;
@@ -48,6 +71,12 @@
                         <span class="text-xs">{{$projectData->status}} in <span class="text-bolder"> {{ $timeDifference }}</span></span>
                         {{-- Button Success --}}
                     </span>
+                        <form id="projectDoneForm" action="{{ route('admin#storeProjectDone', $projectData->id ) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="button" class="badge badge-sm bg-gradient-success font-weight-bold mb-0 text-white hover:bg-secondary" style="border: none; text-decoration: none;" onclick="showConfirmationModal()">PROJECT DONE</button>
+                        </form>
+
+
                     @elseif ($projectLogs->last()->status == 'Done')
                         <p class="nav-link mb-0 px-0 py-1 active">
                             This Project Already <span class="text-bolder">Done</span>
@@ -82,9 +111,7 @@
                     </li>
                 </ul>
             </div>
-          </div>
-        </div>
-      </div>
+
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     @if ($projectLogs->isNotEmpty())
@@ -139,6 +166,42 @@
                 });
             </script>
 
+          </div>
+        </div>
+      </div>
+
+
+                            <!-- Modal for confirmation -->
+                            <div class="modal fade" id="makeItDone" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" style="max-width: 400px;">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="confirmationModalLabel">Finish this Project?</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <p>By confirming, you'll be change the project status as <span class="text-bold">DONE</span> This action canot be undo, make sure your action</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="modal-btn modal-btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                                      <button type="button" class="modal-btn modal-btn-continue" onclick="submitProjectDoneForm()">Make it Done</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                        <script>
+                            function showConfirmationModal() {
+                                var modal = new bootstrap.Modal(document.getElementById('makeItDone'));
+                                modal.show();
+                            }
+
+                            function submitProjectDoneForm() {
+                                document.getElementById('projectDoneForm').submit();
+                            }
+                        </script>
+
+
     <div class="row my-4">
         <div class="col w-full mb-4">
             {{-- Tabel Project Information --}}
@@ -164,7 +227,7 @@
                         </div>
                         <div class="col">
                             <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Last Update:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->update_at)->translatedFormat('D, M Y') }}</li>
-                            <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') }}</li>
+                            <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ $projectData->finish_date ? \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') : 'Not finish yet' }}</li>
                             <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project File:</strong> &nbsp; <a href="{{$projectData->file}}" class="text-primary" target="_blank" style="text-decoration: underline;">Download File</a></li>
                         </div>
                     </div>
@@ -180,15 +243,6 @@
                         <div class="row">
                             <div class="w-full mx-auto d-flex align-items-center justify-content-between">
                                 <h6 class="text-weight-bolder">Project Records</h6>
-                                <div class="gap-2">
-                                    <a class="badge badge-xs bg-secondary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createProjectSOPModal">
-                                        <span class="px-2">SOP Check</span>
-                                    </a>
-                                    <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createQcModal">
-                                        <i class="fa-solid fa-plus text-white"></i>
-                                        <span class="px-2">New QC Records</span>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -267,41 +321,40 @@
             </div>
 
         {{-- Modal New Records --}}
-        <div class="modal fade" id="createProjectModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+        <div class="modal fade" id="projectReviseModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createProjectModalLabel">Submit Project Draft</h5>
+                        <h5 class="modal-title" id="createProjectModalLabel">Project Revise</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="px-3 pt-3">
-                        <form action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin#storeProjectRevise') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+                            <input type="hidden" name="user_id" value="{{ $adminData->id }}">
 
                             <div class="mb-2">
-                                <label for="project_stage" class="text-md text-dark">Project Draft Stage</label>
-                                <select name="project_stage" class="form-control">
-                                    <option value="">Please select Project Stage</option>
-                                    <option value="Submit First Draft">Submit First Draft</option>
-                                    <option value="Submit Revise 1">Submit Revise 1</option>
-                                    <option value="Submit Revise 2">Submit Revise 2</option>
-                                    <option value="Submit Revise 3">Submit Revise 3</option>
+                                <label for="revise_stage" class="text-md text-dark">Revise Stage</label>
+                                <select name="revise_stage" class="form-control">
+                                    <option value="">Please select Project revise stage</option>
+                                    <option value="Revise 1">Revise 1</option>
+                                    <option value="Revise 2">Revise 2</option>
+                                    <option value="Revise 3">Revise 3</option>
                                 </select>
-                                @error('project_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                                @error('revise_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
                             </div>
                             <div class="mb-2">
                                 <label for="number_of_panel" class="text-md text-dark">Total Number Of Panel</label>
                                 <input type="number" name="number_of_panel" class="form-control" placeholder="Example 50">
                                 @error('number_of_panel') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
                             </div>
-                            <div class="mb-2">
-                                <label for="link_google_drive" class="text-md text-dark">Link Project</label>
-                                <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
-                                @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            <div class="mb-3 text-left">
+                                <label for="revise_message" class="form-label">Revise Message</label>
+                                <textarea class="form-control" id="revise_message" name="revise_message" rows="4" required placeholder="Type Revise Message"></textarea>
+                                <small class="form-text text-muted">Use commas to separate list items.</small>
                             </div>
-                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Draft</button>
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Revise</button>
                         </form>
                     </div>
                 </div>
@@ -355,14 +408,20 @@
         </script>
 
 
-
             <div class="col-lg-12 col-md-12 mb-md-0 mb-4 mt-4">
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="row">
                             <div class="w-full mx-auto d-flex align-items-center justify-content-between">
                                 <h6 class="text-weight-bolder">Project Revision</h6>
+                                <div class="gap-2">
+                                    <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#projectReviseModal">
+                                        <i class="fa-solid fa-plus text-white"></i>
+                                        <span class="px-2">Add Revision</span>
+                                    </a>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -374,11 +433,11 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Stage</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">File</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Message</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- Add your dynamic content here --}}
+                                    {{-- Tabel Content --}}
                                     @if ($reviseRecords->isEmpty())
                                         <tr>
                                             <td colspan="4" class="text-center">
@@ -416,45 +475,19 @@
             </div>
         </div>
 
-                {{-- Modal Pop Up Repeated --}}
-                @foreach ($reviseRecords as $revise)
-                <!-- Modal -->
-                <div class="modal fade" id="qcMessageModal-{{ $revise->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $revise->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">revise Message</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="text-left mt-2">
-                                <ul>
-                                    @foreach(explode(',', $revise->revise_message) as $message)
-                                        <li>{{ $message }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-
-
         {{-- Modal Pop Up Repeated --}}
-        @foreach ($qcRecords as $qc)
+        @foreach ($reviseRecords as $revise)
         <!-- Modal -->
-        <div class="modal fade" id="qcMessageModal-{{ $qc->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $qc->id }}" aria-hidden="true">
+        <div class="modal fade" id="qcMessageModal-{{ $revise->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $revise->id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="qcMessageModalLabel-{{ $qc->id }}">QC Message</h5>
+                        <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">revise Message</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="text-left mt-2">
                         <ul>
-                            @foreach(explode(',', $qc->qc_message) as $message)
+                            @foreach(explode(',', $revise->revise_message) as $message)
                                 <li>{{ $message }}</li>
                             @endforeach
                         </ul>
@@ -467,84 +500,30 @@
         </div>
         @endforeach
 
-
-        {{-- Modal New SOP --}}
-        <div class="modal fade" id="createProjectSOPModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content rounded-3 shadow-lg">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title" id="createProjectModalLabel">Standard Formula</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal-body px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
-                        <form action="{{ route('talentqc#storeSop') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
-                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <div class="row border-top border-bottom py-2">
-                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
-                                <div class="col-4 text-center text-uppercase text-black text-xxs font-weight-bolder ps-2 py-2 border-end">Standard</div>
-                                <div class="col-2 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Note</div>
-                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2">Check List</div>
+                {{-- Modal Pop Up Repeated --}}
+                @foreach ($qcRecords as $qc)
+                <!-- Modal -->
+                <div class="modal fade" id="qcMessageModal-{{ $qc->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $qc->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="qcMessageModalLabel-{{ $qc->id }}">QC Message</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            @foreach ($sops as $sop)
-                            <div class="row border-bottom py-2">
-                                <div class="col-3 text-xs text-center d-flex align-items-center justify-content-center border-end">{{ $sop->steps }}</div>
-                                <div class="col-4 text-xs px-4 py-2 border-end">{{ $sop->standard }}</div>
-                                <div class="col-2 text-xs px-3 py-2 text-justify border-end">{{ $sop->note }}</div>
-                                <div class="col-3 d-flex align-items-center justify-content-center p-2">
-                                    @if(isset($sopChecklists[$sop->id]))
-                                        <input type="checkbox" name="checklist[{{ $sop->id }}]" value="1" checked="checked">
-                                    @else
-                                        <input type="checkbox" name="checklist[{{ $sop->id }}]" value="1">
-                                    @endif
-                                </div>
+                            <div class="text-left mt-2">
+                                <ul>
+                                    @foreach(explode(',', $qc->qc_message) as $message)
+                                        <li>{{ $message }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
-                            @endforeach
-                            @if ($sopChecklists->isEmpty())
-                                <button type="submit" class="btn btn-primary w-100 mt-3">Send SOP Document</button>
-                            @else
-                                <button type="submit" class="btn btn-primary w-100 mt-3">Update SOP Document</button>
-                            @endif
-                        </form>
-                    </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        {{-- Modal New QC --}}
-        <div class="modal fade" id="createQcModal" tabindex="-1" aria-labelledby="createQcModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 500px;">
-                <div class="modal-content rounded-3 shadow-lg">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title" id="createQcModalLabel">New QC Record</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class=" text-left px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
-                        <form action="{{ route('talentqc#storeQcRecords') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
-                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <div class="mb-3 text-left">
-                                <label for="qc_stage" class="form-label text-left">QC Stage</label>
-                                <select class="form-control" id="qc_stage" name="qc_stage" required>
-                                    <option value="QC First Draft">QC First Draft</option>
-                                    <option value="QC Revise 1">QC Revise 1</option>
-                                    <option value="QC Revise 2">QC Revise 2</option>
-                                    <option value="QC Revise 3">QC Revise 3</option>
-                                </select>
-                            <div class="mb-3 text-left">
-                                <label for="qc_message" class="form-label">QC Message</label>
-                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" required placeholder="Type QC Message"></textarea>
-                                <small class="form-text text-muted">Use commas to separate list items.</small>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100 mt-3">Submit QC Record</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                @endforeach
 
         {{-- Status --}}
         <div class="col-lg-4 col-md-12">

@@ -116,6 +116,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(QcRecords::class);
     }
+    public function projectQc()
+    {
+        return $this->hasOne(ProjectQc::class);
+    }
 
 
 

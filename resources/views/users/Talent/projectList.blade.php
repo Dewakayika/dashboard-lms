@@ -69,7 +69,7 @@
                         @endif
                       </td>
                       <td class="align-middle">
-                        <a href="{{ route('talent#projectDetail', ['id' => encrypt($projects->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+                        <a href="{{ route('talent#projectDetail', $projects->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
                             Detail
                         </a>
                       </td>

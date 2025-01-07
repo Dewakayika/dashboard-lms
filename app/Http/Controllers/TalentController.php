@@ -14,6 +14,10 @@ use App\Models\ApplyProject;
 use App\Models\Status;
 use App\Models\ProjectLog;
 use App\Models\ProjectRecord;
+use App\Models\Sop;
+use App\Models\SopChecklist;
+use App\Models\QcRecords;
+use App\Models\ProjectRevise;
 
 
 use App\Mail\ApplyProjectMail;
@@ -60,6 +64,9 @@ class TalentController extends Controller
             ->where('user_id', Auth::id())
             ->get();
 
+        // Cek apakah proyek status terbaru di database adalah 'Project Assign' atau 'QC First Draft'
+        $latestStatus = Project::orderBy('created_at', 'desc')->first();
+
         // Mengambil semua data project dengan nama talent sesuai user yang ter auth
         $projectOverview = Project::where('talent', $user->name)
             ->paginate(10);
@@ -79,7 +86,8 @@ class TalentController extends Controller
                 'projects' => $projectsOffer,
                 'groupedProjectStatuses' => $groupedProjectStatuses,
                 'projectLogs' => $projectLogs,
-                'projectOverview' => $projectOverview
+                'projectOverview' => $projectOverview,
+                'latestStatus' => $latestStatus,
             ]);
         }
     }
@@ -88,11 +96,12 @@ class TalentController extends Controller
     public function apply(Request $request, $projectId)
     {
         $user = Auth::user();
-
         // Cek apakah user sudah pernah apply ke project ini
         if (ApplyProject::where('project_id', $projectId)->where('user_id', $user->id)->exists()) {
             return redirect()->back()->with('error', 'You have already applied for this project.');
         }
+
+
 
         // Simpan data ke tabel apply_projects
         $apply = ApplyProject::create([
@@ -172,8 +181,6 @@ class TalentController extends Controller
 
     public function detail($id)
     {
-        // Decrypt the ID
-        $decryptedId = decrypt($id);
 
         // Ambil pengguna yang sedang login
         $user = auth()->user();
@@ -184,18 +191,33 @@ class TalentController extends Controller
             ->get();
 
         // Cari proyek berdasarkan ID yang telah didekripsi
-        $project = Project::findOrFail($decryptedId);
+        $project = Project::findOrFail($id);
 
         // Ambil data project Records
-        $records = ProjectRecord::where('project_id', $decryptedId)->get();
+        $records = ProjectRecord::where('project_id', $id)->get();
 
         // Ambil data project log berdasarkan project_id
-        $projectLogs = ProjectLog::where('project_id', $decryptedId)
-            ->where('user_id', $user->id)
+        $projectLogs = ProjectLog::where('project_id', $id)
             ->get();
 
+
         // Ambil data status berdasarkan project_id
-        $projectStatuses = Status::where('project_id', $decryptedId)->get();
+        $projectStatuses = Status::where('project_id', $id)->get();
+
+        // Ambil semua data SOPs
+        $sops = Sop::all();
+
+        // Mengambil data SOP Checklists
+        $sopChecklists = SopChecklist::where('project_id', $id)
+            ->get();
+
+        // Mengambil project QC records
+        $qcRecords = QcRecords::where('project_id', $id)
+            ->get();
+
+        // Ambil semua data revise records
+        $reviseRecords = ProjectRevise::where('project_id', $id)
+            ->get();
 
         // Kirim data proyek ke tampilan
         return view('users.Talent.projectDetail')->with([
@@ -204,9 +226,15 @@ class TalentController extends Controller
             'projectData' => $project,
             'projectLogs' => $projectLogs,
             'statuses' => $projectStatuses,
-            'projectRecords' => $records
+            'projectRecords' => $records,
+            'sops' => $sops,
+            'sopChecklists' => $sopChecklists,
+            'qcRecords' => $qcRecords,
+            'reviseRecords' => $reviseRecords,
+
         ]);
     }
+
 
     public function projectRecord(Request $request)
     {

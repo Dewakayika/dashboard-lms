@@ -18,7 +18,13 @@ use App\Models\TalentCV;
 use App\Models\Project;
 use App\Models\TalentQc;
 use App\Models\Notification;
-
+use App\Models\ProjectLog;
+use App\Models\ProjectRecord;
+use App\Models\Status;
+use App\Models\Sop;
+use App\Models\SopChecklist;
+use App\Models\QcRecords;
+use App\Models\ProjectRevise;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -47,17 +53,65 @@ use Google\Service\Calendar\ConferenceSolutionKey;
 
 class AdminController extends Controller
 {
-    public function overview(){
+    public function index(){
+
         $admin_data = User::where('id', Auth::id())->first();
 
-        $notification = Notification::get();
+        // Count all Project based on Status
+        $projectWaiting = Project::where('status', 'Waiting Talent')->count();
+        $projectDraft = Project::whereIn('status', ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted'])->count();
+        $projectRevise = Project::whereIn('status', ['Revise 1', 'Revise 2', 'Revise 3'])->count();
+        $projectCompleted = Project::where('status', 'Done')->count();
+        $totalProject = Project::count();
+
+        // Total Panel
+        $totalPanel = Project::sum('number_of_panel');
+
+        // Ambil semua proyek yang memiliki log status "Project Assign" dan "First Draft Submitted"
+        $projects = DB::table('projects')
+            ->join('project_logs as assign_log', function ($join) {
+                $join->on('projects.id', '=', 'assign_log.project_id')
+                    ->where('assign_log.status', 'Project Assign');
+            })
+            ->join('project_logs as draft_log', function ($join) {
+                $join->on('projects.id', '=', 'draft_log.project_id')
+                    ->where('draft_log.status', 'First Draft Submitted');
+            })
+            ->select('projects.id', 'assign_log.timestamp as assign_time', 'draft_log.timestamp as draft_time')
+            ->get();
+
+        $durations = [];
+
+        foreach ($projects as $project) {
+            $assignTime = Carbon::parse($project->assign_time);
+            $draftTime = Carbon::parse($project->draft_time);
+            $duration = $draftTime->diffInDays($assignTime);
+            $durations[] = $duration;
+        }
+
+        $averageDuration = !empty($durations) ? array_sum($durations) / count($durations) : 0;
+
+
+        $notification = Notification::where('email', $admin_data->email)
+            ->orWhere('notif_type', 'urgent')
+            ->get();
+
+
         // Get Project with "Waiting Talent" status
         $waitingProjects = Project::where('status', 'waiting talent')->paginate(10);
 
         return view ('users.Admin.Overview')->with([
             'adminData' => $admin_data,
             'projectsList' => $waitingProjects,
-            'notification' => $notification
+            'notification' => $notification,
+            'projectWaiting' => $projectWaiting,
+            'projectDraft' => $projectDraft,
+            'projectRevise' => $projectRevise,
+            'projectCompleted' => $projectCompleted,
+            'totalProject' => $totalProject,
+            'totalPanel' => $totalPanel,
+            'averageDuration' => $averageDuration
+
         ]);
     }
 
@@ -69,6 +123,10 @@ class AdminController extends Controller
 
         // Mendapatkan list semua user dengan role 'talent_qc'
         $talent_qc = User::where('role', 'talent_qc')->get();
+
+        $notification = Notification::where('email', $admin_data->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
 
         return view('users.Admin.createNewProject')->with([
             'adminData' => $admin_data,
@@ -103,6 +161,21 @@ class AdminController extends Controller
         // Kirim email ke talent QC
         Mail::to($talentQc->email)->send(new TalentQcAssigned($project));
 
+
+        // Kirimi semua email talent dan talent QC di database kecuali talent QC dengan email yang terdaftar sebagai QC Project yang di assign
+        $talents = User::where('role', 'talent')->get();
+        $talentQcs = User::where('role', 'talent_qc')->get();
+        foreach ($talents as $talent) {
+            foreach ($talentQcs as $talentQc) {
+                if ($talent->email != $talentQc->email) {
+                    Mail::send('emails.newProject', ['projectName' => $request->comic_name, 'chapter' => $request->chapter_number], function ($message) use ($talent, $talentQc) {
+                        $message->to([$talent->email, $talentQc->email])
+                                ->subject("New Project Created");
+                    });
+                }
+            }
+        }
+
         // Simpan detail email yang dikirim ke tabel "notifikasi"
         Notification::create([
             'notif_type' => "urgent",
@@ -117,7 +190,7 @@ class AdminController extends Controller
 
 
     // Admin Dashboard
-    public function index()
+    public function community()
     {
         // Hitung total user, intern, talent, dan role
         $user_data = User::count();
@@ -129,7 +202,9 @@ class AdminController extends Controller
         $admin_data = User::where('id', Auth::id())->first();
 
 
-        $notification = Notification::get();
+        $notification = Notification::where('email', $admin_data->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
 
 
         // Ambil data leaderboard (total submission per user)
@@ -169,7 +244,10 @@ class AdminController extends Controller
     public function createRole(){
         $admin_data = User::where('id', Auth::id())->first();
 
-        return view('users.Admin.createRole')->with([ 'adminData' => $admin_data,]);
+        // get all notification
+        $notification = Notification::get();
+
+        return view('users.Admin.createRole')->with([ 'adminData' => $admin_data, 'notification' => $notification]);
 
     }
 
@@ -203,7 +281,8 @@ class AdminController extends Controller
     public function editRole($id)
     {
         $role_data = Roles::where('id', $id)->first();
-        return view('users.Admin.updateRole')->with(['editRole' => $role_data]);
+        $notification = Notification::get();
+        return view('users.Admin.updateRole')->with(['editRole' => $role_data, 'notification' => $notification]);
     }
 
     // Admin Update Role
@@ -350,7 +429,15 @@ class AdminController extends Controller
     public function listTalent()
     {
         $talent_data = Talent::paginate(10);
-        return view('users.Admin.listPartner')->with(['talentData' => $talent_data]);
+        $admin_data = User::where('id', Auth::id())->first();
+        $notification = Notification::where('email', $admin_data->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
+        return view('users.Admin.listPartner')
+        ->with(['talentData' => $talent_data
+        , 'adminData' => $admin_data    , 'notification' => $notification]);
+
     }
 
     // Admin Delete Partner
@@ -586,6 +673,9 @@ class AdminController extends Controller
         // Dekripsi ID pengguna
         $userId = Crypt::decrypt($encryptedId);
 
+        // Get notification
+        $notification = Notification::get();
+
         // Ambil data pengguna beserta submission dan vote
         $user = User::with(['submissions' => function ($query) {
             $query->with(['votes' => function ($query) {
@@ -597,9 +687,257 @@ class AdminController extends Controller
         }])->findOrFail($userId);
 
         // Kembalikan view dengan data yang diperlukan
-        return view('users.Admin.submission', compact('user', 'adminData'));
+        return view('users.Admin.submission', compact('user', 'adminData', 'notification'));
     }
 
 
+    // Manage Project
+    public function projectOverview(){
+        // Ambil pengguna yang sedang login
+        $user = auth()->user();
+
+        // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
+        $notifications = Notification::where('notif_type', 'urgent')
+        ->orWhere('email', $user->email) // For general notifications based on the authenticated user's email
+        ->get();
+
+
+        // Ambil semua data projects
+        $projectOverview = Project::paginate(10);
+
+        return view('users.Admin.manageProject')->with([
+            'adminData' => $user,
+            'notification' => $notifications,
+            'projectOverview' => $projectOverview
+
+        ]);
+    }
+
+    public function detail($id)
+    {
+
+        // Ambil pengguna yang sedang login
+        $user = auth()->user();
+
+        // Ambil semua notifikasi yang bersifat 'urgent' atau notifikasi berdasarkan email pengguna yang sedang login
+        $notifications = Notification::where('notif_type', 'urgent')
+            ->orWhere('email', $user->email)
+            ->get();
+
+        // Cari proyek berdasarkan ID yang telah didekripsi
+        $project = Project::findOrFail($id);
+
+        // Ambil data project Records
+        $records = ProjectRecord::where('project_id', $id)->get();
+
+        // Ambil data project log berdasarkan project_id
+        $projectLogs = ProjectLog::where('project_id', $id)
+            ->get();
+
+
+        // Ambil data status berdasarkan project_id
+        $projectStatuses = Status::where('project_id', $id)->get();
+
+        // Ambil semua data SOPs
+        $sops = Sop::all();
+
+        // Mengambil data SOP Checklists
+        $sopChecklists = SopChecklist::where('project_id', $id)
+            ->get();
+
+        // Mengambil project QC records
+        $qcRecords = QcRecords::where('project_id', $id)
+            ->get();
+
+        // Ambil semua data revise records
+        $reviseRecords = ProjectRevise::where('project_id', $id)
+            ->get();
+
+        // Kirim data proyek ke tampilan
+        return view('users.Admin.projectDetail')->with([
+            'adminData' => $user,
+            'notification' => $notifications,
+            'projectData' => $project,
+            'projectLogs' => $projectLogs,
+            'statuses' => $projectStatuses,
+            'projectRecords' => $records,
+            'sops' => $sops,
+            'sopChecklists' => $sopChecklists,
+            'qcRecords' => $qcRecords,
+            'reviseRecords' => $reviseRecords
+        ]);
+    }
+
+        // admin submit revise
+        public function storeProjectRevise(Request $request)
+        {
+            $validatedData = $request->validate([
+                'project_id' => 'required|exists:projects,id',
+                'user_id' => 'required|exists:users,id',
+                'revise_stage' => 'required|string',
+                'number_of_panel' => 'required|integer',
+                'revise_message' => 'required|string',
+            ]);
+
+            // Simpan project revise menggunakan instance model
+            $projectRecord = new ProjectRevise();
+            $projectRecord->project_id = $validatedData['project_id'];
+            $projectRecord->user_id = $validatedData['user_id'];
+            $projectRecord->revise_stage = $validatedData['revise_stage'];
+            $projectRecord->number_of_panel = $validatedData['number_of_panel'];
+            $projectRecord->revise_message = $validatedData['revise_message'];
+            $projectRecord->save();
+
+            // Validasi apabila project tidak di save
+            if (!$projectRecord) {
+                return redirect()->back()->with('error', 'Failed to save project record.');
+            }
+
+            // Ambil project yang terkait
+            $project = Project::find($request->project_id);
+
+            // Update status berdasarkan project_stage dan simpan data baru di tabel Statuses
+            $statusUpdates = [
+                'Revise 1' => ['status' => 'Revise 1', 'status_type_id' => 4],
+                'Revise 2' => ['status' => 'Revise 2', 'status_type_id' => 7],
+                'Revise 3' => ['status' => 'Revise 3', 'status_type_id' => 10],
+            ];
+
+            if (isset($statusUpdates[$request->revise_stage])) {
+                $statusData = $statusUpdates[$request->revise_stage];
+
+                // Update status di tabel Project
+                $project->update([
+                    'status' => $statusData['status'],
+                ]);
+
+                // Simpan data baru ke tabel Statuses
+                Status::create([
+                    'project_id' => $project->id,
+                    'status_type_id' => $statusData['status_type_id'],
+                ]);
+
+                // Menyimpan Data baru untuk project_log
+                $log = ProjectLog::create([
+                    'project_id' => $project->id,
+                    'user_id' => $validatedData['user_id'],
+                    'talent_qc' => $project->talent_qc ?? 'N/A',
+                    'timestamp' => Carbon::now(),
+                    'status' => $statusData['status'],
+                ]);
+
+                $deadline = Carbon::parse($log->timestamp)->addHours(30);
+
+            }
+
+            // Kirim email
+            $talentName = $project->talent;
+            $talent = User::where('name', $talentName)->first();
+            $user = User::find($request->user_id);
+
+            if ($talent) {
+                // Kirim email ke Talent dan Talent QC
+                Mail::send('emails.revise', [
+                    'talentName' => $talent->name,
+                    'projectStage' => $request->revise_stage,
+                    'projectName' => $project->name
+                ], function ($message) use ($talent, $user) {
+                    $message->to([$talent->email, $user->email])
+                            ->subject("Project Revision");
+                });
+            }
+
+            // Simpan notifikasi
+            Notification::create([
+                'email' => $user->email,
+                'subject' => "You Already send {$request->project_stage} of {$project->comic_name} Chapter {$project->chapter_number}",
+                'message' => "The project stage has been successfully submitted. Please wait for the next stage.",
+                'notif_type' => 'general',
+            ]);
+
+            // Notifikasi untuk Talent dengan email talent
+            Notification::create([
+                'email' => $talent->email,
+                'subject' => "{$user->name} Already Submit revise of {$project->comic_name} Chapter {$project->chapter_number}",
+                'message' => "The project stage has been successfully submitted. Please wait for the next stage.",
+                'notif_type' => 'general',
+            ]);
+
+            // Alert sukses
+            return redirect()->back()->with('success', 'You have successfully Add New Revise.');
+        }
+
+
+        // Project Mark as Done
+    public function storeProjectDone(Request $request, $id){
+
+        // Mengambil data project berdasarkan ID
+        $project = Project::findOrFail($id);
+
+        // Melakukan Update Project Status menjadi Done dan finish date hari ini
+        $project->update([
+            'status' => 'Done',
+            'finish_date' => Carbon::now(),
+        ]);
+
+        // Menyimpan data baru ke tabel 'statuses' dengan status_type_id = 13
+        Status::create([
+            'project_id' => $id,
+            'status_type_id' => 13,
+        ]);
+
+        // Menyimpan data baru ke tabel 'project_logs'
+        ProjectLog::create([
+            'project_id' => $id,
+            'user_id' => Auth::id(),
+            'talent_qc' => $project->talent_qc ?? 'N/A',
+            'timestamp' => Carbon::now(),
+            'status' => 'Done',
+        ]);
+
+        // Kirim email ke Talent dan talent_qc
+        $talent = User::where('name', $project->talent)->first();
+        $talentQc = User::where('name', $project->talent_qc)->first();
+
+        if ($talent && $talentQc) {
+            // Kirim email ke Talent dan Talent QC
+            Mail::send('emails.projectDone', [
+                'talentName' => $talent->name,
+                'talentQcName' => $talentQc->name,
+                'projectName' => $project->comic_name,
+                'projectChapter' => $project->chapter_number,
+            ], function ($message) use ($talent, $talentQc) {
+                $message->to([$talent->email, $talentQc->email])
+                        ->subject("Project Done");
+            });
+        }
+
+        // Mengirim notifikasi ke Talent, talent qc, dan user yang ter auth
+        Notification::create([
+            'email' => $talent->email,
+            'subject' => "Congrast! {$project->comic_name} Eps {$project->chapter_name} mark as Done",
+            'message' => "The project has been successfully completed.",
+            'notif_type' => 'general',
+        ]);
+
+        Notification::create([
+            'email' => $talentQc->email,
+            'subject' => "Congrast! {$project->comic_name} Eps {$project->chapter_name} mark as Done",
+            'message' => "The project has been successfully completed.",
+            'notif_type' => 'general',
+        ]);
+
+        Notification::create([
+            'email' => Auth::user()->email,
+            'subject' => "Congrast! {$project->comic_name} Eps {$project->chapter_name} mark as Done",
+            'message' => "The project has been successfully completed.",
+            'notif_type' => 'general',
+        ]);
+
+
+        return redirect()->back()->with('success', 'Project has been marked as Done!.');
+
+
+    }
 
 }

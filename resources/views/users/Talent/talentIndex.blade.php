@@ -187,12 +187,18 @@
                     <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <div class="bg-gradient-succes">
-                      <form action="{{ route('talent#applyProject', $project->id) }}" method="POST" id="applyForm-{{ $project->id }}">
-                        @csrf
-                        <button type="button" class="badge badge-sm text-white bg-gradient-success" style="border: none" onclick="confirmApply({{ $project->id }})">Apply</button>
-                      </form>
-                    </div>
+                    @if ($projectOverview->last()->status == 'Project Assign' || $projectOverview->last()->status == 'QC First Draft')
+                        <a class="badge badge-sm text-white bg-gradient-success" href="#" data-bs-toggle="modal" data-bs-target="#notApply">
+                            <span class="px-2">Apply</span>
+                        </a>
+                    @else
+                        <div class="bg-gradient-succes">
+                            <form action="{{ route('talent#applyProject', $project->id) }}" method="POST" id="applyForm-{{ $project->id }}">
+                                @csrf
+                                <button type="button" class="badge badge-sm text-white bg-gradient-success" style="border: none" onclick="confirmApply({{ $project->id }})">Apply</button>
+                            </form>
+                        </div>
+                    @endif
                   </td>
                 </tr>
                 @endforeach
@@ -233,7 +239,7 @@
 
     <!-- Modal for confirmation -->
     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="max-width: 400px;">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="confirmationModalLabel">Apply Project?</h5>
@@ -249,6 +255,27 @@
           </div>
         </div>
       </div>
+
+          <!-- Modal for confirmation -->
+    <div class="modal fade" id="notApply" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 400px;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">Sorry! You canot apply this project?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Some of your project still on going, you can't apply new project. Please make sure your project draft submitted and apply this project again.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="modal-btn modal-btn-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="modal-btn modal-btn-continue" data-bs-dismiss="modal">Finish Project</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     <div class="col-lg-4 col-md-6">
         <div class="card h-100">
             @if ($groupedProjectStatuses->isEmpty())
@@ -278,17 +305,65 @@
                                     @foreach ($statuses as $status)
                                         <div class="timeline-block mb-3">
                                             <span class="timeline-step">
-                                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Tompson">
+                                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Status">
                                                     @if ($status->status_type_id == '1')
-                                                        <img src="{{ asset('/assets/img/small-logos/Assign.png')}}" alt="team1">
+                                                        <img src="{{ asset('/assets/img/small-logos/Assign.png')}}" alt="assign">
+                                                    @elseif ($status->status_type_id == '2')
+                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '3')
+                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '4')
+                                                        <img src="{{ asset('/assets/img/small-logos/Revisi.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '5')
+                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '6')
+                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '7')
+                                                        <img src="{{ asset('/assets/img/small-logos/Revisi.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '8')
+                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '9')
+                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '10')
+                                                        <img src="{{ asset('/assets/img/small-logos/Revisi.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '11')
+                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '12')
+                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
+                                                    @elseif ($status->status_type_id == '13')
+                                                        <img src="{{ asset('/assets/img/small-logos/Done.png')}}" alt="team1">
                                                     @endif
                                                 </a>
                                             </span>
                                             <div class="timeline-content">
                                                 <h6 class="text-dark text-sm font-weight-bold mb-0">
                                                     @if ($status->status_type_id == '1')
-                                                        Project Assign
-                                                    @endif
+                                                    Project Asign
+                                                 @elseif ($status->status_type_id == '2')
+                                                 QC First Draft
+                                                 @elseif ($status->status_type_id == '3')
+                                                 First Draft Submitted
+                                                 @elseif ($status->status_type_id == '4')
+                                                 Revision 1
+                                                 @elseif ($status->status_type_id == '5')
+                                                 QC Revise 1
+                                                 @elseif ($status->status_type_id == '6')
+                                                     Revise 1 Submitted
+                                                 @elseif ($status->status_type_id == '7')
+                                                     Revision 2
+                                                 @elseif ($status->status_type_id == '8')
+                                                     QC Revise 2
+                                                 @elseif ($status->status_type_id == '9')
+                                                     Revise 2 Submitted
+                                                 @elseif ($status->status_type_id == '10')
+                                                     Revision 3
+                                                 @elseif ($status->status_type_id == '11')
+                                                     QC Revise 3
+                                                 @elseif ($status->status_type_id == '12')
+                                                     Revise 3 Submitted
+                                                 @elseif ($status->status_type_id == '13')
+                                                     Done
+                                                 @endif
                                                 </h6>
                                                 <p class="text-secondary font-weight-bold text-xs mt-1 mb-0 text-uppercase">{{ \Carbon\Carbon::parse($status->created_at)->translatedFormat('D, M Y | H:i A') }}</p>
                                             </div>
@@ -366,23 +441,25 @@
                     </span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    @if ($projects->status == 'Project Assign')
+                    @if ($projects->status == 'Waiting Talent')
+                    <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
+                    @elseif ($projects->status == 'Project Assign')
                         <span class="badge badge-sm bg-gradient-info">{{$projects->status}}</span>
-                    @elseif ($projects->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
-                        <span class="badge badge-sm .bg-gradient-attentions">{{$projects->status}}</span>
-                    @elseif ($projects->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
-                        <span class="badge badge-sm .bg-gradient-warning">{{$projects->status}}</span>
-                    @elseif ($projects->status == 'Revision 1' && 'Revision 2' && 'Revision 3')
-                        <span class="badge badge-sm .bg-gradient-danger">{{$projects->status}}</span>
+                    @elseif (in_array($projects->status, ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3']))
+                        <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
+                    @elseif (in_array($projects->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
+                        <span class="badge badge-sm bg-gradient-success">{{$projects->status}}</span>
+                    @elseif (in_array($projects->status, ['Revision 1', 'Revision 2', 'Revision 3']))
+                        <span class="badge badge-sm bg-gradient-danger">{{$projects->status}}</span>
                     @elseif ($projects->status == 'Done')
-                        <span class="badge badge-sm .bg-gradient-success">{{$projects->status}}</span>
+                        <span class="badge badge-sm bg-gradient-success">{{$projects->status}}</span>
                     @else
-                        <span class="badge badge-sm .bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
+                        <span class="badge badge-sm bg-gradient-danger">{{$projects->status ?? 'undefined'}}</span>
                     @endif
-
                   </td>
                   <td class="align-middle">
-                    <a href="{{ route('talent#projectDetail', ['id' => encrypt($projects->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+
+                    <a href="{{ route('talent#projectDetail', $projects->id )}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
                         Detail
                     </a>
                   </td>
