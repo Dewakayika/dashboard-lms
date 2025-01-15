@@ -96,7 +96,6 @@ class AdminController extends Controller
             ->orWhere('notif_type', 'urgent')
             ->get();
 
-
         // Get Project with "Waiting Talent" status
         $waitingProjects = Project::where('status', 'waiting talent')->paginate(10);
 

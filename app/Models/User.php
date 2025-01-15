@@ -120,6 +120,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(ProjectQc::class);
     }
+    // withdraw
+    public function withdraws()
+    {
+        return $this->hasMany(Withdraw::class);
+    }
+    public function ewallets()
+    {
+        return $this->hasMany(Ewallet::class);
+    }
 
 
 

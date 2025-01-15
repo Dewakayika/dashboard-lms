@@ -14,6 +14,7 @@ use App\Http\Controllers\TalentCVController;
 use App\Http\Controllers\AdditionalInfoController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TalentQcController;
+use App\Http\Controllers\EwaletController;
 
 
 /*
@@ -81,12 +82,12 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::get('/project/{id}/detail', [TalentController::class, 'detail'])->name('talent#projectDetail');
     Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talent#projectRecods');
 
-
-
-
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
     Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
     Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
+
+    Route::get('/e-walet', [EwaletController::class, 'indexTalent'])->name('talent#ewalet');
+    Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talent#withdrawRequest');
 
 });
 

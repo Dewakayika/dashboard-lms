@@ -101,8 +101,6 @@ class TalentController extends Controller
             return redirect()->back()->with('error', 'You have already applied for this project.');
         }
 
-
-
         // Simpan data ke tabel apply_projects
         $apply = ApplyProject::create([
             'project_id' => $projectId,

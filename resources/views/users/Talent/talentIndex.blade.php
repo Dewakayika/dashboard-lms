@@ -187,7 +187,7 @@
                     <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    @if ($projectOverview->last()->status == 'Project Assign' || $projectOverview->last()->status == 'QC First Draft')
+                    @if ($projectOverview->isNotEmpty() && ($projectOverview->last()->status == 'Project Assign' || $projectOverview->last()->status == 'QC First Draft'))
                         <a class="badge badge-sm text-white bg-gradient-success" href="#" data-bs-toggle="modal" data-bs-target="#notApply">
                             <span class="px-2">Apply</span>
                         </a>
