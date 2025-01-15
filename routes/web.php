@@ -110,13 +110,16 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     // Update Status Project Log
     Route::post('/project-log/store', [TalentQcController::class, 'qcstoreProjectRecord'])->name('talentqc#storeProjectLog');
 
+    Route::get('/e-walet', [EwaletController::class, 'indexTalentQc'])->name('talentqc#ewalet');
+    Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talentqc#withdrawRequest');
+
+
 });
 
 // Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('/community', [AdminController::class, 'community'])->name('admin#communty'); //Admin Dashboard
     Route::get('/', [AdminController::class, 'index'])->name('admin#index'); //Admin Dashboard
-
 
     Route::get('/adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile'); //Admin Profile
     Route::get('/editProfile', [AdminController::class, 'editProfile'])->name('admin#editProfile'); //edit profile

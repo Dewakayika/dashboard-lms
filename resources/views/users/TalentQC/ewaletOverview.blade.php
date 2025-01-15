@@ -1,4 +1,4 @@
-@extends('users.Talent.layouts.dashboard-app')
+@extends('users.TalentQC.layouts.dashboard-app')
 
 @section('content')
 
@@ -115,7 +115,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="px-3 pt-3">
-                        <form action="{{ route('talent#withdrawRequest') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('talentqc#withdrawRequest') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="user_id" value="{{ $userData->id }}">
                             <input type="hidden" name="total_project" value="{{$projects}}">
