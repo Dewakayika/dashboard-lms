@@ -118,7 +118,7 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
 
 // Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
-    Route::get('/community', [AdminController::class, 'community'])->name('admin#communty'); //Admin Dashboard
+    Route::get('/community', [AdminController::class, 'community'])->name('admin#community'); //Admin Dashboard
     Route::get('/', [AdminController::class, 'index'])->name('admin#index'); //Admin Dashboard
 
     Route::get('/adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile'); //Admin Profile
@@ -147,6 +147,13 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::post('/project-revise', [AdminController::class, 'storeProjectRevise'])->name('admin#storeProjectRevise');
     // Project Done
     Route::post('/project-done/{id}', [AdminController::class, 'storeProjectDone'])->name('admin#storeProjectDone');
+
+    Route::get('/time-statistic', [AdminController::class, 'projectTimeStatistic'])->name('admin#timeStatistic');
+
+
+    // Profile Detail User ID
+    Route::get('/profile/{id}', [AdminController::class, 'profileUser'])->name('admin#profileDetailUser');
+
 
 
     // Route::get('/create-project', function () {

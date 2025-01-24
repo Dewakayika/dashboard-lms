@@ -61,36 +61,59 @@ class AdminController extends Controller
         $projectWaiting = Project::where('status', 'Waiting Talent')->count();
         $projectDraft = Project::whereIn('status', ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted'])->count();
         $projectRevise = Project::whereIn('status', ['Revise 1', 'Revise 2', 'Revise 3'])->count();
+        $projectQC = Project::where('status', ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3'])->count();
         $projectCompleted = Project::where('status', 'Done')->count();
         $totalProject = Project::count();
 
-        // Total Panel
-        $totalPanel = Project::sum('number_of_panel');
+        // Menghitung total proyek di tahun ini
+        $totalProjectThisYear = Project::whereYear('created_at', Carbon::now()->year)->count();
 
-        // Ambil semua proyek yang memiliki log status "Project Assign" dan "First Draft Submitted"
-        $projects = DB::table('projects')
-            ->join('project_logs as assign_log', function ($join) {
-                $join->on('projects.id', '=', 'assign_log.project_id')
-                    ->where('assign_log.status', 'Project Assign');
-            })
-            ->join('project_logs as draft_log', function ($join) {
-                $join->on('projects.id', '=', 'draft_log.project_id')
-                    ->where('draft_log.status', 'First Draft Submitted');
-            })
-            ->select('projects.id', 'assign_log.timestamp as assign_time', 'draft_log.timestamp as draft_time')
-            ->get();
+        //Menghitung total waktu timestamp yang diperlukan dari statusnya Project Assign ke First Draft Submitted pada tabel project_logs
+        $projects = ProjectLog::select('project_id', 'status', 'timestamp')
+        ->whereIn('status', ['Project Assign', 'First Draft Submitted'])
+        ->orderBy('project_id')
+        ->orderBy('timestamp')
+        ->get()
+        ->groupBy('project_id');
 
-        $durations = [];
+        $totalDuration = 0;
+        $projectCount = 0;
 
-        foreach ($projects as $project) {
-            $assignTime = Carbon::parse($project->assign_time);
-            $draftTime = Carbon::parse($project->draft_time);
-            $duration = $draftTime->diffInDays($assignTime);
-            $durations[] = $duration;
+        foreach ($projects as $projectLogs) {
+            $assignLog = $projectLogs->firstWhere('status', 'Project Assign');
+            $firstDraftLog = $projectLogs->firstWhere('status', 'First Draft Submitted');
+
+            if ($assignLog && $firstDraftLog) {
+                $assignTime = Carbon::parse($assignLog->timestamp);
+                $firstDraftTime = Carbon::parse($firstDraftLog->timestamp);
+                $duration = $firstDraftTime->diffInSeconds($assignTime);
+                $totalDuration += $duration;
+                $projectCount++;
+            }
         }
 
-        $averageDuration = !empty($durations) ? array_sum($durations) / count($durations) : 0;
+        $averageDuration = $projectCount > 0 ? $totalDuration / $projectCount : 0;
 
+
+            // Mengambil total proyek per bulan
+        $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'asc')
+        ->orderBy('month', 'asc')
+        ->get();
+
+        // Mengonversi data ke format yang dapat digunakan di chart
+        $months = [];
+        $totals = [];
+
+        foreach ($projects as $project) {
+            $months[] = Carbon::createFromDate($project->year, $project->month, 1)->format('F Y');
+            $totals[] = $project->total;
+        }
+
+
+        // Total Panel
+        $totalPanel = Project::sum('number_of_panel');
 
         $notification = Notification::where('email', $admin_data->email)
             ->orWhere('notif_type', 'urgent')
@@ -105,11 +128,16 @@ class AdminController extends Controller
             'notification' => $notification,
             'projectWaiting' => $projectWaiting,
             'projectDraft' => $projectDraft,
+            'projectQC' => $projectQC,
             'projectRevise' => $projectRevise,
             'projectCompleted' => $projectCompleted,
             'totalProject' => $totalProject,
             'totalPanel' => $totalPanel,
-            'averageDuration' => $averageDuration
+            'totalProjectThisYear' => $totalProjectThisYear,
+            'averageDuration' => $averageDuration,
+            'months' => $months,
+            'totals' => $totals,
+
 
         ]);
     }
@@ -131,6 +159,131 @@ class AdminController extends Controller
             'adminData' => $admin_data,
             'talentQc' => $talent_qc,
             'notification' => $notification
+        ]);
+    }
+
+
+    // Project Time Statistic
+    public function projectTimeStatistic(){
+        // Ambil pengguna yang sedang login
+        $user = auth()->user();
+
+        // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
+        $notifications = Notification::where('notif_type', 'urgent')
+        ->orWhere('email', $user->email) // For general notifications based on the authenticated user's email
+        ->get();
+
+        // Mengambil data seluruh user dan menghitung jumlah proyek yang telah dia seleesaikan.
+        $userProjects = Project::select(
+            'talent',
+            'users.id as user_id',  // Add this to get user ID
+            DB::raw('COUNT(*) as total_projects'),
+            DB::raw('SUM(number_of_panel) as total_panels')
+        )
+        ->join('users', 'users.name', '=', 'projects.talent')  // Join with users table
+        ->where('projects.status', 'Done')   
+        ->groupBy('talent', 'users.id')  
+        ->get();
+
+
+
+        // Mengambil nama talent di tabel project
+        $projectOverview = Project::select('talent');
+        
+        // Melakukan kalkulasi waktu timestamp sejak status 'Project Assign' sampai 'First Draft Submitted' pada tabel project log kemudian mengambil project ID, setelah ID di temukan dilakukan pencarian siapa 'talent' dari project ID tersebut.
+        // Retrieve all projects with their associated talent names
+        $projects = Project::select('id as project_id', 'talent')->get();
+        
+        $talentDurations = [];
+        $talentProjectCounts = []; // To track the number of projects for each talent
+
+        foreach ($projects as $project) {
+            // Retrieve project logs for the relevant statuses
+            $projectLogs = ProjectLog::select('status', 'timestamp')
+                ->where('project_id', $project->project_id)
+                ->whereIn('status', ['Project Assign', 'First Draft Submitted'])
+                ->orderBy('timestamp')
+                ->get();
+
+            // Check if we have both logs
+            if ($projectLogs->count() < 2) {
+                continue; // Skip if there are not enough logs
+            }
+
+            $assignLog = $projectLogs->firstWhere('status', 'Project Assign');
+            $firstDraftLog = $projectLogs->firstWhere('status', 'First Draft Submitted');
+
+            if ($assignLog && $firstDraftLog) {
+                $assignTime = Carbon::parse($assignLog->timestamp);
+                $firstDraftTime = Carbon::parse($firstDraftLog->timestamp);
+                $duration = $firstDraftTime->diffInSeconds($assignTime);
+
+                // Store the duration for the talent
+                if (!isset($talentDurations[$project->talent])) {
+                    $talentDurations[$project->talent] = 0;
+                    $talentProjectCounts[$project->talent] = 0; // Initialize project count
+                }
+
+                $talentDurations[$project->talent] += $duration;
+                $talentProjectCounts[$project->talent]++; // Increment project count
+            }
+        }
+
+        // Prepare the final response with talent names, their total durations, and average durations
+        $result = [];
+        $talentNames = [];
+        $totalDurations = [];
+        $averageDurationsInHours = []; // New array to store average durations in hours
+
+        foreach ($talentDurations as $talent => $totalDuration) {
+            $averageDurationInSeconds = $talentProjectCounts[$talent] > 0 ? $totalDuration / $talentProjectCounts[$talent] : 0;
+            
+            // Calculate average duration in hours and format it
+            $averageDurationInHours = $averageDurationInSeconds / 3600; // Convert seconds to hours
+            $formattedAverageDuration = gmdate("H:i:s", $averageDurationInSeconds); // Format as hours:minutes:seconds
+
+            $result[] = [
+                'talent_name' => $talent,
+                'total_seconds' => $totalDuration,
+                'formatted_duration' => gmdate("H:i:s", $totalDuration), // Format as hours:minutes:seconds
+                'average_seconds' => $averageDurationInSeconds,
+                'average_hours' => $averageDurationInHours, // Store average in hours
+                'formatted_average_duration' => $formattedAverageDuration // Format average duration
+            ];
+
+            // Prepare data for the chart
+            $talentNames[] = $talent;
+            $totalDurations[] = $totalDuration;
+            $averageDurationsInHours[] = $averageDurationInHours; // Store average in hours for the chart
+        }
+
+        usort($result, function ($a, $b) {
+            return $a['average_seconds'] <=> $b['average_seconds'];
+        });
+
+        // Fetch user data based on talent names
+        $users = User::whereIn('name', $talentNames)->get()->keyBy('name');
+
+        // Add email and profile information to the result
+        foreach ($result as &$talent) {
+            if (isset($users[$talent['talent_name']])) {
+                $talent['email'] = $users[$talent['talent_name']]->email;
+            } else {
+                $talent['email'] = null; // Handle case where user is not found
+            }
+        }
+
+
+        return view('users.Admin.projectTimeOverview')->with([
+            'adminData' => $user,
+            'notification' => $notifications,
+            'projectOverview' => $projectOverview,
+            'result' => $result,
+            'talentNames' => $talentNames,
+            'totalDurations' => $totalDurations,
+            'averageDurations' => $averageDurationsInHours,
+            'userProjects' => $userProjects,
+
         ]);
     }
 
@@ -156,24 +309,6 @@ class AdminController extends Controller
         $project->file = $validated['file'];
         $project->status = 'Waiting Talent';
         $project->save();
-
-        // Kirim email ke talent QC
-        Mail::to($talentQc->email)->send(new TalentQcAssigned($project));
-
-
-        // Kirimi semua email talent dan talent QC di database kecuali talent QC dengan email yang terdaftar sebagai QC Project yang di assign
-        $talents = User::where('role', 'talent')->get();
-        $talentQcs = User::where('role', 'talent_qc')->get();
-        foreach ($talents as $talent) {
-            foreach ($talentQcs as $talentQc) {
-                if ($talent->email != $talentQc->email) {
-                    Mail::send('emails.newProject', ['projectName' => $request->comic_name, 'chapter' => $request->chapter_number], function ($message) use ($talent, $talentQc) {
-                        $message->to([$talent->email, $talentQc->email])
-                                ->subject("New Project Created");
-                    });
-                }
-            }
-        }
 
         // Simpan detail email yang dikirim ke tabel "notifikasi"
         Notification::create([
@@ -363,6 +498,11 @@ class AdminController extends Controller
     public function listUser(Request $request)
     {
         $admin_data = User::where('id', Auth::id())->first();
+        // Notification
+        $notification = Notification::where('email', $admin_data->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
         $role = $request->input('role'); // Mendapatkan role dari request (Intern atau Talent)
 
         if ($role == 'Intern') {
@@ -376,8 +516,70 @@ class AdminController extends Controller
             $user_data = User::with(['talent', 'intern'])->paginate(10);
         }
 
-        return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role])->with(['adminData' => $admin_data]);
+        return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role])
+            ->with(['adminData' => $admin_data,
+                    'notification' => $notification]);
     }
+
+
+    // Profile User by Id
+    public function profileUser($id)
+    {
+        $user_data = User::where('id', $id)->first();
+        // mengambil data talent dan talent qc berdasarkan ID
+        $talent=Talent::where('user_id', $id)->first();
+        $talentQc=TalentQC::where('user_id', $id)->first();
+
+        $admin_data = User::where('id', Auth::id())->first();
+
+        $notification = Notification::where('email', $admin_data->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
+        $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
+        ->where('talent', $user_data->name)  // Add this line to filter by talent name
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'asc')
+        ->orderBy('month', 'asc')
+        ->get();
+
+        // Convert data for chart
+        $months = [];
+        $totals = [];
+
+        foreach ($projects as $project) {
+            $months[] = Carbon::createFromDate($project->year, $project->month, 1)->format('F Y');
+            $totals[] = $project->total;
+        }
+
+
+
+        $projectOverview = Project::where('talent', $user_data->name)
+        ->where('status', 'Done')
+        ->select(
+            'id',
+            'comic_name',
+            'chapter_number',
+            'number_of_panel',
+            'updated_at',
+            'status'
+        )
+        ->orderBy('updated_at', 'desc')
+        ->get();
+        
+
+        return view('users.Admin.profileUser')->with([
+            'userData' => $user_data, 
+            'adminData' => $admin_data, 
+            'notification' => $notification,
+            'talent' => $talent,
+            'talentQc' => $talentQc,
+            'projectOverview' => $projectOverview,
+            'months' => $months,
+            'totals' => $totals,
+        ]);
+    }
+    
 
 
     // Admin Delete User
@@ -530,6 +732,12 @@ class AdminController extends Controller
     public function talentCV(Request $request)
     {
         $admin_data = User::where('id', Auth::id())->first();
+
+        // Notification
+        $notification = Notification::where('email', $admin_data->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
         // Dapatkan nilai status dari request, defaultnya adalah null
         $status = $request->input('status');
 
@@ -550,6 +758,7 @@ class AdminController extends Controller
             'status' => $status,
             'registrationCodes' => $registrationCodes,
             'adminData' => $admin_data,
+            'notification' => $notification
         ]);
     }
 

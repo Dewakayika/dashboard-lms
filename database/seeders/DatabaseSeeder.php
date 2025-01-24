@@ -43,6 +43,8 @@ class DatabaseSeeder extends Seeder
 
         Talent::factory()->create();
 
+
+
         User::factory()->create([
             'id' => '3',
             'name' => 'Admin',
@@ -64,6 +66,29 @@ class DatabaseSeeder extends Seeder
         ]);
 
         TalentQc::factory()->create();
+
+
+        User::factory()->create([
+            'id' => '5',
+            'name' => 'Talent',
+            'role' => 'talent2',
+            'email' => 'talent2@gmail.com',
+            'password' => Hash::make('123123'),
+            'registration_code' => 'PADMA',
+        ]);
+
+        Talent::factory()->create();
+
+        User::factory()->create([
+            'id' => '5',
+            'name' => 'Talent',
+            'role' => 'talent3',
+            'email' => 'talent3@gmail.com',
+            'password' => Hash::make('123123'),
+            'registration_code' => 'PADMA',
+        ]);
+
+        Talent::factory()->create();
 
 
 
