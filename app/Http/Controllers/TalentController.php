@@ -78,6 +78,45 @@ class TalentController extends Controller
             // Ambil data Talent berdasarkan user_id
             $talent_data = Talent::where('user_id', $user->id)->first();
 
+
+
+        // Data overview
+        $onGoingProject = Project::where('talent', $user->name)
+        // satatus tidak sama dengan "Done"
+            ->where('status', '!=', 'Done')
+            ->count();
+
+        $projectThisMonth = Project::where('talent', $user->name)
+            ->whereMonth('created_at', '=', Carbon::now()->month)
+            ->count();
+
+        $AllProject = Project::where('talent', $user->name)
+            ->count();
+
+
+        // Donut Chart Data
+        $projectAssign = Project::where('talent', $user->name)
+            ->where('status', 'Project Assign')
+            ->count();
+
+        $projectQc = Project::where('talent', $user->name)
+            ->where('status', ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3'])
+            ->count();
+
+        $projectDraft = Project::where('talent', $user->name)
+            ->where('status', ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted'])
+            ->count();
+
+        $projectRevise = Project::where('talent', $user->name)
+            ->where('status', ['Revise 1', 'Revise 2', 'Revise 3'])
+            ->count();
+
+        $projectCompleted = Project::where('talent', $user->name)
+            ->where('status', 'Done')
+            ->count();
+
+
+
             // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
             return view('users.Talent.talentIndex')->with([
                 'talentData' => $talent_data,
@@ -88,6 +127,14 @@ class TalentController extends Controller
                 'projectLogs' => $projectLogs,
                 'projectOverview' => $projectOverview,
                 'latestStatus' => $latestStatus,
+                'onGoingProject' => $onGoingProject,
+                'projectThisMonth' => $projectThisMonth,
+                'AllProject' => $AllProject,
+                'projectAssign' => $projectAssign,
+                'projectQc' => $projectQc,
+                'projectCompleted' => $projectCompleted,
+                'projectDraft' => $projectDraft,
+                'projectRevise' => $projectRevise,
             ]);
         }
     }

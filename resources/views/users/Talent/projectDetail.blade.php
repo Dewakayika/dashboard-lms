@@ -97,7 +97,7 @@
                 const countdownElem = document.getElementById(`countdown-${id}`);
                 let endTime;
 
-                if (["Project Assign", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
+                if (["Waiting Talent", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
                     endTime = new Date(new Date(timestamp).getTime() + 30 * 60 * 60 * 1000); // Add 30 hours for deadline
                 } else {
                     endTime = new Date(timestamp);

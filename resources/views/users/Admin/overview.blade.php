@@ -98,7 +98,7 @@
                 <h6 class="mb-0">On Going Project</h6>
             </div>
             <div class="p-3 min-height-160">
-                <canvas id="radarChart"></canvas>
+                <canvas  id="radarChart" ></canvas>
             </div>
             {{-- <div class="card-body p-3 justify-content-between">
                 <ul class=" justify-content-between">

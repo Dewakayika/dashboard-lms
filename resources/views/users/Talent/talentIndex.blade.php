@@ -3,39 +3,39 @@
 @section('content')
 
   <div class="row">
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
       <div class="card">
-        <div class="card-body bg-primary p-3 border-radius-xl">
+        <div class="card-body bg-white bg-primary p-3 border-radius-xl">
           <div class="row">
             <div class="col-8">
-                <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                    <i class="fa-solid fa-repeat fa-xl" style="color: #ed3237;"></i>
-                </div>
-              <div class="numbers mt-4">
-                    <h5 class="font-weight-bolder text-white mb-0">
-                    1
-                    </h5>
-                <p class="text-sm mb-0 text-white text-capitalize font-weight-light">On Going Project</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body bg-secondary p-3 border-radius-xl">
-          <div class="row">
-            <div class="col-8">
-                <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                    <i class="fa-solid fa-receipt fa-xl" style="color: #27272a;"></i>
+                <div class="icon icon-shape bg-red-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-file fa-lg" style="color: #e67e22;" ></i>
                   </div>
               <div class="numbers mt-4">
-                <h5 class="font-weight-bolder text-white mb-0">
-                    20
-                  </h5>
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Project This Month</p>
+                    <h3 class="font-weight-bolder text-gray-900 mb-0">
+                    {{$onGoingProject}}
+                    </h3>
+                <p class="text-sm mb-0 text-black text-capitalize font-weight-light">On Going Project</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body bg-white bg-secondary p-3 border-radius-xl">
+          <div class="row">
+            <div class="col-8">
+                <div class="icon icon-shape bg-blue-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-rectangle-list fa-lg" style="color: #2e86c1 "></i>
+                  </div>
+              <div class="numbers mt-4">
+                <h3 class="font-weight-bolder text-gray-900 mb-0">
+                    {{$projectThisMonth}}
+                  </h3>
+                <p class="text-sm mb-0 text-capitalize text-black font-weight-light">Project This Month</p>
               </div>
             </div>
           </div>
@@ -43,19 +43,19 @@
       </div>
     </div>
 
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
         <div class="card">
-          <div class="card-body bg-secondary p-3 border-radius-xl">
+          <div class="card-body bg-white bg-secondary p-3 border-radius-xl">
             <div class="row">
               <div class="col-8">
-                  <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                      <i class="fa-solid fa-circle-check fa-xl" style="color: #27272a;"></i>
-                    </div>
+                <div class="icon icon-shape bg-green-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-file-lines" style="color: #1ea079;"></i>
+                  </div>
                 <div class="numbers mt-4">
-                  <h5 class="font-weight-bolder text-white mb-0">
-                      100
-                    </h5>
-                  <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Total Project</p>
+                  <h3 class="font-weight-bolder text-gray-900 mb-0">
+                      {{$AllProject}}
+                    </h3>
+                  <p class="text-sm mb-0 text-capitalize text-black font-weight-light">Total Project</p>
                 </div>
               </div>
             </div>
@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
         <div class="card">
             <div class="card-body bg-white p-0 border-radius-xl">
                 @if ($projectLogs->isempty())
@@ -120,13 +120,13 @@
                 @endif
             </div>
         </div>
-        </div>
+    </div> --}}
   </div>
 
 
-  <div class="row my-4">
+  <div class="row my-4" >
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-      <div class="card">
+      <div class="card" style="min-height: 450px">
         <div class="card-header pb-0">
           <div class="row">
             <div class="col-lg-6 col-7">
@@ -204,6 +204,7 @@
                 @endforeach
               </tbody>
             </table>
+            @if ($projects->hasMorePages())
             <ul class="pagination justify-content-center">
                 @if ($projects->onFirstPage())
                     <li class="page-item disabled px-1">
@@ -231,6 +232,9 @@
                     </li>
                 @endif
             </ul>
+            @else
+
+            @endif
             @endif
           </div>
         </div>
@@ -278,20 +282,16 @@
 
     <div class="col-lg-4 col-md-6">
         <div class="card h-100">
-            @if ($groupedProjectStatuses->isEmpty())
-            <div class="card-header pb-0">
-                <h6>Project Status</h6>
-            </div>
-            <div class="text-center d-flex align-items-center justify-content-center">
-                <div class="">
-                    <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
-                    <p class="text-xs">There's no Project Status Recorded</p>
-                </div>
-            </div>
-            @else
 
-            <div class="card-body p-3">
-                <div id="projectCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="card-header pb-0">
+                <h6>Project On Going</h6>
+            </div>
+
+            <div class="card-body">
+                <div class="min-height-160">
+                    <canvas id="radarChart" height="200px" width="80px"></canvas>
+                </div>
+                {{-- <div id="projectCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         @foreach ($groupedProjectStatuses as $projectId => $statuses)
                             <div class="carousel-item @if ($loop->first) active @endif">
@@ -382,9 +382,9 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
-                </div>
+                </div> --}}
             </div>
-            @endif
+
         </div>
     </div>
   </div>
@@ -531,176 +531,65 @@
   </script>
 
   <script>
-    window.onload = function() {
-      var ctx = document.getElementById("chart-bars").getContext("2d");
-
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-            label: "Sales",
-            tension: 0.4,
-            borderWidth: 0,
-            borderRadius: 4,
-            borderSkipped: false,
-            backgroundColor: "#fff",
-            data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
-            maxBarThickness: 6
-          }, ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-              },
-              ticks: {
-                suggestedMin: 0,
-                suggestedMax: 500,
-                beginAtZero: true,
-                padding: 15,
-                font: {
-                  size: 14,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-                color: "#fff"
-              },
-            },
-            x: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false
-              },
-              ticks: {
-                display: false
-              },
-            },
-          },
-        },
-      });
-
-
-      var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-      var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-      gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-      gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-      gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-      var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-      gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-      gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-      gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
+      const ctx2 = document.getElementById('radarChart').getContext('2d');
 
       new Chart(ctx2, {
-        type: "line",
-        data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-              label: "Mobile apps",
-              tension: 0.4,
-              borderWidth: 0,
-              pointRadius: 0,
-              borderColor: "#cb0c9f",
-              borderWidth: 3,
-              backgroundColor: gradientStroke1,
-              fill: true,
-              data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-              maxBarThickness: 6
-
-            },
-            {
-              label: "Websites",
-              tension: 0.4,
-              borderWidth: 0,
-              pointRadius: 0,
-              borderColor: "#3A416F",
-              borderWidth: 3,
-              backgroundColor: gradientStroke2,
-              fill: true,
-              data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-              maxBarThickness: 6
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            }
+          type: 'doughnut',
+          data: {
+              labels: ['Project Assign', 'Project QC', 'Project Draft', 'Project Revision', 'Project Completed'],
+              datasets: [{
+                  label: 'Project Status',
+                  data: [{{$projectAssign}}, {{$projectQc}}, {{$projectDraft}}, {{$projectRevise}}, {{$projectCompleted}}],
+                  backgroundColor: [
+                      '#f1c40f',
+                      '#d35400',
+                      '#2e86c1',
+                      '#c0392b',
+                      '#28b463'
+                  ],
+                  hoverOffset: 4
+              }]
           },
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: true,
-                drawOnChartArea: true,
-                drawTicks: false,
-                borderDash: [5, 5]
+          options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              aspectRatio: 1.4,  // Adjusted for better fit with bottom legend
+              plugins: {
+                  tooltip: {
+                      callbacks: {
+                          label: function(tooltipItem) {
+                              return tooltipItem.label + ': ' + tooltipItem.raw;
+                          }
+                      }
+                  },
+                  legend: {
+                      position: 'bottom', // Changed from 'right' to 'bottom'
+                      labels: {
+                          boxWidth: 12,
+                          padding: 10,
+                          usePointStyle: false, // Makes legend items circular
+                          pointStyle: 'circle'
+                      },
+                      align: 'center', // Centers the legend items
+                      maxWidth: 400 // Controls the maximum width of the legend
+                  }
               },
-              ticks: {
-                display: true,
-                padding: 10,
-                color: '#b2b9bf',
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-              }
-            },
-            x: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-                borderDash: [5, 5]
+              layout: {
+                  padding: {
+                      left: 10,
+                      right: 10,
+                      top: 0,
+                      bottom: 20 // Added more bottom padding for legend
+                  }
               },
-              ticks: {
-                display: true,
-                color: '#b2b9bf',
-                padding: 20,
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-              }
-            },
-          },
-        },
+              cutout: '50%'
+          }
       });
-    }
   </script>
+
+
+
+
+
 @endpush
 
