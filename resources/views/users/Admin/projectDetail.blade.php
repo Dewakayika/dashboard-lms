@@ -1,26 +1,4 @@
-{{--
-    DESCRIPTION: This Blade template extends the 'users.admin.layouts.dashboard-app' layout and displays detailed information about a specific project.
-    DEPENDENCIES:
-        - Carbon\Carbon for date and time manipulation.
-    SECTIONS:
-        - @section('content'): Main content section that includes:
-            - Breadcrumb navigation.
-            - Project header with background image and project details.
-            - Conditional display of project status and actions based on the latest project log.
-            - Countdown timer for project deadlines.
-            - Modal for project completion confirmation.
-            - Project information table.
-            - Project records and QC records table.
-            - Modal for adding new project revisions.
-            - Modal for sharing project details via WhatsApp.
-            - Project revision table.
-            - Modal for displaying QC messages.
-            - Project status timeline.
-    SCRIPTS:
-        - JavaScript for handling countdown timer.
-        - JavaScript for showing confirmation modal and submitting project completion form.
-        - JavaScript for sharing project details via WhatsApp.
---}}
+
 @extends('users.admin.layouts.dashboard-app')
 
 @php
@@ -123,7 +101,7 @@
                         const countdownElem = document.getElementById(`countdown-${id}`);
                         let endTime;
 
-                        if (["Project Assign", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
+                        if (["Waiting Talent", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
                             endTime = new Date(new Date(timestamp).getTime() + 30 * 60 * 60 * 1000); // Add 30 hours for deadline
                         } else {
                             endTime = new Date(timestamp);

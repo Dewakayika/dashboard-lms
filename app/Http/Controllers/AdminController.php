@@ -70,7 +70,7 @@ class AdminController extends Controller
 
         //Menghitung total waktu timestamp yang diperlukan dari statusnya Project Assign ke First Draft Submitted pada tabel project_logs
         $projects = ProjectLog::select('project_id', 'status', 'timestamp')
-        ->whereIn('status', ['Project Assign', 'First Draft Submitted'])
+        ->whereIn('status', ['Waiting Talent', 'First Draft Submitted'])
         ->orderBy('project_id')
         ->orderBy('timestamp')
         ->get()
@@ -80,7 +80,7 @@ class AdminController extends Controller
         $projectCount = 0;
 
         foreach ($projects as $projectLogs) {
-            $assignLog = $projectLogs->firstWhere('status', 'Project Assign');
+            $assignLog = $projectLogs->firstWhere('status', 'Waiting Talent');
             $firstDraftLog = $projectLogs->firstWhere('status', 'First Draft Submitted');
 
             if ($assignLog && $firstDraftLog) {
@@ -122,6 +122,8 @@ class AdminController extends Controller
         // Get Project with "Waiting Talent" status
         $waitingProjects = Project::where('status', 'waiting talent')->paginate(10);
 
+        $talent_qc = User::where('role', 'talent_qc')->get();
+
         return view ('users.Admin.Overview')->with([
             'adminData' => $admin_data,
             'projectsList' => $waitingProjects,
@@ -137,8 +139,7 @@ class AdminController extends Controller
             'averageDuration' => $averageDuration,
             'months' => $months,
             'totals' => $totals,
-
-
+            'talentQc' => $talent_qc,
         ]);
     }
 
@@ -190,7 +191,6 @@ class AdminController extends Controller
         // Mengambil nama talent di tabel project
         $projectOverview = Project::select('talent');
         
-        // Melakukan kalkulasi waktu timestamp sejak status 'Project Assign' sampai 'First Draft Submitted' pada tabel project log kemudian mengambil project ID, setelah ID di temukan dilakukan pencarian siapa 'talent' dari project ID tersebut.
         // Retrieve all projects with their associated talent names
         $projects = Project::select('id as project_id', 'talent')->get();
         
@@ -201,7 +201,7 @@ class AdminController extends Controller
             // Retrieve project logs for the relevant statuses
             $projectLogs = ProjectLog::select('status', 'timestamp')
                 ->where('project_id', $project->project_id)
-                ->whereIn('status', ['Project Assign', 'First Draft Submitted'])
+                ->whereIn('status', ['Waiting Talent', 'First Draft Submitted'])
                 ->orderBy('timestamp')
                 ->get();
 
@@ -210,7 +210,7 @@ class AdminController extends Controller
                 continue; // Skip if there are not enough logs
             }
 
-            $assignLog = $projectLogs->firstWhere('status', 'Project Assign');
+            $assignLog = $projectLogs->firstWhere('status', 'Waiting Talent');
             $firstDraftLog = $projectLogs->firstWhere('status', 'First Draft Submitted');
 
             if ($assignLog && $firstDraftLog) {
@@ -293,22 +293,31 @@ class AdminController extends Controller
             'comic_name' => 'required|string|max:255',
             'chapter_number' => 'required|integer',
             'talent_qc' => 'required|exists:users,id', // Pastikan ID talent QC valid
-            'number_of_panel' => 'required|integer',
+            'number_of_panel' => 'nullable|integer',
             'file' => 'required|string',
         ]);
 
         // Cari data user berdasarkan ID talent_qc
         $talentQc = User::find($validated['talent_qc']);
 
+        // First save the project
         $project = new Project();
         $project->user_id = auth()->id();
         $project->comic_name = $validated['comic_name'];
         $project->chapter_number = $validated['chapter_number'];
         $project->talent_qc = $talentQc->name; // Simpan nama talent QC
-        $project->number_of_panel = $validated['number_of_panel'];
         $project->file = $validated['file'];
         $project->status = 'Waiting Talent';
         $project->save();
+
+        // Then create the project log using the newly saved project's information
+        $log = ProjectLog::create([
+            'project_id' => $project->id,  // Get ID from the newly saved project
+            'user_id' => auth()->id(),     // Get current authenticated user's ID
+            'talent_qc' => $project->talent_qc,  // Get talent_qc from the newly saved project
+            'timestamp' => Carbon::now(), 
+            'status' => $project->status,   // Get status from the newly saved project
+        ]);
 
         // Simpan detail email yang dikirim ke tabel "notifikasi"
         Notification::create([
@@ -318,7 +327,7 @@ class AdminController extends Controller
             'email' => $talentQc->email,
         ]);
 
-        return redirect()->route('admin#createNewProject')->with('success', 'Project created successfully, email sent to Talent QC, and notification recorded!');
+        return redirect()->route('admin#index')->with('success', 'Project created successfully!');
     }
 
 
@@ -954,7 +963,7 @@ class AdminController extends Controller
             ->get();
 
         // Mengambil project QC records
-        $qcRecords = QcRecords::where('project_id', $id)
+        $qcRecords = ProjectRecord::where('project_id', $id)
             ->get();
 
         // Ambil semua data revise records
@@ -1107,18 +1116,6 @@ class AdminController extends Controller
         $talent = User::where('name', $project->talent)->first();
         $talentQc = User::where('name', $project->talent_qc)->first();
 
-        if ($talent && $talentQc) {
-            // Kirim email ke Talent dan Talent QC
-            Mail::send('emails.projectDone', [
-                'talentName' => $talent->name,
-                'talentQcName' => $talentQc->name,
-                'projectName' => $project->comic_name,
-                'projectChapter' => $project->chapter_number,
-            ], function ($message) use ($talent, $talentQc) {
-                $message->to([$talent->email, $talentQc->email])
-                        ->subject("Project Done");
-            });
-        }
 
         // Mengirim notifikasi ke Talent, talent qc, dan user yang ter auth
         Notification::create([

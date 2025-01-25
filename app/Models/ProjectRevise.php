@@ -13,7 +13,6 @@ class ProjectRevise extends Model
         'project_id',
         'user_id',
         'revise_stage',
-        'number_of_panel',
         'revise_message',
     ];
 

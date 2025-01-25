@@ -18,7 +18,6 @@
                 <p class="text-sm mb-0 text-black text-capitalize font-weight-light">On Going Project</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>

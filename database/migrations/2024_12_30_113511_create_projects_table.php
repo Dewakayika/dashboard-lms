@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('chapter_number');
             $table->string('talent_qc');
             $table->string('talent')->nullable();
-            $table->integer('number_of_panel');
+            $table->integer('number_of_panel')->nullable();
             $table->dateTime('finish_date')->nullable(); // Otomatis saat status "done"
             $table->string('file')->nullable();
             $table->string('status')->default('Waiting Talent');

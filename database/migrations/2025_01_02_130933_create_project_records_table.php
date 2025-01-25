@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('project_stage');
-            $table->integer('number_of_panel');
+            $table->string('qc_message')->nullable();
             $table->string('link_google_drive');
             $table->timestamps();
         });

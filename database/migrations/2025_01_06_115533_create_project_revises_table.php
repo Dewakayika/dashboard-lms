@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('user_id');
             $table->string('revise_stage');
-            $table->integer('number_of_panel');
             $table->text('revise_message');
             $table->timestamps();
 

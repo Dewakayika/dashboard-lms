@@ -116,7 +116,6 @@ class TalentController extends Controller
             ->count();
 
 
-
             // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
             return view('users.Talent.talentIndex')->with([
                 'talentData' => $talent_data,
@@ -167,22 +166,6 @@ class TalentController extends Controller
             'status_type_id' => 1, // Status Type ID untuk "Project Assign"
         ]);
 
-        // Simpan log proyek ke tabel project_logs
-        $log = ProjectLog::create([
-            'project_id' => $projectId,
-            'user_id' => $user->id,
-            'talent_qc' => $project->talent_qc ?? 'N/A', // Nama Talent QC
-            'timestamp' => Carbon::now(), // Waktu status pertama kali diubah
-            'status' => $project->status, // Status proyek
-        ]);
-
-        // Menyimpan deadline untuk countdown 30 jam dari timestamp
-        $deadline = Carbon::parse($log->timestamp)->addHours(30); // Deadline 30 jam setelah timestamp
-
-        // Update project log dengan deadline
-        $log->update([
-            'deadline' => $deadline, // Menyimpan deadline
-        ]);
 
         // Kirim email ke Talent yang apply
         Mail::to($user->email)->send(new ApplyProjectMail($user, $project));
@@ -257,7 +240,7 @@ class TalentController extends Controller
             ->get();
 
         // Mengambil project QC records
-        $qcRecords = QcRecords::where('project_id', $id)
+        $qcRecords = ProjectRecord::where('project_id', $id)
             ->get();
 
         // Ambil semua data revise records
@@ -280,6 +263,32 @@ class TalentController extends Controller
         ]);
     }
 
+    // Store new SOP Record
+    public function storeSop(Request $request)
+    {
+        // Validasi input form
+        $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id', // Pastikan project_id valid
+            'checklist' => 'required|array', // Pastikan checklist adalah array
+            'checklist.*' => 'required|boolean', // Setiap nilai dalam checklist harus boolean
+        ]);
+
+        // Loop melalui checklist dan simpan ke database
+        foreach ($validated['checklist'] as $sopId => $isChecked) {
+            SopChecklist::updateOrCreate(
+                [
+                    'sop_id' => $sopId,
+                    'project_id' => $validated['project_id'],
+                    'user_id' => auth()->id(),
+                ],
+                [
+                    'is_checked' => $isChecked,
+                ]
+            );
+        }
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'SOP Updated.');
+    }
 
     public function projectRecord(Request $request)
     {
@@ -287,7 +296,7 @@ class TalentController extends Controller
             'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
             'project_stage' => 'required|string',
-            'number_of_panel' => 'required|integer',
+            'qc_message' =>'nullable|string',
             'link_google_drive' => 'required|url',
             'agree_terms' => 'accepted',
         ]);
@@ -297,9 +306,33 @@ class TalentController extends Controller
         $projectRecord->project_id = $validatedData['project_id'];
         $projectRecord->user_id = $validatedData['user_id'];
         $projectRecord->project_stage = $validatedData['project_stage'];
-        $projectRecord->number_of_panel = $validatedData['number_of_panel'];
+        // qc message nullable
+        if (isset($validatedData['qc_message'])) {
+            $projectRecord->qc_message = $validatedData['qc_message'];
+        }
         $projectRecord->link_google_drive = $validatedData['link_google_drive'];
         $projectRecord->save();
+
+        // Fungsi menyimpan
+        $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id', // Pastikan project_id valid
+            'checklist' => 'required|array', // Pastikan checklist adalah array
+            'checklist.*' => 'required|boolean', // Setiap nilai dalam checklist harus boolean
+        ]);
+
+        // Loop melalui checklist dan simpan ke database
+        foreach ($validated['checklist'] as $sopId => $isChecked) {
+            SopChecklist::updateOrCreate(
+                [
+                    'sop_id' => $sopId,
+                    'project_id' => $validated['project_id'],
+                    'user_id' => auth()->id(),
+                ],
+                [
+                    'is_checked' => $isChecked,
+                ]
+            );
+        }
 
         // Ambil project yang terkait
         $project = Project::find($request->project_id);

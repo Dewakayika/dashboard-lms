@@ -75,6 +75,51 @@ class TalentQcController extends Controller
             // Ambil data Talent berdasarkan user_id
             $talent_data = TalentQc::where('user_id', $user->id)->first();
 
+        }
+
+
+        $projectQcOverview = Project::where('talent_qc', $user->name)
+        ->paginate(10);
+                // Data overview
+        $onGoingProject = Project::where('talent', $user->name)
+        // satatus tidak sama dengan "Done"
+            ->where('status', '!=', 'Done')
+            ->count();
+
+        $projectThisMonth = Project::where('talent', $user->name)
+            ->whereMonth('created_at', '=', Carbon::now()->month)
+            ->count();
+
+        $AllProject = Project::where('talent', $user->name)
+            ->count();
+
+        // Donut Chart Data
+        $projectAssign = Project::where('talent', $user->name)
+            ->where('status', 'Project Assign')
+            ->count();
+
+        $projectQc = Project::where('talent', $user->name)
+            ->where('status', ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3'])
+            ->count();
+
+        $projectDraft = Project::where('talent', $user->name)
+            ->where('status', ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted'])
+            ->count();
+
+        $projectRevise = Project::where('talent', $user->name)
+            ->where('status', ['Revise 1', 'Revise 2', 'Revise 3'])
+            ->count();
+
+        $projectCompleted = Project::where('talent', $user->name)
+            ->where('status', 'Done')
+            ->count();
+
+        $projectQc = Project::where('talent_qc', $user->name)
+            ->count();
+
+        $projectQcOverview = Project::where('talent_qc', $user->name)
+            ->paginate(10);
+
             // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
             return view('users.TalentQC.talentIndex')->with([
                 'talentData' => $talent_data,
@@ -83,9 +128,19 @@ class TalentQcController extends Controller
                 'projects' => $projectsOffer,
                 'groupedProjectStatuses' => $groupedProjectStatuses,
                 'projectLogs' => $projectLogs,
-                'projectOverview' => $projectOverview
+                'projectOverview' => $projectOverview,
+                'onGoingProject' => $onGoingProject,
+                'projectThisMonth' => $projectThisMonth,
+                'AllProject' => $AllProject,
+                'projectAssign' => $projectAssign,
+                'projectQc' => $projectQc,
+                'projectDraft' => $projectDraft,
+                'projectRevise' => $projectRevise,
+                'projectCompleted' => $projectCompleted,
+                'projectQc' => $projectQc,
+                'projectQcOverview' => $projectQcOverview,
             ]);
-        }
+
     }
 
 
@@ -117,20 +172,8 @@ class TalentQcController extends Controller
             'status_type_id' => 1, // Status Type ID untuk "Project Assign"
         ]);
 
-        // Simpan log proyek ke tabel project_logs
-        $log = ProjectLog::create([
-            'project_id' => $projectId,
-            'user_id' => $user->id,
-            'talent_qc' => $project->talent_qc ?? 'N/A', // Nama Talent QC
-            'timestamp' => Carbon::now(), // Waktu status pertama kali diubah
-            'status' => $project->status, // Status proyek
-        ]);
 
 
-        // Update project log dengan deadline
-        $log->update([
-            'deadline' => $deadline, // Menyimpan dealdine project.
-        ]);
 
         // Kirim email ke Talent yang apply
         Mail::to($user->email)->send(new ApplyProjectMail($user, $project));
@@ -204,7 +247,7 @@ class TalentQcController extends Controller
             ->get();
 
         // Mengambil project QC records
-        $qcRecords = QcRecords::where('project_id', $id)
+        $qcRecords = ProjectRecord::where('project_id', $id)
             ->get();
 
         // Ambil semua data revise records
@@ -226,82 +269,162 @@ class TalentQcController extends Controller
         ]);
     }
 
-    // public function projectRecord(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'project_id' => 'required|exists:projects,id',
-    //         'user_id' => 'required|exists:users,id',
-    //         'project_stage' => 'required|string',
-    //         'number_of_panel' => 'required|integer',
-    //         'link_google_drive' => 'required|url',
-    //         'agree_terms' => 'accepted',
-    //     ]);
+    public function detailOwnProject($id)
+    {
 
-    //     // Simpan project record menggunakan instance model
-    //     $projectRecord = new ProjectRecord();
-    //     $projectRecord->project_id = $validatedData['project_id'];
-    //     $projectRecord->user_id = $validatedData['user_id'];
-    //     $projectRecord->project_stage = $validatedData['project_stage'];
-    //     $projectRecord->number_of_panel = $validatedData['number_of_panel'];
-    //     $projectRecord->link_google_drive = $validatedData['link_google_drive'];
-    //     $projectRecord->save();
+        // Ambil pengguna yang sedang login
+        $user = auth()->user();
 
-    //     // Ambil project yang terkait
-    //     $project = Project::find($request->project_id);
+        // Ambil semua notifikasi yang bersifat 'urgent' atau notifikasi berdasarkan email pengguna yang sedang login
+        $notifications = Notification::where('notif_type', 'urgent')
+            ->orWhere('email', $user->email)
+            ->get();
 
-    //     // Update status berdasarkan project_stage dan simpan data baru di tabel Statuses
-    //     $statusUpdates = [
-    //         'First Draft' => ['status' => 'QC First Draft', 'status_type_id' => 2],
-    //         'Revise 1' => ['status' => 'QC Revise 1', 'status_type_id' => 5],
-    //         'Revise 2' => ['status' => 'QC Revise 2', 'status_type_id' => 8],
-    //         'Revise 3' => ['status' => 'QC Revise 3', 'status_type_id' => 11],
-    //     ];
+        // Cari proyek berdasarkan ID yang telah didekripsi
+        $project = Project::findOrFail($id);
 
-    //     if (isset($statusUpdates[$request->project_stage])) {
-    //         $statusData = $statusUpdates[$request->project_stage];
+        // Ambil data project Records
+        $records = ProjectRecord::where('project_id', $id)->get();
 
-    //         // Update status di tabel Project
-    //         $project->update([
-    //             'status' => $statusData['status'],
-    //         ]);
+        // Ambil data project log berdasarkan project_id
+        $projectLogs = ProjectLog::where('project_id', $id)
+            ->get();
 
-    //         // Simpan data baru ke tabel Statuses
-    //         Status::create([
-    //             'project_id' => $project->id,
-    //             'status_type_id' => $statusData['status_type_id'],
-    //         ]);
-    //     }
 
-    //     // Kirim email
-    //     $talentQCName = $project->talent_qc;
-    //     $talentQC = User::where('name', $talentQCName)->first();
-    //     $user = User::find($request->user_id);
+        // Ambil data status berdasarkan project_id
+        $projectStatuses = Status::where('project_id', $id)->get();
 
-    //     if ($talentQC) {
-    //         // Kirim email ke Talent QC
-    //         Mail::send('emails.updateProjectforQc', ['projectStage' => $request->project_stage], function ($message) use ($talentQC) {
-    //             $message->to($talentQC->email)
-    //                     ->subject("Project Ready for QC");
-    //         });
+        // Ambil semua data SOPs
+        $sops = Sop::all();
 
-    //         // Kirim email ke Talent yang melakukan perubahan
-    //         Mail::send('emails.updateProjectStage', ['projectStage' => $request->project_stage, 'talentQC' => $talentQCName], function ($message) use ($user) {
-    //             $message->to($user->email)
-    //                     ->subject("Project Stage Submitted");
-    //         });
-    //     }
+        // Mengambil data SOP Checklists
+        $sopChecklists = SopChecklist::where('project_id', $id)
+            ->get();
 
-    //     // Simpan notifikasi
-    //     Notification::create([
-    //         'email' => $user->email,
-    //         'subject' => "{$user->name} already submit {$request->project_stage} of {$project->name}",
-    //         'message' => "The project stage has been successfully submitted. Please contact {$talentQCName} for QC.",
-    //         'notif_type' => 'general',
-    //     ]);
+        // Mengambil project QC records
+        $qcRecords = ProjectRecord::where('project_id', $id)
+            ->get();
 
-    //     // Alert sukses
-    //     return redirect()->back()->with('success', 'You have successfully Add New Records.');
-    // }
+        // Ambil semua data revise records
+        $reviseRecords = ProjectRevise::where('project_id', $id)
+            ->get();
+
+        // Kirim data proyek ke tampilan
+        return view('users.TalentQC.ownprojectDetail')->with([
+            'userData' => $user,
+            'notification' => $notifications,
+            'projectData' => $project,
+            'projectLogs' => $projectLogs,
+            'statuses' => $projectStatuses,
+            'projectRecords' => $records,
+            'sops' => $sops,
+            'sopChecklists' => $sopChecklists,
+            'qcRecords' => $qcRecords,
+            'reviseRecords' => $reviseRecords,
+
+        ]);
+    }
+
+    public function projectRecord(Request $request)
+    {
+        $validatedData = $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'user_id' => 'required|exists:users,id',
+            'project_stage' => 'required|string',
+            'qc_message' =>'nullable|string',
+            'link_google_drive' => 'required|url',
+            'agree_terms' => 'accepted',
+        ]);
+
+        // Simpan project record menggunakan instance model
+        $projectRecord = new ProjectRecord();
+        $projectRecord->project_id = $validatedData['project_id'];
+        $projectRecord->user_id = $validatedData['user_id'];
+        $projectRecord->project_stage = $validatedData['project_stage'];
+        // qc message nullable
+        if (isset($validatedData['qc_message'])) {
+            $projectRecord->qc_message = $validatedData['qc_message'];
+        }
+        $projectRecord->link_google_drive = $validatedData['link_google_drive'];
+        $projectRecord->save();
+
+        // Fungsi menyimpan SOP
+        $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id', // Pastikan project_id valid
+            'checklist' => 'required|array', // Pastikan checklist adalah array
+            'checklist.*' => 'required|boolean', // Setiap nilai dalam checklist harus boolean
+        ]);
+
+        // Loop melalui checklist dan simpan ke database
+        foreach ($validated['checklist'] as $sopId => $isChecked) {
+            SopChecklist::updateOrCreate(
+                [
+                    'sop_id' => $sopId,
+                    'project_id' => $validated['project_id'],
+                    'user_id' => auth()->id(),
+                ],
+                [
+                    'is_checked' => $isChecked,
+                ]
+            );
+        }
+
+        // Ambil project yang terkait
+        $project = Project::find($request->project_id);
+
+        // Update status berdasarkan project_stage dan simpan data baru di tabel Statuses
+        $statusUpdates = [
+            'First Draft' => ['status' => 'QC First Draft', 'status_type_id' => 2],
+            'Revise 1' => ['status' => 'QC Revise 1', 'status_type_id' => 5],
+            'Revise 2' => ['status' => 'QC Revise 2', 'status_type_id' => 8],
+            'Revise 3' => ['status' => 'QC Revise 3', 'status_type_id' => 11],
+        ];
+
+        if (isset($statusUpdates[$request->project_stage])) {
+            $statusData = $statusUpdates[$request->project_stage];
+
+            // Update status di tabel Project
+            $project->update([
+                'status' => $statusData['status'],
+            ]);
+
+            // Simpan data baru ke tabel Statuses
+            Status::create([
+                'project_id' => $project->id,
+                'status_type_id' => $statusData['status_type_id'],
+            ]);
+        }
+
+        $talentQCName = $project->talent_qc;
+        $talentQC = User::where('name', $talentQCName)->first();
+        $user = User::find($request->user_id);
+
+
+        if ($talentQC) {
+            // Kirim email ke Talent QC
+            Mail::send('emails.updateProjectforQc', ['projectStage' => $request->project_stage], function ($message) use ($talentQC) {
+                $message->to($talentQC->email)
+                        ->subject("Project Ready for QC");
+            });
+
+            // Kirim email ke Talent yang melakukan perubahan
+            Mail::send('emails.updateProjectStage', ['projectStage' => $request->project_stage, 'talentQC' => $talentQCName], function ($message) use ($user) {
+                $message->to($user->email)
+                        ->subject("Project Stage Submitted");
+            });
+        }
+
+        // Simpan notifikasi
+        Notification::create([
+            'email' => $user->email,
+            'subject' => "{$user->name} already submit {$request->project_stage} of {$project->name}",
+            'message' => "The project stage has been successfully submitted. Please contact {$talentQCName} for QC.",
+            'notif_type' => 'general',
+        ]);
+
+        // Alert sukses
+        return redirect()->back()->with('success', 'You have successfully Add New Records.');
+    }
 
 
     // Project QC Overview
@@ -434,7 +557,7 @@ class TalentQcController extends Controller
             'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
             'project_stage' => 'required|string',
-            'number_of_panel' => 'required|integer',
+            'qc_message' => 'nullable|string',
             'link_google_drive' => 'required|url',
         ]);
 
@@ -443,7 +566,7 @@ class TalentQcController extends Controller
         $projectRecord->project_id = $validatedData['project_id'];
         $projectRecord->user_id = $validatedData['user_id'];
         $projectRecord->project_stage = $validatedData['project_stage'];
-        $projectRecord->number_of_panel = $validatedData['number_of_panel'];
+        $projectRecord->qc_message = $validatedData['qc_message'];
         $projectRecord->link_google_drive = $validatedData['link_google_drive'];
         $projectRecord->save();
 
@@ -487,19 +610,6 @@ class TalentQcController extends Controller
         $talentName = $project->talent;
         $talent = User::where('name', $talentName)->first();
         $user = User::find($request->user_id);
-
-        if ($talent) {
-            // Kirim email ke Talent dan Talent QC
-            Mail::send('emails.draftSubmitted', [
-                'talentName' => $talent->name,
-                'talentQcName' => $user->name,
-                'projectStage' => $request->project_stage,
-                'projectName' => $project->name
-            ], function ($message) use ($talent, $user) {
-                $message->to([$talent->email, $user->email])
-                        ->subject("Draft Already Submitted");
-            });
-        }
 
         // Simpan notifikasi
         Notification::create([

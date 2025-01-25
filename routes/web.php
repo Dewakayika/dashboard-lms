@@ -15,6 +15,7 @@ use App\Http\Controllers\AdditionalInfoController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TalentQcController;
 use App\Http\Controllers\EwaletController;
+use App\Model\Project;
 
 
 /*
@@ -85,9 +86,13 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
     Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
     Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
+    Route::post('/sop/store', [TalentController::class, 'storeSop'])->name('talent#storeSop');
 
     Route::get('/e-walet', [EwaletController::class, 'indexTalent'])->name('talent#ewalet');
     Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talent#withdrawRequest');
+
+
+    
 
 });
 
@@ -102,6 +107,11 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     Route::post('/projects/{projectId}/apply', [TalentQcController::class, 'apply'])->name('talentqc#applyProject');
     Route::post('/sops/checklist', [TalentQcController::class, 'storeChecklist'])->name('talentqc#storeChecklist');
     Route::get('/project-qc-overview', [TalentQcController::class, 'projectQcOverview'])->name('talentqc#projectQcOverview');
+    Route::get('/talentqc/ownprojectDetail/{id}', [TalentQcController::class, 'detailOwnProject'])->name('talentqc#ownprojectDetail');
+    Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talentqc#projectRecods');
+
+
+
 
     // Route to store sop
     Route::post('/sop/store', [TalentQcController::class, 'storeSop'])->name('talentqc#storeSop');

@@ -1,17 +1,17 @@
 
-@extends('users.Talent.layouts.dashboard-app')
+@extends('users.TalentQC.layouts.dashboard-app')
 
 @php
     use Carbon\Carbon;
 @endphp
 @section('content')
 
-  <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
+  <div class="main-content position-relative bg-gray-100 ">
     <div class="container-fluid">
         <nav aria-label="container-fluid breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#index') }}">Home</a></li>
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#projectOverview') }}">Project Overview</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#index') }}">Home</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#projectOverview') }}">Project Overview</a></li>
                 <li class="breadcrumb-item active text-xs" aria-current="page">Project {{$projectData->comic_name}} Eps.{{$projectData->chapter_number}}</li>
             </ol>
         </nav>
@@ -201,7 +201,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div> <!-- Fixed: Properly closed the modal-header -->
                                     <div class="modal-body px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
-                                        <form action="{{ route('talent#projectRecods') }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('talentqc#projectRecods') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <!-- Hidden Inputs -->
                                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">

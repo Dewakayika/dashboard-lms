@@ -6,12 +6,12 @@
 
 @section('content')
 
-  <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
+  <div class="main-content position-relative bg-gray-100 ">
     <div class="container-fluid">
         <nav aria-label="container-fluid breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#index') }}">Home</a></li>
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#projectOverview') }}">Project Overview</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#index') }}">Home</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#projectOverview') }}">Project Overview</a></li>
                 <li class="breadcrumb-item active text-xs" aria-current="page">Project {{$projectData->comic_name}} Eps.{{$projectData->chapter_number}}</li>
             </ol>
         </nav>
@@ -96,7 +96,7 @@
                         const countdownElem = document.getElementById(`countdown-${id}`);
                         let endTime;
 
-                        if (["Project Assign", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
+                        if (["Waiting Talent", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
                             endTime = new Date(new Date(timestamp).getTime() + 30 * 60 * 60 * 1000); // Add 30 hours for deadline
                         } else {
                             endTime = new Date(timestamp);
@@ -238,7 +238,9 @@
                                                         <a href="{{ $record->link_google_drive }}" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Project File</a>
                                                     @endif
                                                 </td>
+                                                
                                                 <td class="align-middle text-center text-sm">
+                                                   
                                                     @if ($record->qc_message == null)
                                                         <span class="text-sm px-1 font-weight-bold">-</span>
                                                     @else
@@ -329,7 +331,7 @@
                     <p class="text-xs text-left"><strong>QC:</strong> {{ auth()->user()->name}}</p>
                     <p class="text-xs text-left"><strong>Status:</strong> {{ $projectData->status}}</p>
                     <p class="text-xs text-left"><strong>Project Link:</strong> <a href="{{$projectRecords->last()->link_google_drive ?? 'not found'}}" class="text-primary" target="_blank" style="text-decoration: underline;">Link Project</a></p>
-                    <a id="whatsappLink" href="#" target="_blank" class="btn btn-success w-100 mt-3">
+                    <a id="whatsappLink" href="#" target="_blank" class="btn w-100 mt-3 text-white" style="background-color: #0c9d08">
                         <i class="fa-brands fa-whatsapp px-2" style="color: #ffffff;"></i>
                         Share to WhatsApp
                     </a>
@@ -420,10 +422,10 @@
                 @foreach ($reviseRecords as $revise)
                 <!-- Modal -->
                 <div class="modal fade" id="qcMessageModal-{{ $revise->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $revise->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">revise Message</h5>
+                                <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">Revise Messages</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="text-left mt-2">
@@ -434,7 +436,7 @@
                                 </ul>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -446,10 +448,10 @@
         @foreach ($qcRecords as $qc)
         <!-- Modal -->
         <div class="modal fade" id="qcMessageModal-{{ $qc->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $qc->id }}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="qcMessageModalLabel-{{ $qc->id }}">QC Message</h5>
+                        <h5 class="modal-title" id="qcMessageModalLabel-{{ $qc->id }}">Message From QC</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="text-left mt-2">
@@ -460,7 +462,7 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -520,30 +522,148 @@
                         <h5 class="modal-title" id="createQcModalLabel">New QC Record</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class=" text-left px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
-                        <form action="{{ route('talentqc#storeQcRecords') }}" method="POST">
+                    <div class="text-left px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
+                        <!-- QC Type Selection -->
+                        <div class="mb-3 text-left">
+                            <label for="qc_type_selector" class="form-label">QC Type</label>
+                            <select class="form-control" id="qc_type_selector">
+                                <option value="">Select QC Type</option>
+                                <option value="approve">Approve</option>
+                                <option value="minor">Minor Revision</option>
+                                <option value="major">Major Revision</option>
+                            </select>
+                        </div>
+
+
+
+                        <!-- Approve Form -->
+                        <form id="approve_form" action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                            <hr>
+                            <p class="text-xs">This action will be directly upload your works and send in to client.</p>
                             @csrf
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <div class="mb-3 text-left">
-                                <label for="qc_stage" class="form-label text-left">QC Stage</label>
-                                <select class="form-control" id="qc_stage" name="qc_stage" required>
-                                    <option value="QC First Draft">QC First Draft</option>
-                                    <option value="QC Revise 1">QC Revise 1</option>
-                                    <option value="QC Revise 2">QC Revise 2</option>
-                                    <option value="QC Revise 3">QC Revise 3</option>
+                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+
+                            <div class="mb-2">
+                                <label for="project_stage" class="text-md text-dark">Project Draft Stage</label>
+                                <select name="project_stage" class="form-control">
+                                    <option value="">Please select Project Stage</option>
+                                    <option value="Submit First Draft">Submit First Draft</option>
+                                    <option value="Submit Revise 1">Submit Revise 1</option>
+                                    <option value="Submit Revise 2">Submit Revise 2</option>
+                                    <option value="Submit Revise 3">Submit Revise 3</option>
                                 </select>
+                                @error('project_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            </div>
+
                             <div class="mb-3 text-left">
-                                <label for="qc_message" class="form-label">QC Message</label>
+                                <label for="qc_message" class="form-label">Message to Talent</label>
                                 <textarea class="form-control" id="qc_message" name="qc_message" rows="4" required placeholder="Type QC Message"></textarea>
                                 <small class="form-text text-muted">Use commas to separate list items.</small>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 mt-3">Submit QC Record</button>
+
+
+                            <div class="mb-2">
+                                <label for="link_google_drive" class="text-md text-dark">Link Project</label>
+                                <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
+                                @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            </div>
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Draft</button>
                         </form>
+
+                        <!-- Minor Revision Form -->
+                        <form id="minor_form" action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                            <hr>
+                            <p class="text-xs">This action will be directly upload your works and send in to client.</p>
+                            @csrf
+                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
+                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+
+                            <div class="mb-2">
+                                <label for="project_stage" class="text-md text-dark">Project Draft Stage</label>
+                                <select name="project_stage" class="form-control">
+                                    <option value="">Please select Project Stage</option>
+                                    <option value="Submit First Draft">Submit First Draft</option>
+                                    <option value="Submit Revise 1">Submit Revise 1</option>
+                                    <option value="Submit Revise 2">Submit Revise 2</option>
+                                    <option value="Submit Revise 3">Submit Revise 3</option>
+                                </select>
+                                @error('project_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div class="mb-3 text-left">
+                                <label for="qc_message" class="form-label">Minor Issue</label>
+                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" required placeholder="Type QC Message"></textarea>
+                                <small class="form-text text-muted">Use commas to separate list items.</small>
+                            </div>
+
+
+                            <div class="mb-2">
+                                <label for="link_google_drive" class="text-md text-dark">Link Project</label>
+                                <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
+                                @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            </div>
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Draft</button>
+                        </form>
+
+                        <!-- Major Revision Form -->
+                        <div id="major_form" class="" style="display: none;">
+                            <div class="modal-header border-0">
+                            <h5 class="modal-title" id="shareToWhatsAppModalLabel">Contact Your Talent</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
+                                <p class="text-xs text-left"><strong>Subject:</strong> Major Revision!</p>
+                                <p class="text-xs text-left"><strong>Project Name:</strong> {{$projectData->comic_name}}</p>
+                                <p class="text-xs text-left"><strong>Talent:</strong> {{$projectData->talent}}</p>
+                                <p class="text-xs text-left"><strong>QC:</strong> {{ auth()->user()->name}}</p>
+                                <p class="text-xs text-left"><strong>Status:</strong> {{ $projectData->status}}</p>
+                                <p class="text-xs text-left"><strong>Project Link:</strong> <a href="{{$projectRecords->last()->link_google_drive ?? 'not found'}}" class="text-primary" target="_blank" style="text-decoration: underline;">Link Project</a></p>
+                                <a id="whatsappLink2" href="#" target="_blank" class="btn  w-100 mt-3 text-white" style="background-color: #0c9d08">
+                                    <i class="fa-brands fa-whatsapp px-2" style="color: #ffffff;"></i>
+                                    Contact Now!
+                                </a>
+                            </div>
+                        </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const whatsappLink = document.getElementById('whatsappLink2');
+                            whatsappLink.addEventListener("click", function (event) {
+                                event.preventDefault();
+                                const subject = "Major Revision!";
+                                const projectName = "{{$projectData->comic_name}}";
+                                const talent = "{{$projectData->talent}}";
+                                const qc = "{{ auth()->user()->name }}";
+                                const status = "{{ $projectData->status }}";
+                                const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
+                                const message = `Project Name: ${projectName}\nTalent: ${talent}\nQC: ${qc}\nStatus: ${status}\nProject Link: ${projectLink}`;
+                                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                                window.open(whatsappUrl, '_blank');
+                            });
+                        });
+                    </script>
                     </div>
                 </div>
             </div>
-        </div>
+
+        <script>
+        document.getElementById('qc_type_selector').addEventListener('change', function() {
+            // Hide all forms first
+            document.querySelectorAll('#approve_form, #minor_form, #major_form').forEach(form => {
+                form.style.display = 'none';
+            });
+
+            // Show the selected form
+            const selectedType = this.value;
+            if (selectedType) {
+                document.getElementById(`${selectedType}_form`).style.display = 'block';
+            }
+        });
+        </script>
+
+
+
     </div>
 
         {{-- Status --}}
