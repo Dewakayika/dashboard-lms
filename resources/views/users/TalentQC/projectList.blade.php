@@ -57,19 +57,19 @@
                         @if ($projects->status == 'Project Assign')
                             <span class="badge badge-sm bg-gradient-info">{{$projects->status}}</span>
                         @elseif ($projects->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
-                            <span class="badge badge-sm .bg-gradient-attentions">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-attentions">{{$projects->status}}</span>
                         @elseif ($projects->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
-                            <span class="badge badge-sm .bg-gradient-warning">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
                         @elseif ($projects->status == 'Revision 1' && 'Revision 2' && 'Revision 3')
-                            <span class="badge badge-sm .bg-gradient-danger">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-danger">{{$projects->status}}</span>
                         @elseif ($projects->status == 'Done')
-                            <span class="badge badge-sm .bg-gradient-success">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-success">{{$projects->status}}</span>
                         @else
-                            <span class="badge badge-sm .bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
+                            <span class="badge badge-sm bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
                         @endif
                       </td>
                       <td class="align-middle">
-                        <a href="{{ route('talentqc#projectDetail', ['id' ($projects->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+                        <a href="{{ route('talentqc#projectDetail', $projects->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
                             Detail
                         </a>
                       </td>

@@ -19,6 +19,9 @@ use App\Models\Sop;
 use App\Models\SopChecklist;
 use App\Models\QcRecords;
 use App\Models\ProjectRevise;
+use App\Models\ProjectComplexity;
+use App\Models\QcReview;
+use App\Models\TalentReview;
 
 
 use App\Mail\ApplyProjectMail;
@@ -254,6 +257,9 @@ class TalentQcController extends Controller
         $reviseRecords = ProjectRevise::where('project_id', $id)
             ->get();
 
+        $projectComplexity = ProjectComplexity::where('user_id', $user->id)
+            ->get();
+
         // Kirim data proyek ke tampilan
         return view('users.TalentQC.projectDetail')->with([
             'userData' => $user,
@@ -266,6 +272,7 @@ class TalentQcController extends Controller
             'sopChecklists' => $sopChecklists,
             'qcRecords' => $qcRecords,
             'reviseRecords' => $reviseRecords,
+            'projectComplexity' => $projectComplexity,
         ]);
     }
 
@@ -309,6 +316,9 @@ class TalentQcController extends Controller
         $reviseRecords = ProjectRevise::where('project_id', $id)
             ->get();
 
+        $projectComplexity = ProjectComplexity::where('project_id', $id)
+            ->get();
+
         // Kirim data proyek ke tampilan
         return view('users.TalentQC.ownprojectDetail')->with([
             'userData' => $user,
@@ -321,6 +331,7 @@ class TalentQcController extends Controller
             'sopChecklists' => $sopChecklists,
             'qcRecords' => $qcRecords,
             'reviseRecords' => $reviseRecords,
+            'projectComplexity' => $projectComplexity
 
         ]);
     }
@@ -631,6 +642,88 @@ class TalentQcController extends Controller
         return redirect()->back()->with('success', 'You have successfully Add New Records.');
     }
 
+    public function projectReview(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'complexity' => 'required|string',
+            'number_of_panel' => 'nullable|integer',
+            'message' => 'nullable|string',
+        ]);
+
+        // Save or Update project Complexity
+        ProjectComplexity::updateOrCreate(
+            [
+                'project_id' => $request->project_id,
+                'user_id' => auth()->id(),
+            ],
+            [
+                'complexity' => $request->complexity
+            ]
+        );
+
+        // Save or Update QC Review
+        QcReview::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+            ],
+            [
+                'qc_reviews' => $request->qc_reviews
+            ],
+            [
+                'message' => $request->message
+            ]
+        );
+
+        // Update project
+        Project::where('id', $request->project_id)
+            ->update(['number_of_panel' => $request->number_of_panel]);
+
+        return redirect()->back()->with('success', 'Project Review and Complexity has been saved.');
+    }
+
+
+    public function projectReviewTalent(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'complexity' => 'required|string',
+            'message' => 'nullable|string',
+            'talent_review' => 'nullable|string',
+        ]);
+
+        // Save or Update project Complexity
+        ProjectComplexity::updateOrCreate(
+            [
+                'project_id' => $request->project_id,
+                'user_id' => auth()->id(),
+            ],
+            [
+                'complexity' => $request->complexity
+            ]
+        );
+
+        // Save or Update QC Review
+        TalentReview::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+            ],
+            [
+                'talent_review' => $request->talent_review
+            ],
+            [
+                'message' => $request->message
+            ]
+        );
+
+        // Update project
+        Project::where('id', $request->project_id)
+            ->update(['number_of_panel' => $request->number_of_panel]);
+
+        return redirect()->back()->with('success', 'Project Review and Complexity has been saved.');
+    }
 
 
 

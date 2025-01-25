@@ -238,9 +238,9 @@
                                                         <a href="{{ $record->link_google_drive }}" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Project File</a>
                                                     @endif
                                                 </td>
-                                                
+
                                                 <td class="align-middle text-center text-sm">
-                                                   
+
                                                     @if ($record->qc_message == null)
                                                         <span class="text-sm px-1 font-weight-bold">-</span>
                                                     @else
@@ -514,6 +514,79 @@
             </div>
         </div>
 
+        @if($projectData->status == 'Done' && $projectComplexity->isEmpty() )
+        <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+            <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
+                <div class="card-header border-bottom pb-0 rounded">
+                    <div class=" justify-content-between align-items-center text-center">
+                        <h5 class="mb-0">Congratulations!</h5>
+                        <p class="text-md mt-2">You already finish this project, Let's give the review for project and your Talent!</p>
+                        <button type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="card-body bg-white p-3 rounded">
+                    <form action="{{ route('talentqc#Review') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="project_id" value="{{ $projectData->id }}">
+                        <input type="hidden" name="user_id" value="{{ $userData->id }}">
+
+                        <div class="mb-2 text-left" style="text-align: start;">
+                            <label for="complexity" class="text-md text-dark">Project Complexity</label>
+                            <select name="complexity" class="form-control">
+                                <option value="">Please select project complexity</option>
+                                <option value="1">Very Easy</option>
+                                <option value="2">Easy</option>
+                                <option value="3">Medium</option>
+                                <option value="4">Hard</option>
+                                <option value="5">Very Hard</option>
+
+                            </select>
+                            @error('complexity')
+                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-2 text-left" style="text-align: start;">
+                            <label for="talent_review" class="text-md text-dark">Talent Review</label>
+                            <select name="talent_review" class="form-control">
+                                <option value="">Please select Qc review</option>
+                                <option value="1">Needs Improvement</option>
+                                <option value="2">Developing</option>
+                                <option value="3">Competent</option>
+                                <option value="4">Outstanding</option>
+                                <option value="5">Exceptional</option>
+
+                            </select>
+                            @error('complexity')
+                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="text-left mb-4" style="text-align: start;">
+                            <label for="message" class="text-md text-dark">Message for QC</label>
+                            <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
+                            @error('message')
+                            <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+
+
+                        <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
+                    </form>
+
+
+                    <!-- Add your form or content here -->
+                </div>
+
+            </div>
+        </div>
+        @else
+        <!-- Your content when project complexity exists -->
+        @endif
+
         {{-- Modal New QC --}}
         <div class="modal fade" id="createQcModal" tabindex="-1" aria-labelledby="createQcModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 500px;">
@@ -661,6 +734,10 @@
             }
         });
         </script>
+
+
+
+
 
 
 

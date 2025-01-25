@@ -30,19 +30,20 @@ class EwaletController extends Controller
 
         // Inisiate Variable Rentang Waktu
         $startDate = Carbon::now()->subMonth()->startOfMonth()->addDays(10);
-        $endDate = Carbon::now()->startOfMonth()->addDays(12);
+        $endDate = Carbon::now()->startOfMonth()->addDays(30);
 
         // Get Data Project dari user yang login dengan status Done
         $projects = Project::where('status', 'Done')
             ->where('talent', $userData->name)
-            ->whereBetween('finish_date', [$startDate, $endDate])
+            ->whereMonth('finish_date', now()->month)
             ->count();
 
         // Get Total Panel yang dikerjakan oleh user pada setiap rentang waktu
         $totalPanel = Project::where('status', 'Done')
             ->where('talent', $userData->name)
-            ->whereBetween('finish_date', [$startDate, $endDate])
+            ->whereMonth('finish_date', now()->month)
             ->sum('number_of_panel');
+
 
         // Calculate Panel perRate
         if ($totalPanel < 40) {
@@ -127,17 +128,18 @@ class EwaletController extends Controller
             $startDate = Carbon::now()->subMonth()->startOfMonth()->addDays(10);
             $endDate = Carbon::now()->startOfMonth()->addDays(12);
 
-            // Get Data Project dari user yang login dengan status Done
-            $projects = Project::where('status', 'Done')
-                ->where('talent', $userData->name)
-                ->whereBetween('finish_date', [$startDate, $endDate])
-                ->count();
+                // Get Data Project dari user yang login dengan status Done
+                $projects = Project::where('status', 'Done')
+                    ->where('talent', $userData->name)
+                    ->whereMonth('finish_date', now()->month)
+                    ->count();
 
-            // Get Total Panel yang dikerjakan oleh user pada setiap rentang waktu
-            $totalPanel = Project::where('status', 'Done')
-                ->where('talent', $userData->name)
-                ->whereBetween('finish_date', [$startDate, $endDate])
-                ->sum('number_of_panel');
+                // Get Total Panel yang dikerjakan oleh user pada setiap rentang waktu
+                $totalPanel = Project::where('status', 'Done')
+                    ->where('talent', $userData->name)
+                    ->whereMonth('finish_date', now()->month)
+                    ->sum('number_of_panel');
+
 
             // Calculate Panel perRate
             if ($totalPanel < 40) {

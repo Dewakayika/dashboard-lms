@@ -87,12 +87,14 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
     Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
     Route::post('/sop/store', [TalentController::class, 'storeSop'])->name('talent#storeSop');
+    // Review
+    Route::post('/review/store', [TalentController::class, 'projectReview'])->name('talent#storeReview');
 
     Route::get('/e-walet', [EwaletController::class, 'indexTalent'])->name('talent#ewalet');
     Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talent#withdrawRequest');
 
 
-    
+
 
 });
 
@@ -108,7 +110,11 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     Route::post('/sops/checklist', [TalentQcController::class, 'storeChecklist'])->name('talentqc#storeChecklist');
     Route::get('/project-qc-overview', [TalentQcController::class, 'projectQcOverview'])->name('talentqc#projectQcOverview');
     Route::get('/talentqc/ownprojectDetail/{id}', [TalentQcController::class, 'detailOwnProject'])->name('talentqc#ownprojectDetail');
-    Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talentqc#projectRecods');
+    Route::post('/project-record/store', [TalentQcController::class, 'projectRecord'])->name('talentqc#projectRecods');
+    Route::post('/review/store', [TalentQcController::class, 'projectReview'])->name('talentqc#storeReview');
+    Route::post('/review/store/talent', [TalentQcController::class, 'projectReviewTalent'])->name('talentqc#Review');
+
+
 
 
 

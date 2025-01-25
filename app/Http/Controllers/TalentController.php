@@ -18,6 +18,13 @@ use App\Models\Sop;
 use App\Models\SopChecklist;
 use App\Models\QcRecords;
 use App\Models\ProjectRevise;
+use App\Models\ProjectComplexity;
+use App\Models\TalentQc;
+use App\Models\TalentCV;
+use App\Models\TalentReview;
+use App\Models\QcReview;
+use App\Models\TalentProject;
+use App\Models\TalentProjectReview;
 
 
 use App\Mail\ApplyProjectMail;
@@ -247,6 +254,9 @@ class TalentController extends Controller
         $reviseRecords = ProjectRevise::where('project_id', $id)
             ->get();
 
+        $projectComplexity = ProjectComplexity::where('project_id', $id)
+            ->get();
+
         // Kirim data proyek ke tampilan
         return view('users.Talent.projectDetail')->with([
             'userData' => $user,
@@ -259,6 +269,9 @@ class TalentController extends Controller
             'sopChecklists' => $sopChecklists,
             'qcRecords' => $qcRecords,
             'reviseRecords' => $reviseRecords,
+            'projectComplexity' => $projectComplexity,
+
+
 
         ]);
     }
@@ -365,19 +378,6 @@ class TalentController extends Controller
         $talentQC = User::where('name', $talentQCName)->first();
         $user = User::find($request->user_id);
 
-        if ($talentQC) {
-            // Kirim email ke Talent QC
-            Mail::send('emails.updateProjectforQc', ['projectStage' => $request->project_stage], function ($message) use ($talentQC) {
-                $message->to($talentQC->email)
-                        ->subject("Project Ready for QC");
-            });
-
-            // Kirim email ke Talent yang melakukan perubahan
-            Mail::send('emails.updateProjectStage', ['projectStage' => $request->project_stage, 'talentQC' => $talentQCName], function ($message) use ($user) {
-                $message->to($user->email)
-                        ->subject("Project Stage Submitted");
-            });
-        }
 
         // Simpan notifikasi
         Notification::create([
@@ -390,6 +390,50 @@ class TalentController extends Controller
         // Alert sukses
         return redirect()->back()->with('success', 'You have successfully Add New Records.');
     }
+
+    public function projectReview(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'complexity' => 'required|string',
+            'number_of_panel' => 'nullable|integer',
+            'message' => 'nullable|string',
+        ]);
+
+        // Save or Update project Complexity
+        ProjectComplexity::updateOrCreate(
+            [
+                'project_id' => $request->project_id,
+                'user_id' => auth()->id(),
+            ],
+            [
+                'complexity' => $request->complexity
+            ]
+        );
+
+        // Save or Update QC Review
+        QcReview::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+            ],
+            [
+                'qc_reviews' => $request->qc_reviews
+            ],
+            [
+                'message' => $request->message
+            ]
+        );
+
+        // Update project
+        Project::where('id', $request->project_id)
+            ->update(['number_of_panel' => $request->number_of_panel]);
+
+        return redirect()->back()->with('success', 'Project Review and Complexity has been saved.');
+    }
+
+
+
 
 
 

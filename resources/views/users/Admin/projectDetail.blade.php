@@ -16,6 +16,8 @@
                 <li class="breadcrumb-item active text-xs" aria-current="page">Project {{$projectData->comic_name}} Eps.{{$projectData->chapter_number}}</li>
             </ol>
         </nav>
+        {{-- div card--}}
+        
       <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{asset('/assets/img/webtoon.png')}}'); background-position-y: 50%;">
         <span class="mask bg-secondary opacity-6"></span>
       </div>

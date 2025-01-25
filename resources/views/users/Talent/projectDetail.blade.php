@@ -6,7 +6,7 @@
 @endphp
 @section('content')
 
-  <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
+  <div class="main-content position-relative bg-gray-100 ">
     <div class="container-fluid">
         <nav aria-label="container-fluid breadcrumb">
             <ol class="breadcrumb">
@@ -185,9 +185,9 @@
                             {{-- <a class="badge badge-xs bg-secondary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createProjectSOPModal">
                                 <span class="px-2">SOP Check</span>
                             </a> --}}
-                            <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" 
-                            href="#" 
-                            data-bs-toggle="modal" 
+                            <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary"
+                            href="#"
+                            data-bs-toggle="modal"
                             data-bs-target="#createProjectSOPModal">
                              <i class="fa-solid fa-plus text-white"></i>
                              <span class="px-2">New Records</span>
@@ -206,7 +206,7 @@
                                             <!-- Hidden Inputs -->
                                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">
                                             <input type="hidden" name="user_id" value="{{ $userData->id }}">
-                        
+
                                             <!-- Project Stage Selection -->
                                             <div class="mb-2 text-left" style="text-align: start;">
                                                 <label for="project_stage" class="text-md text-dark">Project Stage</label>
@@ -221,7 +221,7 @@
                                                     <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                                 @enderror
                                             </div>
-                        
+
                                             <!-- Google Drive Link Input -->
                                             <div class="text-left mb-4" style="text-align: start;">
                                                 <label for="link_google_drive" class="text-md text-dark">Link Project</label>
@@ -230,7 +230,7 @@
                                                     <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                                 @enderror
                                             </div>
-                                            
+
                                             <!-- SOP Checklist -->
                                             <div class="row border-top border-bottom py-2 mx-3">
                                                 <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
@@ -248,19 +248,19 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                        
+
                                             <!-- Agree to Terms -->
                                             <div class="form-check mb-3 mt-3" style="text-align: start">
                                                 <input type="checkbox" class="form-check-input" id="agreeTerms" name="agree_terms" value="1">
                                                 <label class="form-check-label" for="agreeTerms">
-                                                    I already follow all the standards based on 
+                                                    I already follow all the standards based on
                                                     <a class="text-bolder underline" href="https://concise-scale-120.notion.site/Webtoon-Standard-Version-2-df8407ad672f4d568390011b5cfcfb37?pvs=4" target="_blank">SOP Document</a>
                                                 </label>
                                                 @error('agree_terms')
                                                     <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                                 @enderror
                                             </div>
-                        
+
                                             <!-- Submit Button -->
                                             <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project Record</button>
                                         </form>
@@ -465,6 +465,92 @@
                             </div>
                         </div>
                         @endforeach
+
+
+        @if($projectData->status == 'Done' && $projectComplexity->isEmpty())
+            <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+                <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
+                    <div class="card-header border-bottom pb-0 rounded">
+                        <div class=" justify-content-between align-items-center text-center">
+                            <h5 class="mb-0">Congratulations!</h5>
+                            <p class="text-md mt-2">You already finish this project, Let's give the review for project and your QC Agent!</p>
+                            <button type="button" class="btn-close" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    <div class="card-body bg-white p-3 rounded">
+                        <form action="{{ route('talent#storeReview') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
+                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+
+                            <div class="text-left mb-4" style="text-align: start;">
+                                <label for="number_of_panel" class="text-md text-dark">Number of Final Panel</label>
+                                <input type="text" name="number_of_panel" class="form-control" placeholder="Example 50" >
+                                @error('number_of_panel')
+                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <hr>
+
+                            <div class="mb-2 text-left" style="text-align: start;">
+                                <label for="complexity" class="text-md text-dark">Project Complexity</label>
+                                <select name="complexity" class="form-control">
+                                    <option value="">Please select project complexity</option>
+                                    <option value="1">Very Easy</option>
+                                    <option value="2">Easy</option>
+                                    <option value="3">Medium</option>
+                                    <option value="4">Hard</option>
+                                    <option value="5">Very Hard</option>
+
+                                </select>
+                                @error('complexity')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <hr>
+
+                            <div class="mb-2 text-left" style="text-align: start;">
+                                <label for="qc_reviews" class="text-md text-dark">QC Review</label>
+                                <select name="qc_reviews" class="form-control">
+                                    <option value="">Please select Qc review</option>
+                                    <option value="1">Needs Improvement</option>
+                                    <option value="2">Developing</option>
+                                    <option value="3">Competent</option>
+                                    <option value="4">Outstanding</option>
+                                    <option value="5">Exceptional</option>
+
+                                </select>
+                                @error('complexity')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="text-left mb-4" style="text-align: start;">
+                                <label for="message" class="text-md text-dark">Message for QC</label>
+                                <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
+                                @error('message')
+                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+
+
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
+                        </form>
+
+
+                        <!-- Add your form or content here -->
+                    </div>
+
+                </div>
+            </div>
+        @else
+            <!-- Your content when project complexity exists -->
+        @endif
+
+
 
 
         <div class="col-lg-4 col-md-12">

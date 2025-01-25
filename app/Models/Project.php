@@ -63,6 +63,10 @@ class Project extends Model
     {
         return $this->hasMany(ProjectRevise::class);
     }
+    public function complexities()
+    {
+        return $this->hasMany(ProjectComplexity::class);
+    }
     
 
 
