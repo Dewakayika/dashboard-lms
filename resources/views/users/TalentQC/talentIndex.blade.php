@@ -403,7 +403,6 @@
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent Qc</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                   <th class="text-secondary opacity-7"></th>
                 </tr>
@@ -426,9 +425,6 @@
                   </td>
                   <td class="align-middle text-center text-sm">
                     <span class="text-sm px-1 font-weight-bold">{{$projects->talent_qc}}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-sm px-1 font-weight-bold">{{$projects->number_of_panel}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
                     @if ($projects->status == 'Waiting Talent')
@@ -485,7 +481,6 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                 <th class="text-secondary opacity-7"></th>
                             </tr>
@@ -521,9 +516,6 @@
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             <span class="text-sm px-1 font-weight-bold">{{$projectQcOverview->talent ?? 'Still Waiting'}}</span>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <span class="text-sm px-1 font-weight-bold">{{$projectQcOverview->number_of_panel}}</span>
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             @if ($projectQcOverview->status == 'Waiting Talent')

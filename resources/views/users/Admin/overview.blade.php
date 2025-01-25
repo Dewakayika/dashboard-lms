@@ -232,15 +232,15 @@
                   <span class="badge badge-sm bg-gradient-warning"> {{ $project->status }}</span>
                 </td>
                 <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-info share-project" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#shareToWhatsAppModal" 
-                          data-project-id="{{ $project->id }}" 
+                    <span class="badge badge-sm bg-gradient-info share-project"
+                          data-bs-toggle="modal"
+                          data-bs-target="#shareToWhatsAppModal"
+                          data-project-id="{{ $project->id }}"
                           style="cursor: pointer;">
                         Share Project
                     </span>
                 </td>
-                          
+
               </tr>
               @endforeach
             </tbody>
@@ -310,15 +310,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     const projects = {!! json_encode($projectsList->toArray()) !!};
     console.log('All projects:', projects); // Debug log
-    
+
     document.querySelectorAll('.share-project').forEach(button => {
         button.addEventListener('click', function() {
             const projectId = this.getAttribute('data-project-id');
             console.log('Clicked project ID:', projectId); // Debug log
-            
+
             const project = projects.data.find(p => p.id == projectId);
             console.log('Found project:', project); // Debug log
-            
+
             if (project) {
                 // Update modal content
                 document.getElementById('modal-subject').textContent = 'New Project Posted!';
@@ -326,12 +326,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('modal-chapter-number').textContent = project.chapter_number;
                 document.getElementById('modal-talent-qc').textContent = project.talent_qc;
                 document.getElementById('modal-status').textContent = project.status;
-                
+
                 // Update WhatsApp link
                 const whatsappLink = document.getElementById('whatsappLink');
                 whatsappLink.onclick = function(e) {
                     e.preventDefault();
-                    const message = 
+                    const message =
                                    `*New Project Posted!*\n` +
                                    `Project Name: ${project.comic_name}\n` +
                                   `Chapter Number: ${project.chapter_number}\n` +
