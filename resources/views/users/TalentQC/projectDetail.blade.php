@@ -87,56 +87,58 @@
       </div>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    @if ($projectLogs->isNotEmpty())
-                        @php $log = $projectLogs->last(); @endphp
-                        startCountdown("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
-                    @endif
+                @if ($projectLogs->isNotEmpty())
+                    @php $log = $projectLogs->last(); @endphp
+                    startTimer("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
+                @endif
 
-                    function startCountdown(id, timestamp, status) {
-                        const countdownElem = document.getElementById(`countdown-${id}`);
-                        let endTime;
+                function startTimer(id, timestamp, status) {
+                    const timerElem = document.getElementById(`countdown-${id}`);
+                    const daysElem = document.getElementById(`days-${id}`);
+                    const hoursElem = document.getElementById(`hours-${id}`);
+                    const minutesElem = document.getElementById(`minutes-${id}`);
+                    const secondsElem = document.getElementById(`seconds-${id}`);
 
-                        if (["Waiting Talent", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
-                            endTime = new Date(new Date(timestamp).getTime() + 30 * 60 * 60 * 1000); // Add 30 hours for deadline
-                        } else {
-                            endTime = new Date(timestamp);
-                        }
+                    const startStatuses = ["Project Assign", "QC First Draft", "Revise 1", "QC Revise 1",  "Revise 2", "QC Revise 2","Revise 3", "QC Revise 3"];
+                    const endStatuses = ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"];
 
-                        const daysElem = document.getElementById(`days-${id}`);
-                        const hoursElem = document.getElementById(`hours-${id}`);
-                        const minutesElem = document.getElementById(`minutes-${id}`);
-                        const secondsElem = document.getElementById(`seconds-${id}`);
 
-                        function updateCountdown() {
+                    if (startStatuses.includes(status)) {
+                        // Stopwatch mode
+                        const startTime = new Date(timestamp);
+
+                        function updateStopwatch() {
                             const now = new Date();
-                            const remainingTime = endTime - now;
+                            const elapsedTime = now - startTime;
 
-                            if (remainingTime <= 0 || ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"].includes(status)) {
-                                clearInterval(interval);
-                                countdownElem.innerHTML = `<p>Status changed or deadline reached.</p>`;
-                                return;
-                            }
-
-
-                            const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                            const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
                             daysElem.textContent = String(days).padStart(2, "0");
                             hoursElem.textContent = String(hours).padStart(2, "0");
                             minutesElem.textContent = String(minutes).padStart(2, "0");
                             secondsElem.textContent = String(seconds).padStart(2, "0");
 
-                            if (remainingTime > 30 * 60 * 60 * 1000) {
-                                countdownElem.style.color = "red";
+                            // Change color if elapsed time exceeds 30 hours
+                            if (elapsedTime > 30 * 60 * 60 * 1000) {
+                                timerElem.style.color = "red";
                             }
                         }
 
-                        const interval = setInterval(updateCountdown, 1000);
-                        updateCountdown();
+                        const interval = setInterval(updateStopwatch, 1000);
+                        updateStopwatch();
+
+                    } else if (endStatuses.includes(status)) {
+                        // If status is a submission status, show completion message
+                        timerElem.innerHTML = `<p>Draft Submitted</p>`;
+                    }else {
+                        // For any other status
+                        timerElem.innerHTML = `<p>Waiting to Apply</p>`;
                     }
-                });
+                }
+            });
             </script>
 
     <div class="row my-4">
@@ -164,7 +166,7 @@
                         </div>
                         <div class="col">
                             <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Last Update:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->update_at)->translatedFormat('D, M Y') }}</li>
-                            <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') }}</li>
+                            <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ $projectData->finish_date ? \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') : 'Not finish yet' }}</li>
                             <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project File:</strong> &nbsp; <a href="{{$projectData->file}}" class="text-primary" target="_blank" style="text-decoration: underline;">Download File</a></li>
                         </div>
                     </div>
@@ -181,9 +183,6 @@
                             <div class="w-full mx-auto d-flex align-items-center justify-content-between">
                                 <h6 class="text-weight-bolder">Project Records</h6>
                                 <div class="gap-2">
-                                    <a class="badge badge-xs bg-secondary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createProjectSOPModal">
-                                        <span class="px-2">SOP Check</span>
-                                    </a>
                                     <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createQcModal">
                                         <i class="fa-solid fa-plus text-white"></i>
                                         <span class="px-2">New QC Records</span>
@@ -200,7 +199,6 @@
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Stage</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Updated Date</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project File</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Qc Message</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
@@ -229,9 +227,6 @@
                                                     <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($record->created_at)->translatedFormat('D, M Y') }}</span>
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
-                                                    <span class="text-sm px-1 font-weight-bold">{{ $record->number_of_panel ?? '-'}}</span>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
                                                     @if ($record->link_google_drive == null)
                                                         <span class="text-sm px-1 font-weight-bold">-</span>
                                                     @else
@@ -250,7 +245,7 @@
                                                 <td class="align-middle text-center text-sm">
                                                     @if (in_array($record->project_stage, ['First Draft', 'Revise 1', 'Revise 2', 'Revise 3']))
                                                         <a href="{{ $record->link_google_drive }}" class="badge badge-sm bg-gradient-warning font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Review Project</a>
-                                                    @elseif (in_array($record->project_stage, ['Submit First Draft', 'Submit Revise 1', 'Submit Revise 2', 'Submit Revise 3']))
+                                                    @elseif (in_array($record->project_stage, ['First Draft Submitted', 'Revise 1 Submitted', 'Revis 2 Submitted', 'Revise 3 Submitted']))
                                                         <a href="#" data-bs-toggle="modal" data-bs-target="#shareToWhatsAppModal" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Share Project</a>
                                                     @else
                                                         <a class="badge badge-sm bg-gradient-danger font-weight-bold mb-0 text-white hover:bg-secondaryy" href="#" data-bs-toggle="modal" data-bs-target="#createProjectModal">
@@ -436,7 +431,7 @@
                                 </ul>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn bg-gradient-dark w-100 my-4" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -462,7 +457,7 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn bg-gradient-dark w-100 my-4" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -576,8 +571,6 @@
 
                         <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
                     </form>
-
-
                     <!-- Add your form or content here -->
                 </div>
 
@@ -588,11 +581,11 @@
         @endif
 
         {{-- Modal New QC --}}
-        <div class="modal fade" id="createQcModal" tabindex="-1" aria-labelledby="createQcModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 500px;">
+        <div class="modal fade {{ $errors->any() ? 'show d-block' : '' }}" id="createQcModal" tabindex="-1" aria-labelledby="createQcModalLabel" aria-hidden="true" style="display: {{ $errors->any() ? 'block' : 'none' }};">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" @if ($checkSop == false ) style="max-width: 1000px;" @else style="max-width: 500px" @endif>
                 <div class="modal-content rounded-3 shadow-lg">
                     <div class="modal-header border-0">
-                        <h5 class="modal-title" id="createQcModalLabel">New QC Record</h5>
+                        <h5 class="modal-title" >New QC Record</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="text-left px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
@@ -602,12 +595,10 @@
                             <select class="form-control" id="qc_type_selector">
                                 <option value="">Select QC Type</option>
                                 <option value="approve">Approve</option>
-                                <option value="minor">Minor Revision</option>
+                                <option value="approve">Minor Revision</option>
                                 <option value="major">Major Revision</option>
                             </select>
                         </div>
-
-
 
                         <!-- Approve Form -->
                         <form id="approve_form" action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data" style="display: none;">
@@ -617,108 +608,137 @@
                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">
                             <input type="hidden" name="user_id" value="{{ $userData->id }}">
 
-                            <div class="mb-2">
-                                <label for="project_stage" class="text-md text-dark">Project Draft Stage</label>
-                                <select name="project_stage" class="form-control">
-                                    <option value="">Please select Project Stage</option>
-                                    <option value="Submit First Draft">Submit First Draft</option>
-                                    <option value="Submit Revise 1">Submit Revise 1</option>
-                                    <option value="Submit Revise 2">Submit Revise 2</option>
-                                    <option value="Submit Revise 3">Submit Revise 3</option>
-                                </select>
-                                @error('project_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
-                            </div>
-
-                            <div class="mb-3 text-left">
+                            <div id="message" class="mb-3 text-left">
                                 <label for="qc_message" class="form-label">Message to Talent</label>
-                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" required placeholder="Type QC Message"></textarea>
+                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" placeholder="Type QC Message"></textarea>
                                 <small class="form-text text-muted">Use commas to separate list items.</small>
                             </div>
 
 
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <label for="link_google_drive" class="text-md text-dark">Link Project</label>
                                 <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
                                 @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
                             </div>
-                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Draft</button>
-                        </form>
 
-                        <!-- Minor Revision Form -->
-                        <form id="minor_form" action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data" style="display: none;">
-                            <hr>
-                            <p class="text-xs">This action will be directly upload your works and send in to client.</p>
-                            @csrf
-                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+                            @if($checkSop == true)
 
-                            <div class="mb-2">
-                                <label for="project_stage" class="text-md text-dark">Project Draft Stage</label>
-                                <select name="project_stage" class="form-control">
-                                    <option value="">Please select Project Stage</option>
-                                    <option value="Submit First Draft">Submit First Draft</option>
-                                    <option value="Submit Revise 1">Submit Revise 1</option>
-                                    <option value="Submit Revise 2">Submit Revise 2</option>
-                                    <option value="Submit Revise 3">Submit Revise 3</option>
-                                </select>
-                                @error('project_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            @else
+
+                            {{-- SOP FORM --}}
+                            <!-- Header Row -->
+                            <div class="row border-top border-bottom py-2 mx-3" style="max-width: 1000px;">
+                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
+                                <div class="col-4 text-center text-uppercase text-black text-xxs font-weight-bolder ps-2 py-2 border-end">Standard</div>
+                                <div class="col-2 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Note</div>
+                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2">Check List</div>
                             </div>
 
-                            <div class="mb-3 text-left">
-                                <label for="qc_message" class="form-label">Minor Issue</label>
-                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" required placeholder="Type QC Message"></textarea>
-                                <small class="form-text text-muted">Use commas to separate list items.</small>
-                            </div>
+                            <!-- SOP Items -->
+                            @foreach ($sops as $sop)
+                                <div class="row border-bottom py-2 mx-3">
+                                    <div class="col-3 text-xs text-center d-flex align-items-center justify-content-center border-end">{{ $sop->steps }}</div>
+                                    <div class="col-4 text-xs px-4 py-2 border-end">{{ $sop->standard }}</div>
+                                    <div class="col-2 text-xs px-3 py-2 text-justify border-end">{{ $sop->note }}</div>
+                                    <div class="col-3 d-flex align-items-center justify-content-center p-2">
+                                        <div class="btn-group" role="group">
+                                            <button type="button"
+                                                    class="btn btn-outline-success btn-xs"
+                                                    onclick="handleResponse('{{ $sop->id }}', true)"
+                                                    id="accept-{{ $sop->id }}">
+                                                <i class="fas fa-check me-1"></i> Accept
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-outline-danger btn-xs"
+                                                    onclick="handleResponse('{{ $sop->id }}', false)"
+                                                    id="reject-{{ $sop->id }}">
+                                                <i class="fas fa-times me-1"></i> Reject
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="checklist[{{ $sop->id }}]" id="checklist-{{ $sop->id }}" value="" requires>
+                                    </div>
+                                </div>
+                            @endforeach
 
-
-                            <div class="mb-2">
-                                <label for="link_google_drive" class="text-md text-dark">Link Project</label>
-                                <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
-                                @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            <!-- Error Message -->
+                            <div class="alert alert-danger alert-dismissible fade show mt-3 text-white" role="alert" id="error-message" style="display: none;">
+                                <i class="fas fa-exclamation-triangle me-2 text-white"></i>
+                                You can't submit because some SOPs are rejected. Please contact your talent.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
-                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Draft</button>
+                            @endif
+
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4" id="submit-button">Submit Draft</button>
                         </form>
 
                         <!-- Major Revision Form -->
                         <div id="major_form" class="" style="display: none;">
                             <div class="modal-header border-0">
-                            <h5 class="modal-title" id="shareToWhatsAppModalLabel">Contact Your Talent</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
-                                <p class="text-xs text-left"><strong>Subject:</strong> Major Revision!</p>
+                            <div class="form-group mb-3">
+                                <label class="form-label"><strong>Major QC Message:</strong></label>
+                                <textarea
+                                    class="form-control"
+                                    id="majorRevisions"
+                                    rows="4"
+                                    placeholder="Enter revision points (one per line)"
+                                ></textarea>
+                                <small class="text-muted">Add each revision point on a new line</small>
+                            </div>
+                            <div class="px-3 pt-3 " style="max-height: 70vh; overflow-y: auto; display: none;">
+                                <p class="text-xs text-left"><strong>Subject:</strong> MAJOR REVISION</p>
                                 <p class="text-xs text-left"><strong>Project Name:</strong> {{$projectData->comic_name}}</p>
                                 <p class="text-xs text-left"><strong>Talent:</strong> {{$projectData->talent}}</p>
                                 <p class="text-xs text-left"><strong>QC:</strong> {{ auth()->user()->name}}</p>
                                 <p class="text-xs text-left"><strong>Status:</strong> {{ $projectData->status}}</p>
                                 <p class="text-xs text-left"><strong>Project Link:</strong> <a href="{{$projectRecords->last()->link_google_drive ?? 'not found'}}" class="text-primary" target="_blank" style="text-decoration: underline;">Link Project</a></p>
-                                <a id="whatsappLink2" href="#" target="_blank" class="btn  w-100 mt-3 text-white" style="background-color: #0c9d08">
-                                    <i class="fa-brands fa-whatsapp px-2" style="color: #ffffff;"></i>
-                                    Contact Now!
-                                </a>
+
                             </div>
+                            <a id="whatsappLink2" href="#" target="_blank" class="btn  w-100 mt-3 text-white" style="background-color: #0c9d08">
+                                <i class="fa-brands fa-whatsapp px-2" style="color: #ffffff;"></i>
+                                Contact Now!
+                            </a>
                         </div>
 
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function () {
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
                             const whatsappLink = document.getElementById('whatsappLink2');
                             whatsappLink.addEventListener("click", function (event) {
                                 event.preventDefault();
-                                const subject = "Major Revision!";
+                                const subject = "MOJOR REVISION";
                                 const projectName = "{{$projectData->comic_name}}";
                                 const talent = "{{$projectData->talent}}";
                                 const qc = "{{ auth()->user()->name }}";
                                 const status = "{{ $projectData->status }}";
                                 const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
-                                const message = `Project Name: ${projectName}\nTalent: ${talent}\nQC: ${qc}\nStatus: ${status}\nProject Link: ${projectLink}`;
+
+                                // Get and format revision points
+                                const revisions = document.getElementById('majorRevisions').value
+                                    .split('\n')
+                                    .filter(item => item.trim())
+                                    .map((item, index) => `${index + 1}. ${item.trim()}`)
+                                    .join('\n');
+
+                                if (!revisions) {
+                                    alert('Please add at least one revision point');
+                                    return;
+                                }
+
+                                const message = `Subject: *MAJOR REVISION*\nProject Name: *${projectName}*\nTalent: *${talent}*\nQC: ${qc}\nStatus: *${status}*\nProject Link: *${projectLink}*\n\nMajor Revision Points:\n${revisions}`;
                                 const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
                                 window.open(whatsappUrl, '_blank');
                             });
                         });
-                    </script>
+
+                        </script>
                     </div>
                 </div>
             </div>
+
+            @if ($errors->any())
+                <div class="modal-backdrop fade show" style="z-index: -1"></div>
+            @endif
 
         <script>
         document.getElementById('qc_type_selector').addEventListener('change', function() {
@@ -733,6 +753,63 @@
                 document.getElementById(`${selectedType}_form`).style.display = 'block';
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('#createQcModal form');
+            form.addEventListener('submit', function (event) {
+                const hasError = document.querySelector('.text-danger'); // Check for validation error messages
+                    if (hasError) {
+                        event.preventDefault(); // Prevent form submission
+                    }
+                });
+        });
+
+        let hasRejected = false;
+
+        function handleResponse(sopId, isAccepted) {
+            const acceptBtn = document.getElementById(`accept-${sopId}`);
+            const rejectBtn = document.getElementById(`reject-${sopId}`);
+            const checklistInput = document.getElementById(`checklist-${sopId}`);
+            const submitButton = document.getElementById('submit-button');
+            const errorMessage = document.getElementById('error-message');
+
+            if (isAccepted) {
+                // Handle Accept
+                acceptBtn.classList.remove('btn-outline-success');
+                acceptBtn.classList.add('btn-success');
+                rejectBtn.classList.remove('btn-danger');
+                rejectBtn.classList.add('btn-outline-danger');
+                acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accepted';
+                rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Reject';
+                checklistInput.value = '1';
+            } else {
+                // Handle Reject
+                rejectBtn.classList.remove('btn-outline-danger');
+                rejectBtn.classList.add('btn-danger');
+                acceptBtn.classList.remove('btn-success');
+                acceptBtn.classList.add('btn-outline-success');
+                rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Rejected';
+                acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accept';
+                checklistInput.value = '0';
+            }
+
+            // Check if any SOP is rejected
+            const checklistInputs = document.querySelectorAll('input[name^="checklist"]');
+            hasRejected = Array.from(checklistInputs).some(input => input.value === '0');
+
+            // Enable/disable submit button and show/hide error message
+            if (hasRejected) {
+                submitButton.disabled = true;
+                submitButton.classList.add('btn-secondary');
+                submitButton.classList.remove('bg-gradient-dark');
+                errorMessage.style.display = 'block';
+            } else {
+                submitButton.disabled = false;
+                submitButton.classList.remove('btn-secondary');
+                submitButton.classList.add('bg-gradient-dark');
+                errorMessage.style.display = 'none';
+            }
+        }
         </script>
 
 

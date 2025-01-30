@@ -10,8 +10,8 @@
     <div class="container-fluid">
         <nav aria-label="container-fluid breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#index') }}">Home</a></li>
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#projectOverview') }}">Project Overview</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#index') }}">Home</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#projectOverview') }}">Project Overview</a></li>
                 <li class="breadcrumb-item active text-xs" aria-current="page">Project {{$projectData->comic_name}} Eps.{{$projectData->chapter_number}}</li>
             </ol>
         </nav>
@@ -88,56 +88,59 @@
 
       <script>
         document.addEventListener("DOMContentLoaded", function () {
-            @if ($projectLogs->isNotEmpty())
-                @php $log = $projectLogs->last(); @endphp
-                startCountdown("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
-            @endif
+        @if ($projectLogs->isNotEmpty())
+            @php $log = $projectLogs->last(); @endphp
+            startTimer("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
+        @endif
 
-            function startCountdown(id, timestamp, status) {
-                const countdownElem = document.getElementById(`countdown-${id}`);
-                let endTime;
+        function startTimer(id, timestamp, status) {
+            const timerElem = document.getElementById(`countdown-${id}`);
+            const daysElem = document.getElementById(`days-${id}`);
+            const hoursElem = document.getElementById(`hours-${id}`);
+            const minutesElem = document.getElementById(`minutes-${id}`);
+            const secondsElem = document.getElementById(`seconds-${id}`);
 
-                if (["Waiting Talent", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
-                    endTime = new Date(new Date(timestamp).getTime() + 30 * 60 * 60 * 1000); // Add 30 hours for deadline
-                } else {
-                    endTime = new Date(timestamp);
-                }
+            const startStatuses = ["Project Assign", "QC First Draft", "Revise 1", "QC Revise 1",  "Revise 2", "QC Revise 2","Revise 3", "QC Revise 3"];
+            const endStatuses = ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"];
 
-                const daysElem = document.getElementById(`days-${id}`);
-                const hoursElem = document.getElementById(`hours-${id}`);
-                const minutesElem = document.getElementById(`minutes-${id}`);
-                const secondsElem = document.getElementById(`seconds-${id}`);
 
-                function updateCountdown() {
+            if (startStatuses.includes(status)) {
+                // Stopwatch mode
+                const startTime = new Date(timestamp);
+
+                function updateStopwatch() {
                     const now = new Date();
-                    const remainingTime = endTime - now;
+                    const elapsedTime = now - startTime;
 
-                    if (remainingTime <= 0 || ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"].includes(status)) {
-                        clearInterval(interval);
-                        countdownElem.innerHTML = `<p>Status changed or deadline reached.</p>`;
-                        return;
-                    }
-
-
-                    const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                    const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
                     daysElem.textContent = String(days).padStart(2, "0");
                     hoursElem.textContent = String(hours).padStart(2, "0");
                     minutesElem.textContent = String(minutes).padStart(2, "0");
                     secondsElem.textContent = String(seconds).padStart(2, "0");
 
-                    if (remainingTime > 30 * 60 * 60 * 1000) {
-                        countdownElem.style.color = "red";
+                    // Change color if elapsed time exceeds 30 hours
+                    if (elapsedTime > 30 * 60 * 60 * 1000) {
+                        timerElem.style.color = "red";
                     }
                 }
 
-                const interval = setInterval(updateCountdown, 1000);
-                updateCountdown();
+                const interval = setInterval(updateStopwatch, 1000);
+                updateStopwatch();
+
+            } else if (endStatuses.includes(status)) {
+                // If status is a submission status, show completion message
+                timerElem.innerHTML = `<p>Draft Submitted</p>`;
+            }else {
+                // For any other status
+                timerElem.innerHTML = `<p>Waiting to Apply</p>`;
             }
-        });
+        }
+    });
+
     </script>
 
       {{-- Tabel --}}
@@ -165,7 +168,7 @@
                     </div>
                     <div class="col">
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Last Update:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->update_at)->translatedFormat('D, M Y') }}</li>
-                        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') }}</li>
+                        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') ?? '-' }}</li>
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project File:</strong> &nbsp; <a href="{{$projectData->file}}" class="text-primary" target="_blank" style="text-decoration: underline;">Download File</a></li>
                     </div>
                 </div>
@@ -193,8 +196,8 @@
                              <span class="px-2">New Records</span>
                          </a>
 
-                         <div class="modal fade" id="createProjectSOPModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                         <div class="modal fade {{ $errors->any() ? 'show d-block' : '' }}" id="createProjectSOPModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true"  style="display: {{ $errors->any() ? 'block' : 'none' }};">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" @if ($checkSop == false) style="max-width: 1000px" @else style="max-width: 400px" @endif >
                                 <div class="modal-content rounded-3 shadow-lg">
                                     <div class="modal-header border-0">
                                         <h5 class="modal-title" id="createProjectModalLabel">Create New Project Records</h5>
@@ -207,21 +210,6 @@
                                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">
                                             <input type="hidden" name="user_id" value="{{ $userData->id }}">
 
-                                            <!-- Project Stage Selection -->
-                                            <div class="mb-2 text-left" style="text-align: start;">
-                                                <label for="project_stage" class="text-md text-dark">Project Stage</label>
-                                                <select name="project_stage" class="form-control">
-                                                    <option value="">Please select Project Stage</option>
-                                                    <option value="First Draft">First Draft</option>
-                                                    <option value="Revise 1">Revise 1</option>
-                                                    <option value="Revise 2">Revise 2</option>
-                                                    <option value="Revise 3">Revise 3</option>
-                                                </select>
-                                                @error('project_stage')
-                                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-
                                             <!-- Google Drive Link Input -->
                                             <div class="text-left mb-4" style="text-align: start;">
                                                 <label for="link_google_drive" class="text-md text-dark">Link Project</label>
@@ -231,23 +219,38 @@
                                                 @enderror
                                             </div>
 
+                                            @if($checkSop == true)
+
+                                            @else
                                             <!-- SOP Checklist -->
                                             <div class="row border-top border-bottom py-2 mx-3">
-                                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
-                                                <div class="col-4 text-center text-uppercase text-black text-xxs font-weight-bolder ps-2 py-2 border-end">Standard</div>
-                                                <div class="col-2 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Note</div>
+
+                                                <div class="col-5 text-center text-uppercase text-black text-xxs font-weight-bolder ps-2 py-2 border-end">Standard</div>
+                                                <div class="col-4 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Note</div>
                                                 <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2">Check List</div>
                                             </div>
+
                                             @foreach ($sops as $sop)
-                                                <div class="row border-bottom py-2 mx-3">
-                                                    <div class="col-3 text-xs text-center d-flex align-items-center justify-content-center border-end">{{ $sop->steps }}</div>
-                                                    <div class="col-4 text-xs px-4 py-2 border-end">{{ $sop->standard }}</div>
-                                                    <div class="col-2 text-xs px-3 py-2 text-justify border-end">{{ $sop->note }}</div>
-                                                    <div class="col-3 d-flex align-items-center justify-content-center p-2">
-                                                        <input type="checkbox" name="checklist[{{ $sop->id }}]" value="1" >
+                                            <div class="row border-bottom py-2 mx-3">
+                                                <div class="col-5 text-xs text-center d-flex align-items-center justify-content-center border-end text-bolder">{{ $sop->sop_formula }}</div>
+                                                <div class="col-4 text-xs px-3 py-2 text-justify border-end">{{ $sop->note }}</div>
+                                                <div class="col-3 d-flex align-items-center justify-content-center p-2">
+                                                    <div class="form-check">
+                                                        <input type="checkbox"
+                                                            name="checklist[{{ $sop->id }}]"
+                                                            value="1"
+                                                            required
+                                                            class="btn-check"
+                                                            id="btn-check-{{ $sop->id }}"
+                                                            autocomplete="off">
+                                                        <label class="btn btn-outline-success btn-sm" for="btn-check-{{ $sop->id }}">
+                                                            Not Done
+                                                        </label>
                                                     </div>
                                                 </div>
+                                            </div>
                                             @endforeach
+
 
                                             <!-- Agree to Terms -->
                                             <div class="form-check mb-3 mt-3" style="text-align: start">
@@ -261,6 +264,8 @@
                                                 @enderror
                                             </div>
 
+
+                                            @endif
                                             <!-- Submit Button -->
                                             <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project Record</button>
                                         </form>
@@ -268,6 +273,50 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if ($errors->any())
+                            <div class="modal-backdrop fade show"></div>
+                        @endif
+
+                        <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                const checkboxes = document.querySelectorAll('.btn-check');
+
+                                checkboxes.forEach(checkbox => {
+                                    checkbox.addEventListener('change', function() {
+                                        const label = this.nextElementSibling;
+                                        if (this.checked) {
+                                            label.classList.remove('btn-outline-success');
+                                            label.classList.add('btn-success');
+                                        } else {
+                                            label.classList.add('btn-outline-success');
+                                            label.classList.remove('btn-success');
+                                        }
+                                    });
+                                });
+                            });
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                            const checkboxes = document.querySelectorAll('.btn-check');
+
+                            checkboxes.forEach(checkbox => {
+                                checkbox.addEventListener('change', function() {
+                                    const label = this.nextElementSibling;
+                                    if (this.checked) {
+                                        label.classList.remove('btn-outline-success');
+                                        label.classList.add('btn-success');
+                                        label.textContent = 'Done ✓';
+                                    } else {
+                                        label.classList.add('btn-outline-success');
+                                        label.classList.remove('btn-success');
+                                        label.textContent = 'Not Done';
+                                    }
+                                });
+                            });
+                        });
+                        </script>
+
+
                         </div>
                     </div>
                 </div>
@@ -280,11 +329,9 @@
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Stage</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Updated Date</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project File</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Qc Message</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -309,9 +356,6 @@
                                             <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($record->created_at)->translatedFormat('D, M Y') }}</span>
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            <span class="text-sm px-1 font-weight-bold">{{ $record->number_of_panel ?? '-'}}</span>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
                                             @if ($record->link_google_drive == null)
                                                 <span class="text-sm px-1 font-weight-bold">-</span>
                                             @else
@@ -328,7 +372,7 @@
                                         <td class="align-middle text-center text-sm">
                                             @if (in_array($record->project_stage, ['First Draft', 'Revise 1', 'Revise 2', 'Revise 3']))
                                                 <a href="{{ $record->link_google_drive }}" class="badge badge-sm bg-gradient-warning font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Review Project</a>
-                                            @elseif (in_array($record->project_stage, ['Submit First Draft', 'Submit Revise 1', 'Submit Revise 2', 'Submit Revise 3']))
+                                            @elseif (in_array($record->project_stage, ['First Draft Submitted', 'Revise 1 Submitted', 'Revis 2 Submitted', 'Revise 3 Submitted']))
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#shareToWhatsAppModal" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Share Project</a>
                                             @else
                                                 <a class="badge badge-sm bg-gradient-danger font-weight-bold mb-0 text-white hover:bg-secondaryy" href="#" data-bs-toggle="modal" data-bs-target="#createProjectModal">
@@ -372,7 +416,6 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Stage</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Message</th>
                                 </tr>
                             </thead>
@@ -399,9 +442,6 @@
                                                 <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($record->created_at)->translatedFormat('D, M Y') }}</span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span class="text-sm px-1 font-weight-bold">{{ $record->number_of_panel ?? '-'}}</span>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
                                                 <button type="button" class="badge badge-sm bg-gradient-success font-weight-bold mb-0 text-white hover:bg-secondary" data-bs-toggle="modal" data-bs-target="#qcMessageModal-{{ $record->id }}" style="border: none; text-decoration: none;">Open Message</button>
                                             </td>
                                         </tr>
@@ -420,10 +460,10 @@
                 @foreach ($reviseRecords as $revise)
                 <!-- Modal -->
                 <div class="modal fade" id="qcMessageModal-{{ $revise->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $revise->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">revise Message</h5>
+                                <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">Revise Message</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="text-left mt-2">
@@ -434,7 +474,7 @@
                                 </ul>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn bg-gradient-dark w-100 my-4" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -445,7 +485,7 @@
                         @foreach ($qcRecords as $qc)
                         <!-- Modal -->
                         <div class="modal fade" id="qcMessageModal-{{ $qc->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $qc->id }}" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                            <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="qcMessageModalLabel-{{ $qc->id }}">QC Message</h5>
@@ -459,7 +499,7 @@
                                         </ul>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn bg-gradient-dark w-100 my-4" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -467,90 +507,78 @@
                         @endforeach
 
 
-
-
-                        @if($projectData->status == 'Done' && $projectComplexity->isEmpty())
-                        <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
-                            <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
-                                <div class="card-header border-bottom pb-0 rounded">
-                                    <div class=" justify-content-between align-items-center text-center">
-                                        <h5 class="mb-0">Congratulations!</h5>
-                                        <p class="text-md mt-2">You already finish this project, Let's give the review for project and your QC Agent!</p>
-                                        <button type="button" class="btn-close" aria-label="Close"></button>
-                                    </div>
-                                </div>
-                                <div class="card-body bg-white p-3 rounded">
-                                    <form action="{{ route('talentqc#storeReview') }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                                        <input type="hidden" name="user_id" value="{{ $userData->id }}">
-
-                                        <div class="text-left mb-4" style="text-align: start;">
-                                            <label for="number_of_panel" class="text-md text-dark">Number of Final Panel</label>
-                                            <input type="text" name="number_of_panel" class="form-control" placeholder="Example 50" >
-                                            @error('number_of_panel')
-                                            <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="mb-2 text-left" style="text-align: start;">
-                                            <label for="complexity" class="text-md text-dark">Project Complexity</label>
-                                            <select name="complexity" class="form-control">
-                                                <option value="">Please select project complexity</option>
-                                                <option value="1">Very Easy</option>
-                                                <option value="2">Easy</option>
-                                                <option value="3">Medium</option>
-                                                <option value="4">Hard</option>
-                                                <option value="5">Very Hard</option>
-
-                                            </select>
-                                            @error('complexity')
-                                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="mb-2 text-left" style="text-align: start;">
-                                            <label for="qc_reviews" class="text-md text-dark">QC Review</label>
-                                            <select name="qc_reviews" class="form-control">
-                                                <option value="">Please select Qc review</option>
-                                                <option value="1">Needs Improvement</option>
-                                                <option value="2">Developing</option>
-                                                <option value="3">Competent</option>
-                                                <option value="4">Outstanding</option>
-                                                <option value="5">Exceptional</option>
-
-                                            </select>
-                                            @error('complexity')
-                                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-                                        <div class="text-left mb-4" style="text-align: start;">
-                                            <label for="message" class="text-md text-dark">Message for QC</label>
-                                            <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
-                                            @error('message')
-                                            <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-
-
-
-                                        <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
-                                    </form>
-
-
-                                    <!-- Add your form or content here -->
-                                </div>
-
-                            </div>
+        @if($projectData->status == 'Done' && $projectComplexity->isEmpty())
+            <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+                <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
+                    <div class="card-header border-bottom pb-0 rounded">
+                        <div class=" justify-content-between align-items-center text-center">
+                            <h5 class="mb-0">Congratulations!</h5>
+                            <p class="text-md mt-2">You already finish this project, Let's give the review for project and your QC Agent!</p>
+                            <button type="button" class="btn-close" aria-label="Close"></button>
                         </div>
-                    @else
-                        <!-- Your content when project complexity exists -->
-                    @endif
+                    </div>
+                    <div class="card-body bg-white p-3 rounded">
+                        <form action="{{ route('talent#storeReview') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
+                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+
+                            <div class="text-left mb-4" style="text-align: start;">
+                                <label for="number_of_panel" class="text-md text-dark">Number of Final Panel</label>
+                                <input type="text" name="number_of_panel" class="form-control" placeholder="Example 50" >
+                                @error('number_of_panel')
+                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <hr>
+                            <div class="mb-2 text-left" style="text-align: start;">
+                                <label for="complexity" class="text-md text-dark">Project Complexity</label>
+                                <select name="complexity" class="form-control">
+                                    <option value="">Please select project complexity</option>
+                                    <option value="1">Very Easy</option>
+                                    <option value="2">Easy</option>
+                                    <option value="3">Medium</option>
+                                    <option value="4">Hard</option>
+                                    <option value="5">Very Hard</option>
+
+                                </select>
+                                @error('complexity')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <hr>
+                            <div class="mb-2 text-left" style="text-align: start;">
+                                <label for="qc_reviews" class="text-md text-dark">QC Review</label>
+                                <select name="qc_reviews" class="form-control">
+                                    <option value="">Please select Qc review</option>
+                                    <option value="1">Needs Improvement</option>
+                                    <option value="2">Developing</option>
+                                    <option value="3">Competent</option>
+                                    <option value="4">Outstanding</option>
+                                    <option value="5">Exceptional</option>
+
+                                </select>
+                                @error('complexity')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="text-left mb-4" style="text-align: start;">
+                                <label for="message" class="text-md text-dark">Message for QC</label>
+                                <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
+                                @error('message')
+                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @else
+            <!-- Your content when project complexity exists -->
+        @endif
+
+
 
 
         <div class="col-lg-4 col-md-12">

@@ -122,6 +122,82 @@
     </div> --}}
   </div>
 
+  @if($projectsWithoutComplexity->isNotEmpty()  )
+    @foreach($projectsWithoutComplexity as $project)
+    @if($project->status == 'Done')
+  <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+      <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
+          <div class="card-header border-bottom pb-0 rounded">
+              <div class=" justify-content-between align-items-center text-center">
+                  <h5 class="mb-0">Congratulations!</h5>
+                  <p class="text-md mt-2">You already finish <span class="text-bold">{{ $project->comic_name }} {{ $project->chapter_number }}</span>, Let's give the review for project and your QC Agent!</p>
+
+                  <button type="button" class="btn-close" aria-label="Close"></button>
+              </div>
+          </div>
+          <div class="card-body bg-white p-3 rounded">
+              <form action="{{ route('talent#storeReview') }}" method="POST" enctype="multipart/form-data">
+                  @csrf
+                  <input type="hidden" name="project_id" value="{{ $project->id }}">
+                  <input type="hidden" name="user_id" value="{{ $userData->id }}">
+                  <input type="hidden" name="comic_name" value="{{ $project->comic_name }}">
+
+
+                  <div class="text-left mb-4" style="text-align: start;">
+                      <label for="number_of_panel" class="text-md text-dark">Number of Final Panel</label>
+                      <input type="text" name="number_of_panel" class="form-control" placeholder="Example 50" >
+                      @error('number_of_panel')
+                      <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                      @enderror
+                  </div>
+                  <hr>
+                  <div class="mb-2 text-left" style="text-align: start;">
+                      <label for="complexity" class="text-md text-dark">Project Complexity</label>
+                      <select name="complexity" class="form-control">
+                          <option value="">Please select project complexity</option>
+                          <option value="1">Very Easy</option>
+                          <option value="2">Easy</option>
+                          <option value="3">Medium</option>
+                          <option value="4">Hard</option>
+                          <option value="5">Very Hard</option>
+
+                      </select>
+                      @error('complexity')
+                          <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                      @enderror
+                  </div>
+                  <hr>
+                  <div class="mb-2 text-left" style="text-align: start;">
+                      <label for="qc_reviews" class="text-md text-dark">QC Review</label>
+                      <select name="qc_reviews" class="form-control">
+                          <option value="">Please select Qc review</option>
+                          <option value="1">Needs Improvement</option>
+                          <option value="2">Developing</option>
+                          <option value="3">Competent</option>
+                          <option value="4">Outstanding</option>
+                          <option value="5">Exceptional</option>
+
+                      </select>
+                      @error('complexity')
+                          <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                      @enderror
+                  </div>
+                  <div class="text-left mb-4" style="text-align: start;">
+                      <label for="message" class="text-md text-dark">Message for QC</label>
+                      <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
+                      @error('message')
+                      <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                      @enderror
+                  </div>
+                  <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
+              </form>
+          </div>
+      </div>
+  </div>
+  @endif
+  @endforeach
+@endif
+
 
   <div class="row my-4" >
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
@@ -180,13 +256,45 @@
                     </div>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <span class="text-sm text-center font-weight-bold"> - </span>
+                    @php
+                        $complexity = $project->projectComplexity->first();
+                        if ($complexity) {
+                            $rawComplexity = $complexity->average_complexity;
+                            // Custom rounding logic
+                            $decimal = $rawComplexity - floor($rawComplexity);
+                            $avgComplexity = $decimal <= 0.5 ? floor($rawComplexity) : ceil($rawComplexity);
+
+                            switch($avgComplexity) {
+                                case 1:
+                                    $result = 'Very Easy';
+                                    break;
+                                case 2:
+                                    $result = 'Easy';
+                                    break;
+                                case 3:
+                                    $result = 'Medium';
+                                    break;
+                                case 4:
+                                    $result = 'Hard';
+                                    break;
+                                case 5:
+                                    $result = 'Very Hard';
+                                    break;
+                                default:
+                                    $result = 'Unknown';
+                            }
+                            $display = $result;
+                        } else {
+                            $display = '-';
+                        }
+                    @endphp
+                    <span class="text-sm font-weight-bold">{{ $display }}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    @if ($projectOverview->isNotEmpty() && ($projectOverview->last()->status == 'Project Assign' || $projectOverview->last()->status == 'QC First Draft'))
+                    @if ($projectOverview->isNotEmpty() && ($projectOverview->first()->status == 'Project Assign' || $projectOverview->first()->status == 'QC First Draft'))
                         <a class="badge badge-sm text-white bg-gradient-success" href="#" data-bs-toggle="modal" data-bs-target="#notApply">
                             <span class="px-2">Apply</span>
                         </a>

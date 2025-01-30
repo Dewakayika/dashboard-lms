@@ -10,8 +10,13 @@ use App\Models\Ewallet;
 use App\Models\Withdraw;
 use App\Models\Talent;
 use App\Models\TalentQc;
+use App\Models\User;
 
+use App\Mail\NotifyTalentQcMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+
 
 class EwaletController extends Controller
 {
@@ -21,6 +26,38 @@ class EwaletController extends Controller
         // Mengambil data user dan talent yang login
         $userData = Auth::user();
         $talent = Talent::where('user_id', $userData->id)->first();
+
+        if ($talent) {
+            try {
+                $talent->id_card = Crypt::decrypt($talent->id_card);
+            } catch (\Exception $e) {
+                $talent->id_card = 'Encrypted';
+            }
+
+            try {
+                $talent->bank_name = Crypt::decrypt($talent->bank_name);
+            } catch (\Exception $e) {
+                $talent->bank_name = 'Encrypted';
+            }
+
+            try {
+                $talent->bank_Account = Crypt::decrypt($talent->bank_Account);
+            } catch (\Exception $e) {
+                $talent->bank_Account = 'Encrypted';
+            }
+
+            try {
+                $talent->swift_code = Crypt::decrypt($talent->swift_code);
+            } catch (\Exception $e) {
+                $talent->swift_code = 'Encrypted';
+            }
+
+            try {
+                $talent->subjected_tax = Crypt::decrypt($talent->subjected_tax);
+            } catch (\Exception $e) {
+                $talent->subjected_tax = 'Encrypted';
+            }
+        }
 
 
         // Get Notification
@@ -80,7 +117,7 @@ class EwaletController extends Controller
         // Total E-wallet alltime
         $ewalletHistory = Ewallet::where('user_id', $userData->id)->sum('total_ewallet');
         $amountWithdraw = Withdraw::where('user_id', $userData->id)
-            ->where('status', 'approved')
+            ->where('status', 'requested')
             ->sum('withdraw_amount');
 
         $totalEwallet = $ewalletHistory + $grandTotal - $amountWithdraw;
@@ -176,7 +213,7 @@ class EwaletController extends Controller
             // Total E-wallet alltime
             $ewalletHistory = Ewallet::where('user_id', $userData->id)->sum('total_ewallet');
             $amountWithdraw = Withdraw::where('user_id', $userData->id)
-                ->where('status', 'approved')
+                ->where('status', 'requested')
                 ->sum('withdraw_amount');
 
             $totalEwallet = $ewalletHistory + $grandTotal - $amountWithdraw;
@@ -233,11 +270,74 @@ class EwaletController extends Controller
         $withdraw->save();
 
         // Update total_ewallet pada tabel ewallet
-        $ewallet = Ewallet::where('user_id', Auth::user()->id)->first();
-        $ewallet->total_ewallet = $ewallet->total_ewallet - $request->withdraw_amount;
-        $ewallet->save();
+        // $ewallet = Ewallet::where('user_id', Auth::user()->id)->first();
+        // $ewallet->total_ewallet = $ewallet->totalEwallet - $request->withdraw_amount;
+        // $ewallet->save();
+
+        // Email to user dengan role admin
+        $admins = User::where('role', 'admin')->get();
+
+        // send mail to admin
+        foreach ($admins as $admin) {
+            $data = [
+                'name' => $admin->name,
+                'email' => $admin->email
+            ];
+
+            Mail::send('emails.requestWithdraw', ['data' => $data], function($message) use ($admin) {
+                $message->to($admin->email)
+                        ->subject('New Withdrawal Request');
+            });
+        }
 
         return redirect()->back()->with('success', 'Withdraw request has been sent');
 
     }
+
+    // Ewallet list from user in admin dashboard
+    public function ewalletRequest(){
+        $adminData = Auth::user();
+
+        $withdraws = Withdraw::where('status', 'requested')->get();
+
+        $withdrawsHistory = Withdraw::where('status', 'approved')->get();
+
+        $notification = Notification::where('email', $adminData->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
+        return view('users.Admin.ewaletOverview', compact('withdraws', 'adminData',  'notification', 'withdrawsHistory'  ));
+    }
+
+    public function approveWithdraw(Request $request){
+        $withdraw = Withdraw::find($request->withdraw_id);
+        if (!$withdraw) {
+            return redirect()->back()->with('error', 'Withdraw request not found.');
+        }
+
+        $withdraw->status = 'approved';
+        $withdraw->save();
+
+        // send email to user
+        $user = User::find($withdraw->user_id);
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email
+        ];
+        Mail::send('emails.approveWithdraw', ['data' => $data], function($message) use ($user) {
+            $message->to($user->email)
+                    ->subject('Withdrawal Request Approved');
+        });
+
+        return redirect()->back()->with('success', 'Withdraw request has been approved.');
+    }
+
+    public function validatePassword(Request $request) {
+        $admin = Auth::user();
+        if (Hash::check($request->password, $admin->password)) {
+            return response()->json(['valid' => true]);
+        }
+        return response()->json(['valid' => false]);
+    }
+
 }

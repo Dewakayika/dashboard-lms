@@ -11,6 +11,7 @@ class ProjectComplexity extends Model
 
     protected $fillable = [
         'project_id',
+        'comic_name',
         'user_id',
         'complexity'
     ];
@@ -32,4 +33,7 @@ class ProjectComplexity extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // In Project.php model
+
+
 }

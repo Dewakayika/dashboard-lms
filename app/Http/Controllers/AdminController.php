@@ -42,11 +42,12 @@ use Spatie\GoogleCalendar\Event;
 use App\Mail\MeetingInvitation;
 
 use Google\Service\Calendar\Event as GoogleEvent;
-use Google\Service\Calendar; // For Calendar service
-use Google\Service\Calendar\EventDateTime; // For EventDateTime class
-use Google\Service\Calendar\ConferenceData; // For ConferenceData class
-use Google\Service\Calendar\ConferenceDataCreateRequest; // For ConferenceDataCreateRequest class
+use Google\Service\Calendar;
+use Google\Service\Calendar\EventDateTime;
+use Google\Service\Calendar\ConferenceData;
+use Google\Service\Calendar\ConferenceDataCreateRequest;
 use Google\Service\Calendar\ConferenceSolutionKey;
+use Illuminate\Support\Facades\Hash;
 
 
 
@@ -59,6 +60,7 @@ class AdminController extends Controller
 
         // Count all Project based on Status
         $projectWaiting = Project::where('status', 'Waiting Talent')->count();
+        $projectAssign = Project::where('status', 'Project Assign')->count();
         $projectDraft = Project::whereIn('status', ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted'])->count();
         $projectRevise = Project::whereIn('status', ['Revise 1', 'Revise 2', 'Revise 3'])->count();
         $projectQC = Project::where('status', ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3'])->count();
@@ -95,20 +97,36 @@ class AdminController extends Controller
         $averageDuration = $projectCount > 0 ? $totalDuration / $projectCount : 0;
 
 
-            // Mengambil total proyek per bulan
-        $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'asc')
-        ->orderBy('month', 'asc')
-        ->get();
+        // Mengambil data untuk drop down based on year
+        $availableYears = Project::selectRaw('DISTINCT YEAR(created_at) as year')
+            ->orderBy('year', 'asc')
+            ->pluck('year');
 
-        // Mengonversi data ke format yang dapat digunakan di chart
+        // Get selected year (default to current year if not specified)
+        $selectedYear = request('year', now()->year);
+
+        // Get monthly data for selected year
+        $projects = Project::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $selectedYear)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->pluck('total', 'month')
+            ->toArray();
+
+        // Create array with all months (1-12) initialized to 0
+        $monthlyData = array_combine(range(1, 12), array_fill(0, 12, 0));
+
+        // Merge actual data with the zero-filled array
+        $monthlyData = array_replace($monthlyData, $projects);
+
+        // Prepare data for chart
         $months = [];
         $totals = [];
 
-        foreach ($projects as $project) {
-            $months[] = Carbon::createFromDate($project->year, $project->month, 1)->format('F Y');
-            $totals[] = $project->total;
+        foreach ($monthlyData as $month => $total) {
+            $months[] = Carbon::createFromDate($selectedYear, $month, 1)->format('F Y');
+            $totals[] = $total;
         }
 
 
@@ -140,6 +158,10 @@ class AdminController extends Controller
             'months' => $months,
             'totals' => $totals,
             'talentQc' => $talent_qc,
+            'projectAssign' => $projectAssign,
+            'availableYears' => $availableYears,
+            'selectedYear' => $selectedYear,
+
         ]);
     }
 
@@ -164,128 +186,117 @@ class AdminController extends Controller
     }
 
 
-    // Project Time Statistic
-    public function projectTimeStatistic(){
-        // Ambil pengguna yang sedang login
+
+    public function projectTimeStatistic()
+    {
         $user = auth()->user();
-
-        // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
         $notifications = Notification::where('notif_type', 'urgent')
-        ->orWhere('email', $user->email) // For general notifications based on the authenticated user's email
-        ->get();
+            ->orWhere('email', $user->email)
+            ->get();
 
-        // Mengambil data seluruh user dan menghitung jumlah proyek yang telah dia seleesaikan.
-        $userProjects = Project::select(
-            'talent',
-            'users.id as user_id',  // Add this to get user ID
-            DB::raw('COUNT(*) as total_projects'),
-            DB::raw('SUM(number_of_panel) as total_panels')
-        )
-        ->join('users', 'users.name', '=', 'projects.talent')  // Join with users table
-        ->where('projects.status', 'Done')   
-        ->groupBy('talent', 'users.id')  
-        ->get();
+        $projects = Project::select('id as project_id', 'talent', 'talent_qc')->get();
 
-
-
-        // Mengambil nama talent di tabel project
-        $projectOverview = Project::select('talent');
-        
-        // Retrieve all projects with their associated talent names
-        $projects = Project::select('id as project_id', 'talent')->get();
-        
+        // Data for Talent (Project Time)
         $talentDurations = [];
-        $talentProjectCounts = []; // To track the number of projects for each talent
+        $talentProjectCounts = [];
+
+        // Data for Talent QC (QC Time)
+        $qcDurations = [];
+        $qcProjectCounts = [];
 
         foreach ($projects as $project) {
-            // Retrieve project logs for the relevant statuses
             $projectLogs = ProjectLog::select('status', 'timestamp')
                 ->where('project_id', $project->project_id)
-                ->whereIn('status', ['Waiting Talent', 'First Draft Submitted'])
+                ->whereIn('status', ['Project Assign', 'QC First Draft', 'First Draft Submitted'])
                 ->orderBy('timestamp')
                 ->get();
 
-            // Check if we have both logs
-            if ($projectLogs->count() < 2) {
-                continue; // Skip if there are not enough logs
-            }
+            // Assign time
+            $assignTime = Carbon::parse(optional($projectLogs->firstWhere('status', 'Project Assign'))->timestamp);
+            $qcFirstDraftTime = Carbon::parse(optional($projectLogs->firstWhere('status', 'QC First Draft'))->timestamp);
+            $firstDraftTime = Carbon::parse(optional($projectLogs->firstWhere('status', 'First Draft Submitted'))->timestamp);
 
-            $assignLog = $projectLogs->firstWhere('status', 'Waiting Talent');
-            $firstDraftLog = $projectLogs->firstWhere('status', 'First Draft Submitted');
-
-            if ($assignLog && $firstDraftLog) {
-                $assignTime = Carbon::parse($assignLog->timestamp);
-                $firstDraftTime = Carbon::parse($firstDraftLog->timestamp);
+            // Calculate talent project time
+            if ($assignTime && $firstDraftTime) {
                 $duration = $firstDraftTime->diffInSeconds($assignTime);
-
-                // Store the duration for the talent
                 if (!isset($talentDurations[$project->talent])) {
                     $talentDurations[$project->talent] = 0;
-                    $talentProjectCounts[$project->talent] = 0; // Initialize project count
+                    $talentProjectCounts[$project->talent] = 0;
                 }
-
                 $talentDurations[$project->talent] += $duration;
-                $talentProjectCounts[$project->talent]++; // Increment project count
+                $talentProjectCounts[$project->talent]++;
+            }
+
+            // Calculate QC project time
+            if ($qcFirstDraftTime && $firstDraftTime && $project->talent_qc) {
+                $qcDuration = $firstDraftTime->diffInSeconds($qcFirstDraftTime);
+                if (!isset($qcDurations[$project->talent_qc])) {
+                    $qcDurations[$project->talent_qc] = 0;
+                    $qcProjectCounts[$project->talent_qc] = 0;
+                }
+                $qcDurations[$project->talent_qc] += $qcDuration;
+                $qcProjectCounts[$project->talent_qc]++;
             }
         }
 
-        // Prepare the final response with talent names, their total durations, and average durations
-        $result = [];
-        $talentNames = [];
-        $totalDurations = [];
-        $averageDurationsInHours = []; // New array to store average durations in hours
+        // Prepare data for Talent Bar Chart
+        $talentNames = array_keys($talentDurations);
+        $averageProjectDurations = array_map(
+            fn($talent) => $talentProjectCounts[$talent] > 0 ? round(($talentDurations[$talent] / $talentProjectCounts[$talent]) / 3600, 2) : 0,
+            $talentNames
+        );
 
-        foreach ($talentDurations as $talent => $totalDuration) {
-            $averageDurationInSeconds = $talentProjectCounts[$talent] > 0 ? $totalDuration / $talentProjectCounts[$talent] : 0;
-            
-            // Calculate average duration in hours and format it
-            $averageDurationInHours = $averageDurationInSeconds / 3600; // Convert seconds to hours
-            $formattedAverageDuration = gmdate("H:i:s", $averageDurationInSeconds); // Format as hours:minutes:seconds
+        // Prepare data for QC Bar Chart
+        $qcNames = array_keys($qcDurations);
+        $averageQCDurations = array_map(
+            fn($qc) => $qcProjectCounts[$qc] > 0 ? round(($qcDurations[$qc] / $qcProjectCounts[$qc]) / 3600, 2) : 0,
+            $qcNames
+        );
 
-            $result[] = [
-                'talent_name' => $talent,
-                'total_seconds' => $totalDuration,
-                'formatted_duration' => gmdate("H:i:s", $totalDuration), // Format as hours:minutes:seconds
-                'average_seconds' => $averageDurationInSeconds,
-                'average_hours' => $averageDurationInHours, // Store average in hours
-                'formatted_average_duration' => $formattedAverageDuration // Format average duration
+        // Prepare Leaderboard Data
+        $leaderboardData = [];
+        foreach ($talentNames as $index => $name) {
+            $leaderboardData[] = [
+                'talent_name' => $name,
+                'email' => $this->getTalentEmail($name),
+                'formatted_average_duration' => $this->formatDuration($averageProjectDurations[$index]),
             ];
-
-            // Prepare data for the chart
-            $talentNames[] = $talent;
-            $totalDurations[] = $totalDuration;
-            $averageDurationsInHours[] = $averageDurationInHours; // Store average in hours for the chart
         }
 
-        usort($result, function ($a, $b) {
-            return $a['average_seconds'] <=> $b['average_seconds'];
+        // Sort leaderboard by average duration
+        usort($leaderboardData, function($a, $b) {
+            return $a['formatted_average_duration'] <=> $b['formatted_average_duration'];
         });
 
-        // Fetch user data based on talent names
-        $users = User::whereIn('name', $talentNames)->get()->keyBy('name');
-
-        // Add email and profile information to the result
-        foreach ($result as &$talent) {
-            if (isset($users[$talent['talent_name']])) {
-                $talent['email'] = $users[$talent['talent_name']]->email;
-            } else {
-                $talent['email'] = null; // Handle case where user is not found
-            }
-        }
-
+        // Now $projectSummaries contains the information about both talent and talent_qc
 
         return view('users.Admin.projectTimeOverview')->with([
             'adminData' => $user,
             'notification' => $notifications,
-            'projectOverview' => $projectOverview,
-            'result' => $result,
             'talentNames' => $talentNames,
-            'totalDurations' => $totalDurations,
-            'averageDurations' => $averageDurationsInHours,
-            'userProjects' => $userProjects,
-
+            'averageProjectDurations' => $averageProjectDurations,
+            'qcNames' => $qcNames,
+            'averageQCDurations' => $averageQCDurations,
+            'result' => $leaderboardData,
+            'projects' => $projects, // Pass $projects to the view
         ]);
     }
+
+
+    private function getTalentEmail($talentName)
+    {
+        // Assuming you have a Talent model or User model where you can get the email by name
+        return User::where('name', $talentName)->first()->email ?? 'No Email';
+    }
+
+    private function formatDuration($durationInHours)
+    {
+        return $durationInHours > 0 ? $durationInHours . ' hours' : '0 hours';
+    }
+
+
+
+
 
     public function storeProject(Request $request)
     {
@@ -315,7 +326,7 @@ class AdminController extends Controller
             'project_id' => $project->id,  // Get ID from the newly saved project
             'user_id' => auth()->id(),     // Get current authenticated user's ID
             'talent_qc' => $project->talent_qc,  // Get talent_qc from the newly saved project
-            'timestamp' => Carbon::now(), 
+            'timestamp' => Carbon::now(),
             'status' => $project->status,   // Get status from the newly saved project
         ]);
 
@@ -327,7 +338,7 @@ class AdminController extends Controller
             'email' => $talentQc->email,
         ]);
 
-        return redirect()->route('admin#index')->with('success', 'Project created successfully!');
+        return redirect()->back()->with('success', 'Project created successfully!');
     }
 
 
@@ -464,8 +475,18 @@ class AdminController extends Controller
     // Admin Profile
     public function adminProfile()
     {
-        $user_data = User::where('id', Auth::id())->first();
-        return view('users.Admin.adminProfile')->with(['userData' => $user_data]);
+        $adminData = User::where('id', Auth::id())->first();
+
+        // get all notification
+        $notification = Notification::where('email', $adminData->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+        return view('users.Admin.adminProfile')
+            ->with([
+                'adminData' => $adminData,
+                'notification' => $notification
+
+        ]);
     }
 
     //Admin Edit Profile
@@ -514,10 +535,10 @@ class AdminController extends Controller
 
         $role = $request->input('role'); // Mendapatkan role dari request (Intern atau Talent)
 
-        if ($role == 'Intern') {
+        if ($role == 'talent_qc') {
             // Mendapatkan data Intern saja
-            $user_data = User::whereHas('intern')->with('intern')->paginate(10);
-        } elseif ($role == 'Talent') {
+            $user_data = User::whereHas('talent_qc')->with('talent_qc')->paginate(10);
+        } elseif ($role == 'talent') {
             // Mendapatkan data Talent saja
             $user_data = User::whereHas('talent')->with('talent')->paginate(10);
         } else {
@@ -534,68 +555,81 @@ class AdminController extends Controller
     // Profile User by Id
     public function profileUser($id)
     {
-        $user_data = User::where('id', $id)->first();
-        // mengambil data talent dan talent qc berdasarkan ID
-        $talent=Talent::where('user_id', $id)->first();
-        $talentQc=TalentQC::where('user_id', $id)->first();
+        $userData = User::findOrFail($id);
+        $adminData = User::findOrFail(Auth::id());
 
-        $admin_data = User::where('id', Auth::id())->first();
+        // Mengambil data talent dan talent QC berdasarkan user ID
+        $talent = Talent::where('user_id', $id)->first();
+        $talentQc = TalentQC::where('user_id', $id)->first();
 
-        $notification = Notification::where('email', $admin_data->email)
-        ->orWhere('notif_type', 'urgent')
-        ->get();
-
-        $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
-        ->where('talent', $user_data->name)  // Add this line to filter by talent name
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'asc')
-        ->orderBy('month', 'asc')
-        ->get();
-
-        // Convert data for chart
-        $months = [];
-        $totals = [];
-
-        foreach ($projects as $project) {
-            $months[] = Carbon::createFromDate($project->year, $project->month, 1)->format('F Y');
-            $totals[] = $project->total;
+        // Dekripsi data talent jika ada
+        if ($talent) {
+            foreach (['id_card', 'bank_name', 'bank_Account', 'swift_code', 'subjected_tax'] as $field) {
+                try {
+                    $talent->$field = Crypt::decrypt($talent->$field);
+                } catch (\Exception $e) {
+                    $talent->$field = 'Encrypted';
+                }
+            }
         }
 
+        // Mengambil notifikasi
+        $notification = Notification::where('email', $adminData->email)
+            ->orWhere('notif_type', 'urgent')
+            ->get();
 
+        // Mengambil daftar tahun yang tersedia
+        $availableYears = Project::selectRaw('DISTINCT YEAR(created_at) as year')
+            ->orderBy('year', 'asc')
+            ->pluck('year');
 
-        $projectOverview = Project::where('talent', $user_data->name)
-        ->where('status', 'Done')
-        ->select(
-            'id',
-            'comic_name',
-            'chapter_number',
-            'number_of_panel',
-            'updated_at',
-            'status'
-        )
-        ->orderBy('updated_at', 'desc')
-        ->get();
-        
+        // Tahun yang dipilih (default ke tahun saat ini jika tidak ada)
+        $selectedYear = request('year', now()->year);
 
-        return view('users.Admin.profileUser')->with([
-            'userData' => $user_data, 
-            'adminData' => $admin_data, 
-            'notification' => $notification,
-            'talent' => $talent,
-            'talentQc' => $talentQc,
-            'projectOverview' => $projectOverview,
-            'months' => $months,
-            'totals' => $totals,
-        ]);
+        // Mengambil data proyek per bulan berdasarkan tahun yang dipilih
+        $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
+            ->where('talent', $userData->name)
+            ->whereYear('created_at', $selectedYear)
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        // Inisialisasi data bulan dengan 0
+        $monthlyData = array_combine(range(1, 12), array_fill(0, 12, 0));
+        foreach ($projects as $project) {
+            $monthlyData[$project->month] = $project->total;
+        }
+
+        // Menyiapkan data untuk chart
+        $months = [];
+        $totals = [];
+        foreach ($monthlyData as $month => $total) {
+            $months[] = Carbon::createFromDate($selectedYear, $month, 1)->format('F Y');
+            $totals[] = $total;
+        }
+
+        // Mengambil daftar proyek yang telah selesai
+        $projectOverview = Project::where('talent', $userData->name)
+            ->where('status', 'Done')
+            ->select('id', 'comic_name', 'chapter_number', 'number_of_panel', 'updated_at', 'status')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(3);
+
+        return view('users.Admin.profileUser', compact(
+            'userData', 'adminData', 'notification', 'talent', 'talentQc',
+            'months', 'totals', 'projectOverview', 'availableYears', 'selectedYear'
+        ));
     }
-    
+
+
 
 
     // Admin Delete User
     public function deleteUser($id)
     {
         User::where('id', $id)->delete();
-        return back()->with(['userDeleted' => 'User Has Been Deleted Successfully!']);
+        return back()->with('success', 'You have been delete user data.');
     }
 
     // Admin Edit User
@@ -918,6 +952,8 @@ class AdminController extends Controller
         ->orWhere('email', $user->email) // For general notifications based on the authenticated user's email
         ->get();
 
+        $talent_qc = User::where('role', 'talent_qc')->get();
+
 
         // Ambil semua data projects
         $projectOverview = Project::paginate(10);
@@ -925,7 +961,8 @@ class AdminController extends Controller
         return view('users.Admin.manageProject')->with([
             'adminData' => $user,
             'notification' => $notifications,
-            'projectOverview' => $projectOverview
+            'projectOverview' => $projectOverview,
+            'talentQc' => $talent_qc
 
         ]);
     }
@@ -991,17 +1028,26 @@ class AdminController extends Controller
             $validatedData = $request->validate([
                 'project_id' => 'required|exists:projects,id',
                 'user_id' => 'required|exists:users,id',
-                'revise_stage' => 'required|string',
-                'number_of_panel' => 'required|integer',
                 'revise_message' => 'required|string',
             ]);
+
+                        // Get the current project
+            $project = Project::findOrFail($request->project_id);
+
+            // Determine project_stage based on current status
+            $projectStageMap = [
+                'First Draft Submitted' => 'Revise 1',
+                'Revise 1 Submitted' => 'Revise 2',
+                'Revise 2 Submitted' => 'Revise 3',
+            ];
+
+            $validatedData['revise_stage'] = $projectStageMap[$project->status] ?? 'Unknown Stage';
 
             // Simpan project revise menggunakan instance model
             $projectRecord = new ProjectRevise();
             $projectRecord->project_id = $validatedData['project_id'];
             $projectRecord->user_id = $validatedData['user_id'];
             $projectRecord->revise_stage = $validatedData['revise_stage'];
-            $projectRecord->number_of_panel = $validatedData['number_of_panel'];
             $projectRecord->revise_message = $validatedData['revise_message'];
             $projectRecord->save();
 
@@ -1020,65 +1066,49 @@ class AdminController extends Controller
                 'Revise 3' => ['status' => 'Revise 3', 'status_type_id' => 10],
             ];
 
-            if (isset($statusUpdates[$request->revise_stage])) {
-                $statusData = $statusUpdates[$request->revise_stage];
+            $talentName = $project->talent;
+            $talent = User::where('name', $talentName)->first();
+            $user = User::find($request->user_id);
 
-                // Update status di tabel Project
-                $project->update([
-                    'status' => $statusData['status'],
-                ]);
+            if (isset($statusUpdates[$validatedData['revise_stage']])) {
+                $statusData = $statusUpdates[$validatedData['revise_stage']];
 
-                // Simpan data baru ke tabel Statuses
+                // Update project status
+                $project->update(['status' => $statusData['status']]);
+
+                // Create status record
                 Status::create([
                     'project_id' => $project->id,
                     'status_type_id' => $statusData['status_type_id'],
                 ]);
 
-                // Menyimpan Data baru untuk project_log
-                $log = ProjectLog::create([
+                // Create project log
+                ProjectLog::create([
                     'project_id' => $project->id,
-                    'user_id' => $validatedData['user_id'],
+                    'user_id' => $user->id,
                     'talent_qc' => $project->talent_qc ?? 'N/A',
-                    'timestamp' => Carbon::now(),
+                    'timestamp' => now(),
                     'status' => $statusData['status'],
                 ]);
 
-                $deadline = Carbon::parse($log->timestamp)->addHours(30);
+                // Simpan notifikasi
+                Notification::create([
+                    'email' => $user->email,
+                    'subject' => "You Already send {$request->project_stage} of {$project->comic_name} Chapter {$project->chapter_number}",
+                    'message' => "The project stage has been successfully submitted. Please wait for the next stage.",
+                    'notif_type' => 'general',
+                ]);
+
+                // Notifikasi untuk Talent dengan email talent
+                Notification::create([
+                    'email' => $talent->email,
+                    'subject' => "{$user->name} Already Submit revise of {$project->comic_name} Chapter {$project->chapter_number}",
+                    'message' => "The project stage has been successfully submitted. Please wait for the next stage.",
+                    'notif_type' => 'general',
+                ]);
+
 
             }
-
-            // Kirim email
-            $talentName = $project->talent;
-            $talent = User::where('name', $talentName)->first();
-            $user = User::find($request->user_id);
-
-            if ($talent) {
-                // Kirim email ke Talent dan Talent QC
-                Mail::send('emails.revise', [
-                    'talentName' => $talent->name,
-                    'projectStage' => $request->revise_stage,
-                    'projectName' => $project->name
-                ], function ($message) use ($talent, $user) {
-                    $message->to([$talent->email, $user->email])
-                            ->subject("Project Revision");
-                });
-            }
-
-            // Simpan notifikasi
-            Notification::create([
-                'email' => $user->email,
-                'subject' => "You Already send {$request->project_stage} of {$project->comic_name} Chapter {$project->chapter_number}",
-                'message' => "The project stage has been successfully submitted. Please wait for the next stage.",
-                'notif_type' => 'general',
-            ]);
-
-            // Notifikasi untuk Talent dengan email talent
-            Notification::create([
-                'email' => $talent->email,
-                'subject' => "{$user->name} Already Submit revise of {$project->comic_name} Chapter {$project->chapter_number}",
-                'message' => "The project stage has been successfully submitted. Please wait for the next stage.",
-                'notif_type' => 'general',
-            ]);
 
             // Alert sukses
             return redirect()->back()->with('success', 'You have successfully Add New Revise.');
@@ -1144,5 +1174,17 @@ class AdminController extends Controller
 
 
     }
+
+
+
+
+    public function validatePassword(Request $request) {
+        $admin = Auth::user();
+        if (Hash::check($request->password, $admin->password)) {
+            return response()->json(['valid' => true]);
+        }
+        return response()->json(['valid' => false]);
+    }
+
 
 }

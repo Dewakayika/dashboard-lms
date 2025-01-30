@@ -7,7 +7,13 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Projects Overview</h6>
+                    <div class="w-full mx-auto  d-flex align-items-center justify-content-between">
+                        <h6 class="text-weight-bolder">Project Overview</h6>
+                        <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                            <i class="fa-solid fa-plus text-white"></i>
+                            <span class="px-2">New Project</span>
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -169,6 +175,59 @@
                             @endif
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="createProjectModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="px-3 pt-3">
+                            <form action="{{ route('projects#store') }}" method="POST" enctype="multipart/form-data" role="form text-left">
+                                @csrf
+                                <div class="mb-2">
+                                  <label for="comic_name" class="text-md text-dark">Comic Name</label>
+                                  <input type="text" name="comic_name" class="form-control" placeholder="Example Keiken Ninzu">
+                                  @error('comic_name')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                                <div class="mb-2">
+                                  <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
+                                  <input type="number" name="chapter_number" class="form-control" placeholder="Example 17, 18, 19">
+                                  @error('chapter_number')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                                <div class="mb-2">
+                                  <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
+                                  <select  name="talent_qc" class="form-control selector" placeholder="Select Talent QC" >
+                                      <option value="" class="form-control">Pelase select Talent Qc</option>
+                                      @foreach ($talentQc as $Qc)
+                                          <option class="text-black" value="{{ $Qc->id }}">{{ $Qc->name }}</option>
+                                      @endforeach
+                                  </select>
+                                  @error('talent_qc')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                                <div class="mb-2">
+                                  <label for="file" class="text-md text-dark">Link Project</label>
+                                  <input type="text" name="file" class="form-control" placeholder="Box storage link">
+                                  @error('file')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                                <div class="text-center">
+                                  <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project</button>
+                                </div>
+                              </form>
+                        </div>
                     </div>
                 </div>
             </div>

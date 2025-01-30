@@ -1,5 +1,5 @@
 
-@extends('users.admin.layouts.dashboard-app')
+@extends('users.Admin.layouts.dashboard-app')
 
 @php
     use Carbon\Carbon;
@@ -17,7 +17,7 @@
             </ol>
         </nav>
         {{-- div card--}}
-        
+
       <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{asset('/assets/img/webtoon.png')}}'); background-position-y: 50%;">
         <span class="mask bg-secondary opacity-6"></span>
       </div>
@@ -94,56 +94,58 @@
 
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    @if ($projectLogs->isNotEmpty())
-                        @php $log = $projectLogs->last(); @endphp
-                        startCountdown("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
-                    @endif
+                @if ($projectLogs->isNotEmpty())
+                    @php $log = $projectLogs->last(); @endphp
+                    startTimer("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
+                @endif
 
-                    function startCountdown(id, timestamp, status) {
-                        const countdownElem = document.getElementById(`countdown-${id}`);
-                        let endTime;
+                function startTimer(id, timestamp, status) {
+                    const timerElem = document.getElementById(`countdown-${id}`);
+                    const daysElem = document.getElementById(`days-${id}`);
+                    const hoursElem = document.getElementById(`hours-${id}`);
+                    const minutesElem = document.getElementById(`minutes-${id}`);
+                    const secondsElem = document.getElementById(`seconds-${id}`);
 
-                        if (["Waiting Talent", "Revise 1", "Revise 2", "Revise 3"].includes(status)) {
-                            endTime = new Date(new Date(timestamp).getTime() + 30 * 60 * 60 * 1000); // Add 30 hours for deadline
-                        } else {
-                            endTime = new Date(timestamp);
-                        }
+                    const startStatuses = ["Project Assign", "QC First Draft", "Revise 1", "QC Revise 1",  "Revise 2", "QC Revise 2","Revise 3", "QC Revise 3"];
+                    const endStatuses = ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"];
 
-                        const daysElem = document.getElementById(`days-${id}`);
-                        const hoursElem = document.getElementById(`hours-${id}`);
-                        const minutesElem = document.getElementById(`minutes-${id}`);
-                        const secondsElem = document.getElementById(`seconds-${id}`);
 
-                        function updateCountdown() {
+                    if (startStatuses.includes(status)) {
+                        // Stopwatch mode
+                        const startTime = new Date(timestamp);
+
+                        function updateStopwatch() {
                             const now = new Date();
-                            const remainingTime = endTime - now;
+                            const elapsedTime = now - startTime;
 
-                            if (remainingTime <= 0 || ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"].includes(status)) {
-                                clearInterval(interval);
-                                countdownElem.innerHTML = `<p>Status changed or deadline reached.</p>`;
-                                return;
-                            }
-
-
-                            const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                            const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
                             daysElem.textContent = String(days).padStart(2, "0");
                             hoursElem.textContent = String(hours).padStart(2, "0");
                             minutesElem.textContent = String(minutes).padStart(2, "0");
                             secondsElem.textContent = String(seconds).padStart(2, "0");
 
-                            if (remainingTime > 30 * 60 * 60 * 1000) {
-                                countdownElem.style.color = "red";
+                            // Change color if elapsed time exceeds 30 hours
+                            if (elapsedTime > 30 * 60 * 60 * 1000) {
+                                timerElem.style.color = "red";
                             }
                         }
 
-                        const interval = setInterval(updateCountdown, 1000);
-                        updateCountdown();
+                        const interval = setInterval(updateStopwatch, 1000);
+                        updateStopwatch();
+
+                    } else if (endStatuses.includes(status)) {
+                        // If status is a submission status, show completion message
+                        timerElem.innerHTML = `<p>Draft Submitted</p>`;
+                    }else {
+                        // For any other status
+                        timerElem.innerHTML = `<p>Waiting to Apply</p>`;
                     }
-                });
+                }
+            });
             </script>
 
           </div>
@@ -282,7 +284,7 @@
                                                 <td class="align-middle text-center text-sm">
                                                     @if (in_array($record->project_stage, ['First Draft', 'Revise 1', 'Revise 2', 'Revise 3']))
                                                         <a href="{{ $record->link_google_drive }}" class="badge badge-sm bg-gradient-warning font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Review Project</a>
-                                                    @elseif (in_array($record->project_stage, ['Submit First Draft', 'Submit Revise 1', 'Submit Revise 2', 'Submit Revise 3']))
+                                                    @elseif (in_array($record->project_stage, ['First Draft Submitted', 'Revise 1 Submitted', 'Revis 2 Submitted', 'Revise 3 Submitted']))
                                                         <a href="#" data-bs-toggle="modal" data-bs-target="#shareToWhatsAppModal" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Share Project</a>
                                                     @else
                                                         <a class="badge badge-sm bg-gradient-danger font-weight-bold mb-0 text-white hover:bg-secondaryy" href="#" data-bs-toggle="modal" data-bs-target="#createProjectModal">
@@ -314,7 +316,7 @@
                             <input type="hidden" name="project_id" value="{{ $projectData->id }}">
                             <input type="hidden" name="user_id" value="{{ $adminData->id }}">
 
-                            <div class="mb-2">
+                            {{-- <div class="mb-2">
                                 <label for="revise_stage" class="text-md text-dark">Revise Stage</label>
                                 <select name="revise_stage" class="form-control">
                                     <option value="">Please select Project revise stage</option>
@@ -323,12 +325,12 @@
                                     <option value="Revise 3">Revise 3</option>
                                 </select>
                                 @error('revise_stage') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="mb-2">
+                            </div> --}}
+                            {{-- <div class="mb-2">
                                 <label for="number_of_panel" class="text-md text-dark">Total Number Of Panel</label>
                                 <input type="number" name="number_of_panel" class="form-control" placeholder="Example 50">
                                 @error('number_of_panel') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
-                            </div>
+                            </div> --}}
                             <div class="mb-3 text-left">
                                 <label for="revise_message" class="form-label">Revise Message</label>
                                 <textarea class="form-control" id="revise_message" name="revise_message" rows="4" required placeholder="Type Revise Message"></textarea>
@@ -430,7 +432,7 @@
                                             </td>
                                         </tr>
                                     @else
-                                    @foreach ($reviseRecords as $record)
+                                        @foreach ($reviseRecords as $record)
                                             <tr>
                                                 <td class="align-middle text-sm">
                                                     <span class="text-sm px-3 font-weight-bold">{{ $record->revise_stage }}</span>
@@ -445,24 +447,80 @@
                                                     <button type="button" class="badge badge-sm bg-gradient-success font-weight-bold mb-0 text-white hover:bg-secondary" data-bs-toggle="modal" data-bs-target="#qcMessageModal-{{ $record->id }}" style="border: none; text-decoration: none;">Open Message</button>
                                                 </td>
                                             </tr>
-                                    @endforeach
+
+                                            {{-- Modal for each record --}}
+                                            <div class="modal fade" id="qcMessageModal-{{ $record->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $record->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+                                                    <div class="modal-content rounded-3 shadow-lg">
+                                                        <div class="modal-header border-0">
+                                                            <h5 class="modal-title" id="qcMessageModalLabel-{{ $record->id }}">Share Message to WhatsApp</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
+                                                            <p class="text-base text-left"><strong>Project Stage:</strong> {{ $record->revise_stage }}</p>
+
+                                                            <p class="text-base text-left"><strong>Revise Note:</strong> <br>
+                                                                @foreach(explode(',', $record->revise_message) as $message)
+                                                                <li class="text-base">{{ $message }}</li>
+                                                                @endforeach
+                                                            </p>
+                                                            <a id="whatsappLink-{{ $record->id }}" href="#" target="_blank" class="btn btn-success w-100 mt-3" style="background-color: #0c9d08 ">
+                                                                <i class="fa-brands fa-whatsapp px-2" style="color: #ffffff; "></i>
+                                                                Share to WhatsApp
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- WhatsApp Link Script --}}
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    const whatsappLink = document.getElementById('whatsappLink-{{ $record->id }}');
+                                                    whatsappLink.addEventListener("click", function (event) {
+                                                        event.preventDefault();
+                                                        const projectName = "{{$projectData->comic_name}}";
+                                                        const Chapter = "{{$projectData->chapter_number}}";
+                                                        const talent = "{{$projectData->talent}}";
+                                                        const status = "{{ $projectData->status }}";
+                                                        const message =
+                                                            `*PROJECT REVISION* \n` +
+                                                            '\n' +
+                                                            `Project Name: *${projectName} Eps: ${Chapter}\n*` +
+                                                            `Talent: ${talent}\n` +
+                                                            `Status: ${status}\n` +
+                                                            '\n' +
+                                                            `Revise Note: \n{{ $record->revise_message }}\n`; // Fix concatenation here
+
+                                                        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                                                        window.open(whatsappUrl, '_blank');
+                                                    });
+                                                });
+                                            </script>
+
+
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
 
+
+
         {{-- Modal Pop Up Repeated --}}
-        @foreach ($reviseRecords as $revise)
+        {{-- @foreach ($reviseRecords as $revise)
         <!-- Modal -->
         <div class="modal fade" id="qcMessageModal-{{ $revise->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $revise->id }}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">revise Message</h5>
+                        <h5 class="modal-title" id="qcMessageModalLabel-{{ $revise->id }}">Revise Message</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="text-left mt-2">
@@ -473,18 +531,18 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="button text-white" class="btn bg-gradient-dark w-100 my-4" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
-        @endforeach
+        @endforeach --}}
 
                 {{-- Modal Pop Up Repeated --}}
                 @foreach ($qcRecords as $qc)
                 <!-- Modal -->
                 <div class="modal fade" id="qcMessageModal-{{ $qc->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $qc->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="qcMessageModalLabel-{{ $qc->id }}">QC Message</h5>
@@ -498,12 +556,15 @@
                                 </ul>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="button text-white" class="btn bg-gradient-dark w-100 my-4" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 @endforeach
+
+
+
 
         {{-- Status --}}
         <div class="col-lg-4 col-md-12">

@@ -57,7 +57,7 @@
                         @if ($projects->status == 'Project Assign')
                             <span class="badge badge-sm bg-gradient-info">{{$projects->status}}</span>
                         @elseif ($projects->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
-                            <span class="badge badge-sm bg-gradient-attentions">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
                         @elseif ($projects->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
                             <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
                         @elseif ($projects->status == 'Revision 1' && 'Revision 2' && 'Revision 3')

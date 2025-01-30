@@ -25,17 +25,19 @@ use App\Models\TalentReview;
 use App\Models\QcReview;
 use App\Models\TalentProject;
 use App\Models\TalentProjectReview;
-
+use App\Models\TalentSop;
+use Illuminate\Support\Facades\Crypt;
 
 use App\Mail\ApplyProjectMail;
 use App\Mail\NotifyTalentQcMail;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -54,8 +56,13 @@ class TalentController extends Controller
 
         // Ambil semua proyek yang statusnya 'waiting talent' dan pastikan talent_qc bukan nama pengguna yang sedang login
         $projectsOffer = Project::where('status', 'waiting talent')
-            ->where('talent_qc', '!=', $user->name)
-            ->paginate(7);
+        ->where('talent_qc', '!=', $user->name)
+        ->with(['projectComplexity' => function($query) {
+            $query->select('comic_name',
+                DB::raw('AVG(complexity) as average_complexity'))
+            ->groupBy('comic_name');
+        }])
+        ->paginate(7);
 
         // Ambil proyek yang telah dilamar oleh pengguna berdasarkan user_id
         $appliedProjects = ApplyProject::where('user_id', $user->id)->get(); // Mengambil proyek yang dilamar oleh user_id
@@ -68,7 +75,7 @@ class TalentController extends Controller
 
         // Ambil data proyek log
         $projectLogs = ProjectLog::with('project')
-            ->where('user_id', Auth::id())
+            ->where('created_at', Auth::id())
             ->get();
 
         // Cek apakah proyek status terbaru di database adalah 'Project Assign' atau 'QC First Draft'
@@ -76,6 +83,7 @@ class TalentController extends Controller
 
         // Mengambil semua data project dengan nama talent sesuai user yang ter auth
         $projectOverview = Project::where('talent', $user->name)
+            ->orderBy('updated_at', 'desc')
             ->paginate(10);
 
         // Cek apakah pengguna memiliki data Talent
@@ -84,7 +92,6 @@ class TalentController extends Controller
         } else {
             // Ambil data Talent berdasarkan user_id
             $talent_data = Talent::where('user_id', $user->id)->first();
-
 
 
         // Data overview
@@ -123,26 +130,35 @@ class TalentController extends Controller
             ->count();
 
 
-            // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
-            return view('users.Talent.talentIndex')->with([
-                'talentData' => $talent_data,
-                'userData' => $user,
-                'notification' => $notifications,
-                'projects' => $projectsOffer,
-                'groupedProjectStatuses' => $groupedProjectStatuses,
-                'projectLogs' => $projectLogs,
-                'projectOverview' => $projectOverview,
-                'latestStatus' => $latestStatus,
-                'onGoingProject' => $onGoingProject,
-                'projectThisMonth' => $projectThisMonth,
-                'AllProject' => $AllProject,
-                'projectAssign' => $projectAssign,
-                'projectQc' => $projectQc,
-                'projectCompleted' => $projectCompleted,
-                'projectDraft' => $projectDraft,
-                'projectRevise' => $projectRevise,
-            ]);
-        }
+        // Pop up Project Review
+        $projectsWithoutComplexity = Project::leftJoin('project_complexities', 'projects.id', '=', 'project_complexities.project_id')
+        ->where('talent', $user->name) // Filter by authenticated user
+        ->whereNull('project_complexities.id')
+        ->select('projects.*')
+        ->get();
+
+
+        // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
+        return view('users.Talent.talentIndex')->with([
+            'talentData' => $talent_data,
+            'userData' => $user,
+            'notification' => $notifications,
+            'projects' => $projectsOffer,
+            'groupedProjectStatuses' => $groupedProjectStatuses,
+            'projectLogs' => $projectLogs,
+            'projectOverview' => $projectOverview,
+            'latestStatus' => $latestStatus,
+            'onGoingProject' => $onGoingProject,
+            'projectThisMonth' => $projectThisMonth,
+            'AllProject' => $AllProject,
+            'projectAssign' => $projectAssign,
+            'projectQc' => $projectQc,
+            'projectCompleted' => $projectCompleted,
+            'projectDraft' => $projectDraft,
+            'projectRevise' => $projectRevise,
+            'projectsWithoutComplexity' => $projectsWithoutComplexity,
+        ]);
+    }
     }
 
 
@@ -173,9 +189,13 @@ class TalentController extends Controller
             'status_type_id' => 1, // Status Type ID untuk "Project Assign"
         ]);
 
-
-        // Kirim email ke Talent yang apply
-        Mail::to($user->email)->send(new ApplyProjectMail($user, $project));
+        ProjectLog::create([
+            'project_id' => $project->id,
+            'user_id' => $user->id,
+            'talent_qc' => $project->talent_qc ?? 'N/A',
+            'timestamp' => Carbon::now(),
+            'status' => 'Project Assign',
+        ]);
 
         // Simpan notifikasi untuk Talent yang apply
         Notification::create([
@@ -228,6 +248,11 @@ class TalentController extends Controller
         // Cari proyek berdasarkan ID yang telah didekripsi
         $project = Project::findOrFail($id);
 
+        $checkSop = Project::where('id', $id)
+            ->where('status', 'First Draft Submitted')
+            ->exists();
+
+
         // Ambil data project Records
         $records = ProjectRecord::where('project_id', $id)->get();
 
@@ -240,7 +265,7 @@ class TalentController extends Controller
         $projectStatuses = Status::where('project_id', $id)->get();
 
         // Ambil semua data SOPs
-        $sops = Sop::all();
+        $sops = TalentSop::all();
 
         // Mengambil data SOP Checklists
         $sopChecklists = SopChecklist::where('project_id', $id)
@@ -257,6 +282,8 @@ class TalentController extends Controller
         $projectComplexity = ProjectComplexity::where('project_id', $id)
             ->get();
 
+
+
         // Kirim data proyek ke tampilan
         return view('users.Talent.projectDetail')->with([
             'userData' => $user,
@@ -270,9 +297,7 @@ class TalentController extends Controller
             'qcRecords' => $qcRecords,
             'reviseRecords' => $reviseRecords,
             'projectComplexity' => $projectComplexity,
-
-
-
+            'checkSop' => $checkSop,
         ]);
     }
 
@@ -305,52 +330,53 @@ class TalentController extends Controller
 
     public function projectRecord(Request $request)
     {
+        // Step 1: Validate basic required fields
         $validatedData = $request->validate([
             'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
-            'project_stage' => 'required|string',
-            'qc_message' =>'nullable|string',
+            'qc_message' => 'nullable|string',
             'link_google_drive' => 'required|url',
-            'agree_terms' => 'accepted',
+            'checklist' => 'nullable|array',
+            'checklist.*' => 'nullable|boolean',
         ]);
 
-        // Simpan project record menggunakan instance model
-        $projectRecord = new ProjectRecord();
-        $projectRecord->project_id = $validatedData['project_id'];
-        $projectRecord->user_id = $validatedData['user_id'];
-        $projectRecord->project_stage = $validatedData['project_stage'];
-        // qc message nullable
-        if (isset($validatedData['qc_message'])) {
-            $projectRecord->qc_message = $validatedData['qc_message'];
-        }
-        $projectRecord->link_google_drive = $validatedData['link_google_drive'];
-        $projectRecord->save();
+        // Step 2: Get the current project
+        $project = Project::findOrFail($validatedData['project_id']);
 
-        // Fungsi menyimpan
-        $validated = $request->validate([
-            'project_id' => 'required|exists:projects,id', // Pastikan project_id valid
-            'checklist' => 'required|array', // Pastikan checklist adalah array
-            'checklist.*' => 'required|boolean', // Setiap nilai dalam checklist harus boolean
+        // Step 3: Determine project stage based on project status
+        $projectStageMap = [
+            'Project Assign' => 'First Draft',
+            'Revise 1' => 'Revise 1',
+            'Revise 2' => 'Revise 2',
+            'Revise 3' => 'Revise 3',
+        ];
+        $projectStage = $projectStageMap[$project->status] ?? 'Unknown Stage';
+        $validatedData['project_stage'] = $projectStage;
+
+        // Step 4: Save project record
+        $projectRecord = ProjectRecord::create([
+            'project_id' => $validatedData['project_id'],
+            'user_id' => $validatedData['user_id'],
+            'project_stage' => $projectStage,
+            'qc_message' => $validatedData['qc_message'] ?? null,
+            'link_google_drive' => $validatedData['link_google_drive'],
         ]);
 
-        // Loop melalui checklist dan simpan ke database
-        foreach ($validated['checklist'] as $sopId => $isChecked) {
-            SopChecklist::updateOrCreate(
-                [
-                    'sop_id' => $sopId,
-                    'project_id' => $validated['project_id'],
-                    'user_id' => auth()->id(),
-                ],
-                [
-                    'is_checked' => $isChecked,
-                ]
-            );
+        // Step 5: Save checklist items, if provided
+        if (!empty($validatedData['checklist'])) {
+            foreach ($validatedData['checklist'] as $sopId => $isChecked) {
+                SopChecklist::updateOrCreate(
+                    [
+                        'sop_id' => $sopId,
+                        'project_id' => $validatedData['project_id'],
+                        'user_id' => auth()->id(),
+                    ],
+                    ['is_checked' => $isChecked]
+                );
+            }
         }
 
-        // Ambil project yang terkait
-        $project = Project::find($request->project_id);
-
-        // Update status berdasarkan project_stage dan simpan data baru di tabel Statuses
+        // Step 6: Status update mapping
         $statusUpdates = [
             'First Draft' => ['status' => 'QC First Draft', 'status_type_id' => 2],
             'Revise 1' => ['status' => 'QC Revise 1', 'status_type_id' => 5],
@@ -358,38 +384,40 @@ class TalentController extends Controller
             'Revise 3' => ['status' => 'QC Revise 3', 'status_type_id' => 11],
         ];
 
-        if (isset($statusUpdates[$request->project_stage])) {
-            $statusData = $statusUpdates[$request->project_stage];
+        // Update project status and log information if the stage is valid
+        if (isset($statusUpdates[$projectStage])) {
+            $statusData = $statusUpdates[$projectStage];
 
-            // Update status di tabel Project
-            $project->update([
-                'status' => $statusData['status'],
-            ]);
+            // Update project status
+            $project->update(['status' => $statusData['status']]);
 
-            // Simpan data baru ke tabel Statuses
+            // Create status record
             Status::create([
                 'project_id' => $project->id,
                 'status_type_id' => $statusData['status_type_id'],
             ]);
+
+            // Create project log
+            ProjectLog::create([
+                'project_id' => $project->id,
+                'user_id' => $validatedData['user_id'],
+                'talent_qc' => $project->talent_qc ?? 'N/A',
+                'timestamp' => now(),
+                'status' => $statusData['status'],
+            ]);
+
+            // Create notification
+            Notification::create([
+                'email' => User::findOrFail($validatedData['user_id'])->email,
+                'subject' => "{$validatedData['user_id']} already submitted {$projectStage} of {$project->name}",
+                'message' => "The project stage has been successfully submitted. Please contact {$project->talent_qc} for QC.",
+                'notif_type' => 'general',
+            ]);
         }
 
-        // Kirim email
-        $talentQCName = $project->talent_qc;
-        $talentQC = User::where('name', $talentQCName)->first();
-        $user = User::find($request->user_id);
-
-
-        // Simpan notifikasi
-        Notification::create([
-            'email' => $user->email,
-            'subject' => "{$user->name} already submit {$request->project_stage} of {$project->name}",
-            'message' => "The project stage has been successfully submitted. Please contact {$talentQCName} for QC.",
-            'notif_type' => 'general',
-        ]);
-
-        // Alert sukses
-        return redirect()->back()->with('success', 'You have successfully Add New Records.');
+        return redirect()->back()->with('success', 'You have successfully added a new record.');
     }
+
 
     public function projectReview(Request $request)
     {
@@ -398,6 +426,7 @@ class TalentController extends Controller
             'project_id' => 'required|exists:projects,id',
             'complexity' => 'required|string',
             'number_of_panel' => 'nullable|integer',
+            'comic_name' => 'nullable|string',
             'message' => 'nullable|string',
         ]);
 
@@ -406,6 +435,7 @@ class TalentController extends Controller
             [
                 'project_id' => $request->project_id,
                 'user_id' => auth()->id(),
+                'comic_name' => $request->comic_name
             ],
             [
                 'complexity' => $request->complexity
@@ -434,6 +464,226 @@ class TalentController extends Controller
 
 
 
+    // Store Profile
+    public function submitData(Request $request)
+        {
+            // Validate the form data
+            $validatedData = $request->validate([
+                'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+                'full_name' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:500'],
+                'phone_number' => ['required', 'numeric'],
+                'gender' => ['required', 'string'],
+                'date_of_birth' => ['required', 'date'],
+                'id_card' => ['required', 'numeric'],
+                'bank_name' => ['required', 'string', 'max:255'],
+                'bank_Account' => ['required', 'string'],
+                'swift_code' => ['required', 'string', 'max:10'],
+                'subjected_tax' => ['nullable', 'string', 'max:255'],
+            ]);
+
+            // Handle the file upload if a profile photo is provided
+            $profilePhotoPath = null;
+            if ($request->hasFile('profile_photo')) {
+                $profilePhoto = $request->file('profile_photo');
+                $profilePhotoPath = $profilePhoto->store('profile_photos', 'public');
+            }
+
+            // Check if the user already has a Talent record
+            $user = Auth::user();
+            $talent = $user->talent ?? new Talent(); // Create a new Talent if none exists
+
+            // Assign values to the Talent instance
+            $talent->profile_photo = $profilePhotoPath ?? $talent->profile_photo;
+            $talent->full_name = $validatedData['full_name'];
+            $talent->address = $validatedData['address'];
+            $talent->phone_number = $validatedData['phone_number'];
+            $talent->gender = $validatedData['gender'];
+            $talent->date_of_birth = $validatedData['date_of_birth'];
+            $talent->id_card = Crypt::encrypt($validatedData['id_card']);
+            $talent->bank_name = Crypt::encrypt($validatedData['bank_name']);
+            $talent->bank_Account = Crypt::encrypt($validatedData['bank_Account']);
+            $talent->swift_code = Crypt::encrypt($validatedData['swift_code']);
+            $talent->subjected_tax = Crypt::encrypt($validatedData['subjected_tax']);
+            $talent->user_id = $user->id;
+
+            // Save the Talent record
+            $talent->save();
+
+            // Redirect back with a success message
+            return redirect()->back()->with('success', 'Your additional information has been successfully submitted!');
+        }
+
+
+    public function profile()
+    {
+
+        $userData = Auth::user();
+        // data talent yang ada id dengan user auth
+        $talent = Talent::where('user_id', $userData->id)->first();
+
+        if ($talent) {
+            try {
+                $talent->id_card = Crypt::decrypt($talent->id_card);
+            } catch (\Exception $e) {
+                $talent->id_card = 'Encrypted';
+            }
+
+            try {
+                $talent->bank_name = Crypt::decrypt($talent->bank_name);
+            } catch (\Exception $e) {
+                $talent->bank_name = 'Encrypted';
+            }
+
+            try {
+                $talent->bank_Account = Crypt::decrypt($talent->bank_Account);
+            } catch (\Exception $e) {
+                $talent->bank_Account = 'Encrypted';
+            }
+
+            try {
+                $talent->swift_code = Crypt::decrypt($talent->swift_code);
+            } catch (\Exception $e) {
+                $talent->swift_code = 'Encrypted';
+            }
+
+            try {
+                $talent->subjected_tax = Crypt::decrypt($talent->subjected_tax);
+            } catch (\Exception $e) {
+                $talent->subjected_tax = 'Encrypted';
+            }
+        }
+
+        $notification = Notification::where('email', $userData->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
+
+        // Mengambil data untuk drop down berdasarkan tahun
+        $availableYears = Project::selectRaw('DISTINCT YEAR(created_at) as year')
+            ->orderBy('year', 'asc')
+            ->pluck('year');
+
+        // Get selected year (default to current year if not specified)
+        $selectedYear = request('year', now()->year);
+
+        // Get monthly data for selected year and talent
+        $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
+            ->where('talent', $userData->name)  // Filter by talent
+            ->whereYear('created_at', $selectedYear)  // Filter by the selected year
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        // Create an array with all months (1-12) initialized to 0
+        $monthlyData = array_combine(range(1, 12), array_fill(0, 12, 0));
+
+        // Fill the array with actual data for the selected year and talent
+        foreach ($projects as $project) {
+            $monthlyData[$project->month] = $project->total;
+        }
+
+        // Prepare data for chart
+        $months = [];
+        $totals = [];
+
+        foreach ($monthlyData as $month => $total) {
+            $months[] = Carbon::createFromDate($selectedYear, $month, 1)->format('F Y');
+            $totals[] = $total;
+        }
+
+
+
+        $projectOverview = Project::where('talent', $userData->name)
+        ->where('status', 'Done')
+        ->select(
+            'id',
+            'comic_name',
+            'chapter_number',
+            'number_of_panel',
+            'updated_at',
+            'status'
+        )
+        ->orderBy('updated_at', 'desc')
+        ->paginate(3);
+
+
+        return view('users.Talent.profile', compact(
+            'userData',
+            'talent',
+            'notification',
+            'months',
+            'totals',
+            'projectOverview',
+            'availableYears',
+           'selectedYear'
+
+        ));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        // Validate the form data
+        $validatedData = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'gender' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'phone_number' => 'required|string|max:15',
+            'bank_name' => 'required|string|max:255',
+            'bank_Account' => 'required|string|max:255',
+            'swift_code' => 'required|string|max:255',
+            'subjected_tax' => 'nullable|string|max:255',
+            'id_card' => 'required|string|max:255',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Encrypt sensitive data
+        if (array_key_exists('bank_name', $validatedData)) {
+            $validatedData['bank_name'] = Crypt::encrypt($validatedData['bank_name']);
+        }
+        if (array_key_exists('bank_Account', $validatedData)) {
+            $validatedData['bank_Account'] = Crypt::encrypt($validatedData['bank_Account']);
+        }
+        if (array_key_exists('swift_code', $validatedData)) {
+            $validatedData['swift_code'] = Crypt::encrypt($validatedData['swift_code']);
+        }
+        if (array_key_exists('subjected_tax', $validatedData)) {
+            $validatedData['subjected_tax'] = Crypt::encrypt($validatedData['subjected_tax']);
+        }
+        if (array_key_exists('id_card', $validatedData)) {
+            $validatedData['id_card'] = Crypt::encrypt($validatedData['id_card']);
+        }
+
+        // Get the authenticated user's talent
+        $talent = auth()->user()->talent;
+
+        // Initialize profile photo path as null
+        $profilePhotoPath = null;
+
+        // Check if a new profile photo was uploaded
+        if ($request->hasFile('profile_photo')) {
+            // Delete the old profile photo if it exists
+            if ($talent->profile_photo && Storage::exists($talent->profile_photo)) {
+                Storage::delete($talent->profile_photo);
+            }
+
+            // Store the new profile photo
+            $profilePhoto = $request->file('profile_photo');
+            $profilePhotoPath = $profilePhoto->store('profile_photos', 'public');
+            $validatedData['profile_photo'] = $profilePhotoPath; // Save the file path
+        }
+
+        // Update the user's profile with the validated data
+        $talent->update($validatedData);
+
+        // Return back with success message
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+
+    }
 
 
 
@@ -444,6 +694,3 @@ class TalentController extends Controller
 
 
 
-
-
-}

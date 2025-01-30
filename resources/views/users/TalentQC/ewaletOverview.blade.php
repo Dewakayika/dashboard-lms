@@ -161,11 +161,19 @@
         <div class="card-body px-0 pb-2">
           <div class="table-responsive">
             <table class="table align-items-center mb-0">
+                @if ($withdraws->isEmpty())
+                <div class="text-center d-flex align-items-center justify-content-center">
+                    <div class="mb-3">
+                        <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
+                        <p class="text-xs">No withdraw record</p>
+                    </div>
+                </div>
+                @else
               <thead>
                 <tr>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Withdraw Amount</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total Project</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Panel</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total Panel</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Project</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                 </tr>
@@ -200,6 +208,7 @@
                 @endforeach
 
               </tbody>
+              @endif
             </table>
           </div>
         </div>
@@ -219,7 +228,7 @@
                 <div class="text-center d-flex align-items-center justify-content-center">
                     <div class="mb-3">
                         <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
-                        <p class="text-xs">There's no Project Offer yet</p>
+                        <p class="text-xs">No ewallet history</p>
                     </div>
                 </div>
                 @else

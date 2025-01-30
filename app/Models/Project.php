@@ -67,7 +67,11 @@ class Project extends Model
     {
         return $this->hasMany(ProjectComplexity::class);
     }
-    
+    public function projectComplexity()
+    {
+        return $this->hasMany(ProjectComplexity::class, 'comic_name', 'comic_name');
+    }
+
 
 
 

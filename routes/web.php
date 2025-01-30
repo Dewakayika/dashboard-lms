@@ -70,11 +70,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
             return redirect()->route('admin#index');
         } else if (Auth::user()->role == 'talent_qc') {
            return redirect()->route('talentqc#index');
-        } else {
+        } else if (Auth::user()->role == 'talentqc') {
+            return redirect()->route('talentqc#index');
+
+        }else {
             return view('auth.login');
         }
     }
 })->name('dashboard');
+
 
 //Talent
 Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () {
@@ -84,18 +88,21 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talent#projectRecods');
 
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
-    Route::post('/additional/submit',[TalentController::class, 'submitForm'])->name('talent#submitData');
+    Route::post('/additional/submit',[TalentController::class, 'submitData'])->name('talent#submitData');
     Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
     Route::post('/sop/store', [TalentController::class, 'storeSop'])->name('talent#storeSop');
     // Review
     Route::post('/review/store', [TalentController::class, 'projectReview'])->name('talent#storeReview');
 
+    // Route Profile
+    Route::get('/profile', [TalentController::class, 'profile'])->name('talent#profile');
+
     Route::get('/e-walet', [EwaletController::class, 'indexTalent'])->name('talent#ewalet');
     Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talent#withdrawRequest');
 
+    Route::post('/talents/update/profile', [TalentController::class, 'updateProfile'])->name('talent#update');
 
-
-
+    Route::post('/update-profile-image', [TalentController::class, 'updateProfileImage'])->name('updateProfileImage');
 });
 
 //TalentQc
@@ -104,8 +111,8 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     Route::get('/project/Overview',[TalentQcController::class, 'projectOverview'])->name('talentqc#projectOverview');
     Route::get('/talentqc/projectDetail/{id}', [TalentQcController::class, 'detail'])->name('talentqc#projectDetail');
     Route::post('/project-record/store', [TalentQcController::class, 'projectRecord'])->name('talentqc#projectRecods');
-    Route::get('/additional/data-talent',[TalentQcController::class, 'additionalInfo'])->name('talentqc#additionalData');
-    Route::post('/additional/submit',[TalentQcController::class, 'submitForm'])->name('talentqc#submitData');
+    Route::get('/additional/data-talentqc',[TalentQcController::class, 'additionalInfo'])->name('talentqc#additionalData');
+    Route::post('/additional/submit',[TalentQcController::class, 'submitData'])->name('talentqc#submitData');
     Route::post('/projects/{projectId}/apply', [TalentQcController::class, 'apply'])->name('talentqc#applyProject');
     Route::post('/sops/checklist', [TalentQcController::class, 'storeChecklist'])->name('talentqc#storeChecklist');
     Route::get('/project-qc-overview', [TalentQcController::class, 'projectQcOverview'])->name('talentqc#projectQcOverview');
@@ -114,10 +121,9 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     Route::post('/review/store', [TalentQcController::class, 'projectReview'])->name('talentqc#storeReview');
     Route::post('/review/store/talent', [TalentQcController::class, 'projectReviewTalent'])->name('talentqc#Review');
 
+    Route::post('/talents/update/profile', [TalentQcController::class, 'updateProfile'])->name('talentqc#update');
 
-
-
-
+    Route::get('/profile', [TalentQcController::class, 'profile'])->name('talentqc#profile');
 
     // Route to store sop
     Route::post('/sop/store', [TalentQcController::class, 'storeSop'])->name('talentqc#storeSop');
@@ -207,6 +213,11 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('deleteRole/{id}', [AdminController::class, 'deleteRole'])->name('admin#deleteRole');
     Route::get('editRole/{id}', [AdminController::class, 'editRole'])->name('admin#editRole'); //Edit Code
     Route::put('updateRole/{id}', [AdminController::class, 'updateRole'])->name('admin#updateRole'); //Update Code
+    Route::get('/ewalletRequest', [EwaletController::class, 'ewalletRequest'])->name('admin#ewalletRequest');
+    Route::post('/admin/approve-withdraw', [EwaletController::class, 'approveWithdraw'])->name('admin#approveWithdraw');
+    Route::post('/admin/validate-password', [AdminController::class, 'validatePassword'])->name('admin#validatePassword');
+
+    Route::get('/profile', [AdminController::class, 'adminProfile'])->name('admin#profile');
 
 });
 

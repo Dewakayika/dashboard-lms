@@ -19,9 +19,9 @@
             <!-- Form Section -->
             <div class="flex items-center justify-center min-h-screen px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
                 <div class="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
-                    <h3 class="text-3xl font-bold leading-tight text-black sm:text-3xl">Talent Additional Info</h3>
+                    <h3 class="text-3xl font-bold leading-tight text-black sm:text-3xl">Talent QC Additional Info</h3>
 
-                    <form action="{{ route('talent#submitData') }}" method="POST" class="mt-8 space-y-5" enctype="multipart/form-data">
+                    <form action="{{ route('talentqc#submitData') }}" method="POST" class="mt-8 space-y-5" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Profile Photo Input -->

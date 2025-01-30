@@ -84,10 +84,22 @@
   <div class="row my-4">
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4" >
         <div class="card " style="padding: 20px" >
-            <div class="card-header">
-                <h6 class="mb-0">Statistic Project by Priode</h6>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Statistic Project {{ $selectedYear }}</h6>
+                <form method="GET" action="{{ request()->url() }}">
+                    <select name="year" id="year"
+                            class="form-select form-select-sm ms-3"
+                            onchange="this.form.submit()">
+                        @foreach($availableYears as $year)
+                            <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
             </div>
-            <div class="h-auto">
+
+            <div>
                 <canvas id="myChart"></canvas>
             </div>
           </div>
@@ -97,12 +109,9 @@
             <div class="card-header pb-0 p-3">
                 <h6 class="mb-0">On Going Project</h6>
             </div>
-            <div class="p-3 min-height-160">
-                <canvas  id="radarChart" ></canvas>
-            </div>
-            {{-- <div class="card-body p-3 justify-content-between">
-                <ul class=" justify-content-between">
-                    <li class="list-group-item border-0 d-flex  align-items-center px-3 mb-2 ">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <ul class="list-group h-100 d-flex flex-column justify-content-between">
+                    <li class="list-group-item border-0 d-flex align-items-center mb-2">
                         <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
                             <div class="icon icon-shape bg-yellow-200 text-center border-radius-2xl">
                                 <i class="fa-regular fa-hourglass-half" style="color: #f1c40f"></i>
@@ -114,7 +123,19 @@
                         </div>
                         <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectWaiting}}</h4>
                     </li>
-                    <li class="list-group-item   border-0 d-flex  align-items-center px-3 mb-2 gap-3">
+                    <li class="list-group-item border-0 d-flex align-items-center px-3 mb-2">
+                        <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                            <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                                <i class="fa-regular fa-chess-queen" style="color: #2e86c1"></i>
+                            </div>
+                            <div class="d-flex align-items-start flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">Project Assign</h6>
+                                <p class="text-normal text-xs">Project Applied, still working on it</p>
+                            </div>
+                        </div>
+                        <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectAssign}}</h4>
+                    </li>
+                    <li class="list-group-item border-0 d-flex align-items-center px-3 mb-2">
                         <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
                             <div class="icon icon-shape bg-orange-200 text-center border-radius-2xl">
                                 <i class="fa-regular fa-pen-to-square" style="color: #d35400"></i>
@@ -126,7 +147,7 @@
                         </div>
                         <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectQC}}</h4>
                     </li>
-                    <li class="list-group-item   border-0 d-flex  align-items-center px-3 mb-2 gap-3">
+                    <li class="list-group-item border-0 d-flex align-items-center px-3 mb-2">
                         <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
                             <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
                                 <i class="fa-regular fa-file-lines" style="color: #2e86c1"></i>
@@ -138,10 +159,10 @@
                         </div>
                         <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectDraft}}</h4>
                     </li>
-                    <li class="list-group-item   border-0 d-flex  align-items-center px-3 mb-2 gap-3">
+                    <li class="list-group-item border-0 d-flex align-items-center px-3 mb-2">
                         <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
                             <div class="icon icon-shape bg-red-200 text-center border-radius-2xl">
-                                <i class="fa-regular fa-file-excel" style=" color: #c0392b"></i>
+                                <i class="fa-regular fa-file-excel" style="color: #c0392b"></i>
                             </div>
                             <div class="d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="mb-0 text-sm">Project Revision</h6>
@@ -150,7 +171,7 @@
                         </div>
                         <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectRevise}}</h4>
                     </li>
-                    <li class="list-group-item   border-0 d-flex  align-items-center px-3 mb-2 gap-3">
+                    <li class="list-group-item border-0 d-flex align-items-center px-3 mb-2">
                         <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
                             <div class="icon icon-shape bg-green-200 text-center border-radius-2xl">
                                 <i class="fa-regular fa-thumbs-up" style="color: #28b463"></i>
@@ -162,13 +183,12 @@
                         </div>
                         <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectCompleted}}</h4>
                     </li>
-
                 </ul>
-            </div> --}}
+            </div>
         </div>
     </div>
-
   </div>
+
 
   <div class="col-lg-12  col-md-6 mb-md-0 mb-4" >
     <div class="card" style="min-height: 400px;"  >
@@ -421,27 +441,117 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const months = @json($months);
         const totals = @json($totals);
+        const selectedYear = @json($selectedYear);
+
+        // Format the month labels for x-axis (short format: Jan 25, Feb 25)
+        const formattedLabels = months.map(month => {
+            const date = new Date(month);
+            return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+        });
+
+        // Format for tooltip (full format: January 2025, February 2025)
+        const fullMonthLabels = months.map(month => {
+            const date = new Date(month);
+            return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        });
 
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: months,
+                labels: formattedLabels,
                 datasets: [{
-                    label: 'Total Projects',
+                    label: `Total Projects (${selectedYear})`,
                     data: totals,
-                    borderWidth: 1,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 0,
+                    backgroundColor: 'rgba(255, 154, 154 )',
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.8
                 }]
             },
             options: {
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            precision: 0,
+                            font: {
+                                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                                size: 12
+                            }
+                        }
                     }
+                },
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        position: 'nearest',
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#333',
+                        titleFont: {
+                            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                            size: 14,
+                            weight: '600'
+                        },
+                        bodyColor: '#666',
+                        bodyFont: {
+                            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 12,
+                        displayColors: false,
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                // Use full month format for tooltip
+                                const index = tooltipItems[0].dataIndex;
+                                return fullMonthLabels[index];
+                            },
+                            label: function(context) {
+                                return `Total Projects: ${context.parsed.y}`;
+                            }
+                        }
+                    },
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
                 }
             }
         });
+
     </script>
 
 
@@ -449,34 +559,133 @@ document.addEventListener("DOMContentLoaded", function () {
         const ctx2 = document.getElementById('radarChart').getContext('2d');
 
         new Chart(ctx2, {
-            type: 'doughnut',
+            type: 'bar',
+            indexAxis: 'y',
             data: {
-            labels: ['Waiting Talent', 'Project QC', 'Project Draft', 'Project Revision', 'Project Completed'],
-            datasets: [{
-                label: 'Project Status',
-                data: [{{$projectWaiting}}, {{$projectQC}}, {{$projectDraft}}, {{$projectRevise}}, {{$projectCompleted}}],
-                backgroundColor: [
-                '#f1c40f',
-                '#d35400',
-                '#2e86c1',
-                '#c0392b',
-                '#28b463'
-                ],
-                hoverOffset: 4
-            }]
+                labels: ['Waiting Talent', 'Project Assign', 'Project QC', 'Project Draft', 'Project Revision', 'Project Completed'],
+                datasets: [{
+                    label: 'Project Status',
+                    data: [{{$projectWaiting}}, {{$projectAssign}}, {{$projectQC}}, {{$projectDraft}}, {{$projectRevise}}, {{$projectCompleted}}],
+                    backgroundColor: [
+                        '#f1c40f',
+                        '#d35400',
+                        '#2e86c6',
+                        '#2e86c1',
+                        '#c0392b',
+                        '#28b463'
+                    ],
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.8
+                }]
             },
             options: {
-            plugins: {
-                tooltip: {
-                callbacks: {
-                    label: function(tooltipItem) {
-                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            precision: 0,
+                            font: {
+                                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                                size: 12
+                            }
+                        }
                     }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                        position: 'nearest',
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#333',
+                        titleFont: {
+                            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                            size: 14,
+                            weight: '600'
+                        },
+                        bodyColor: '#666',
+                        bodyFont: {
+                            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 12,
+                        displayColors: true,
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                return tooltipItems[0].label;
+                            },
+                            label: function(context) {
+                                return `Total Projects: ${context.parsed.x}`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
                 }
+            },
+            plugins: [{
+                afterDraw: function(chart) {
+                    var ctx = chart.ctx;
+                    chart.data.datasets.forEach(function(dataset, datasetIndex) {
+                        var meta = chart.getDatasetMeta(datasetIndex);
+                        meta.data.forEach(function(bar, index) {
+                            var data = dataset.data[index];
+
+                            // Only draw text if the bar is wide enough
+                            if (bar.width > 20) {
+                                ctx.save();
+                                ctx.fillStyle = 'white';
+                                ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+                                ctx.textAlign = 'left';
+                                ctx.textBaseline = 'middle';
+
+                                // Position text inside the bar
+                                var x = bar.x + 10; // 10px padding from start of bar
+                                var y = bar.y;
+
+                                // Draw text
+                                ctx.fillText(data, x, y);
+                                ctx.restore();
+                            }
+                        });
+                    });
                 }
-            }
-            }
+            }]
         });
+
     </script>
 
 @endsection

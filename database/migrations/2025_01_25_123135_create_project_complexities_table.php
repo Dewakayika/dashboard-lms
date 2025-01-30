@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('project_complexities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained();
+            $table->string('comic_name');
             $table->foreignId('user_id')->constrained();
             $table->tinyInteger('complexity')->comment('1=Very Easy, 2=Easy, 3=Medium, 4=Hard, 5=Very Hard');
             $table->timestamps();
