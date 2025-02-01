@@ -198,10 +198,9 @@
   @endforeach
 @endif
 
-
   <div class="row my-4" >
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-      <div class="card" style="min-height: 450px">
+      <div class="card h-100">
         <div class="card-header pb-0">
           <div class="row">
             <div class="col-lg-6 col-7">
@@ -395,9 +394,66 @@
             </div>
 
             <div class="card-body">
-                <div class="min-height-160">
-                    <canvas id="radarChart" height="200px" width="80px"></canvas>
-                </div>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-chess-queen" style="color: #2e86c1"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Assign</h6>
+                            <p class="text-normal text-xs">Project Applied, still working on it</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectAssign}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-orange-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-pen-to-square" style="color: #d35400"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project QC</h6>
+                            <p class="text-normal text-xs">Waiting QC agent check the project</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectQc}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-file-lines" style="color: #2e86c1"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Draft</h6>
+                            <p class="text-normal text-xs">Project with status draft submitted</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectDraft}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-red-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-file-excel" style="color: #c0392b"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Revision</h6>
+                            <p class="text-normal text-xs">Revision note release by admin</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectRevise}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-green-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-thumbs-up" style="color: #28b463"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Completed</h6>
+                            <p class="text-normal text-xs">Number of project completed</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectCompleted}}</h4>
+                </li>
                 {{-- <div id="projectCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         @foreach ($groupedProjectStatuses as $projectId => $statuses)
@@ -580,6 +636,178 @@
       </div>
     </div>
   </div>
+
+
+
+  {{-- <button onclick="startConfetti()">Test Confetti</button> --}}
+  {{-- Add this in your <head> section or at the end of body --}}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+{{-- Add this at the end of your body tag --}}
+@if($showWelcome == true)
+<div class="welcome-modal-overlay" id="welcomeModal">
+    <div class="welcome-modal">
+        <div class="welcome-content text-center">
+            <h2 class="welcome-title mb-3">Welcome to the Team!</h2>
+            <p class="welcome-text mb-4">
+                Congratulations! Your account has been approved.
+                We're excited to have you join our talented community.
+            </p>
+
+            <div class="welcome-features mt-4">
+                <div class="feature-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Access to all projects</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Direct communication with QC</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Project submissions</span>
+                </div>
+            </div>
+        </div>
+        <form action="{{ route('talent#activeAccount', $talentData->id) }}" method="POST" class="w-100">
+            @csrf
+            <button  type="submit" class="btn bg-primary btn-lg text-white" onclick="closeWelcomeModal()">
+                Let's Get Started
+            </button>
+        </form>
+
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-content {
+    padding-bottom: 30px;
+}
+.welcome-features {
+    text-align: left;
+}
+.welcome-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.welcome-modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.5s ease-out 0.5s forwards;
+}
+
+.welcome-img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.welcome-title {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-text {
+    color: #34495e;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Start confetti
+    startConfetti();
+});
+
+function startConfetti() {
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000 };
+
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+
+        // Since particles fall down, start a bit higher than random
+        confetti(Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }
+        }));
+        confetti(Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }
+        }));
+    }, 250);
+}
+
+function closeWelcomeModal() {
+    const modal = document.getElementById('welcomeModal');
+    modal.style.animation = 'fadeOut 0.5s ease-out forwards';
+
+    // Final confetti burst on close
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+
+    setTimeout(() => {
+        modal.remove();
+    }, 500);
+}
+</script>
+@endif
+
+
+
+
 @endsection
 @push('dashboard')
 
@@ -694,8 +922,57 @@
       });
   </script>
 
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userId = "{{ auth()->user()->id }}";
+        const welcomeShown = localStorage.getItem('welcomeMessageShown_' + userId);
 
+        if (!welcomeShown) {
+            showWelcomeMessage(userId);
+        }
+    });
 
+    function showWelcomeMessage(userId) {
+        const modal = document.getElementById('welcomeModal');
+        if (modal) {
+            modal.style.display = 'block';
+            setTimeout(() => startConfetti(), 500);
+            localStorage.setItem('welcomeMessageShown_' + userId, 'true');
+        }
+    }
+
+    function startConfetti() {
+        const duration = 3000;
+        const end = Date.now() + duration;
+        const colors = ['#ff6b6b', '#f7b731', '#45b7d1', '#2ecc71', '#e74c3c'];
+
+        function launchConfetti() {
+            if (Date.now() > end) return;
+            confetti({
+                particleCount: 5,
+                spread: 120,
+                startVelocity: 30,
+                colors: colors,
+                origin: { x: Math.random(), y: Math.random() - 0.2 }
+            });
+            requestAnimationFrame(launchConfetti);
+        }
+        launchConfetti();
+    }
+
+    function closeWelcomeModal() {
+        const modal = document.getElementById('welcomeModal');
+        if (!modal) return;
+
+        confetti({
+            particleCount: 100,
+            spread: 80,
+            startVelocity: 40,
+            origin: { y: 0.6 }
+        });
+        setTimeout(() => modal.style.display = 'none', 500);
+    }
+</script> --}}
 
 
 @endpush

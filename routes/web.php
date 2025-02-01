@@ -103,6 +103,10 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::post('/talents/update/profile', [TalentController::class, 'updateProfile'])->name('talent#update');
 
     Route::post('/update-profile-image', [TalentController::class, 'updateProfileImage'])->name('updateProfileImage');
+    Route::get('/waiting-approval', [TalentContoller::class, 'waitingApproval'])->name('talent#waitingApproval');
+
+
+    Route::post('talent/active/{id}', [TalentController::class, 'activeAccount'])->name('talent#activeAccount');
 });
 
 //TalentQc
@@ -175,6 +179,10 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     // Profile Detail User ID
     Route::get('/profile/{id}', [AdminController::class, 'profileUser'])->name('admin#profileDetailUser');
+
+    Route::post('/admin/approve-user/{id}', [AdminController::class, 'approveUser'])->name('admin.approveUser');
+    Route::post('/admin/decline-user/{id}', [AdminController::class, 'declineUser'])->name('admin.declineUser');
+
 
 
 

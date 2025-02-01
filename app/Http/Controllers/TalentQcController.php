@@ -245,7 +245,7 @@ class TalentQcController extends Controller
 
         // Ambil semua data projects
         $projectOverview = Project::where('talent', $user->name)
-        ->paginate(10);
+        ->get();
 
         return view('users.TalentQC.projectList')->with([
             'userData' => $user,

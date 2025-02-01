@@ -493,101 +493,69 @@
             </div>
 
             <div class="card-body">
-                <div class="min-height-160">
+                {{-- <div class="min-height-160">
                     <canvas id="radiarChart" height="200px" width="80px"></canvas>
-                </div>
-                {{-- <div id="projectCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @foreach ($groupedProjectStatuses as $projectId => $statuses)
-                            <div class="carousel-item @if ($loop->first) active @endif">
-                                <div class="card-header pb-0">
-                                    <h6>Project Status</h6>
-                                    <p class="text-sm">
-                                        {{ $statuses->first()->project->comic_name ?? 'Unknown Project' }} <span class="font-weight-bold">{{ $statuses->first()->project->chapter_number ?? 'Unknown Project' }}</span>
-                                    </p>
-                                </div>
-                                <div class="timeline timeline-one-side">
-                                    @foreach ($statuses as $status)
-                                        <div class="timeline-block mb-3">
-                                            <span class="timeline-step">
-                                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Status">
-                                                    @if ($status->status_type_id == '1')
-                                                        <img src="{{ asset('/assets/img/small-logos/Assign.png')}}" alt="assign">
-                                                    @elseif ($status->status_type_id == '2')
-                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '3')
-                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '4')
-                                                        <img src="{{ asset('/assets/img/small-logos/Revisi.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '5')
-                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '6')
-                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '7')
-                                                        <img src="{{ asset('/assets/img/small-logos/Revisi.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '8')
-                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '9')
-                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '10')
-                                                        <img src="{{ asset('/assets/img/small-logos/Revisi.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '11')
-                                                        <img src="{{ asset('/assets/img/small-logos/QC.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '12')
-                                                        <img src="{{ asset('/assets/img/small-logos/Draft.png')}}" alt="team1">
-                                                    @elseif ($status->status_type_id == '13')
-                                                        <img src="{{ asset('/assets/img/small-logos/Done.png')}}" alt="team1">
-                                                    @endif
-                                                </a>
-                                            </span>
-                                            <div class="timeline-content">
-                                                <h6 class="text-dark text-sm font-weight-bold mb-0">
-                                                    @if ($status->status_type_id == '1')
-                                                    Project Asign
-                                                 @elseif ($status->status_type_id == '2')
-                                                 QC First Draft
-                                                 @elseif ($status->status_type_id == '3')
-                                                 First Draft Submitted
-                                                 @elseif ($status->status_type_id == '4')
-                                                 Revision 1
-                                                 @elseif ($status->status_type_id == '5')
-                                                 QC Revise 1
-                                                 @elseif ($status->status_type_id == '6')
-                                                     Revise 1 Submitted
-                                                 @elseif ($status->status_type_id == '7')
-                                                     Revision 2
-                                                 @elseif ($status->status_type_id == '8')
-                                                     QC Revise 2
-                                                 @elseif ($status->status_type_id == '9')
-                                                     Revise 2 Submitted
-                                                 @elseif ($status->status_type_id == '10')
-                                                     Revision 3
-                                                 @elseif ($status->status_type_id == '11')
-                                                     QC Revise 3
-                                                 @elseif ($status->status_type_id == '12')
-                                                     Revise 3 Submitted
-                                                 @elseif ($status->status_type_id == '13')
-                                                     Done
-                                                 @endif
-                                                </h6>
-                                                <p class="text-secondary font-weight-bold text-xs mt-1 mb-0 text-uppercase">{{ \Carbon\Carbon::parse($status->created_at)->translatedFormat('D, M Y | H:i A') }}</p>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div> --}}
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-chess-queen" style="color: #2e86c1"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Assign</h6>
+                            <p class="text-normal text-xs">Project Applied, still working on it</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectAssign}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-orange-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-pen-to-square" style="color: #d35400"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project QC</h6>
+                            <p class="text-normal text-xs">Waiting QC agent check the project</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectQc}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-file-lines" style="color: #2e86c1"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Draft</h6>
+                            <p class="text-normal text-xs">Project with status draft submitted</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectDraft}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-red-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-file-excel" style="color: #c0392b"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Revision</h6>
+                            <p class="text-normal text-xs">Revision note release by admin</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectRevise}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-green-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-thumbs-up" style="color: #28b463"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Completed</h6>
+                            <p class="text-normal text-xs">Number of project completed</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectCompleted}}</h4>
+                </li>
             </div>
 
         </div>

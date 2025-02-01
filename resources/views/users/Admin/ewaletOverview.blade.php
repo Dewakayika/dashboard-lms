@@ -134,70 +134,119 @@
 
 
     <div class="col-lg-6 col-md-6">
-      <div class="card h-100">
-        <div class="card-header pb-0">
-          <h6>Withdraw History History</h6>
-        </div>
-        <div class="table-responsive">
+        <div class="card h-100">
+          <div class="card-header pb-0">
+            <h6>Withdraw History</h6>
+          </div>
+          <div class="table-responsive">
             <table class="table align-items-center mb-0">
-                @if ($withdrawsHistory->isEmpty())
+              @if ($withdrawsHistory->isEmpty())
                 <div class="text-center d-flex align-items-center justify-content-center">
-                    <div class="mb-3">
-                        <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
-                        <p class="text-xs">No withdraw history</p>
-                    </div>
+                  <div class="mb-3">
+                    <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
+                    <p class="text-xs">No withdraw history</p>
+                  </div>
                 </div>
-                @else
+              @else
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Request Date</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aproval Date</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Approval Date</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User Requested</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Withdraw Amount</th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($withdrawsHistory as  $withdraw)
-                  <tr>
+                  @foreach ($withdrawsHistory as $withdraw)
+                    <tr>
                       <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">
-                              {{ \Carbon\Carbon::parse($withdraw->withdraw_date)->format('d M Y') }}
-                          </span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                            <span class="text-xs font-weight-bold">
-                                {{ \Carbon\Carbon::parse($withdraw->update_at)->format('d M Y') }}
-                            </span>
-                          </td>
-                      <td class="align-middle text- text-leftsm">
-                          <span class="text-xs font-weight-bold">{{$withdraw->user->name}}</span>
-                        </td>
-
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Rp {{ number_format($withdraw->withdraw_amount, 0, ',', '.') }}</h6>
+                        <span class="text-xs font-weight-bold">{{ \Carbon\Carbon::parse($withdraw->withdraw_date)->format('d M Y') }}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-xs font-weight-bold">{{ \Carbon\Carbon::parse($withdraw->updated_at)->format('d M Y') }}</span>
+                      </td>
+                      <td class="align-middle text-left text-sm">
+                        <span class="text-xs font-weight-bold">{{ $withdraw->user->name }}</span>
+                      </td>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Rp {{ number_format($withdraw->withdraw_amount, 0, ',', '.') }}</h6>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm text-white bg-gradient-warning" href="#" data-bs-toggle="modal" data-bs-target="#notApply">
-                          <span class="px-2">{{$withdraw->status}}</span>
-                      </span>
-                    </td>
-                  </tr>
-
-
+                      </td>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <span class="badge badge-sm bg-gradient-info">{{ $withdraw->status }}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-info share-project"
+                              data-bs-toggle="modal"
+                              data-bs-target="#shareToWhatsAppModal"
+                              data-id="{{ $withdraw->id }}"
+                              data-date="{{ $withdraw->updated_at }}"
+                              data-user="{{ $withdraw->user->name }}"
+                              data-amount="{{ $withdraw->withdraw_amount }}"
+                              data-status="{{ $withdraw->status }}"
+                              style="cursor: pointer;">
+                          Share Withdraw
+                        </span>
+                      </td>
+                    </tr>
                   @endforeach
-
                 </tbody>
-                @endif
-              </table>
+              @endif
+            </table>
           </div>
-
+        </div>
       </div>
-    </div>
+      
+      <!-- Modal Share to WhatsApp -->
+      <div class="modal fade" id="shareToWhatsAppModal" tabindex="-1" aria-labelledby="shareToWhatsAppModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+          <div class="modal-content rounded-3 shadow-lg">
+            <div class="modal-header border-0">
+              <h5 class="modal-title" id="shareToWhatsAppModalLabel">Share Withdraw Information</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
+              <p class="text-xs text-left"><strong>Approval Date:</strong> <span id="approval_date"></span></p>
+              <p class="text-xs text-left"><strong>User Requested:</strong> <span id="user_requested"></span></p>
+              <p class="text-xs text-left"><strong>Withdraw Amount:</strong> <span id="withdraw_amount"></span></p>
+              <p class="text-xs text-left"><strong>Status:</strong> <span id="status"></span></p>
+              <a id="whatsappLink" href="#" target="_blank" class="btn w-100 mt-3 text-white" style="background-color: #0c9d08">
+                <i class="fa-brands fa-whatsapp px-2" style="color: #ffffff;"></i>
+                Share to WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          document.querySelectorAll('.share-project').forEach(button => {
+              button.addEventListener('click', function() {
+                  document.getElementById('approval_date').textContent = new Date(this.getAttribute('data-date')).toLocaleDateString('id-ID');
+                  document.getElementById('user_requested').textContent = this.getAttribute('data-user');
+                  document.getElementById('withdraw_amount').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(this.getAttribute('data-amount'));
+                  document.getElementById('status').textContent = this.getAttribute('data-status');
+                  
+                  const message = `*Withdraw History*\nApproval Date: ${document.getElementById('approval_date').textContent}\nUser: ${document.getElementById('user_requested').textContent}\nAmount: ${document.getElementById('withdraw_amount').textContent}\nStatus: ${document.getElementById('status').textContent}`;
+                  
+                  document.getElementById('whatsappLink').href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+              });
+          });
+      });
+      </script>
+      
+
+
   </div>
 
   <script>

@@ -7,19 +7,19 @@
     <section class="bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-2">
             <!-- Left Image Section -->
-            <div class="h-screen relative flex items-start px-4 pb-10 pt-6 sm:pb-16 md:justify-left lg:pb-24 bg-gray-50 sm:px-6 lg:px-8 hidden lg:block absolute inset-0">
+            <div class="relative flex items-start px-4 pb-10 pt-6 sm:pb-16 md:justify-left lg:pb-24 bg-gray-50 sm:px-6 lg:px-8 hidden lg:block absolute inset-0">
                 <div class="absolute inset-0">
-                    <img class="object-cover object-top w-auto " src="{{ url('images/login-image.jpg') }}" alt="" />
+                    <img class="object-cover h-full" src="{{ url('images/additional.jpg') }}" alt="" />
                 </div>
                 <div class="absolute">
-                    <img style="width: 30px" src="{{ url('images/webtoon.jpg') }}" alt="">
+                    <img style="width: 30px" src="{{ url('images/padma.png') }}" alt="">
                 </div>
             </div>
 
             <!-- Form Section -->
             <div class="flex items-center justify-center min-h-screen px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
                 <div class="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
-                    <h3 class="text-3xl font-bold leading-tight text-black sm:text-3xl">Talent Additional Info</h3>
+                    <h3 class="text-3xl font-bold leading-tight text-black sm:text-3xl">Active you account, Now!</h3>
 
                     <form action="{{ route('talent#submitData') }}" method="POST" class="mt-8 space-y-5" enctype="multipart/form-data">
                         @csrf

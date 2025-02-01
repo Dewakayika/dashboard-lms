@@ -48,6 +48,11 @@ class TalentController extends Controller
     {
         // Ambil pengguna yang sedang login
         $user = auth()->user();
+        $talent_data = Talent::where('user_id', $user->id)->first();
+
+
+        // Only pass showWelcome flag if user is approved
+        $showWelcome = $talent_data && $talent_data->status === 'approved';
 
         // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
         $notifications = Notification::where('notif_type', 'urgent')
@@ -89,9 +94,29 @@ class TalentController extends Controller
         // Cek apakah pengguna memiliki data Talent
         if (!Talent::where('user_id', $user->id)->exists()) {
             return view('users.Partner.register-talent');
-        } else {
-            // Ambil data Talent berdasarkan user_id
-            $talent_data = Talent::where('user_id', $user->id)->first();
+        }
+
+        if (!Talent::where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'declined', 'active'])
+            ->exists())
+        {
+            $talent = Talent::where('user_id', $user->id)->first();
+            return view('users.Talent.waitingApproval')->with([
+                'user' => $user,
+                'talent' => $talent
+            ]);
+
+        }elseif(Talent::where('user_id', $user->id)
+            ->whereIn('status', ['declined'])
+            ->exists()){
+
+            $talent = Talent::where('user_id', $user->id)->first();
+            return view('users.Talent.declineApproval')->with([
+                'user' => $user,
+                'talent' => $talent
+
+            ]);
+        }
 
 
         // Data overview
@@ -137,7 +162,6 @@ class TalentController extends Controller
         ->select('projects.*')
         ->get();
 
-
         // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
         return view('users.Talent.talentIndex')->with([
             'talentData' => $talent_data,
@@ -157,8 +181,8 @@ class TalentController extends Controller
             'projectDraft' => $projectDraft,
             'projectRevise' => $projectRevise,
             'projectsWithoutComplexity' => $projectsWithoutComplexity,
+           'showWelcome' => $showWelcome,
         ]);
-    }
     }
 
 
@@ -208,22 +232,19 @@ class TalentController extends Controller
         return redirect()->back()->with('success', 'You have successfully applied for the project.');
     }
 
-
     // Project List Overview
-
     public function projectOverview(){
         // Ambil pengguna yang sedang login
         $user = auth()->user();
 
-        // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
         $notifications = Notification::where('notif_type', 'urgent')
-        ->orWhere('email', $user->email) // For general notifications based on the authenticated user's email
+        ->orWhere('email', $user->email)
         ->get();
 
 
         // Ambil semua data projects
         $projectOverview = Project::where('talent', $user->name)
-        ->paginate(10);
+        ->get();
 
         return view('users.Talent.projectList')->with([
             'userData' => $user,
@@ -231,6 +252,19 @@ class TalentController extends Controller
             'projectOverview' => $projectOverview
 
         ]);
+    }
+
+    public function activeAccount(Request $request, $id){
+        try {
+            $talent = Talent::where('id', $id)->firstOrFail();
+            $talent->status = 'active';
+            $talent->save(); // Simpan perubahan
+
+            return back()->with('success', 'User has been approved successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Error in approveUser: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while approving the user.');
+        }
     }
 
 
@@ -510,8 +544,19 @@ class TalentController extends Controller
             // Save the Talent record
             $talent->save();
 
+            // send email to admin
+            $user = User::where('role', 'admin')->first();
+
+            // send email
+            Mail::send('emails.newUser', ['user' => $user], function($message) use ($user) {
+                $message->to($user->email)
+                        ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+                        ->subject('New User Registered');
+            });
+
+
             // Redirect back with a success message
-            return redirect()->back()->with('success', 'Your additional information has been successfully submitted!');
+            return redirect()->back()->with('success', 'New user has been registered, wait the admin approval.');
         }
 
 

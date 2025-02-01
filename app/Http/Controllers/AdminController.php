@@ -142,6 +142,15 @@ class AdminController extends Controller
 
         $talent_qc = User::where('role', 'talent_qc')->get();
 
+
+        // Check talent status
+        $pendingUsers = Talent::whereNull('status')
+        // ->join('users', 'talent.user_id', '=', 'users.id')
+        // ->select('talent.*', 'users.name', 'users.email', 'users.created_at as registration_date')
+        ->get();
+
+
+
         return view ('users.Admin.Overview')->with([
             'adminData' => $admin_data,
             'projectsList' => $waitingProjects,
@@ -161,6 +170,7 @@ class AdminController extends Controller
             'projectAssign' => $projectAssign,
             'availableYears' => $availableYears,
             'selectedYear' => $selectedYear,
+            'pendingUsers' => $pendingUsers,
 
         ]);
     }
@@ -183,6 +193,81 @@ class AdminController extends Controller
             'talentQc' => $talent_qc,
             'notification' => $notification
         ]);
+    }
+
+    public function approveUser($id)
+    {
+        try {
+            $talent = Talent::where('id', $id)->firstOrFail();
+            $talent->status = 'approved';
+            $talent->save();
+
+            $user = User::join('talent', 'users.id', '=', 'talent.user_id')
+            ->where('talent.id', $id)
+            ->select('users.id', 'users.name', 'users.email') // Pastikan email dipilih
+            ->first();
+
+
+            // send email
+            Mail::send('emails.userApprove',
+                [
+                    'user' => $user,
+                    'name' => $user->name
+                ],
+                function($message) use ($user) {
+                    $message->to($user->email)
+                            ->from(config('mail.from.address'), config('mail.from.name'))
+                            ->subject('Your Account Has Been Approved');
+                }
+            );
+
+            return back()->with('success', 'User has been approved successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Error in approveUser: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while approving the user.');
+        }
+    }
+
+
+
+    public function declineUser($id)
+    {
+        try {
+
+            // Find the talent record
+            $talent = Talent::where('id', $id)->firstOrFail();
+            $talent->status = 'declined';
+            $talent->save();
+
+            //             // Get the user
+            // $user = User::join('talent', 'users.id', '=', 'talent.user_id')
+            //         ->where('talent.id', $id)
+            //         ->select('users.id', 'users.name', 'users.email')
+            //         ->first();
+
+            // // dd($user);
+
+            // // Send email
+            // Mail::send('emails.userDecline',
+            //     [
+            //         'user' => $user,
+            //         'name' => $user->name
+            //     ],
+            //     function($message) use ($user) {
+            //         $message->to($user->email)
+            //                 ->from(config('mail.from.address'), config('mail.from.name'))
+            //                 ->subject('Account Information Declined');
+            //     }
+            // );
+
+
+
+            return redirect()->back()->with('success', 'User has been declined successfully.');
+
+        } catch (\Exception $e) {
+            \Log::error('Error in declineUser: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while declining the user.');
+        }
     }
 
 
@@ -537,13 +622,13 @@ class AdminController extends Controller
 
         if ($role == 'talent_qc') {
             // Mendapatkan data Intern saja
-            $user_data = User::whereHas('talent_qc')->with('talent_qc')->paginate(10);
+            $user_data = User::whereHas('talent_qc')->with('talent_qc')->get();
         } elseif ($role == 'talent') {
             // Mendapatkan data Talent saja
-            $user_data = User::whereHas('talent')->with('talent')->paginate(10);
+            $user_data = User::whereHas('talent')->with('talent')->get();
         } else {
             // Default: Mendapatkan semua data (Intern dan Talent)
-            $user_data = User::with(['talent', 'intern'])->paginate(10);
+            $user_data = User::with(['talent', 'intern'])->get();
         }
 
         return view('users.Admin.listUser')->with(['userData' => $user_data, 'role' => $role])
@@ -956,7 +1041,7 @@ class AdminController extends Controller
 
 
         // Ambil semua data projects
-        $projectOverview = Project::paginate(10);
+        $projectOverview = Project::get();
 
         return view('users.Admin.manageProject')->with([
             'adminData' => $user,
@@ -1171,7 +1256,6 @@ class AdminController extends Controller
 
 
         return redirect()->back()->with('success', 'Project has been marked as Done!.');
-
 
     }
 

@@ -7,12 +7,12 @@
     <section class="bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-2">
             <!-- Left Image Section -->
-            <div class="h-screen relative flex items-start px-4 pb-10 pt-6 sm:pb-16 md:justify-left lg:pb-24 bg-gray-50 sm:px-6 lg:px-8 hidden lg:block absolute inset-0">
+            <div class="relative flex items-start px-4 pb-10 pt-6 sm:pb-16 md:justify-left lg:pb-24 bg-gray-50 sm:px-6 lg:px-8 hidden lg:block absolute inset-0">
                 <div class="absolute inset-0">
-                    <img class="object-cover object-top w-auto " src="{{ url('images/login-image.jpg') }}" alt="" />
+                    <img class="object-cover h-full " src="{{ url('images/additional.jpg') }}" alt="" />
                 </div>
                 <div class="absolute">
-                    <img style="width: 30px" src="{{ url('images/webtoon.jpg') }}" alt="">
+                    <img style="width: 30px" src="{{ url('images/padma.jpg') }}" alt="">
                 </div>
             </div>
 
