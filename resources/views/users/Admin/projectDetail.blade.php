@@ -41,7 +41,8 @@
           <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
             <div class="nav-wrapper position-relative end-0">
                 <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
-                    @if (in_array($projectLogs->last()->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
+                    @if ($projectLogs->last() && in_array($projectLogs->last()->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
+
                     <span class="nav-link mb-0 px-0 py-1 active" id="overview-tab" data-bs-toggle="pill" href="#overview" role="tab" aria-controls="overview" aria-selected="true">
                         @php
                             $lastLog = $projectLogs->last();
@@ -57,10 +58,12 @@
                         </form>
 
 
-                    @elseif ($projectLogs->last()->status == 'Done')
+                        @elseif ($projectLogs->last() && $projectLogs->last()->status == 'Done')
                         <p class="nav-link mb-0 px-0 py-1 active">
-                            This Project Already <span class="text-bolder">Done</span>
+                            Total duration: <span class="text-bolder">{{$formatted_duration ?? 'Project Already Done'}}</span>
                         </p>
+                     @elseif($projectLogs->count() == 0)
+
                      @else
                     <li class="nav-item">
                         @php $log = $projectLogs->last(); @endphp
@@ -94,58 +97,60 @@
 
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                @if ($projectLogs->isNotEmpty())
-                    @php $log = $projectLogs->last(); @endphp
-                    startTimer("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
-                @endif
+            @if ($projectLogs->isNotEmpty())
+                @php
+                    $startLog = $projectLogs->where('status', 'Project Assign')->first();
+                    $endLog = $projectLogs->where('status', 'Done')->first();
+                    $currentLog = $projectLogs->last();
+                @endphp
+                startTimer("{{ $currentLog->id }}", "{{ $startLog ? $startLog->timestamp : '' }}", "{{ $currentLog->status }}");
+            @endif
 
-                function startTimer(id, timestamp, status) {
-                    const timerElem = document.getElementById(`countdown-${id}`);
-                    const daysElem = document.getElementById(`days-${id}`);
-                    const hoursElem = document.getElementById(`hours-${id}`);
-                    const minutesElem = document.getElementById(`minutes-${id}`);
-                    const secondsElem = document.getElementById(`seconds-${id}`);
+            function startTimer(id, startTimestamp, currentStatus) {
+                const timerElem = document.getElementById(`countdown-${id}`);
+                const daysElem = document.getElementById(`days-${id}`);
+                const hoursElem = document.getElementById(`hours-${id}`);
+                const minutesElem = document.getElementById(`minutes-${id}`);
+                const secondsElem = document.getElementById(`seconds-${id}`);
 
-                    const startStatuses = ["Project Assign", "QC First Draft", "Revise 1", "QC Revise 1",  "Revise 2", "QC Revise 2","Revise 3", "QC Revise 3"];
-                    const endStatuses = ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"];
+                if (!startTimestamp) {
+                    timerElem.innerHTML = `<p>Project not started yet</p>`;
+                    return;
+                }
 
+                const startTime = new Date(startTimestamp);
 
-                    if (startStatuses.includes(status)) {
-                        // Stopwatch mode
-                        const startTime = new Date(timestamp);
+                function updateTimer() {
+                    const now = new Date();
+                    const elapsedTime = now - startTime;
 
-                        function updateStopwatch() {
-                            const now = new Date();
-                            const elapsedTime = now - startTime;
+                    const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
-                            const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+                    daysElem.textContent = String(days).padStart(2, "0");
+                    hoursElem.textContent = String(hours).padStart(2, "0");
+                    minutesElem.textContent = String(minutes).padStart(2, "0");
+                    secondsElem.textContent = String(seconds).padStart(2, "0");
 
-                            daysElem.textContent = String(days).padStart(2, "0");
-                            hoursElem.textContent = String(hours).padStart(2, "0");
-                            minutesElem.textContent = String(minutes).padStart(2, "0");
-                            secondsElem.textContent = String(seconds).padStart(2, "0");
-
-                            // Change color if elapsed time exceeds 30 hours
-                            if (elapsedTime > 30 * 60 * 60 * 1000) {
-                                timerElem.style.color = "red";
-                            }
-                        }
-
-                        const interval = setInterval(updateStopwatch, 1000);
-                        updateStopwatch();
-
-                    } else if (endStatuses.includes(status)) {
-                        // If status is a submission status, show completion message
-                        timerElem.innerHTML = `<p>Draft Submitted</p>`;
-                    }else {
-                        // For any other status
-                        timerElem.innerHTML = `<p>Waiting to Apply</p>`;
+                    if (elapsedTime > 30 * 60 * 60 * 1000) {
+                        timerElem.style.color = "red";
                     }
                 }
-            });
+
+                // If status is Done, stop the timer
+                if (currentStatus === 'Done') {
+                    updateTimer(); // Show final time
+                    return;
+                }
+
+                // Otherwise, keep updating the timer
+                const interval = setInterval(updateTimer, 1000);
+                updateTimer();
+            }
+        });
+
             </script>
 
           </div>

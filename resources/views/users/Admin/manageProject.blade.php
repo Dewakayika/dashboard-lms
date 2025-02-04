@@ -103,7 +103,13 @@
 
             <div class="card mb-4">
                 <div class="card-header pb-0">
+                    <div class="w-full mx-auto  d-flex align-items-center justify-content-between">
                     <h6>Completed Projects</h6>
+                    <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
+                        <i class="fa-solid fa-plus text-white"></i>
+                        <span class="px-2">Upload Old Project</span>
+                    </a>
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -232,8 +238,91 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="uploadProjectModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" style="max-width: 900px;">
+                    <div class="modal-content rounded-3 shadow-lg" style="border-radius: 16px;">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-4 pt-4">
+                            <form action="{{ route('csv.upload') }}" method="POST" enctype="multipart/form-data" class="mb-4">
+                                @csrf
+                                <input type="file" name="csv_file" class="form-control p-2 border-0 rounded-3 shadow-sm" id="csvFileInput">
+                                {{-- <button type="submit" class="mt-3 w-100 btn btn-primary rounded-3 py-2">Upload</button> --}}
+                            </form>
+
+                            <!-- Preview Table -->
+                            <div id="previewTable overview" class="hidden">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Comic Name</th>
+                                            <th>Chapter</th>
+                                            <th>Talent QC</th>
+                                            <th>Talent</th>
+                                            <th>Panels</th>
+                                            <th>Finish Date</th>
+                                            <th>File</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="csvTableBody">
+                                        <!-- Data will be inserted here -->
+                                    </tbody>
+                                </table>
+
+                                <form action="{{ route('submit.csv') }}" method="POST" class="mt-4" enctype="multipart/form-data">
+                                    @csrf
+                                    <button type="submit" class="w-100 btn btn-success rounded-3 py-2">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 </main>
+<script>
+    document.getElementById('csvFileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type === 'text/csv') {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const contents = e.target.result;
+                const rows = contents.split('\n');
+                const data = rows.map(row => row.split(','));
+
+                // Remove the table's previous content (if any)
+                const tableBody = document.getElementById('csvTableBody');
+                tableBody.innerHTML = '';
+
+                // Loop through the CSV rows and add them to the table
+                data.forEach((row, index) => {
+                    if (index > 0) { // Skip the header row
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell.trim();  // Trim spaces
+                            td.classList.add('border', 'p-2');
+                            tr.appendChild(td);
+                        });
+                        tableBody.appendChild(tr);
+                    }
+                });
+
+                // Show the table
+                document.getElementById('previewTable').classList.remove('hidden');
+            };
+            reader.readAsText(file);
+        } else {
+            alert('Please upload a valid CSV file.');
+        }
+    });
+</script>
 
 @endsection

@@ -154,13 +154,20 @@ class TalentController extends Controller
             ->where('status', 'Done')
             ->count();
 
+            $userId = auth()->id(); // Mendapatkan ID pengguna yang sedang login
+            $userName = auth()->user()->name; // Mendapatkan nama pengguna yang sedang login
 
         // Pop up Project Review
-        $projectsWithoutComplexity = Project::leftJoin('project_complexities', 'projects.id', '=', 'project_complexities.project_id')
-        ->where('talent', $user->name) // Filter by authenticated user
-        ->whereNull('project_complexities.id')
-        ->select('projects.*')
+        $projectsWithoutComplexity = Project::where('status', 'Done') // Filter proyek dengan status 'Done'
+        ->where('talent', $userName) // Filter proyek dengan talent_qc yang sesuai dengan nama pengguna yang sedang login
+        ->leftJoin('project_complexities', function ($join) use ($userId) {
+            $join->on('projects.id', '=', 'project_complexities.project_id')
+                 ->where('project_complexities.user_id', '=', $userId); // Filter berdasarkan user_id
+        })
+        ->whereNull('project_complexities.id') // Pastikan entri di project_complexities belum ada
+        ->select('projects.*') // Ambil data proyek yang sudah disaring
         ->get();
+
 
         // Kirim data Talent, User, Notifikasi, Proyek, dan Status Proyek ke view
         return view('users.Talent.talentIndex')->with([

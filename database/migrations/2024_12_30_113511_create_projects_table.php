@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id(); // Primary Key
             $table->foreignId('user_id')
+            ->nullable()
             ->reference('id')
             ->on('users')
             ->constrained()

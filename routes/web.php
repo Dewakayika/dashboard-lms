@@ -182,6 +182,8 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     Route::post('/admin/approve-user/{id}', [AdminController::class, 'approveUser'])->name('admin.approveUser');
     Route::post('/admin/decline-user/{id}', [AdminController::class, 'declineUser'])->name('admin.declineUser');
+    Route::post('/csv/upload', [AdminController::class, 'uploadCSV'])->name('csv.upload');
+    Route::post('/csv/store', [AdminController::class, 'submitCSV'])->name('submit.csv');
 
 
 

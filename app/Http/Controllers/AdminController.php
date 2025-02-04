@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Crypt;
 
 use Spatie\GoogleCalendar\Event;
 use App\Mail\MeetingInvitation;
-
+use Illuminate\Support\Facades\Session;
 use Google\Service\Calendar\Event as GoogleEvent;
 use Google\Service\Calendar;
 use Google\Service\Calendar\EventDateTime;
@@ -144,10 +144,10 @@ class AdminController extends Controller
 
 
         // Check talent status
-        $pendingUsers = Talent::whereNull('status')
-        // ->join('users', 'talent.user_id', '=', 'users.id')
-        // ->select('talent.*', 'users.name', 'users.email', 'users.created_at as registration_date')
-        ->get();
+        // $pendingUsers = Talent::whereNull('status')
+        // // ->join('users', 'talent.user_id', '=', 'users.id')
+        // // ->select('talent.*', 'users.name', 'users.email', 'users.created_at as registration_date')
+        // ->get();
 
 
 
@@ -204,7 +204,7 @@ class AdminController extends Controller
 
             $user = User::join('talent', 'users.id', '=', 'talent.user_id')
             ->where('talent.id', $id)
-            ->select('users.id', 'users.name', 'users.email') // Pastikan email dipilih
+            ->select('users.id', 'users.name', 'users.email')
             ->first();
 
 
@@ -259,8 +259,6 @@ class AdminController extends Controller
             //                 ->subject('Account Information Declined');
             //     }
             // );
-
-
 
             return redirect()->back()->with('success', 'User has been declined successfully.');
 
@@ -380,9 +378,6 @@ class AdminController extends Controller
     }
 
 
-
-
-
     public function storeProject(Request $request)
     {
         $validated = $request->validate([
@@ -445,6 +440,8 @@ class AdminController extends Controller
         ->orWhere('notif_type', 'urgent')
         ->get();
 
+        $pendingUsers = Talent::whereNull('status')
+        ->get();
 
         // Ambil data leaderboard (total submission per user)
         $leaderboard = DB::table('users')
@@ -472,8 +469,9 @@ class AdminController extends Controller
             'talentData' => $talent_data,
             'countRole' => $role_count,
             'roleData' => $role_data,
-            'leaderboard' => $leaderboard, // Tambahkan leaderboard di sini
-            'notification' => $notification
+            'leaderboard' => $leaderboard,
+            'notification' => $notification,
+            'pendingUsers' => $pendingUsers,
         ]);
     }
 
@@ -654,6 +652,16 @@ class AdminController extends Controller
                     $talent->$field = Crypt::decrypt($talent->$field);
                 } catch (\Exception $e) {
                     $talent->$field = 'Encrypted';
+                }
+            }
+        }
+
+        if ($talentQc) {
+            foreach (['id_card', 'bank_name', 'bank_Account', 'swift_code', 'subjected_tax'] as $field) {
+                try {
+                    $talentQc->$field = Crypt::decrypt($talentQc->$field);
+                } catch (\Exception $e) {
+                    $talentQc->$field = 'Encrypted';
                 }
             }
         }
@@ -937,10 +945,9 @@ class AdminController extends Controller
             $cv->status = 'approve';
             $cv->save();
 
-            // Ambil kode registrasi yang dipilih
+
             $registrationCode = $request->input('registration_code');
 
-            // Kirim email pemberitahuan persetujuan dengan kode registrasi
             Mail::to($cv->email)->send(new ApproveEmail($registrationCode));
 
             return redirect()->back()->with(['successCV' =>'CV approved, registration code sent to user.']);
@@ -1092,6 +1099,59 @@ class AdminController extends Controller
         $reviseRecords = ProjectRevise::where('project_id', $id)
             ->get();
 
+        // // Menghitung waktu project duration dari Project assign sampai Done
+        $projectLogs = ProjectLog::where('project_id', $id)
+            ->whereIn('status', ['Project Assign', 'Done'])
+            ->orderBy('timestamp')
+            ->get();
+
+
+        // Get the start time (Project Assign)
+        $startTime = $projectLogs->where('status', 'Project Assign')->first();
+
+        // Get the end time (Done)
+        $endTime = $projectLogs->where('status', 'Done')->first();
+
+        $start = Carbon::parse($startTime->timestamp);
+        $end = Carbon::parse($endTime->timestamp);
+
+
+        // Calculate the total difference in minutes first
+        $totalMinutes = $end->diffInMinutes($start);
+
+        // Calculate days, hours, and remaining minutes
+        $days = floor($totalMinutes / 1440); // 1440 minutes in a day
+        $hours = floor(($totalMinutes % 1440) / 60); // Remaining hours
+        $minutes = $totalMinutes % 60; // Remaining minutes
+
+        // Format the duration string
+        $formatted_duration = '';
+
+        if ($days > 0) {
+            $formatted_duration .= $days . ' ' . ($days == 1 ? 'day' : 'days');
+        }
+
+        if ($hours > 0) {
+            if ($formatted_duration !== '') {
+                $formatted_duration .= ', ';
+            }
+            $formatted_duration .= $hours . ' ' . ($hours == 1 ? 'hour' : 'hours');
+        }
+
+        if ($minutes > 0) {
+            if ($formatted_duration !== '') {
+                $formatted_duration .= ', ';
+            }
+            $formatted_duration .= $minutes . ' ' . ($minutes == 1 ? 'minute' : 'minutes');
+        }
+
+        // If duration is less than a minute
+        if ($formatted_duration === '') {
+            $formatted_duration = 'Less than a minute';
+        }
+
+
+
         // Kirim data proyek ke tampilan
         return view('users.Admin.projectDetail')->with([
             'adminData' => $user,
@@ -1103,7 +1163,9 @@ class AdminController extends Controller
             'sops' => $sops,
             'sopChecklists' => $sopChecklists,
             'qcRecords' => $qcRecords,
-            'reviseRecords' => $reviseRecords
+            'reviseRecords' => $reviseRecords,
+            'formatted_duration' => $formatted_duration
+
         ]);
     }
 
@@ -1269,6 +1331,71 @@ class AdminController extends Controller
         }
         return response()->json(['valid' => false]);
     }
+
+
+    // CSV Upload
+    public function uploadCSV(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,txt|max:2048'
+        ]);
+
+        $file = $request->file('csv_file');
+        $data = [];
+
+        if (($handle = fopen($file->getPathname(), "r")) !== FALSE) {
+            $header = fgetcsv($handle, 1000, ","); // Ambil header
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        Session::put('csv_data', $data);
+        $adminData = auth()->user();
+
+        // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
+        $notification = Notification::where('notif_type', 'urgent')
+        ->orWhere('email', $adminData->email) // For general notifications based on the authenticated user's email
+        ->get();
+
+        $talentQc = User::where('role', 'talent_qc')->get();
+
+
+        // Ambil semua data projects
+        $projectOverview = Project::get();
+        return view('users.Admin.manageProject', compact(
+            'data',
+            'adminData',
+            'notification',
+            'talentQc',
+            'projectOverview'
+
+        ));
+    }
+
+    public function submitCSV()
+    {
+        $csvData = Session::get('csv_data', []);
+
+        foreach ($csvData as $row) {
+            Project::create([
+                'user_id' => auth()->id(), // Sesuaikan dengan autentikasi
+                'comic_name' => $row['comic_name'],
+                'chapter_number' => $row['chapter_number'],
+                'talent_qc' => $row['talent_qc'],
+                'talent' => $row['talent'] ?? null,
+                'number_of_panel' => $row['number_of_panel'] ?? null,
+                'finish_date' => $row['finish_date'] ?? null,
+                'file' => $row['file'] ?? null,
+                'status' => $row['status'] ?? 'Done',
+            ]);
+        }
+
+        Session::forget('csv_data'); // Hapus session setelah submit
+        return redirect()->route('admin#projectOverview')->with('success', 'Success add csv data.');
+    }
+
 
 
 }

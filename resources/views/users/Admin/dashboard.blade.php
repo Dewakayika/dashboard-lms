@@ -2,68 +2,34 @@
 
 @section('content')
 
-  <div class="row">
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body bg-secondary p-3 border-radius-xl">
-          <div class="row">
-            <div class="col-8">
-                <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                    <i class="fa-solid fa-user-group fa-xl" style="color: #27272a;"></i>
-                  </div>
-              <div class="numbers mt-4">
-                <h5 class="font-weight-bolder text-white mb-0">
-                    {{ $talentData }}
-                  </h5>
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Talent User</p>
-              </div>
-            </div>
+
+
+  <div class="container-fluid">
+    <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('../assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
+      <span class="mask bg-gradient-primary opacity-6"></span>
+    </div>
+    <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+      <div class="row gx-4">
+        <div class="col-auto">
+          <div class="avatar avatar-xl position-relative">
+            <img src="{{asset('images/profile/admin_profile.png')}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+          </div>
+        </div>
+        <div class="col-auto my-auto">
+          <div class="h-100">
+            <h5 class="mb-1">
+              {{$adminData->name}}
+            </h5>
+            <p class="mb-0 font-weight-bold text-sm">
+              {{$adminData->email}}
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-          <div class="card-body bg-secondary p-3 border-radius-xl">
-            <div class="row">
-              <div class="col-8">
-                  <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                      <i class="fa-solid fa-user-group fa-xl" style="color: #27272a;"></i>
-                    </div>
-                <div class="numbers mt-4">
-                  <h5 class="font-weight-bolder text-white mb-0">
-                    {{ $internData }}
-
-                    </h5>
-                  <p class="text-sm mb-0 text-capitalize text-white font-weight-light">QC Talent</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-          <div class="card-body bg-secondary p-3 border-radius-xl">
-            <div class="row">
-              <div class="col-8">
-                  <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                      <i class="fa-solid fa-user-group fa-xl" style="color: #27272a;"></i>
-                    </div>
-                <div class="numbers mt-4">
-                  <h5 class="font-weight-bolder text-white mb-0">
-                    {{ $internData }}
-                    </h5>
-                  <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Intern User</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
   </div>
-    <div class="row mt-4">
+
+    <div class="container-fluid row mt-4">
         @if (Session::has('roleCreated'))
         <div class="alert alert-warning animate-box" role="alert">
             {{ Session::get('roleCreated') }}
@@ -121,6 +87,8 @@
                         <span class="badge badge-sm bg-gradient-success">{{ $role->role_types }}</span>
                     @elseif ($role->role_types == 'talent')
                         <span class="badge badge-sm bg-gradient-info">{{ $role->role_types }}</span>
+                    @elseif ($role->role_types == 'talent_qc')
+                        <span class="badge badge-sm bg-gradient-warning">{{ $role->role_types }}</span>
                     @else
                         <span class="badge badge-sm bg-gradient-waring">{{ $role->role_types }}</span>
                     @endif
@@ -152,11 +120,11 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="container-fluid row">
     <div class="col-12">
       <div class="card mb-4">
         <div class="card-header pb-0">
-          <h6 class="text-weight-bolder">Leaderboard</h6>
+          <h6 class="text-weight-bolder">Talent Request</h6>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-0">
@@ -165,16 +133,17 @@
                 <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 invisible">ID</th>
-                    <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Username</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Submissions</th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Vote</th>
-                    <th th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                    <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Full Name</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Address</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Phone Number</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Of Birth</th>
+                    <th th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                   <th class="text-secondary opacity-7"></th>
                 </tr>
               </thead>
               <tbody>
-                @foreach($leaderboard as $user)
+                @foreach($pendingUsers as $user)
                 <tr>
                   <td>
                     <p class=" px-3 text-xs font-weight-bold mb-0">{{ ($leaderboard->currentPage() - 1) * $leaderboard->perPage() + $loop->iteration }}</p>
@@ -183,33 +152,39 @@
                     <span class="text-center text-xs font-weight-bold mb-0 invisible">{{ $user->id }}</span>
                   </td>
                   <td class="align-middle text-sm">
-                    <span class="text-xs font-weight-bold mb-0">{{ $user->name }}</span>
+                    <span class="text-xs font-weight-bold mb-0">{{ $user->full_name }}</span>
                   </td>
 
                   <td class="align-middle  text-sm">
-                    <span class=" text-xs font-weight-bold mb-0">{{ $user->email }}</span>
+                    <span class=" text-xs font-weight-bold mb-0">{{ $user->address }}</span>
                   </td>
 
                   <td class="align-middle text-center text-sm">
-                    <span class="text-center text-xs font-weight-bold mb-0">{{ $user->total_submissions }}</span>
+                    <span class="text-center text-xs font-weight-bold mb-0">{{ $user->phone_number }}</span>
                   </td>
 
                   <td class="align-middle text-center text-sm">
-                    <span class="text-center text-xs font-weight-bold mb-0">{{ $user->total_votes }}</span>
+                    <span class="text-center text-xs font-weight-bold mb-0">{{ $user->gender }}</span>
                   </td>
 
                   <td class="align-middle text-center text-sm">
-                    @if ($user->total_submissions == 8)
-                        <span class="badge badge-sm bg-gradient-success">Completed</span>
-                    @else
-                        <span class="badge badge-sm bg-gradient-warning">Incompleted</span>
-                    @endif
-
+                    <span class="text-center text-xs font-weight-bold mb-0">{{ $user->date_of_birth }}</span>
                   </td>
-                  <td class="align-middle text-center">
-                    <a href="{{ route('admin.user.submissions', ['id' => Crypt::encrypt($user->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                      Detail
-                    </a>
+
+                  <td class="align-right text-right d-flex gap-2">
+                    <form action="{{ route('admin.declineUser', $user->id) }}" method="POST" class="w-52">
+                        @csrf
+                        <button type="submit" class="btn btn-danger w-52">
+                            Decline
+                        </button>
+                    </form>
+
+                    <form action="{{ route('admin.approveUser', $user->id) }}" method="POST" class="w-52">
+                        @csrf
+                        <button type="submit" class="btn btn-success w-52">
+                            Approve
+                        </button>
+                    </form>
                   </td>
                 </tr>
                 @endforeach
@@ -396,4 +371,3 @@
     }
   </script>
 @endpush
-

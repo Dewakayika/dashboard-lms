@@ -191,7 +191,7 @@
 
 
     {{-- Add this at the bottom of your blade file --}}
-    @if($pendingUsers == True)
+    {{-- @if($pendingUsers == True)
         @foreach($pendingUsers as $user)
         <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
             <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
@@ -225,7 +225,7 @@
             </div>
 
         </div>
-        @endforeach
+        @endforeach --}}
 
         {{-- Auto-show first pending user modal --}}
         {{-- @if(session('show_pending_approvals'))

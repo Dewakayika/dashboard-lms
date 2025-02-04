@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
         Talent::factory()->create();
 
         User::factory()->create([
-            'id' => '5',
+            'id' => '6',
             'name' => 'Talent',
             'role' => 'talent3',
             'email' => 'talent3@gmail.com',

@@ -38,108 +38,121 @@
           <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
             <div class="nav-wrapper position-relative end-0">
                 <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
-                    @if (in_array($projectLogs->last()->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
-                    <span class="nav-link mb-0 px-0 py-1 active" id="overview-tab" data-bs-toggle="pill" href="#overview" role="tab" aria-controls="overview" aria-selected="true">
-                        @php
-                            $lastLog = $projectLogs->last();
-                            $previousLog = $projectLogs->count() > 1 ? $projectLogs->get($projectLogs->count() - 2) : null;
-                            $timeDifference = $previousLog ? Carbon::parse($lastLog->timestamp)->diffForHumans(Carbon::parse($previousLog->timestamp), true) : 'N/A';
-                        @endphp
-                        <span class="text-xs">{{$projectData->status}} in <span class="text-bolder"> {{ $timeDifference }}</span></span>
-                        {{-- Button Success --}}
-                    </span>
-                    @elseif ($projectLogs->last()->status == 'Done')
+                    @php
+                        $lastLog = $projectLogs->last();
+                        $startLog = $projectLogs->where('status', 'Project Assign')->first();
+                    @endphp
+
+                @if ($projectLogs->last() && $projectLogs->last()->status == 'Done')
+
+                <p class="nav-link mb-0 px-0 py-1 active">
+                    @php
+                        $totalDuration = $startLog ? Carbon::parse($lastLog->timestamp)->diffForHumans(Carbon::parse($startLog->timestamp), true) : 'N/A';
+                    @endphp
+                    This Project Completed in <span class="text-bolder">{{ $totalDuration }}</span>
+                </p>
+
+                @elseif($projectLogs->isEmpty())
                         <p class="nav-link mb-0 px-0 py-1 active">
-                            This Project Already <span class="text-bolder">Done</span>
+                            @php
+                                $totalDuration = $startLog ? Carbon::parse($lastLog->timestamp)->diffForHumans(Carbon::parse($startLog->timestamp), true) : 'N/A';
+                            @endphp
+                            This Project Completed in <span class="text-bolder">{{ $totalDuration }}</span>
                         </p>
-                     @else
-                    <li class="nav-item">
-                        @php $log = $projectLogs->last(); @endphp
-                        <div class="carousel-item active">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <!-- Countdown timer -->
-                                <div id="countdown-{{ $log->id }}" class="d-flex justify-content-center align-items-center">
-                                    <div class="text-center me-4">
-                                        <h4 id="days-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">DAY</span>
+                    @else
+                        <li class="nav-item">
+                            <div class="carousel-item active">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <!-- Countdown timer -->
+                                    <div id="countdown-{{ $lastLog->id }}" class="d-flex justify-content-center align-items-center">
+                                        <div class="text-center me-4">
+                                            <h4 id="days-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">DAY</span>
+                                        </div>
+                                        <div class="text-center mx-2">
+                                            <h4 id="hours-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">HOUR</span>
+                                        </div>
+                                        <div class="text-center mx-2">
+                                            <h4 id="minutes-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">MIN</span>
+                                        </div>
+                                        <div class="text-center ms-2">
+                                            <h4 id="seconds-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">SEC</span>
+                                        </div>
                                     </div>
-                                    <div class="text-center mx-2">
-                                        <h4 id="hours-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">HOUR</span>
-                                    </div>
-                                    <div class="text-center mx-2">
-                                        <h4 id="minutes-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">MIN</span>
-                                    </div>
-                                    <div class="text-center ms-2">
-                                        <h4 id="seconds-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">SEC</span>
-                                    </div>
+                                    @if ($startLog)
+                                        <div class="ms-3">
+                                            <span class="text-xs text-gray-500">Started: {{ Carbon::parse($startLog->timestamp)->format('d M Y H:i') }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     @endif
-                    </li>
                 </ul>
             </div>
           </div>
         </div>
       </div>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                @if ($projectLogs->isNotEmpty())
-                    @php $log = $projectLogs->last(); @endphp
-                    startTimer("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
-                @endif
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    @if ($projectLogs->isNotEmpty())
+        @php
+            $startLog = $projectLogs->where('status', 'Project Assign')->first();
+            $endLog = $projectLogs->where('status', 'Done')->first();
+            $currentLog = $projectLogs->last();
+        @endphp
+        startTimer("{{ $currentLog->id }}", "{{ $startLog ? $startLog->timestamp : '' }}", "{{ $currentLog->status }}");
+    @endif
 
-                function startTimer(id, timestamp, status) {
-                    const timerElem = document.getElementById(`countdown-${id}`);
-                    const daysElem = document.getElementById(`days-${id}`);
-                    const hoursElem = document.getElementById(`hours-${id}`);
-                    const minutesElem = document.getElementById(`minutes-${id}`);
-                    const secondsElem = document.getElementById(`seconds-${id}`);
+    function startTimer(id, startTimestamp, currentStatus) {
+        const timerElem = document.getElementById(`countdown-${id}`);
+        const daysElem = document.getElementById(`days-${id}`);
+        const hoursElem = document.getElementById(`hours-${id}`);
+        const minutesElem = document.getElementById(`minutes-${id}`);
+        const secondsElem = document.getElementById(`seconds-${id}`);
 
-                    const startStatuses = ["Project Assign", "QC First Draft", "Revise 1", "QC Revise 1",  "Revise 2", "QC Revise 2","Revise 3", "QC Revise 3"];
-                    const endStatuses = ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"];
+        if (!startTimestamp) {
+            timerElem.innerHTML = `<p>Project not started yet</p>`;
+            return;
+        }
 
+        const startTime = new Date(startTimestamp);
 
-                    if (startStatuses.includes(status)) {
-                        // Stopwatch mode
-                        const startTime = new Date(timestamp);
+        function updateTimer() {
+            const now = new Date();
+            const elapsedTime = now - startTime;
 
-                        function updateStopwatch() {
-                            const now = new Date();
-                            const elapsedTime = now - startTime;
+            const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
-                            const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+            daysElem.textContent = String(days).padStart(2, "0");
+            hoursElem.textContent = String(hours).padStart(2, "0");
+            minutesElem.textContent = String(minutes).padStart(2, "0");
+            secondsElem.textContent = String(seconds).padStart(2, "0");
 
-                            daysElem.textContent = String(days).padStart(2, "0");
-                            hoursElem.textContent = String(hours).padStart(2, "0");
-                            minutesElem.textContent = String(minutes).padStart(2, "0");
-                            secondsElem.textContent = String(seconds).padStart(2, "0");
+            if (elapsedTime > 30 * 60 * 60 * 1000) {
+                timerElem.style.color = "red";
+            }
+        }
 
-                            // Change color if elapsed time exceeds 30 hours
-                            if (elapsedTime > 30 * 60 * 60 * 1000) {
-                                timerElem.style.color = "red";
-                            }
-                        }
+        // If status is Done, stop the timer
+        if (currentStatus === 'Done') {
+            updateTimer(); // Show final time
+            return;
+        }
 
-                        const interval = setInterval(updateStopwatch, 1000);
-                        updateStopwatch();
+        // Otherwise, keep updating the timer
+        const interval = setInterval(updateTimer, 1000);
+        updateTimer();
+    }
+});
 
-                    } else if (endStatuses.includes(status)) {
-                        // If status is a submission status, show completion message
-                        timerElem.innerHTML = `<p>Draft Submitted</p>`;
-                    }else {
-                        // For any other status
-                        timerElem.innerHTML = `<p>Waiting to Apply</p>`;
-                    }
-                }
-            });
-            </script>
+    </script>
 
     <div class="row my-4">
         <div class="col w-full mb-4">
@@ -600,32 +613,7 @@
                             </select>
                         </div>
 
-                        <!-- Approve Form -->
-                        <form id="approve_form" action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data" style="display: none;">
-                            <hr>
-                            <p class="text-xs">This action will be directly upload your works and send in to client.</p>
-                            @csrf
-                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
-
-                            <div id="message" class="mb-3 text-left">
-                                <label for="qc_message" class="form-label">Message to Talent</label>
-                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" placeholder="Type QC Message"></textarea>
-                                <small class="form-text text-muted">Use commas to separate list items.</small>
-                            </div>
-
-
-                            <div class="mb-4">
-                                <label for="link_google_drive" class="text-md text-dark">Link Project</label>
-                                <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
-                                @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
-                            </div>
-
-                            @if($checkSop == true)
-
-                            @else
-
-                            {{-- SOP FORM --}}
+                                                    {{-- SOP FORM --}}
                             <!-- Header Row -->
                             <div class="row border-top border-bottom py-2 mx-3" style="max-width: 1000px;">
                                 <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
@@ -660,6 +648,33 @@
                                 </div>
                             @endforeach
 
+                        <!-- Approve Form -->
+                        <form id="approve_form" action="{{ route('talentqc#storeProjectLog') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                            <hr>
+                            <p class="text-xs">This action will be directly upload your works and send in to client.</p>
+                            @csrf
+                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
+                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
+
+                            <div id="message" class="mb-3 text-left">
+                                <label for="qc_message" class="form-label">Message to Talent</label>
+                                <textarea class="form-control" id="qc_message" name="qc_message" rows="4" placeholder="Type QC Message"></textarea>
+                                <small class="form-text text-muted">Use commas to separate list items.</small>
+                            </div>
+
+
+                            <div class="mb-4">
+                                <label for="link_google_drive" class="text-md text-dark">Link Project</label>
+                                <input type="text" name="link_google_drive" class="form-control" placeholder="Google Drive">
+                                @error('link_google_drive') <p class="text-danger text-xs mt-2">{{ $message }}</p> @enderror
+                            </div>
+
+                            @if($checkSop == true)
+
+                            @else
+
+
+
                             <!-- Error Message -->
                             <div class="alert alert-danger alert-dismissible fade show mt-3 text-white" role="alert" id="error-message" style="display: none;">
                                 <i class="fas fa-exclamation-triangle me-2 text-white"></i>
@@ -676,6 +691,7 @@
                             <div class="modal-header border-0">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+
                             <div class="form-group mb-3">
                                 <label class="form-label"><strong>Major QC Message:</strong></label>
                                 <textarea
@@ -702,34 +718,34 @@
                         </div>
 
                         <script>
-                            document.addEventListener("DOMContentLoaded", function () {
-                            const whatsappLink = document.getElementById('whatsappLink2');
-                            whatsappLink.addEventListener("click", function (event) {
-                                event.preventDefault();
-                                const subject = "MOJOR REVISION";
-                                const projectName = "{{$projectData->comic_name}}";
-                                const talent = "{{$projectData->talent}}";
-                                const qc = "{{ auth()->user()->name }}";
-                                const status = "{{ $projectData->status }}";
-                                const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
+                        //     document.addEventListener("DOMContentLoaded", function () {
+                        //     const whatsappLink = document.getElementById('whatsappLink2');
+                        //     whatsappLink.addEventListener("click", function (event) {
+                        //         event.preventDefault();
+                        //         const subject = "MOJOR REVISION";
+                        //         const projectName = "{{$projectData->comic_name}}";
+                        //         const talent = "{{$projectData->talent}}";
+                        //         const qc = "{{ auth()->user()->name }}";
+                        //         const status = "{{ $projectData->status }}";
+                        //         const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
 
-                                // Get and format revision points
-                                const revisions = document.getElementById('majorRevisions').value
-                                    .split('\n')
-                                    .filter(item => item.trim())
-                                    .map((item, index) => `${index + 1}. ${item.trim()}`)
-                                    .join('\n');
+                        //         // Get and format revision points
+                        //         const revisions = document.getElementById('majorRevisions').value
+                        //             .split('\n')
+                        //             .filter(item => item.trim())
+                        //             .map((item, index) => `${index + 1}. ${item.trim()}`)
+                        //             .join('\n');
 
-                                if (!revisions) {
-                                    alert('Please add at least one revision point');
-                                    return;
-                                }
+                        //         if (!revisions) {
+                        //             alert('Please add at least one revision point');
+                        //             return;
+                        //         }
 
-                                const message = `Subject: *MAJOR REVISION*\nProject Name: *${projectName}*\nTalent: *${talent}*\nQC: ${qc}\nStatus: *${status}*\nProject Link: *${projectLink}*\n\nMajor Revision Points:\n${revisions}`;
-                                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-                                window.open(whatsappUrl, '_blank');
-                            });
-                        });
+                        //         const message = `Subject: *MAJOR REVISION*\nProject Name: *${projectName}*\nTalent: *${talent}*\nQC: ${qc}\nStatus: *${status}*\nProject Link: *${projectLink}*\n\nMajor Revision Points:\n${revisions}`;
+                        //         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                        //         window.open(whatsappUrl, '_blank');
+                        //     });
+                        // });
 
                         </script>
                     </div>
@@ -765,58 +781,115 @@
         });
 
         let hasRejected = false;
+let rejectedSops = []; // Array to store rejected SOP details
 
-        function handleResponse(sopId, isAccepted) {
-            const acceptBtn = document.getElementById(`accept-${sopId}`);
-            const rejectBtn = document.getElementById(`reject-${sopId}`);
-            const checklistInput = document.getElementById(`checklist-${sopId}`);
-            const submitButton = document.getElementById('submit-button');
-            const errorMessage = document.getElementById('error-message');
+function handleResponse(sopId, isAccepted) {
+    const acceptBtn = document.getElementById(`accept-${sopId}`);
+    const rejectBtn = document.getElementById(`reject-${sopId}`);
+    const checklistInput = document.getElementById(`checklist-${sopId}`);
+    const submitButton = document.getElementById('submit-button');
+    const errorMessage = document.getElementById('error-message');
 
-            if (isAccepted) {
-                // Handle Accept
-                acceptBtn.classList.remove('btn-outline-success');
-                acceptBtn.classList.add('btn-success');
-                rejectBtn.classList.remove('btn-danger');
-                rejectBtn.classList.add('btn-outline-danger');
-                acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accepted';
-                rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Reject';
-                checklistInput.value = '1';
-            } else {
-                // Handle Reject
-                rejectBtn.classList.remove('btn-outline-danger');
-                rejectBtn.classList.add('btn-danger');
-                acceptBtn.classList.remove('btn-success');
-                acceptBtn.classList.add('btn-outline-success');
-                rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Rejected';
-                acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accept';
-                checklistInput.value = '0';
-            }
+    // Get the SOP details
+    const stepElement = acceptBtn.closest('.row').querySelector('.col-3');
+    const standardElement = acceptBtn.closest('.row').querySelector('.col-4');
+    const step = stepElement.textContent.trim();
+    const standard = standardElement.textContent.trim();
 
-            // Check if any SOP is rejected
-            const checklistInputs = document.querySelectorAll('input[name^="checklist"]');
-            hasRejected = Array.from(checklistInputs).some(input => input.value === '0');
-
-            // Enable/disable submit button and show/hide error message
-            if (hasRejected) {
-                submitButton.disabled = true;
-                submitButton.classList.add('btn-secondary');
-                submitButton.classList.remove('bg-gradient-dark');
-                errorMessage.style.display = 'block';
-            } else {
-                submitButton.disabled = false;
-                submitButton.classList.remove('btn-secondary');
-                submitButton.classList.add('bg-gradient-dark');
-                errorMessage.style.display = 'none';
-            }
+    if (isAccepted) {
+        // Handle Accept
+        acceptBtn.classList.remove('btn-outline-success');
+        acceptBtn.classList.add('btn-success');
+        rejectBtn.classList.remove('btn-danger');
+        rejectBtn.classList.add('btn-outline-danger');
+        acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accepted';
+        rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Reject';
+        checklistInput.value = '1';
+        // Remove from rejected list if previously rejected
+        rejectedSops = rejectedSops.filter(item => item.id !== sopId);
+    } else {
+        // Handle Reject
+        rejectBtn.classList.remove('btn-outline-danger');
+        rejectBtn.classList.add('btn-danger');
+        acceptBtn.classList.remove('btn-success');
+        acceptBtn.classList.add('btn-outline-success');
+        rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Rejected';
+        acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accept';
+        checklistInput.value = '0';
+        // Add to rejected list
+        if (!rejectedSops.some(item => item.id === sopId)) {
+            rejectedSops.push({
+                id: sopId,
+                step: step,
+                standard: standard
+            });
         }
+    }
+
+    // Check if any SOP is rejected
+    const checklistInputs = document.querySelectorAll('input[name^="checklist"]');
+    hasRejected = Array.from(checklistInputs).some(input => input.value === '0');
+
+    // Enable/disable submit button and show/hide error message
+    if (hasRejected) {
+        submitButton.disabled = true;
+        submitButton.classList.add('btn-secondary');
+        submitButton.classList.remove('bg-gradient-dark');
+        errorMessage.style.display = 'block';
+    } else {
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-secondary');
+        submitButton.classList.add('bg-gradient-dark');
+        errorMessage.style.display = 'none';
+    }
+}
+
+// WhatsApp sharing functionality
+document.addEventListener("DOMContentLoaded", function () {
+    const whatsappLink = document.getElementById('whatsappLink2');
+    whatsappLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        const subject = "MAJOR REVISION";
+        const projectName = "{{$projectData->comic_name}}";
+        const talent = "{{$projectData->talent}}";
+        const qc = "{{ auth()->user()->name }}";
+        const status = "{{ $projectData->status }}";
+        const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
+
+        // Get and format revision points
+        const revisions = document.getElementById('majorRevisions').value
+            .split('\n')
+            .filter(item => item.trim())
+            .map((item, index) => `${index + 1}. ${item.trim()}`)
+            .join('\n');
+
+        // Format rejected SOPs list
+        let rejectedSopsList = '';
+        if (rejectedSops.length > 0) {
+            rejectedSopsList = "\n\nRejected Items:\n" + rejectedSops.map((item, index) =>
+                `${index + 1}. ${item.step}: ${item.standard}`
+            ).join('\n');
+        }
+
+        // Check if either revisions or rejected SOPs exist
+        if (!revisions && rejectedSops.length === 0) {
+            alert('Please add revision points or reject some items');
+            return;
+        }
+
+        const message = `Subject: *MAJOR REVISION*
+Project Name: *${projectName}*
+Talent: *${talent}*
+QC: ${qc}
+Status: *${status}*
+Project Link: *${projectLink}*${rejectedSopsList}${revisions ? '\n\nMajor Revision Points:\n' + revisions : ''}`;
+
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    });
+});
+
         </script>
-
-
-
-
-
-
 
     </div>
 

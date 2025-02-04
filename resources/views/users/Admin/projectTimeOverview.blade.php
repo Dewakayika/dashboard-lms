@@ -187,7 +187,7 @@
             data: {
                 labels: qcNames,
                 datasets: [{
-                    label: 'Rata-rata Waktu QC (jam)',
+                    // label: 'Rata-rata Waktu QC (jam)',
                     data: averageQCDurations,
                     borderWidth: 0,
                     backgroundColor: 'rgba(255, 99, 132, 0.6)',
@@ -264,7 +264,7 @@
                         display: true
                     },
                     legend: {
-                        display: true
+                        display: false
                     }
                 },
                 animation: {

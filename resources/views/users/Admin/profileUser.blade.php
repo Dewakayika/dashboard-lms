@@ -24,7 +24,9 @@
         <div class="row gx-4">
           <div class="col-auto">
             <div class="avatar avatar-xl position-relative">
-              <img src="{{asset('images/profile/1730087881_United2.jpg')}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                <img src="{{ asset('storage/' . ($userData->talent->profile_photo ?? $userData->talentQc->profile_photo ?? 'default.png')) }}"
+                alt="profile_image"
+                class="w-100 border-radius-lg shadow-sm">
             </div>
           </div>
           <div class="col-auto my-auto">
@@ -57,49 +59,96 @@
               <hr class="">
               <div class="card-body p-3">
                 <div id="viewProfile">
-                    <div class="row">
-                        <div class="col">
-                            <ul class="list-group">
-                                <li class="list-group-item border-0 ps-0 pt-0 text-sm">
-                                    <strong class="text-dark">Full Name:</strong> &nbsp; {{$talent->full_name ?? '-'}}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Address:</strong> &nbsp; {{$talent->address ?? '-'}}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Gender:</strong> &nbsp; {{$talent->gender ?? '-'}}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Date of Birth:</strong> &nbsp; {{$talent->date_of_birth ?? '-'}}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Phone Number:</strong> &nbsp; {{$talent->phone_number ?? '-'}}
-                                </li>
-                            </ul>
+                    @if($talent)
+                        <h5 class="text-dark">Talent Profile</h5>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-group">
+                                    <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                                        <strong class="text-dark">Full Name:</strong> &nbsp; {{$talent->full_name ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Address:</strong> &nbsp; {{$talent->address ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Gender:</strong> &nbsp; {{$talent->gender ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Date of Birth:</strong> &nbsp; {{$talent->date_of_birth ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Phone Number:</strong> &nbsp; {{$talent->phone_number ?? '-'}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <ul class="list-group">
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Bank Name:</strong> &nbsp; {{ Str::mask($talent->bank_name, '*', 0, strlen($talent->bank_name) ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Bank Account:</strong> &nbsp; {{ Str::mask($talent->bank_Account, '*', 0 ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Swift Code:</strong> &nbsp; {{ Str::mask($talent->swift_code, '*', 0 ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Subject TAX:</strong> &nbsp; {{ Str::mask($talent->subjected_tax, '*', 0 ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">ID Card Number:</strong> &nbsp; {{ Str::mask($talent->id_card, '*', 0 ) }}
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="col">
-                            <ul class="list-group">
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Bank Name:</strong> &nbsp; {{ Str::mask($talent->bank_name, '*', 0, strlen($talent->bank_name) ) }}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Bank Account:</strong> &nbsp; {{ Str::mask($talent->bank_Account, '*', 0, ) }}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Swift Code:</strong> &nbsp; {{ Str::mask($talent->swift_code, '*', 0, ) }}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">Subject TAX:</strong> &nbsp; {{ Str::mask($talent->subjected_tax, '*', 0, ) }}
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-sm">
-                                    <strong class="text-dark">ID Card Number:</strong> &nbsp; {{ Str::mask($talent->id_card, '*', 0,  ) }}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                    @endif
 
-              </div>
+                    @if($talentQc)
+                        <h5 class="text-dark mt-4">Talent QC Profile</h5>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-group">
+                                    <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                                        <strong class="text-dark">Full Name:</strong> &nbsp; {{$talentQc->full_name ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Address:</strong> &nbsp; {{$talentQc->address ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Gender:</strong> &nbsp; {{$talentQc->gender ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Date of Birth:</strong> &nbsp; {{$talentQc->date_of_birth ?? '-'}}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Phone Number:</strong> &nbsp; {{$talentQc->phone_number ?? '-'}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <ul class="list-group">
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Bank Name:</strong> &nbsp; {{ Str::mask($talentQc->bank_name, '*', 0, strlen($talentQc->bank_name) ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Bank Account:</strong> &nbsp; {{ Str::mask($talentQc->bank_Account, '*', 0 ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Swift Code:</strong> &nbsp; {{ Str::mask($talentQc->swift_code, '*', 0 ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">Subject TAX:</strong> &nbsp; {{ Str::mask($talentQc->subjected_tax, '*', 0 ) }}
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 text-sm">
+                                        <strong class="text-dark">ID Card Number:</strong> &nbsp; {{ Str::mask($talentQc->id_card, '*', 0 ) }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             </div>
           </div>
 

@@ -834,7 +834,7 @@ class TalentQcController extends Controller
             $talent->bank_name = Crypt::encrypt($validatedData['bank_name']);
             $talent->bank_Account = Crypt::encrypt($validatedData['bank_Account']);
             $talent->swift_code = Crypt::encrypt($validatedData['swift_code']);
-            $talent->subjected_tax = Crypt::encrypt($validatedData['subjected_tax']);           
+            $talent->subjected_tax = Crypt::encrypt($validatedData['subjected_tax']);
             $talent->user_id = $user->id;
 
             // Save the Talent record
@@ -857,25 +857,25 @@ class TalentQcController extends Controller
             } catch (\Exception $e) {
                 $talent->id_card = 'Encrypted';
             }
-    
+
             try {
                 $talent->bank_name = Crypt::decrypt($talent->bank_name);
             } catch (\Exception $e) {
                 $talent->bank_name = 'Encrypted';
             }
-    
+
             try {
                 $talent->bank_Account = Crypt::decrypt($talent->bank_Account);
             } catch (\Exception $e) {
                 $talent->bank_Account = 'Encrypted';
             }
-    
+
             try {
                 $talent->swift_code = Crypt::decrypt($talent->swift_code);
             } catch (\Exception $e) {
                 $talent->swift_code = 'Encrypted';
             }
-    
+
             try {
                 $talent->subjected_tax = Crypt::decrypt($talent->subjected_tax);
             } catch (\Exception $e) {
@@ -887,15 +887,15 @@ class TalentQcController extends Controller
         ->orWhere('notif_type', 'urgent')
         ->get();
 
-        
+
         // Mengambil data untuk drop down berdasarkan tahun
         $availableYears = Project::selectRaw('DISTINCT YEAR(created_at) as year')
             ->orderBy('year', 'asc')
             ->pluck('year');
-        
+
         // Get selected year (default to current year if not specified)
         $selectedYear = request('year', now()->year);
-        
+
         // Get monthly data for selected year and talent
         $projects = Project::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
             ->where('talent', $userData->name)  // Filter by talent
@@ -904,24 +904,24 @@ class TalentQcController extends Controller
             ->orderBy('year', 'asc')
             ->orderBy('month', 'asc')
             ->get();
-        
+
         // Create an array with all months (1-12) initialized to 0
         $monthlyData = array_combine(range(1, 12), array_fill(0, 12, 0));
-        
+
         // Fill the array with actual data for the selected year and talent
         foreach ($projects as $project) {
             $monthlyData[$project->month] = $project->total;
         }
-        
+
         // Prepare data for chart
         $months = [];
         $totals = [];
-        
+
         foreach ($monthlyData as $month => $total) {
             $months[] = Carbon::createFromDate($selectedYear, $month, 1)->format('F Y');
             $totals[] = $total;
         }
-        
+
 
 
         $projectOverview = Project::where('talent', $userData->name)
@@ -947,7 +947,7 @@ class TalentQcController extends Controller
             'projectOverview',
             'availableYears',
            'selectedYear'
-        
+
         ));
     }
 
@@ -988,7 +988,7 @@ class TalentQcController extends Controller
 
             // Get or create TalentQc record for the authenticated user
             $talentQc = TalentQc::where('user_id', auth()->id())->first();
-            
+
             if (!$talentQc) {
                 $talentQc = new TalentQc();
                 $talentQc->user_id = auth()->id();
@@ -1012,7 +1012,7 @@ class TalentQcController extends Controller
             $talentQc->save();
 
             return redirect()->back()->with('success', 'Profile updated successfully');
-            
+
         } catch (\Exception $e) {
             \Log::error('Profile update error: ' . $e->getMessage());
             return redirect()->back()

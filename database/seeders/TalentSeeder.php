@@ -20,7 +20,7 @@ class TalentSeeder extends Seeder
     public function run()
     {
         User::factory()->create([
-            'id' => '5',
+            'id' => '7',
             'name' => 'Talent',
             'role' => 'talent2',
             'email' => 'talent2@gmail.com',
@@ -31,7 +31,7 @@ class TalentSeeder extends Seeder
         Talent::factory()->create();
 
         User::factory()->create([
-            'id' => '6',
+            'id' => '8',
             'name' => 'Talent',
             'role' => 'talent3',
             'email' => 'talent3@gmail.com',
