@@ -196,10 +196,15 @@
                             <div class="w-full mx-auto d-flex align-items-center justify-content-between">
                                 <h6 class="text-weight-bolder">Project Records</h6>
                                 <div class="gap-2">
+                                    @if(in_array($projectData->status, ['QC First Draft',  'QC Revise 1',  'QC Revise 2',  'QC Revise 3']))
                                     <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createQcModal">
                                         <i class="fa-solid fa-plus text-white"></i>
                                         <span class="px-2">New QC Records</span>
                                     </a>
+                                @elseif(in_array($projectData->status, ['Project Assign', 'Revise 1', 'Revise 2', 'Revise 3', 'Done']))
+                                    {{-- Your code for this condition --}}
+                                @endif
+
                                 </div>
                             </div>
                         </div>
@@ -478,121 +483,6 @@
         @endforeach
 
 
-        {{-- Modal New SOP --}}
-        <div class="modal fade" id="createProjectSOPModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content rounded-3 shadow-lg">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title" id="createProjectModalLabel">Standard Formula</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal-body px-3 pt-3" style="max-height: 70vh; overflow-y: auto;">
-                        <form action="{{ route('talentqc#storeSop') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
-                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <div class="row border-top border-bottom py-2">
-                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
-                                <div class="col-4 text-center text-uppercase text-black text-xxs font-weight-bolder ps-2 py-2 border-end">Standard</div>
-                                <div class="col-2 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Note</div>
-                                <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2">Check List</div>
-                            </div>
-                            @foreach ($sops as $sop)
-                            <div class="row border-bottom py-2">
-                                <div class="col-3 text-xs text-center d-flex align-items-center justify-content-center border-end">{{ $sop->steps }}</div>
-                                <div class="col-4 text-xs px-4 py-2 border-end">{{ $sop->standard }}</div>
-                                <div class="col-2 text-xs px-3 py-2 text-justify border-end">{{ $sop->note }}</div>
-                                <div class="col-3 d-flex align-items-center justify-content-center p-2">
-                                    @if(isset($sopChecklists[$sop->id]))
-                                        <input type="checkbox" name="checklist[{{ $sop->id }}]" value="1" checked="checked">
-                                    @else
-                                        <input type="checkbox" name="checklist[{{ $sop->id }}]" value="1">
-                                    @endif
-                                </div>
-                            </div>
-                            @endforeach
-                            @if ($sopChecklists->isEmpty())
-                                <button type="submit" class="btn btn-primary w-100 mt-3">Send SOP Document</button>
-                            @else
-                                <button type="submit" class="btn btn-primary w-100 mt-3">Update SOP Document</button>
-                            @endif
-                        </form>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @if($projectData->status == 'Done' && $projectComplexity->isEmpty() )
-        <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
-            <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
-                <div class="card-header border-bottom pb-0 rounded">
-                    <div class=" justify-content-between align-items-center text-center">
-                        <h5 class="mb-0">Congratulations!</h5>
-                        <p class="text-md mt-2">You already finish this project, Let's give the review for project and your Talent!</p>
-                        <button type="button" class="btn-close" aria-label="Close"></button>
-                    </div>
-                </div>
-                <div class="card-body bg-white p-3 rounded">
-                    <form action="{{ route('talentqc#Review') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                        <input type="hidden" name="user_id" value="{{ $userData->id }}">
-
-                        <div class="mb-2 text-left" style="text-align: start;">
-                            <label for="complexity" class="text-md text-dark">Project Complexity</label>
-                            <select name="complexity" class="form-control">
-                                <option value="">Please select project complexity</option>
-                                <option value="1">Very Easy</option>
-                                <option value="2">Easy</option>
-                                <option value="3">Medium</option>
-                                <option value="4">Hard</option>
-                                <option value="5">Very Hard</option>
-
-                            </select>
-                            @error('complexity')
-                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <hr>
-
-                        <div class="mb-2 text-left" style="text-align: start;">
-                            <label for="talent_review" class="text-md text-dark">Talent Review</label>
-                            <select name="talent_review" class="form-control">
-                                <option value="">Please select Qc review</option>
-                                <option value="1">Needs Improvement</option>
-                                <option value="2">Developing</option>
-                                <option value="3">Competent</option>
-                                <option value="4">Outstanding</option>
-                                <option value="5">Exceptional</option>
-
-                            </select>
-                            @error('complexity')
-                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="text-left mb-4" style="text-align: start;">
-                            <label for="message" class="text-md text-dark">Message for QC</label>
-                            <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
-                            @error('message')
-                            <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-
-
-                        <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
-                    </form>
-                    <!-- Add your form or content here -->
-                </div>
-
-            </div>
-        </div>
-        @else
-        <!-- Your content when project complexity exists -->
-        @endif
-
         {{-- Modal New QC --}}
         <div class="modal fade {{ $errors->any() ? 'show d-block' : '' }}" id="createQcModal" tabindex="-1" aria-labelledby="createQcModalLabel" aria-hidden="true" style="display: {{ $errors->any() ? 'block' : 'none' }};">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" @if ($checkSop == false ) style="max-width: 1000px;" @else style="max-width: 500px" @endif>
@@ -613,7 +503,7 @@
                             </select>
                         </div>
 
-                                                    {{-- SOP FORM --}}
+                         {{-- SOP FORM --}}
                             <!-- Header Row -->
                             <div class="row border-top border-bottom py-2 mx-3" style="max-width: 1000px;">
                                 <div class="col-3 text-center text-uppercase text-black text-xxs font-weight-bolder py-2 border-end">Steps</div>
@@ -643,7 +533,7 @@
                                                 <i class="fas fa-times me-1"></i> Reject
                                             </button>
                                         </div>
-                                        <input type="hidden" name="checklist[{{ $sop->id }}]" id="checklist-{{ $sop->id }}" value="" requires>
+                                        <input type="hidden" name="checklist[{{ $sop->id }}]" id="checklist-{{ $sop->id }}" value="" required>
                                     </div>
                                 </div>
                             @endforeach
@@ -683,7 +573,7 @@
                             </div>
                             @endif
 
-                            <button type="submit" class="btn bg-gradient-dark w-100 my-4" id="submit-button">Submit Draft</button>
+                            <button type="submit" class="btn bg-gradient-dark w-100 my-4" id="submit-button" disabled>Submit Draft</button>
                         </form>
 
                         <!-- Major Revision Form -->
@@ -756,140 +646,183 @@
                 <div class="modal-backdrop fade show" style="z-index: -1"></div>
             @endif
 
-        <script>
-        document.getElementById('qc_type_selector').addEventListener('change', function() {
-            // Hide all forms first
-            document.querySelectorAll('#approve_form, #minor_form, #major_form').forEach(form => {
-                form.style.display = 'none';
-            });
+            <script>
+                document
+                    .getElementById('qc_type_selector')
+                    .addEventListener('change', function () {
+                        // Hide all forms first
+                        document
+                            .querySelectorAll('#approve_form, #minor_form, #major_form')
+                            .forEach(form => {
+                                form.style.display = 'none';
+                            });
 
-            // Show the selected form
-            const selectedType = this.value;
-            if (selectedType) {
-                document.getElementById(`${selectedType}_form`).style.display = 'block';
-            }
-        });
+                        // Show the selected form
+                        const selectedType = this.value;
+                        if (selectedType) {
+                            document
+                                .getElementById(`${selectedType}_form`)
+                                .style
+                                .display = 'block';
+                        }
+                    });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('#createQcModal form');
-            form.addEventListener('submit', function (event) {
-                const hasError = document.querySelector('.text-danger'); // Check for validation error messages
-                    if (hasError) {
-                        event.preventDefault(); // Prevent form submission
-                    }
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.querySelector('#createQcModal form');
+                    form.addEventListener('submit', function (event) {
+                        const hasError = document.querySelector('.text-danger'); // Check for validation error messages
+                        if (hasError) {
+                            event.preventDefault(); // Prevent form submission
+                        }
+                    });
                 });
-        });
 
-        let hasRejected = false;
-let rejectedSops = []; // Array to store rejected SOP details
+                let hasRejected = false;
+                let rejectedSops = []; // Array to store rejected SOP details
 
-function handleResponse(sopId, isAccepted) {
-    const acceptBtn = document.getElementById(`accept-${sopId}`);
-    const rejectBtn = document.getElementById(`reject-${sopId}`);
-    const checklistInput = document.getElementById(`checklist-${sopId}`);
-    const submitButton = document.getElementById('submit-button');
-    const errorMessage = document.getElementById('error-message');
+                function handleResponse(sopId, isAccepted) {
+                    const acceptBtn = document.getElementById(`accept-${sopId}`);
+                    const rejectBtn = document.getElementById(`reject-${sopId}`);
+                    const checklistInput = document.getElementById(`checklist-${sopId}`);
+                    const submitButton = document.getElementById('submit-button');
+                    const errorMessage = document.getElementById('error-message');
 
-    // Get the SOP details
-    const stepElement = acceptBtn.closest('.row').querySelector('.col-3');
-    const standardElement = acceptBtn.closest('.row').querySelector('.col-4');
-    const step = stepElement.textContent.trim();
-    const standard = standardElement.textContent.trim();
+                    // Get the SOP details
+                    const stepElement = acceptBtn
+                        .closest('.row')
+                        .querySelector('.col-3');
+                    const standardElement = acceptBtn
+                        .closest('.row')
+                        .querySelector('.col-4');
+                    const step = stepElement
+                        .textContent
+                        .trim();
+                    const standard = standardElement
+                        .textContent
+                        .trim();
 
-    if (isAccepted) {
-        // Handle Accept
-        acceptBtn.classList.remove('btn-outline-success');
-        acceptBtn.classList.add('btn-success');
-        rejectBtn.classList.remove('btn-danger');
-        rejectBtn.classList.add('btn-outline-danger');
-        acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accepted';
-        rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Reject';
-        checklistInput.value = '1';
-        // Remove from rejected list if previously rejected
-        rejectedSops = rejectedSops.filter(item => item.id !== sopId);
-    } else {
-        // Handle Reject
-        rejectBtn.classList.remove('btn-outline-danger');
-        rejectBtn.classList.add('btn-danger');
-        acceptBtn.classList.remove('btn-success');
-        acceptBtn.classList.add('btn-outline-success');
-        rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Rejected';
-        acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accept';
-        checklistInput.value = '0';
-        // Add to rejected list
-        if (!rejectedSops.some(item => item.id === sopId)) {
-            rejectedSops.push({
-                id: sopId,
-                step: step,
-                standard: standard
-            });
-        }
-    }
+                    if (isAccepted) {
+                        // Handle Accept
+                        acceptBtn
+                            .classList
+                            .remove('btn-outline-success');
+                        acceptBtn
+                            .classList
+                            .add('btn-success');
+                        rejectBtn
+                            .classList
+                            .remove('btn-danger');
+                        rejectBtn
+                            .classList
+                            .add('btn-outline-danger');
+                        acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accepted';
+                        rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Reject';
+                        checklistInput.value = '1';
+                        // Remove from rejected list if previously rejected
+                        rejectedSops = rejectedSops.filter(item => item.id !== sopId);
+                    } else {
+                        // Handle Reject
+                        rejectBtn
+                            .classList
+                            .remove('btn-outline-danger');
+                        rejectBtn
+                            .classList
+                            .add('btn-danger');
+                        acceptBtn
+                            .classList
+                            .remove('btn-success');
+                        acceptBtn
+                            .classList
+                            .add('btn-outline-success');
+                        rejectBtn.innerHTML = '<i class="fas fa-times me-1"></i> Rejected';
+                        acceptBtn.innerHTML = '<i class="fas fa-check me-1"></i> Accept';
+                        checklistInput.value = '0';
+                        // Add to rejected list
+                        if (!rejectedSops.some(item => item.id === sopId)) {
+                            rejectedSops.push({id: sopId, step: step, standard: standard});
+                        }
+                    }
 
-    // Check if any SOP is rejected
-    const checklistInputs = document.querySelectorAll('input[name^="checklist"]');
-    hasRejected = Array.from(checklistInputs).some(input => input.value === '0');
+                    // Check if any SOP is rejected
+                    const checklistInputs = document.querySelectorAll('input[name^="checklist"]');
+                    hasRejected = Array
+                        .from(checklistInputs)
+                        .some(input => input.value === '0');
 
-    // Enable/disable submit button and show/hide error message
-    if (hasRejected) {
-        submitButton.disabled = true;
-        submitButton.classList.add('btn-secondary');
-        submitButton.classList.remove('bg-gradient-dark');
-        errorMessage.style.display = 'block';
-    } else {
-        submitButton.disabled = false;
-        submitButton.classList.remove('btn-secondary');
-        submitButton.classList.add('bg-gradient-dark');
-        errorMessage.style.display = 'none';
-    }
-}
+                    // Enable/disable submit button and show/hide error message
+                    if (hasRejected) {
+                        submitButton.disabled = true;
+                        submitButton
+                            .classList
+                            .add('btn-secondary');
+                        submitButton
+                            .classList
+                            .remove('bg-gradient-dark');
+                        errorMessage.style.display = 'block';
+                    } else {
+                        submitButton.disabled = false;
+                        submitButton
+                            .classList
+                            .remove('btn-secondary');
+                        submitButton
+                            .classList
+                            .add('bg-gradient-dark');
+                        errorMessage.style.display = 'none';
+                    }
+                }
 
-// WhatsApp sharing functionality
-document.addEventListener("DOMContentLoaded", function () {
-    const whatsappLink = document.getElementById('whatsappLink2');
-    whatsappLink.addEventListener("click", function (event) {
-        event.preventDefault();
-        const subject = "MAJOR REVISION";
-        const projectName = "{{$projectData->comic_name}}";
-        const talent = "{{$projectData->talent}}";
-        const qc = "{{ auth()->user()->name }}";
-        const status = "{{ $projectData->status }}";
-        const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
+                // WhatsApp sharing functionality
+                document.addEventListener("DOMContentLoaded", function () {
+                    const whatsappLink = document.getElementById('whatsappLink2');
+                    whatsappLink.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        const subject = "MAJOR REVISION";
+                        const projectName = "{{$projectData->comic_name}}";
+                        const talent = "{{$projectData->talent}}";
+                        const qc = "{{ auth()->user()->name }}";
+                        const status = "{{ $projectData->status }}";
+                        const projectLink = "{{ $projectRecords->last()->link_google_drive ?? 'not found'}}";
 
-        // Get and format revision points
-        const revisions = document.getElementById('majorRevisions').value
-            .split('\n')
-            .filter(item => item.trim())
-            .map((item, index) => `${index + 1}. ${item.trim()}`)
-            .join('\n');
+                        // Get and format revision points
+                        const revisions = document
+                            .getElementById('majorRevisions')
+                            .value
+                            .split('\n')
+                            .filter(item => item.trim())
+                            .map((item, index) => `${index + 1}. ${item.trim()}`)
+                            .join('\n');
 
-        // Format rejected SOPs list
-        let rejectedSopsList = '';
-        if (rejectedSops.length > 0) {
-            rejectedSopsList = "\n\nRejected Items:\n" + rejectedSops.map((item, index) =>
-                `${index + 1}. ${item.step}: ${item.standard}`
-            ).join('\n');
-        }
+                        // Format rejected SOPs list
+                        let rejectedSopsList = '';
+                        if (rejectedSops.length > 0) {
+                            rejectedSopsList = "\n\nRejected Items:\n" + rejectedSops
+                                .map(
+                                    (item, index) => `${index + 1}. ${item.step}: ${item.standard}`
+                                )
+                                .join('\n');
+                        }
 
-        // Check if either revisions or rejected SOPs exist
-        if (!revisions && rejectedSops.length === 0) {
-            alert('Please add revision points or reject some items');
-            return;
-        }
+                        // Check if either revisions or rejected SOPs exist
+                        if (!revisions && rejectedSops.length === 0) {
+                            alert('Please add revision points or reject some items');
+                            return;
+                        }
 
-        const message = `Subject: *MAJOR REVISION*
-Project Name: *${projectName}*
-Talent: *${talent}*
-QC: ${qc}
-Status: *${status}*
-Project Link: *${projectLink}*${rejectedSopsList}${revisions ? '\n\nMajor Revision Points:\n' + revisions : ''}`;
+                        const message = `Subject: *MAJOR REVISION*
+                Project Name: *${projectName}*
+                Talent: *${talent}*
+                QC: ${qc}
+                Status: *${status}*
+                Project Link: *${projectLink}*${rejectedSopsList}${revisions
+                                    ? '\n\nMajor Revision Points:\n' + revisions
+                                    : ''}`;
 
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-    });
-});
+                        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                        window.open(whatsappUrl, '_blank');
+                    });
+                });
+            </script>
 
-        </script>
 
     </div>
 

@@ -14,7 +14,7 @@
                   </div>
               <div class="numbers mt-4">
                 <h3 class="font-weight-bolder text-gray-700 mb-0">
-                    {{ gmdate('H:i:s', $averageDuration) }}
+                    {{$formatedDuration }}
                   </h3>
                 <p class="text-sm mb-0 text-capitalize text-black font-weight-light">Average Project Serving Time</p>
               </div>
@@ -188,61 +188,6 @@
         </div>
     </div>
   </div>
-
-
-    {{-- Add this at the bottom of your blade file --}}
-    {{-- @if($pendingUsers == True)
-        @foreach($pendingUsers as $user)
-        <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
-            <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
-                <div class="card-header border-bottom pb-0 rounded">
-                    <div class=" justify-content-between align-items-center">
-                        <h5 class="mb-3 text-center">New Talent Registration Request</h5>
-                        <p class="text-center text-sm">We have received a request for registration from a new talent. Below are the details of the individual seeking to join our team:</p>
-                        <p class="mb-0 text-left text-sm"><span class="text-bold">Full Name: </span>{{$user->full_name}}</p>
-                        <p class="mb-0 text-left text-sm"><span class="text-bold">Phone Number: </span>{{$user->phone_number}}</p>
-                        <p class="mb-0 text-left text-sm"><span class="text-bold">Address: </span>{{$user->address}}</p>
-
-                        <button type="button" class="btn-close" aria-label="Close"></button>
-
-                        <div class="d-flex justify-content-between gap-2">
-                            <form action="{{ route('admin.declineUser', $user->id) }}" method="POST" class="w-100">
-                                @csrf
-                                <button type="submit" class="btn btn-danger w-100">
-                                    Decline
-                                </button>
-                            </form>
-
-                            <form action="{{ route('admin.approveUser', $user->id) }}" method="POST" class="w-100">
-                                @csrf
-                                <button type="submit" class="btn btn-success w-100">
-                                    Approve
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        @endforeach --}}
-
-        {{-- Auto-show first pending user modal --}}
-        {{-- @if(session('show_pending_approvals'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const firstModal = new bootstrap.Modal(document.getElementById('approvalModal{{ $pendingUsers->first()->id }}'));
-                firstModal.show();
-            });
-        </script> --}}
-        {{-- @endif --}}
-
-        @else
-
-        haii
-    @endif
-
-
 
   <div class="col-lg-12  col-md-6 mb-md-0 mb-4" >
     <div class="card" style="min-height: 400px;"  >

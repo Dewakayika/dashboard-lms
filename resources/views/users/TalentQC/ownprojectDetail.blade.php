@@ -10,8 +10,8 @@
     <div class="container-fluid">
         <nav aria-label="container-fluid breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#index') }}">Home</a></li>
-                <li class="breadcrumb-item text-xs"><a href="{{ route('talent#projectOverview') }}">Project Overview</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#index') }}">Home</a></li>
+                <li class="breadcrumb-item text-xs"><a href="{{ route('talentqc#projectOverview') }}">Project Overview</a></li>
                 <li class="breadcrumb-item active text-xs" aria-current="page">Project {{$projectData->comic_name}} Eps.{{$projectData->chapter_number}}</li>
             </ol>
         </nav>
@@ -38,108 +38,121 @@
           <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
             <div class="nav-wrapper position-relative end-0">
                 <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
-                    @if (in_array($projectLogs->last()->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
-                    <span class="nav-link mb-0 px-0 py-1 active" id="overview-tab" data-bs-toggle="pill" href="#overview" role="tab" aria-controls="overview" aria-selected="true">
+                    @php
+                        $lastLog = $projectLogs->last();
+                        $startLog = $projectLogs->where('status', 'Project Assign')->first();
+                    @endphp
+
+                    @if ($projectLogs->last() && $projectLogs->last()->status == 'Done')
+
+                    <p class="nav-link mb-0 px-0 py-1 active">
                         @php
-                            $lastLog = $projectLogs->last();
-                            $previousLog = $projectLogs->count() > 1 ? $projectLogs->get($projectLogs->count() - 2) : null;
-                            $timeDifference = $previousLog ? Carbon::parse($lastLog->timestamp)->diffForHumans(Carbon::parse($previousLog->timestamp), true) : 'N/A';
+                            $totalDuration = $startLog ? Carbon::parse($lastLog->timestamp)->diffForHumans(Carbon::parse($startLog->timestamp), true) : 'N/A';
                         @endphp
-                        <span class="text-xs">{{$projectData->status}} in <span class="text-bolder"> {{ $timeDifference }}</span></span>
-                        {{-- Button Success --}}
-                    </span>
-                    @elseif ($projectLogs->last()->status == 'Done')
+                        This Project Completed in <span class="text-bolder">{{ $totalDuration }}</span>
+                    </p>
+
+                    @elseif($projectLogs->isEmpty())
                         <p class="nav-link mb-0 px-0 py-1 active">
-                            This Project Already <span class="text-bolder">Done</span>
+                            @php
+                                $totalDuration = $startLog ? Carbon::parse($lastLog->timestamp)->diffForHumans(Carbon::parse($startLog->timestamp), true) : 'N/A';
+                            @endphp
+                            This Project Completed in <span class="text-bolder">{{ $totalDuration }}</span>
                         </p>
-                     @else
-                    <li class="nav-item">
-                        @php $log = $projectLogs->last(); @endphp
-                        <div class="carousel-item active">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <!-- Countdown timer -->
-                                <div id="countdown-{{ $log->id }}" class="d-flex justify-content-center align-items-center">
-                                    <div class="text-center me-4">
-                                        <h4 id="days-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">DAY</span>
+                    @else
+                        <li class="nav-item">
+                            <div class="carousel-item active">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <!-- Countdown timer -->
+                                    <div id="countdown-{{ $lastLog->id }}" class="d-flex justify-content-center align-items-center">
+                                        <div class="text-center me-4">
+                                            <h4 id="days-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">DAY</span>
+                                        </div>
+                                        <div class="text-center mx-2">
+                                            <h4 id="hours-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">HOUR</span>
+                                        </div>
+                                        <div class="text-center mx-2">
+                                            <h4 id="minutes-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">MIN</span>
+                                        </div>
+                                        <div class="text-center ms-2">
+                                            <h4 id="seconds-{{ $lastLog->id }}" class="font-weight-bold mb-0">00</h4>
+                                            <span class="text-xs text-gray-500">SEC</span>
+                                        </div>
                                     </div>
-                                    <div class="text-center mx-2">
-                                        <h4 id="hours-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">HOUR</span>
-                                    </div>
-                                    <div class="text-center mx-2">
-                                        <h4 id="minutes-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">MIN</span>
-                                    </div>
-                                    <div class="text-center ms-2">
-                                        <h4 id="seconds-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                        <span class="text-xs text-gray-500">SEC</span>
-                                    </div>
+                                    @if ($startLog)
+                                        <div class="ms-3">
+                                            <span class="text-xs text-gray-500">Started: {{ Carbon::parse($startLog->timestamp)->format('d M Y H:i') }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     @endif
-                    </li>
                 </ul>
+
             </div>
           </div>
         </div>
       </div>
 
-      <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
-        @if ($projectLogs->isNotEmpty())
-            @php $log = $projectLogs->last(); @endphp
-            startTimer("{{ $log->id }}", "{{ $log->timestamp }}", "{{ $log->status }}");
-        @endif
+    @if ($projectLogs->isNotEmpty())
+        @php
+            $startLog = $projectLogs->where('status', 'Project Assign')->first();
+            $endLog = $projectLogs->where('status', 'Done')->first();
+            $currentLog = $projectLogs->last();
+        @endphp
+        startTimer("{{ $currentLog->id }}", "{{ $startLog ? $startLog->timestamp : '' }}", "{{ $currentLog->status }}");
+    @endif
 
-        function startTimer(id, timestamp, status) {
-            const timerElem = document.getElementById(`countdown-${id}`);
-            const daysElem = document.getElementById(`days-${id}`);
-            const hoursElem = document.getElementById(`hours-${id}`);
-            const minutesElem = document.getElementById(`minutes-${id}`);
-            const secondsElem = document.getElementById(`seconds-${id}`);
+    function startTimer(id, startTimestamp, currentStatus) {
+        const timerElem = document.getElementById(`countdown-${id}`);
+        const daysElem = document.getElementById(`days-${id}`);
+        const hoursElem = document.getElementById(`hours-${id}`);
+        const minutesElem = document.getElementById(`minutes-${id}`);
+        const secondsElem = document.getElementById(`seconds-${id}`);
 
-            const startStatuses = ["Project Assign", "QC First Draft", "Revise 1", "QC Revise 1",  "Revise 2", "QC Revise 2","Revise 3", "QC Revise 3"];
-            const endStatuses = ["First Draft Submitted", "Revise 1 Submitted", "Revise 2 Submitted", "Revise 3 Submitted"];
+        if (!startTimestamp) {
+            timerElem.innerHTML = `<p>Project not started yet</p>`;
+            return;
+        }
 
+        const startTime = new Date(startTimestamp);
 
-            if (startStatuses.includes(status)) {
-                // Stopwatch mode
-                const startTime = new Date(timestamp);
+        function updateTimer() {
+            const now = new Date();
+            const elapsedTime = now - startTime;
 
-                function updateStopwatch() {
-                    const now = new Date();
-                    const elapsedTime = now - startTime;
+            const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
-                    const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+            daysElem.textContent = String(days).padStart(2, "0");
+            hoursElem.textContent = String(hours).padStart(2, "0");
+            minutesElem.textContent = String(minutes).padStart(2, "0");
+            secondsElem.textContent = String(seconds).padStart(2, "0");
 
-                    daysElem.textContent = String(days).padStart(2, "0");
-                    hoursElem.textContent = String(hours).padStart(2, "0");
-                    minutesElem.textContent = String(minutes).padStart(2, "0");
-                    secondsElem.textContent = String(seconds).padStart(2, "0");
-
-                    // Change color if elapsed time exceeds 30 hours
-                    if (elapsedTime > 30 * 60 * 60 * 1000) {
-                        timerElem.style.color = "red";
-                    }
-                }
-
-                const interval = setInterval(updateStopwatch, 1000);
-                updateStopwatch();
-
-            } else if (endStatuses.includes(status)) {
-                // If status is a submission status, show completion message
-                timerElem.innerHTML = `<p>Draft Submitted</p>`;
-            }else {
-                // For any other status
-                timerElem.innerHTML = `<p>Waiting to Apply</p>`;
+            if (elapsedTime > 30 * 60 * 60 * 1000) {
+                timerElem.style.color = "red";
             }
         }
-    });
+
+        // If status is Done, stop the timer
+        if (currentStatus === 'Done') {
+            updateTimer(); // Show final time
+            return;
+        }
+
+        // Otherwise, keep updating the timer
+        const interval = setInterval(updateTimer, 1000);
+        updateTimer();
+    }
+});
 
     </script>
 
@@ -163,12 +176,12 @@
                         <ul class="list-group">
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Project Name:</strong> &nbsp; {{$projectData->comic_name}}</li>
                             <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">QC Talent:</strong> &nbsp; {{$projectData->talent_qc}}</li>
-                            <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Assign:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->created_at)->translatedFormat('D, M Y') }}</li>
+                            <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Posted:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->created_at)->translatedFormat('D, M Y') }}</li>
                           </ul>
                     </div>
                     <div class="col">
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Last Update:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->update_at)->translatedFormat('D, M Y') }}</li>
-                        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') ?? '-' }}</li>
+                        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project Finish Date:</strong> &nbsp; {{ $projectData->finish_date ? \Carbon\Carbon::parse($projectData->finish_date)->translatedFormat('D, M Y') : 'Not finish yet' }}</li>
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project File:</strong> &nbsp; <a href="{{$projectData->file}}" class="text-primary" target="_blank" style="text-decoration: underline;">Download File</a></li>
                     </div>
                 </div>
@@ -188,13 +201,19 @@
                             {{-- <a class="badge badge-xs bg-secondary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#createProjectSOPModal">
                                 <span class="px-2">SOP Check</span>
                             </a> --}}
+
+                            @if(in_array($projectData->status, ['Project Assign', 'Revise 1', 'Revise 2', 'Revise 3']))
                             <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary"
-                            href="#"
-                            data-bs-toggle="modal"
-                            data-bs-target="#createProjectSOPModal">
-                             <i class="fa-solid fa-plus text-white"></i>
-                             <span class="px-2">New Records</span>
-                         </a>
+                                href="#"
+                                data-bs-toggle="modal"
+                                data-bs-target="#createProjectSOPModal">
+                                <i class="fa-solid fa-plus text-white"></i>
+                                <span class="px-2">New Records</span>
+                            </a>
+                        @elseif(in_array($projectData->status, ['QC First Draft', 'First Draft Submitted', 'QC Revise 1', 'Revise 1 Submitted', 'QC Revise 2', 'Revise 2 Submitted', 'QC Revise 3', 'Done']))
+                            {{-- Your code for this condition --}}
+                        @endif
+
 
                          <div class="modal fade {{ $errors->any() ? 'show d-block' : '' }}" id="createProjectSOPModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true"  style="display: {{ $errors->any() ? 'block' : 'none' }};">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" @if ($checkSop == false) style="max-width: 1000px" @else style="max-width: 400px" @endif >
@@ -250,20 +269,6 @@
                                                 </div>
                                             </div>
                                             @endforeach
-
-
-                                            <!-- Agree to Terms -->
-                                            <div class="form-check mb-3 mt-3" style="text-align: start">
-                                                <input type="checkbox" class="form-check-input" id="agreeTerms" name="agree_terms" value="1">
-                                                <label class="form-check-label" for="agreeTerms">
-                                                    I already follow all the standards based on
-                                                    <a class="text-bolder underline" href="https://concise-scale-120.notion.site/Webtoon-Standard-Version-2-df8407ad672f4d568390011b5cfcfb37?pvs=4" target="_blank">SOP Document</a>
-                                                </label>
-                                                @error('agree_terms')
-                                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-
 
                                             @endif
                                             <!-- Submit Button -->
@@ -375,9 +380,7 @@
                                             @elseif (in_array($record->project_stage, ['First Draft Submitted', 'Revise 1 Submitted', 'Revis 2 Submitted', 'Revise 3 Submitted']))
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#shareToWhatsAppModal" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Share Project</a>
                                             @else
-                                                <a class="badge badge-sm bg-gradient-danger font-weight-bold mb-0 text-white hover:bg-secondaryy" href="#" data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                                                    <span class="px-2">Make it done</span>
-                                                </a>
+
                                             @endif
                                         </td>
                                     </tr>
@@ -505,79 +508,6 @@
                             </div>
                         </div>
                         @endforeach
-
-
-        @if($projectData->status == 'Done' && $projectComplexity->isEmpty())
-            <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
-                <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
-                    <div class="card-header border-bottom pb-0 rounded">
-                        <div class=" justify-content-between align-items-center text-center">
-                            <h5 class="mb-0">Congratulations!</h5>
-                            <p class="text-md mt-2">You already finish this project, Let's give the review for project and your QC Agent!</p>
-                            <button type="button" class="btn-close" aria-label="Close"></button>
-                        </div>
-                    </div>
-                    <div class="card-body bg-white p-3 rounded">
-                        <form action="{{ route('talent#storeReview') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="project_id" value="{{ $projectData->id }}">
-                            <input type="hidden" name="user_id" value="{{ $userData->id }}">
-
-                            <div class="text-left mb-4" style="text-align: start;">
-                                <label for="number_of_panel" class="text-md text-dark">Number of Final Panel</label>
-                                <input type="text" name="number_of_panel" class="form-control" placeholder="Example 50" >
-                                @error('number_of_panel')
-                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <hr>
-                            <div class="mb-2 text-left" style="text-align: start;">
-                                <label for="complexity" class="text-md text-dark">Project Complexity</label>
-                                <select name="complexity" class="form-control">
-                                    <option value="">Please select project complexity</option>
-                                    <option value="1">Very Easy</option>
-                                    <option value="2">Easy</option>
-                                    <option value="3">Medium</option>
-                                    <option value="4">Hard</option>
-                                    <option value="5">Very Hard</option>
-
-                                </select>
-                                @error('complexity')
-                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <hr>
-                            <div class="mb-2 text-left" style="text-align: start;">
-                                <label for="qc_reviews" class="text-md text-dark">QC Review</label>
-                                <select name="qc_reviews" class="form-control">
-                                    <option value="">Please select Qc review</option>
-                                    <option value="1">Needs Improvement</option>
-                                    <option value="2">Developing</option>
-                                    <option value="3">Competent</option>
-                                    <option value="4">Outstanding</option>
-                                    <option value="5">Exceptional</option>
-
-                                </select>
-                                @error('complexity')
-                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="text-left mb-4" style="text-align: start;">
-                                <label for="message" class="text-md text-dark">Message for QC</label>
-                                <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
-                                @error('message')
-                                <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        @else
-            <!-- Your content when project complexity exists -->
-        @endif
-
 
 
 

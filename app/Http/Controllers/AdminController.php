@@ -25,6 +25,7 @@ use App\Models\Sop;
 use App\Models\SopChecklist;
 use App\Models\QcRecords;
 use App\Models\ProjectRevise;
+use App\Models\ProjectRecap;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -48,6 +49,10 @@ use Google\Service\Calendar\ConferenceData;
 use Google\Service\Calendar\ConferenceDataCreateRequest;
 use Google\Service\Calendar\ConferenceSolutionKey;
 use Illuminate\Support\Facades\Hash;
+use Carbon\CarbonInterval;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
+
 
 
 
@@ -95,6 +100,7 @@ class AdminController extends Controller
         }
 
         $averageDuration = $projectCount > 0 ? $totalDuration / $projectCount : 0;
+        $formattedDuration = CarbonInterval::seconds($averageDuration)->cascade()->format('%H:%I:%S');
 
 
         // Mengambil data untuk drop down based on year
@@ -151,7 +157,7 @@ class AdminController extends Controller
 
 
 
-        return view ('users.Admin.Overview')->with([
+        return view ('users.Admin.overview')->with([
             'adminData' => $admin_data,
             'projectsList' => $waitingProjects,
             'notification' => $notification,
@@ -170,7 +176,7 @@ class AdminController extends Controller
             'projectAssign' => $projectAssign,
             'availableYears' => $availableYears,
             'selectedYear' => $selectedYear,
-            'pendingUsers' => $pendingUsers,
+            'formatedDuration'=> $formattedDuration,
 
         ]);
     }
@@ -1099,56 +1105,56 @@ class AdminController extends Controller
         $reviseRecords = ProjectRevise::where('project_id', $id)
             ->get();
 
-        // // Menghitung waktu project duration dari Project assign sampai Done
-        $projectLogs = ProjectLog::where('project_id', $id)
-            ->whereIn('status', ['Project Assign', 'Done'])
-            ->orderBy('timestamp')
-            ->get();
+        // // // Menghitung waktu project duration dari Project assign sampai Done
+        // $projectLogs = ProjectLog::where('project_id', $id)
+        //     ->whereIn('status', ['Project Assign', 'Done'])
+        //     ->orderBy('timestamp')
+        //     ->get();
 
 
-        // Get the start time (Project Assign)
-        $startTime = $projectLogs->where('status', 'Project Assign')->first();
+        // // Get the start time (Project Assign)
+        // $startTime = $projectLogs->where('status', 'Project Assign')->first();
 
-        // Get the end time (Done)
-        $endTime = $projectLogs->where('status', 'Done')->first();
+        // // Get the end time (Done)
+        // $endTime = $projectLogs->where('status', 'Done')->first();
 
-        $start = Carbon::parse($startTime->timestamp);
-        $end = Carbon::parse($endTime->timestamp);
+        // $start = Carbon::parse($startTime->timestamp);
+        // $end = Carbon::parse($endTime->timestamp);
 
 
-        // Calculate the total difference in minutes first
-        $totalMinutes = $end->diffInMinutes($start);
+        // // Calculate the total difference in minutes first
+        // $totalMinutes = $end->diffInMinutes($start);
 
-        // Calculate days, hours, and remaining minutes
-        $days = floor($totalMinutes / 1440); // 1440 minutes in a day
-        $hours = floor(($totalMinutes % 1440) / 60); // Remaining hours
-        $minutes = $totalMinutes % 60; // Remaining minutes
+        // // Calculate days, hours, and remaining minutes
+        // $days = floor($totalMinutes / 1440); // 1440 minutes in a day
+        // $hours = floor(($totalMinutes % 1440) / 60); // Remaining hours
+        // $minutes = $totalMinutes % 60; // Remaining minutes
 
-        // Format the duration string
-        $formatted_duration = '';
+        // // Format the duration string
+        // $formatted_duration = '';
 
-        if ($days > 0) {
-            $formatted_duration .= $days . ' ' . ($days == 1 ? 'day' : 'days');
-        }
+        // if ($days > 0) {
+        //     $formatted_duration .= $days . ' ' . ($days == 1 ? 'day' : 'days');
+        // }
 
-        if ($hours > 0) {
-            if ($formatted_duration !== '') {
-                $formatted_duration .= ', ';
-            }
-            $formatted_duration .= $hours . ' ' . ($hours == 1 ? 'hour' : 'hours');
-        }
+        // if ($hours > 0) {
+        //     if ($formatted_duration !== '') {
+        //         $formatted_duration .= ', ';
+        //     }
+        //     $formatted_duration .= $hours . ' ' . ($hours == 1 ? 'hour' : 'hours');
+        // }
 
-        if ($minutes > 0) {
-            if ($formatted_duration !== '') {
-                $formatted_duration .= ', ';
-            }
-            $formatted_duration .= $minutes . ' ' . ($minutes == 1 ? 'minute' : 'minutes');
-        }
+        // if ($minutes > 0) {
+        //     if ($formatted_duration !== '') {
+        //         $formatted_duration .= ', ';
+        //     }
+        //     $formatted_duration .= $minutes . ' ' . ($minutes == 1 ? 'minute' : 'minutes');
+        // }
 
-        // If duration is less than a minute
-        if ($formatted_duration === '') {
-            $formatted_duration = 'Less than a minute';
-        }
+        // // If duration is less than a minute
+        // if ($formatted_duration === '') {
+        //     $formatted_duration = 'Less than a minute';
+        // }
 
 
 
@@ -1164,7 +1170,7 @@ class AdminController extends Controller
             'sopChecklists' => $sopChecklists,
             'qcRecords' => $qcRecords,
             'reviseRecords' => $reviseRecords,
-            'formatted_duration' => $formatted_duration
+            // 'formatted_duration' => $formatted_duration
 
         ]);
     }
@@ -1263,63 +1269,64 @@ class AdminController extends Controller
 
 
         // Project Mark as Done
-    public function storeProjectDone(Request $request, $id){
-
-        // Mengambil data project berdasarkan ID
-        $project = Project::findOrFail($id);
-
-        // Melakukan Update Project Status menjadi Done dan finish date hari ini
-        $project->update([
-            'status' => 'Done',
-            'finish_date' => Carbon::now(),
-        ]);
-
-        // Menyimpan data baru ke tabel 'statuses' dengan status_type_id = 13
-        Status::create([
-            'project_id' => $id,
-            'status_type_id' => 13,
-        ]);
-
-        // Menyimpan data baru ke tabel 'project_logs'
-        ProjectLog::create([
-            'project_id' => $id,
-            'user_id' => Auth::id(),
-            'talent_qc' => $project->talent_qc ?? 'N/A',
-            'timestamp' => Carbon::now(),
-            'status' => 'Done',
-        ]);
-
-        // Kirim email ke Talent dan talent_qc
-        $talent = User::where('name', $project->talent)->first();
-        $talentQc = User::where('name', $project->talent_qc)->first();
+        public function storeProjectDone(Request $request, $id)
+        {
 
 
-        // Mengirim notifikasi ke Talent, talent qc, dan user yang ter auth
-        Notification::create([
-            'email' => $talent->email,
-            'subject' => "Congrast! {$project->comic_name} Eps {$project->chapter_name} mark as Done",
-            'message' => "The project has been successfully completed.",
-            'notif_type' => 'general',
-        ]);
+            // Mengambil data project berdasarkan ID
+            $project = Project::findOrFail($id);
 
-        Notification::create([
-            'email' => $talentQc->email,
-            'subject' => "Congrast! {$project->comic_name} Eps {$project->chapter_name} mark as Done",
-            'message' => "The project has been successfully completed.",
-            'notif_type' => 'general',
-        ]);
+            // Melakukan Update Project Status menjadi Done dan finish date hari ini
+            $project->update([
+                'status' => 'Done',
+                'finish_date' => Carbon::now(),
+            ]);
 
-        Notification::create([
-            'email' => Auth::user()->email,
-            'subject' => "Congrast! {$project->comic_name} Eps {$project->chapter_name} mark as Done",
-            'message' => "The project has been successfully completed.",
-            'notif_type' => 'general',
-        ]);
+            // Menyimpan data baru ke tabel 'statuses' dengan status_type_id = 13
+            Status::create([
+                'project_id' => $id,
+                'status_type_id' => 13,
+            ]);
+
+            // Menyimpan data baru ke tabel 'project_logs'
+            ProjectLog::create([
+                'project_id' => $id,
+                'user_id' => Auth::id(),
+                'talent_qc' => $project->talent_qc ?? 'N/A',
+                'timestamp' => Carbon::now(),
+                'status' => 'Done',
+            ]);
+
+            // Kirim email ke Talent dan Talent QC
+            $talent = User::where('name', $project->talent)->first();
+            $talentQc = User::where('name', $project->talent_qc)->first();
+
+            // Mengirim notifikasi ke Talent, Talent QC, dan user yang ter-auth
+            Notification::create([
+                'email' => $talent->email,
+                'subject' => "Congrats! {$project->comic_name} Eps {$project->chapter_name} marked as Done",
+                'message' => "The project has been successfully completed.",
+                'notif_type' => 'general',
+            ]);
+
+            Notification::create([
+                'email' => $talentQc->email,
+                'subject' => "Congrats! {$project->comic_name} Eps {$project->chapter_name} marked as Done",
+                'message' => "The project has been successfully completed.",
+                'notif_type' => 'general',
+            ]);
+
+            Notification::create([
+                'email' => Auth::user()->email,
+                'subject' => "Congrats! {$project->comic_name} Eps {$project->chapter_name} marked as Done",
+                'message' => "The project has been successfully completed.",
+                'notif_type' => 'general',
+            ]);
 
 
-        return redirect()->back()->with('success', 'Project has been marked as Done!.');
+            return redirect()->back()->with('success', 'Project has been marked as Done!');
+        }
 
-    }
 
 
 
@@ -1333,68 +1340,55 @@ class AdminController extends Controller
     }
 
 
-    // CSV Upload
-    public function uploadCSV(Request $request)
+
+    public function submitCSV(Request $request)
     {
-        $request->validate([
-            'csv_file' => 'required|mimes:csv,txt|max:2048'
+
+        // Validasi file harus CSV
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|mimes:csv,txt|max:2048',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $file = $request->file('csv_file');
-        $data = [];
+        $filePath = $file->getRealPath();
 
-        if (($handle = fopen($file->getPathname(), "r")) !== FALSE) {
-            $header = fgetcsv($handle, 1000, ","); // Ambil header
-            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $data[] = array_combine($header, $row);
-            }
-            fclose($handle);
+        // Membaca file CSV
+        $csvData = array_map('str_getcsv', file($filePath));
+
+        // Pastikan ada header dan minimal 1 data
+        if (count($csvData) < 2) {
+            return redirect()->back()->with('error', 'CSV file is empty or has incorrect format.');
         }
 
-        Session::put('csv_data', $data);
-        $adminData = auth()->user();
+        // Hapus header
+        array_shift($csvData);
 
-        // Ambil semua notifikasi yang berhubungan dengan email pengguna yang sedang login
-        $notification = Notification::where('notif_type', 'urgent')
-        ->orWhere('email', $adminData->email) // For general notifications based on the authenticated user's email
-        ->get();
-
-        $talentQc = User::where('role', 'talent_qc')->get();
-
-
-        // Ambil semua data projects
-        $projectOverview = Project::get();
-        return view('users.Admin.manageProject', compact(
-            'data',
-            'adminData',
-            'notification',
-            'talentQc',
-            'projectOverview'
-
-        ));
-    }
-
-    public function submitCSV()
-    {
-        $csvData = Session::get('csv_data', []);
-
+        // Simpan data ke database
         foreach ($csvData as $row) {
-            Project::create([
-                'user_id' => auth()->id(), // Sesuaikan dengan autentikasi
-                'comic_name' => $row['comic_name'],
-                'chapter_number' => $row['chapter_number'],
-                'talent_qc' => $row['talent_qc'],
-                'talent' => $row['talent'] ?? null,
-                'number_of_panel' => $row['number_of_panel'] ?? null,
-                'finish_date' => $row['finish_date'] ?? null,
-                'file' => $row['file'] ?? null,
-                'status' => $row['status'] ?? 'Done',
-            ]);
+            if (count($row) >= 8) {
+                Project::create([
+                    'user_id'        => Auth::id(), // User ID dari auth
+                    'comic_name'     => $row[0],
+                    'chapter_number' => $row[1],
+                    'talent_qc'      => $row[2],
+                    'talent'         => $row[3],
+                    'number_of_panel'=> $row[4],
+                    'finish_date'    => $row[5],
+                    'file'           => $row[6],
+                    'status'         => $row[7] ?? 'Done',
+                ]);
+            }
         }
 
-        Session::forget('csv_data'); // Hapus session setelah submit
-        return redirect()->route('admin#projectOverview')->with('success', 'Success add csv data.');
+        return redirect()->back()->with('success', 'CSV file uploaded successfully.');
+
     }
+
+
 
 
 

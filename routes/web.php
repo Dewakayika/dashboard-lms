@@ -123,7 +123,7 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     Route::get('/talentqc/ownprojectDetail/{id}', [TalentQcController::class, 'detailOwnProject'])->name('talentqc#ownprojectDetail');
     Route::post('/project-record/store', [TalentQcController::class, 'projectRecord'])->name('talentqc#projectRecods');
     Route::post('/review/store', [TalentQcController::class, 'projectReview'])->name('talentqc#storeReview');
-    Route::post('/review/store/talent', [TalentQcController::class, 'projectReviewTalent'])->name('talentqc#Review');
+    Route::post('/review', [TalentQcController::class, 'projectReviewTalent'])->name('talentqc#ReviewTalent');
 
     Route::post('/talents/update/profile', [TalentQcController::class, 'updateProfile'])->name('talentqc#update');
 
@@ -182,7 +182,6 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     Route::post('/admin/approve-user/{id}', [AdminController::class, 'approveUser'])->name('admin.approveUser');
     Route::post('/admin/decline-user/{id}', [AdminController::class, 'declineUser'])->name('admin.declineUser');
-    Route::post('/csv/upload', [AdminController::class, 'uploadCSV'])->name('csv.upload');
     Route::post('/csv/store', [AdminController::class, 'submitCSV'])->name('submit.csv');
 
 

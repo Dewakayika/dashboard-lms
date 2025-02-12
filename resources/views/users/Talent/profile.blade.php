@@ -23,6 +23,13 @@
                 {{$userData->email}}
               </p>
             </div>
+
+          </div>
+          <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+            <div class="nav-wrapper position-relative end-0 text-center">
+                Average Project Serving Time: <h3 class="text-bolder text-7xl">{{$formattedDuration ?? 'No duration specified' }}</h3>
+               {{-- {{$formattedDuration2}} {{$projectCount}} --}}
+            </div>
           </div>
         </div>
       </div>

@@ -85,64 +85,6 @@
         </div>
       </div>
 
-    {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-body bg-white p-0 border-radius-xl">
-                @if ($projectLogs->isempty())
-                    <div class="text-center d-flex align-items-center justify-content-center">
-                        <div class="">
-                            <img src="{{ asset('/assets/img/ilustration/NoConnection.svg')}}" class="h-auto w-11" style="width: 110px; height: auto;">
-                            <p class="text-xs">There's no timestamp tracked</p>
-                        </div>
-                    </div>
-                @else
-                <div>
-                    <!-- Carousel for countdown -->
-                    <div id="countdownCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            @foreach ($projectLogs as $key => $log)
-                                <div class="carousel-item @if ($key === 0) active @endif">
-                                    <div>
-                                        <h6 class="text-uppercase text-sm font-weight-bolder text-black text-left">COUNTDOWN</h6>
-                                        <p class="text-sm font-weight-normal text-gray-700">Submission for <span class="text-bolder"> {{ $log->project->comic_name ?? 'Unknown Project' }} Chapter {{$log->project->chapter_number}}</span></p>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center ">
-                                        <!-- Countdown timer -->
-                                        <div id="countdown-{{ $log->id }}" class="d-flex justify-content-center align-items-center">
-                                            <div class="text-center me-4">
-                                                <h4 id="days-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">DAY</span>
-                                            </div>
-                                            <div class="text-center mx-2">
-                                                <h4 id="hours-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">HOUR</span>
-                                            </div>
-                                            <div class="text-center mx-2">
-                                                <h4 id="minutes-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">MIN</span>
-                                            </div>
-                                            <div class="text-center ms-2">
-                                                <h4 id="seconds-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">SEC</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <!-- Dot Indicators for Carousel -->
-                        <div class="carousel-indicators ">
-                            @foreach ($projectLogs as $key => $log)
-                                <button type="button" data-bs-target="#countdownCarousel" data-bs-slide-to="{{ $key }}" class="@if ($key === 0) active @endif" style="background-color: red;"></button>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                @endif
-            </div>
-        </div>
-    </div> --}}
   </div>
 
 
@@ -225,22 +167,24 @@
 
 {{-- review to talent --}}
 @if($projectsqcWithoutComplexity->isNotEmpty())
-@foreach($projectsqcWithoutComplexity as $project)
-@if($project->status == 'Done')
+@foreach($projectsqcWithoutComplexity as $comic)
+@if($comic->status == 'Done')
 <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
     <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
         <div class="card-header border-bottom pb-0 rounded">
             <div class=" justify-content-between align-items-center text-center">
                 <h5 class="mb-0">Congratulations!</h5>
-                <p class="text-md mt-2">You already finish {{$project->comic_name}} Eps {{$project->chapter_number}}, Let's give the review for project and your Talent!</p>
+                <p class="text-md mt-2">You already finish {{$comic->comic_name}} Eps {{$comic->chapter_number}}, Let's give the review for comic and your Talent!</p>
                 <button type="button" class="btn-close" aria-label="Close"></button>
             </div>
         </div>
         <div class="card-body bg-white p-3 rounded">
-            <form action="{{ route('talentqc#Review') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('talentqc#ReviewTalent') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="project_id" value="{{ $project->id }}">
+                <input type="hidden" name="project_id" value="{{ $comic->id }}">
                 <input type="hidden" name="user_id" value="{{ $userData->id }}">
+                <input type="hidden" name="comic_name" value="{{ $comic->comic_name }}">
+
 
                 <div class="mb-2 text-left" style="text-align: start;">
                     <label for="complexity" class="text-md text-dark">Project Complexity</label>
@@ -271,7 +215,7 @@
                         <option value="5">Exceptional</option>
 
                     </select>
-                    @error('complexity')
+                    @error('talent_review')
                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                     @enderror
                 </div>
@@ -285,8 +229,7 @@
                 </div>
 
 
-
-                <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
+                <button type="submit" class="btn bg-gradient-dark w-100 my-4" >Submit Project Review</button>
             </form>
             <!-- Add your form or content here -->
         </div>
@@ -317,8 +260,6 @@
                     </div>
                 </div>
             @else
-
-
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
@@ -392,7 +333,7 @@
                     <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    @if ($projectOverview->isNotEmpty() && ($projectOverview->last()->status == 'Project Assign' || $projectOverview->last()->status == 'QC First Draft'))
+                    @if ($projectOverview->isNotEmpty() && ($projectOverview->last()->status == 'Project Assign'))
                         <a class="badge badge-sm text-white bg-gradient-success" href="#" data-bs-toggle="modal" data-bs-target="#notApply">
                             <span class="px-2">Apply</span>
                         </a>

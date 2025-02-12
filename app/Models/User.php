@@ -138,8 +138,6 @@ class User extends Authenticatable
         return $this->hasMany(ProjectComplexity::class);
     }
 
-    // Reviews
-
     public function talentReviews()
     {
         return $this->hasMany(TalentReview::class);
@@ -149,4 +147,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(QcReview::class);
     }
+
+    public function projectRecaps()
+    {
+        return $this->hasMany(ProjectRecap::class);
+    }
+
 }

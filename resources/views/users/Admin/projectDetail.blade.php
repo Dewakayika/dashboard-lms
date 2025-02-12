@@ -60,7 +60,7 @@
 
                         @elseif ($projectLogs->last() && $projectLogs->last()->status == 'Done')
                         <p class="nav-link mb-0 px-0 py-1 active">
-                            Total duration: <span class="text-bolder">{{$formatted_duration ?? 'Project Already Done'}}</span>
+                            <span class="text-bolder">{{$formatted_duration ?? 'Project Already Done'}}</span>
                         </p>
                      @elseif($projectLogs->count() == 0)
 

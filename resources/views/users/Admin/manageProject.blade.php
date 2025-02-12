@@ -238,91 +238,92 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="uploadProjectModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" style="max-width: 900px;">
-                    <div class="modal-content rounded-3 shadow-lg" style="border-radius: 16px;">
-                        <div class="modal-header border-0">
-                            <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body px-4 pt-4">
-                            <form action="{{ route('csv.upload') }}" method="POST" enctype="multipart/form-data" class="mb-4">
-                                @csrf
-                                <input type="file" name="csv_file" class="form-control p-2 border-0 rounded-3 shadow-sm" id="csvFileInput">
-                                {{-- <button type="submit" class="mt-3 w-100 btn btn-primary rounded-3 py-2">Upload</button> --}}
-                            </form>
+<!-- Modal Upload CSV -->
+<div class="modal fade" id="uploadProjectModal" tabindex="-1" aria-labelledby="uploadProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 900px;">
+        <div class="modal-content rounded-3 shadow-lg">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="uploadProjectModalLabel">Upload CSV File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4 pt-4">
+                <!-- Form Upload CSV -->
+                <form id="csvUploadForm" action="{{ route('submit.csv') }}" method="POST" enctype="multipart/form-data" class="mb-4">
+                    @csrf
+                    <label for="csvFileInput" class="form-label fw-bold">Choose CSV File</label>
+                    <input type="file" name="csv_file" class="form-control p-2 border-0 rounded-3 shadow-sm" id="csvFileInput" accept=".csv">
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Upload CSV</button>
+                </form>
 
-                            <!-- Preview Table -->
-                            <div id="previewTable overview" class="hidden">
-                                <table class="table table-bordered table-striped">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Comic Name</th>
-                                            <th>Chapter</th>
-                                            <th>Talent QC</th>
-                                            <th>Talent</th>
-                                            <th>Panels</th>
-                                            <th>Finish Date</th>
-                                            <th>File</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="csvTableBody">
-                                        <!-- Data will be inserted here -->
-                                    </tbody>
-                                </table>
-
-                                <form action="{{ route('submit.csv') }}" method="POST" class="mt-4" enctype="multipart/form-data">
-                                    @csrf
-                                    <button type="submit" class="w-100 btn btn-success rounded-3 py-2">Submit</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Preview Table (Muncul setelah file dipilih) -->
+                <div id="previewTableOverview" class="d-none">
+                    <h6 class="fw-bold">Preview Data</h6>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Comic Name</th>
+                                <th>Chapter</th>
+                                <th>Talent QC</th>
+                                <th>Talent</th>
+                                <th>Panels</th>
+                                <th>Finish Date</th>
+                                <th>File</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="csvTableBody">
+                            <!-- Data akan dimasukkan lewat JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('csvFileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const rows = text.split('\n').map(row => row.split(','));
+            if (rows.length > 1) {
+                rows.shift(); // Hapus header
+                const tableBody = document.getElementById('csvTableBody');
+                tableBody.innerHTML = '';
+                rows.forEach(row => {
+                    if (row.length >= 7) {
+                        tableBody.innerHTML += `<tr>
+                            <td>${row[0]}</td>
+                            <td>${row[1]}</td>
+                            <td>${row[2]}</td>
+                            <td>${row[3]}</td>
+                            <td>${row[4]}</td>
+                            <td>${row[5]}</td>
+                            <td><a href="${row[6]}" target="_blank">File Link</a></td>
+                            <td>${row[7] || 'Pending'}</td>
+                        </tr>`;
+                    }
+                });
+                document.getElementById('previewTableOverview').classList.remove('d-none');
+            }
+        };
+        reader.readAsText(file);
+    });
+</script>
+
+
+
 
 
 
         </div>
     </div>
 </main>
-<script>
-    document.getElementById('csvFileInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file && file.type === 'text/csv') {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const contents = e.target.result;
-                const rows = contents.split('\n');
-                const data = rows.map(row => row.split(','));
 
-                // Remove the table's previous content (if any)
-                const tableBody = document.getElementById('csvTableBody');
-                tableBody.innerHTML = '';
 
-                // Loop through the CSV rows and add them to the table
-                data.forEach((row, index) => {
-                    if (index > 0) { // Skip the header row
-                        const tr = document.createElement('tr');
-                        row.forEach(cell => {
-                            const td = document.createElement('td');
-                            td.textContent = cell.trim();  // Trim spaces
-                            td.classList.add('border', 'p-2');
-                            tr.appendChild(td);
-                        });
-                        tableBody.appendChild(tr);
-                    }
-                });
-
-                // Show the table
-                document.getElementById('previewTable').classList.remove('hidden');
-            };
-            reader.readAsText(file);
-        } else {
-            alert('Please upload a valid CSV file.');
-        }
-    });
-</script>
 
 @endsection

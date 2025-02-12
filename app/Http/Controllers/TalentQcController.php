@@ -23,6 +23,8 @@ use App\Models\ProjectComplexity;
 use App\Models\QcReview;
 use App\Models\TalentReview;
 use App\Models\TalentSop;
+use App\Models\ProjectRecap;
+
 
 
 use Illuminate\Support\Facades\DB;
@@ -36,6 +38,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Carbon\CarbonInterval;
+
 
 
 
@@ -392,7 +396,6 @@ class TalentQcController extends Controller
             'user_id' => 'required|exists:users,id',
             'qc_message' => 'nullable|string',
             'link_google_drive' => 'required|url',
-            'agree_terms' => 'accepted',
         ]);
 
         // Get the current project
@@ -718,15 +721,34 @@ class TalentQcController extends Controller
         $request->validate([
             'project_id' => 'required|exists:projects,id',
             'complexity' => 'required|string',
-            'number_of_panel' => 'nullable|integer',
+            'number_of_panel' => 'required|integer',
+            'comic_name' => 'required|string',
             'message' => 'nullable|string',
         ]);
+
+        $userId = auth()->id();
+        $now = Carbon::now();
+
+        // Jika hari ini sudah tanggal 11 atau lebih, mulai periode dari bulan ini
+        if ($now->day >= 11) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $now->format('Y-m') . '-11')->startOfDay();
+        } else {
+            // Jika masih tanggal 1-10, periode masih menggunakan bulan lalu
+            $startDate = Carbon::createFromFormat('Y-m-d', $now->subMonthNoOverflow()->format('Y-m') . '-11')->startOfDay();
+        }
+
+        // Tanggal 10 bulan ini sebagai akhir periode
+        $endDate = Carbon::createFromFormat('Y-m-d', $now->format('Y-m') . '-10')->endOfDay();
+
+        // Nama periode berdasarkan bulan dari startDate
+        $periode = $startDate->format('F');
 
         // Save or Update project Complexity
         ProjectComplexity::updateOrCreate(
             [
                 'project_id' => $request->project_id,
                 'user_id' => auth()->id(),
+                'comic_name' => $request->comic_name
             ],
             [
                 'complexity' => $request->complexity
@@ -750,48 +772,80 @@ class TalentQcController extends Controller
         Project::where('id', $request->project_id)
             ->update(['number_of_panel' => $request->number_of_panel]);
 
-        return redirect()->back()->with('success', 'Project Review and Complexity has been saved.');
+        // =================== Menyimpan ke tabel project_recap ===================
+
+
+        $recap = ProjectRecap::where('user_id', $userId)
+            ->where('periode', $periode)
+            ->first();
+
+        if ($recap) {
+
+            $recap->increment('total_project', 1);
+            $recap->increment('total_panel', $request->number_of_panel);
+        } else {
+            // Jika belum ada rekap, buat entri baru
+            ProjectRecap::create([
+                'user_id' => $userId,
+                'total_project' => 1,
+                'total_panel' => $request->number_of_panel,
+                'periode' => $periode,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Project Review and Complexity has been saved, & Recap has been updated.');
     }
 
 
-    public function projectReviewTalent(Request $request)
+    public function projectReviewTalent(Request $request )
     {
-        // Validate request data
+
+        // \Log::info($request->all());
+        // Validasi data request
         $request->validate([
             'project_id' => 'required|exists:projects,id',
             'complexity' => 'required|string',
             'message' => 'nullable|string',
-            'comic_name' => 'nullable|string',
-            'talent_review' => 'nullable|string',
+            'comic_name' => 'required|string',
+            'talent_review' => 'required|string',
         ]);
 
-        // Save or Update project Complexity
-        ProjectComplexity::updateOrCreate(
-            [
-                'project_id' => $request->project_id,
-                'user_id' => auth()->id(),
-                'comic_name' => $request->comic_name,
-            ],
-            [
-                'complexity' => $request->complexity
-            ]
-        );
+        // Cari atau buat ProjectComplexity baru
+        $projectComplexity = ProjectComplexity::where('project_id', $request->project_id)
+                                              ->where('user_id', auth()->id())
+                                              ->where('comic_name', $request->comic_name)
+                                              ->first();
 
-        // Save or Update QC Review
-        TalentReview::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-            ],
-            [
-                'talent_review' => $request->talent_review
-            ],
-            [
-                'message' => $request->message
-            ]
-        );
+        if (!$projectComplexity) {
+            // Jika tidak ditemukan, buat baru
+            $projectComplexity = new ProjectComplexity();
+            $projectComplexity->project_id = $request->project_id;
+            $projectComplexity->user_id = auth()->id();
+            $projectComplexity->comic_name = $request->comic_name;
+        }
 
+        // Assign nilai complexity dan simpan
+        $projectComplexity->complexity = $request->complexity;
+        $projectComplexity->save();
+
+        // Cari atau buat TalentReview baru
+        $talentReview = TalentReview::where('user_id', auth()->id())->first();
+
+        if (!$talentReview) {
+            // Jika tidak ditemukan, buat baru
+            $talentReview = new TalentReview();
+            $talentReview->user_id = auth()->id();
+        }
+
+        // Assign nilai talent_review dan message, kemudian simpan
+        $talentReview->talent_review = $request->talent_review;
+        $talentReview->message = $request->message;
+        $talentReview->save();
+
+        // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Project Review and Complexity has been saved.');
     }
+
 
 
         // Store Profile
@@ -937,6 +991,45 @@ class TalentQcController extends Controller
         ->orderBy('updated_at', 'desc')
         ->paginate(3);
 
+                // Average time spent on projects
+                $projects = ProjectLog::select('project_logs.project_id', 'project_logs.status', 'project_logs.timestamp', 'projects.talent')
+                ->join('projects', 'project_logs.project_id', '=', 'projects.id')
+                ->whereIn('project_logs.status', ['Project Assign', 'First Draft Submitted'])
+                ->where('projects.talent', auth()->user()->name)
+                ->orderBy('project_logs.project_id')
+                ->orderBy('project_logs.timestamp')
+                ->get()
+                ->groupBy('project_id');
+
+
+            $totalDuration = 0;
+            $projectCount = 0;
+            $projectIds = []; // Array to store project IDs
+
+            foreach ($projects as $projectId => $projectLogs) {
+                $assignLog = $projectLogs->firstWhere('status', 'Project Assign');
+                $firstDraftLog = $projectLogs->firstWhere('status', 'First Draft Submitted');
+
+                if ($assignLog && $firstDraftLog) {
+                    $assignTime = Carbon::parse($assignLog->timestamp);
+                    $firstDraftTime = Carbon::parse($firstDraftLog->timestamp);
+                    $duration = $firstDraftTime->diffInSeconds($assignTime);
+                    $totalDuration += $duration;
+                    $projectCount++;
+                    $projectIds[] = $projectId; // Store the project ID
+                }
+            }
+
+            $averageDuration = $projectCount > 0 ? $totalDuration / $projectCount : 0;
+        // Konversi durasi rata-rata ke H:i:s
+        $formattedDuration = CarbonInterval::seconds($averageDuration)->cascade()->format('%H:%I:%S');
+
+        // Konversi total durasi ke H:i:s
+        $formattedDuration2 = CarbonInterval::seconds($totalDuration)->cascade()->format('%H:%I:%S');
+
+
+
+
 
         return view('users.TalentQC.profile', compact(
             'userData',
@@ -946,7 +1039,11 @@ class TalentQcController extends Controller
             'totals',
             'projectOverview',
             'availableYears',
-           'selectedYear'
+           'selectedYear',
+            'averageDuration',
+            'formattedDuration',
+            'totalDuration',
+            'formattedDuration2'
 
         ));
     }

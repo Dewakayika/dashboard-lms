@@ -12,7 +12,7 @@
           <div class="col-auto">
             <div class="avatar avatar-xl position-relative">
                 <img src="{{ asset('storage/' . $talent->profile_photo) }}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
-            </div>            
+            </div>
           </div>
           <div class="col-auto my-auto">
             <div class="h-100">
@@ -22,6 +22,12 @@
               <p class="mb-0 font-weight-bold text-sm">
                 {{$userData->email}}
               </p>
+            </div>
+
+          </div>
+          <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+            <div class="nav-wrapper position-relative end-0 text-center">
+                Average Project Serving Time: <h3 class="text-bolder text-7xl">{{$formattedDuration ?? 'No duration specified' }}</h3>
             </div>
           </div>
         </div>
@@ -89,7 +95,7 @@
                             </div>
                         </div>
                     </div>
-            
+
                     <!-- Edit Profile Form (Initially Hidden) -->
                     <form id="editProfileForm" style="display: none;" method="POST" action="{{ route('talentqc#update') }}" enctype="multipart/form-data">
                         @csrf
@@ -169,27 +175,27 @@
                             <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-sm">Cancel</button>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
-            
+
             <script>
                 const editProfileBtn = document.getElementById('editProfileBtn');
                 const editProfileForm = document.getElementById('editProfileForm');
                 const viewProfile = document.getElementById('viewProfile');
                 const cancelEditBtn = document.getElementById('cancelEditBtn');
-            
+
                 editProfileBtn.addEventListener('click', () => {
                     viewProfile.style.display = 'none';
                     editProfileForm.style.display = 'block';
                 });
-            
+
                 cancelEditBtn.addEventListener('click', () => {
                     editProfileForm.style.display = 'none';
                     viewProfile.style.display = 'block';
                 });
             </script>
-            
+
           </div>
 
         <div class="col-12 col-xl-4">
