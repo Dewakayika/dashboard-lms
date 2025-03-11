@@ -20,6 +20,7 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
@@ -45,11 +46,14 @@
                                 @foreach ($projectOverview->sortByDesc('created_at') as $project)
                                     @if ($project->status != 'Done')
                                         <tr>
+                                            <td class="align-middle text-sm ps-4">
+                                                <span class="text-sm font-weight-bold">{{ optional($project->projectType)->name ?? 'N/A' }}</span>
+                                            </td>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
-                                                    <div>
+                                                    {{-- <div>
                                                         <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">{{$project->comic_name}}</h6>
                                                     </div>
@@ -85,11 +89,107 @@
                                                 @endif
                                             </td>
                                             <td class="align-middle">
-                                                @if ($project->status != 'Waiting Talent')
-                                                    <a href="{{ route('admin#projectDetail', $project->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
-                                                        Detail
+                                                <div class="d-flex gap-2">
+                                                    @if ($project->status != 'Waiting Talent')
+                                                        <a href="{{ route('admin#projectDetail', $project->id) }}" class="badge badge-sm bg-gradient-info text-white text-xs" data-toggle="tooltip" data-original-title="View Details">
+                                                            Detail
+                                                        </a>
+                                                    @endif
+                                                    <a href="#" class="badge badge-sm bg-gradient-warning text-white text-xs" data-bs-toggle="modal" data-bs-target="#editProjectModal-{{ $project->id }}">
+                                                        Edit
                                                     </a>
-                                                @endif
+                                                    <a href="#" class="badge badge-sm bg-gradient-danger text-white text-xs" data-bs-toggle="modal" data-bs-target="#deleteProjectModal-{{ $project->id }}">
+                                                        Delete
+                                                    </a>
+                                                </div>
+
+                                                <!-- Edit Project Modal -->
+                                                <div class="modal fade" id="editProjectModal-{{ $project->id }}" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Edit Project</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="px-3 pt-3">
+                                                                <form action="{{ route('admin.updateProject', $project->id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="mb-2">
+                                                                        <label for="project_type_id" class="text-md text-dark">Project Type</label>
+                                                                        <select name="project_type_id" class="form-control">
+                                                                            <option value="">Please select project type</option>
+                                                                            @foreach ($projectTypes as $type)
+                                                                                <option value="{{ $type->id }}" {{ $project->project_type_id == $type->id ? 'selected' : '' }}>
+                                                                                    {{ $type->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="mb-2">
+                                                                        <label for="comic_name" class="text-md text-dark">Comic Name</label>
+                                                                        <input type="text" name="comic_name" class="form-control" value="{{ $project->comic_name }}">
+                                                                    </div>
+
+                                                                    <div class="mb-2">
+                                                                        <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
+                                                                        <input type="text" name="chapter_number" class="form-control" value="{{ $project->chapter_number }}">
+                                                                    </div>
+
+                                                                    <div class="mb-2">
+                                                                        <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
+                                                                        <select name="talent_qc" class="form-control">
+                                                                            <option value="">Please select Talent QC</option>
+                                                                            @foreach ($talentQc as $Qc)
+                                                                                <option value="{{ $Qc->id }}" {{ $project->talent_qc == $Qc->id ? 'selected' : '' }}>
+                                                                                    {{ $Qc->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+
+
+                                                                    <div class="mb-2">
+                                                                        <label for="file" class="text-md text-dark">Link Project</label>
+                                                                        <input type="text" name="file" class="form-control" value="{{ $project->file }}">
+                                                                    </div>
+
+                                                                    <div class="modal-footer d-flex justify-content-between border-0 px-0">
+                                                                        <button type="button" class="modal-btn modal-btn-cancel" style="width: 45%;" data-bs-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="modal-btn modal-btn-continue" style="width: 45%;">Update Project</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Delete Project Modal -->
+                                                <div class="modal fade" id="deleteProjectModal-{{ $project->id }}" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header border-0">
+                                                                <h5 class="modal-title">Delete Project</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to delete project <strong>{{ $project->comic_name }}</strong>?</p>
+                                                                <p class="text-danger">This action cannot be undone.</p>
+                                                            </div>
+                                                            <div class="modal-footer d-flex justify-content-between border-0">
+                                                                <form action="{{ route('admin.deleteProject', $project->id) }}" method="POST" style="width: 100%;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <div class="d-flex justify-content-between gap-2">
+                                                                        <button type="button" class="modal-btn modal-btn-cancel" style="width: 45%;" data-bs-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="modal-btn modal-btn-continue" style="width: 45%;">Delete Project</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endif
@@ -107,7 +207,7 @@
                     <h6>Completed Projects</h6>
                     <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
                         <i class="fa-solid fa-plus text-white"></i>
-                        <span class="px-2">Upload Old Project</span>
+                        <span class="px-2">Upload CSV Project</span>
                     </a>
                     </div>
                 </div>
@@ -116,6 +216,7 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
@@ -142,11 +243,14 @@
                                 @foreach ($projectOverview as $project)
                                     @if ($project->status == 'Done')
                                         <tr>
+                                            <td class="align-middle text-center text-sm">
+                                                <span class="text-sm font-weight-bold">{{ optional($project->projectType)->name ?? 'N/A' }}</span>
+                                            </td>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
-                                                    <div>
+                                                    {{-- <div>
                                                         <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">{{$project->comic_name}}</h6>
                                                     </div>
@@ -197,42 +301,77 @@
                             <form action="{{ route('projects#store') }}" method="POST" enctype="multipart/form-data" role="form text-left">
                                 @csrf
                                 <div class="mb-2">
-                                  <label for="comic_name" class="text-md text-dark">Comic Name</label>
-                                  <input type="text" name="comic_name" class="form-control" placeholder="Example Keiken Ninzu">
-                                  @error('comic_name')
-                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                  @enderror
+                                    <label for="project_type_id" class="text-md text-dark">Project Type</label>
+                                    <select name="project_type_id" id="project_type_id" class="form-control selector">
+                                        <option value="">Please select project type</option>
+                                        @foreach ($projectTypes as $type)
+                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('project_type_id')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
                                 <div class="mb-2">
-                                  <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
-                                  <input type="number" name="chapter_number" class="form-control" placeholder="Example 17, 18, 19">
-                                  @error('chapter_number')
-                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                  @enderror
+                                    <label for="comic_name" class="text-md text-dark">Comic Name</label>
+                                    <input type="text" name="comic_name" id="comic_name" class="form-control" placeholder="Enter comic name">
+                                    @error('comic_name')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
+                                <div class="mb-2 chapter-field">
+                                    <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
+                                    <select name="chapter_number" class="form-control selector">
+                                        <option value="">Please select chapter number</option>
+                                        @for ($i = 1; $i <= 100; $i++)
+                                            <option value="{{ $i }}">Chapter {{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                    @error('chapter_number')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div class="mb-2">
-                                  <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
-                                  <select  name="talent_qc" class="form-control selector" placeholder="Select Talent QC" >
-                                      <option value="" class="form-control">Pelase select Talent Qc</option>
-                                      @foreach ($talentQc as $Qc)
-                                          <option class="text-black" value="{{ $Qc->id }}">{{ $Qc->name }}</option>
-                                      @endforeach
-                                  </select>
-                                  @error('talent_qc')
-                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                  @enderror
+                                    <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
+                                    <select name="talent_qc" class="form-control selector">
+                                        <option value="">Please select Talent QC</option>
+                                        @foreach ($talentQc as $Qc)
+                                            <option value="{{ $Qc->id }}">{{ $Qc->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('talent_qc')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
                                 <div class="mb-2">
-                                  <label for="file" class="text-md text-dark">Link Project</label>
-                                  <input type="text" name="file" class="form-control" placeholder="Box storage link">
-                                  @error('file')
-                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                  @enderror
+                                    <label for="number_of_panel" class="text-md text-dark">Number of Panel</label>
+                                    <select name="number_of_panel" class="form-control selector">
+                                        <option value="">Please select number of panel</option>
+                                        @for ($i = 10; $i <= 200; $i += 10)
+                                            <option value="{{ $i }}">{{ $i }} Panels</option>
+                                        @endfor
+                                    </select>
+                                    @error('number_of_panel')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
+                                <div class="mb-2">
+                                    <label for="file" class="text-md text-dark">Link Project</label>
+                                    <input type="text" name="file" class="form-control" placeholder="Box storage link">
+                                    @error('file')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div class="text-center">
-                                  <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project</button>
+                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project</button>
                                 </div>
-                              </form>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -312,6 +451,32 @@
             }
         };
         reader.readAsText(file);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const projectTypeSelect = document.getElementById('project_type_id');
+        const chapterField = document.querySelector('.chapter-field');
+        const comicNameInput = document.getElementById('comic_name');
+
+        // Initially hide chapter field
+        chapterField.style.display = 'none';
+
+        projectTypeSelect.addEventListener('change', function() {
+            const selectedType = this.options[this.selectedIndex];
+            if (selectedType.value) {
+                // Show chapter field for all project types
+                chapterField.style.display = 'block';
+
+                // If it's a comic type project, suggest the comic name
+                if (selectedType.text.toLowerCase().includes('comic') || selectedType.text.toLowerCase().includes('webtoon')) {
+                    comicNameInput.placeholder = 'Enter comic name (e.g. ' + selectedType.text + ' Chapter)';
+                } else {
+                    comicNameInput.placeholder = 'Enter project name';
+                }
+            } else {
+                chapterField.style.display = 'none';
+            }
+        });
     });
 </script>
 

@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('project_recaps', function (Blueprint $table) {
+        Schema::create('project_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('project_type_id')->constrained('project_types')->onDelete('cascade');
-            $table->integer('total_project');
-            $table->integer('total_panel');
-            $table->string('periode');
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_recap');
+        Schema::dropIfExists('project_types');
     }
 };

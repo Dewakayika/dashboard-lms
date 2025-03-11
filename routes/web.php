@@ -176,6 +176,11 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
 
     Route::get('/time-statistic', [AdminController::class, 'projectTimeStatistic'])->name('admin#timeStatistic');
 
+    // Delete project route
+    Route::delete('/projects/{id}/delete', [AdminController::class, 'deleteProject'])->name('admin.deleteProject');
+
+    // Update project route
+    Route::put('/projects/{id}', [AdminController::class, 'updateProject'])->name('admin.updateProject');
 
     // Profile Detail User ID
     Route::get('/profile/{id}', [AdminController::class, 'profileUser'])->name('admin#profileDetailUser');
@@ -184,18 +189,12 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::post('/admin/decline-user/{id}', [AdminController::class, 'declineUser'])->name('admin.declineUser');
     Route::post('/csv/store', [AdminController::class, 'submitCSV'])->name('submit.csv');
 
+    Route::post('/admin/store-project-type', [AdminController::class, 'storeProjectType'])->name('admin.storeProjectType');
+    Route::delete('/admin/delete-project-type/{id}', [AdminController::class, 'deleteProjectType'])->name('admin.deleteProjectType');
+    Route::put('/admin/update-project-type/{id}', [AdminController::class, 'updateProjectType'])->name('admin.updateProjectType');
 
-
-
-    // Route::get('/create-project', function () {
-    //     $admin_data = User::where('id', Auth::id())->first();
-
-    //     return view ('users.Admin.createNewProject')->with(['adminData' => $admin_data]);
-    // })->name('admin#createNewProject');
-
-
-
-
+    Route::put('/revise/{id}', [AdminController::class, 'updateRevise'])->name('admin.updateRevise');
+    Route::delete('/revise/{id}', [AdminController::class, 'deleteRevise'])->name('admin.deleteRevise');
 
     Route::get('/userlist', [AdminController::class, 'listUser'])->name('admin#listUser'); //User List
     Route::get('deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('admin#deleteUser'); //Delete User

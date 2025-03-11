@@ -48,9 +48,15 @@
                   </div>
                 </div>
                 <div class="ms-auto w-20 d-flex align-items-end justify-content-end">
-                    <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#crequestModal">
-                        <span class="px-2">Request Withdraw</span>
-                    </a>
+                    @if($totalEwallet > 0)
+                        <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#crequestModal">
+                            <span class="px-2">Request Withdraw</span>
+                        </a>
+                    @else
+                        <button class="badge badge-xs bg-gray-400 text-xs font-weight-bold mb-0 text-white" disabled cursor-pointer style="border: none;">
+                            <span class="px-2">Request Withdraw</span>
+                        </button>
+                    @endif
                 </div>
               </div>
             </div>
@@ -100,7 +106,7 @@
             <h6 class="text-center mb-0">Total Panel</h6>
             <span class="text-xs">Recap by this month</span>
             <hr class="horizontal dark my-3">
-            <h5 class="mb-0"> {{$recapPanel}}</h5>
+            <h5 class="mb-0"> {{$totalPanel}}</h5>
           </div>
         </div>
     </div>

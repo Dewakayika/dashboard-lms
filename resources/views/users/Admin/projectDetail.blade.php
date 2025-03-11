@@ -1,4 +1,3 @@
-
 @extends('users.Admin.layouts.dashboard-app')
 
 @php
@@ -289,7 +288,7 @@
                                                 <td class="align-middle text-center text-sm">
                                                     @if (in_array($record->project_stage, ['First Draft', 'Revise 1', 'Revise 2', 'Revise 3']))
                                                         <a href="{{ $record->link_google_drive }}" class="badge badge-sm bg-gradient-warning font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Review Project</a>
-                                                    @elseif (in_array($record->project_stage, ['First Draft Submitted', 'Revise 1 Submitted', 'Revis 2 Submitted', 'Revise 3 Submitted']))
+                                                    @elseif (in_array($record->project_stage, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
                                                         <a href="#" data-bs-toggle="modal" data-bs-target="#shareToWhatsAppModal" class="badge badge-sm bg-gradient-info font-weight-bold mb-0 text-white hover:bg-secondary" target="_blank" style="border: none; text-decoration: none;">Share Project</a>
                                                     @else
                                                         <a class="badge badge-sm bg-gradient-danger font-weight-bold mb-0 text-white hover:bg-secondaryy" href="#" data-bs-toggle="modal" data-bs-target="#createProjectModal">
@@ -421,6 +420,7 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Message</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -451,7 +451,67 @@
                                                 <td class="align-middle text-center text-sm">
                                                     <button type="button" class="badge badge-sm bg-gradient-success font-weight-bold mb-0 text-white hover:bg-secondary" data-bs-toggle="modal" data-bs-target="#qcMessageModal-{{ $record->id }}" style="border: none; text-decoration: none;">Open Message</button>
                                                 </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <div class="d-flex justify-content-center gap-2">
+                                                        <a href="#" class="badge badge-sm bg-gradient-warning text-white text-xs" data-bs-toggle="modal" data-bs-target="#editReviseModal-{{ $record->id }}">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#" class="badge badge-sm bg-gradient-danger text-white text-xs" data-bs-toggle="modal" data-bs-target="#deleteReviseModal-{{ $record->id }}">
+                                                            Delete
+                                                        </a>
+                                                    </div>
+                                                </td>
                                             </tr>
+
+                                            <!-- Edit Revise Modal -->
+                                            <div class="modal fade" id="editReviseModal-{{ $record->id }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog" style="max-width: 400px;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Edit Revision</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{{ route('admin.updateRevise', $record->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="mb-3 text-left">
+                                                                    <label for="revise_message" class="form-label">Revise Message</label>
+                                                                    <textarea class="form-control" id="revise_message" name="revise_message" rows="4" required>{{ $record->revise_message }}</textarea>
+                                                                    <small class="form-text text-muted">Use commas to separate list items.</small>
+                                                                </div>
+                                                                <div class="modal-footer d-flex justify-content-between border-0 px-0">
+                                                                    <button type="button" class="modal-btn modal-btn-cancel" style="width: 45%;" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="modal-btn modal-btn-continue" style="width: 45%;">Update</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Delete Revise Modal -->
+                                            <div class="modal fade" id="deleteReviseModal-{{ $record->id }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog" style="max-width: 350px;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Delete Revision?</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to delete this revision? This action cannot be undone.</p>
+                                                        </div>
+                                                        <div class="modal-footer d-flex justify-content-between border-0">
+                                                            <button type="button" class="modal-btn modal-btn-cancel"  data-bs-dismiss="modal">Cancel</button>
+                                                            <form action="{{ route('admin.deleteRevise', $record->id) }}" method="POST" >
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="modal-btn modal-btn-continue w-100">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             {{-- Modal for each record --}}
                                             <div class="modal fade" id="qcMessageModal-{{ $record->id }}" tabindex="-1" aria-labelledby="qcMessageModalLabel-{{ $record->id }}" aria-hidden="true">

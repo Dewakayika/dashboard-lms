@@ -43,7 +43,9 @@ class DatabaseSeeder extends Seeder
 
         Talent::factory()->create();
 
-
+        $this->call([
+            ProjectTypeSeeder::class,
+        ]);
 
         User::factory()->create([
             'id' => '3',
@@ -67,7 +69,6 @@ class DatabaseSeeder extends Seeder
 
         TalentQc::factory()->create();
 
-
         User::factory()->create([
             'id' => '5',
             'name' => 'Talent',
@@ -89,8 +90,5 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Talent::factory()->create();
-
-
-
     }
 }

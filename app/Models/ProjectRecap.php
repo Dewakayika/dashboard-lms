@@ -11,6 +11,7 @@ class ProjectRecap extends Model
 
     protected $fillable = [
         'user_id',
+        'project_type_id',
         'total_project',
         'total_panel',
         'periode'

@@ -21,6 +21,12 @@ return new class extends Migration
             ->on('users')
             ->constrained()
             ->onDelete('cascade');
+            $table->foreignId('project_type_id')
+            ->nullable()
+            ->reference('id')
+            ->on('project_types')
+            ->constrained()
+            ->onDelete('cascade');
             $table->string('comic_name');
             $table->integer('chapter_number');
             $table->string('talent_qc');

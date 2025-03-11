@@ -469,6 +469,7 @@ class TalentController extends Controller
         // Validate request data
         $request->validate([
             'project_id' => 'required|exists:projects,id',
+            'project_type_id' => 'required|exists:project_types,id',
             'complexity' => 'required|string',
             'number_of_panel' => 'nullable|integer',
             'comic_name' => 'nullable|string',
@@ -535,6 +536,7 @@ class TalentController extends Controller
             ProjectRecap::create([
                 'user_id' => $userId,
                 'total_project' => 1,
+                'project_type_id' => $request->project_type_id,
                 'total_panel' => $request->number_of_panel,
                 'periode' => $periode,
             ]);

@@ -263,6 +263,7 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Episode Number</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Talent QC</th>
@@ -274,11 +275,14 @@
               <tbody>
                 @foreach ($projects as $project )
                 <tr>
+                  <td class="align-middle text-center text-sm">
+                    <span class="text-sm font-weight-bold">{{ optional($project->projectType)->name ?? 'N/A' }}</span>
+                  </td>
                   <td>
                     <div class="d-flex px-2 py-1">
-                      <div>
+                      {{-- <div>
                         <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                      </div>
+                      </div> --}}
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="mb-0 text-sm">{{$project->comic_name}}</h6>
                       </div>
@@ -523,6 +527,7 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent Qc</th>
@@ -533,11 +538,14 @@
               <tbody>
                 @foreach ($projectOverview as $projects )
                 <tr>
+                    <td class="align-middle text-center text-sm">
+                        <span class="text-sm font-weight-bold">{{ optional($projects->projectType)->name ?? 'N/A' }}</span>
+                    </td>
                   <td>
                     <div class="d-flex px-2 py-1">
-                        <div>
+                        {{-- <div>
                           <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                        </div>
+                        </div> --}}
                         <div class="d-flex flex-column justify-content-center">
                           <h6 class="mb-0 text-sm">{{$projects->comic_name}}</h6>
                         </div>
@@ -601,6 +609,7 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
@@ -624,11 +633,14 @@
                             @foreach ($projectQcOverview->sortByDesc('created_at') as $projectQcOverview)
                                 @if ($projectQcOverview->status != 'Done')
                                     <tr>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-sm font-weight-bold">{{ optional($projectQcOverview->projectType)->name ?? 'N/A' }}</span>
+                                        </td>
                                         <td>
                                             <div class="d-flex px-2 py-1">
-                                                <div>
+                                                {{-- <div>
                                                     <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                                                </div>
+                                                </div> --}}
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">{{$projectQcOverview->comic_name}}</h6>
                                                 </div>

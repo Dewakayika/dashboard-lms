@@ -95,11 +95,13 @@ class EwaletController extends Controller
 
         // Get Project Recap On Periode
         $recapProject = ProjectRecap::where('user_id', $userData->id)
+
                         ->where('periode', $periode )
                         ->sum('total_project');
 
         // Get Project Recap Panel
         $recapPanel = ProjectRecap::where('user_id', $userData->id)
+                        ->where('project_type_id', 1)
                         ->where('periode', $periode)
                         ->sum('total_panel');
 
@@ -112,7 +114,18 @@ class EwaletController extends Controller
             $recapPanelRate = '5000';
         }
 
-        $baseSalary = $recapPanel * $recapPanelRate;
+        // Get based salary khusus untuk project type = 2
+        $recapPanelSukawara = ProjectRecap::where('user_id', $userData->id)
+                ->where('periode', $periode)
+                ->where('project_type_id', 2)
+                ->sum('total_panel');
+
+
+        $baseSalarySukawara = $recapPanelSukawara * 2000;
+        $baseSalaryWebtoon = $recapPanel * $recapPanelRate;
+        $totalPanel = $recapPanel + $recapPanelSukawara;
+
+        $baseSalary = $baseSalaryWebtoon + $baseSalarySukawara;
 
 
         // Get all ewallet money recap - withdraw
@@ -180,8 +193,11 @@ class EwaletController extends Controller
             'recapProject',
             'baseSalaryforWithdraw',
             'totalPanelRecap',
-            'periode'
-
+            'periode',
+            'baseSalaryWebtoon',
+            'baseSalarySukawara',
+            'recapPanelSukawara',
+            'totalPanel'
         ));
     }
 
@@ -260,6 +276,7 @@ class EwaletController extends Controller
 
         // Get Project Recap Panel
         $recapPanel = ProjectRecap::where('user_id', $userData->id)
+                        ->where('project_type_id', 1)
                         ->where('periode', $periode)
                         ->sum('total_panel');
 
@@ -272,7 +289,19 @@ class EwaletController extends Controller
             $recapPanelRate = '5000';
         }
 
-        $baseSalary = $recapPanel * $recapPanelRate;
+        // Get based salary khusus untuk project type = 2
+        $recapPanelSukawara = ProjectRecap::where('user_id', $userData->id)
+                ->where('periode', $periode)
+                ->where('project_type_id', 2)
+                ->sum('total_panel');
+
+
+        $baseSalarySukawara = $recapPanelSukawara * 2000;
+        $baseSalaryWebtoon = $recapPanel * $recapPanelRate;
+        $totalPanel = $recapPanel + $recapPanelSukawara;
+
+        $baseSalary = $baseSalaryWebtoon + $baseSalarySukawara;
+
 
 
         // Get all ewallet money recap - withdraw
@@ -340,9 +369,14 @@ class EwaletController extends Controller
             'recapProject',
             'baseSalaryforWithdraw',
             'totalPanelRecap',
-            'periode'
+            'periode',
+            'baseSalaryWebtoon',
+            'baseSalarySukawara',
+            'recapPanelSukawara',
+            'totalPanel'
 
-        ));        }
+        ));
+    }
 
     public function requestWithdraw(Request $request){
 

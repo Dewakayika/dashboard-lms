@@ -26,6 +26,7 @@ use App\Models\SopChecklist;
 use App\Models\QcRecords;
 use App\Models\ProjectRevise;
 use App\Models\ProjectRecap;
+use App\Models\ProjectType;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -111,6 +112,7 @@ class AdminController extends Controller
         // Get selected year (default to current year if not specified)
         $selectedYear = request('year', now()->year);
 
+
         // Get monthly data for selected year
         $projects = Project::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
             ->whereYear('created_at', $selectedYear)
@@ -155,6 +157,8 @@ class AdminController extends Controller
         // // ->select('talent.*', 'users.name', 'users.email', 'users.created_at as registration_date')
         // ->get();
 
+        // project type
+        $projectTypes = ProjectType::all();
 
 
         return view ('users.Admin.overview')->with([
@@ -177,6 +181,7 @@ class AdminController extends Controller
             'availableYears' => $availableYears,
             'selectedYear' => $selectedYear,
             'formatedDuration'=> $formattedDuration,
+            'projectTypes' => $projectTypes,
 
         ]);
     }
@@ -387,6 +392,7 @@ class AdminController extends Controller
     public function storeProject(Request $request)
     {
         $validated = $request->validate([
+            'project_type_id' => 'required|exists:project_types,id',
             'comic_name' => 'required|string|max:255',
             'chapter_number' => 'required|integer',
             'talent_qc' => 'required|exists:users,id', // Pastikan ID talent QC valid
@@ -399,6 +405,7 @@ class AdminController extends Controller
 
         // First save the project
         $project = new Project();
+        $project->project_type_id = $validated['project_type_id'];
         $project->user_id = auth()->id();
         $project->comic_name = $validated['comic_name'];
         $project->chapter_number = $validated['chapter_number'];
@@ -410,6 +417,7 @@ class AdminController extends Controller
         // Then create the project log using the newly saved project's information
         $log = ProjectLog::create([
             'project_id' => $project->id,  // Get ID from the newly saved project
+            'project_type_id' => $project->project_type_id,
             'user_id' => auth()->id(),     // Get current authenticated user's ID
             'talent_qc' => $project->talent_qc,  // Get talent_qc from the newly saved project
             'timestamp' => Carbon::now(),
@@ -466,6 +474,9 @@ class AdminController extends Controller
         ->orderBy('first_submission_date', 'ASC') // Kemudian urutkan berdasarkan tanggal submission paling awal
         ->paginate(5);
 
+        // Get project Types
+        $projectTypes = ProjectType::all();
+
 
         // Return ke view dengan data yang telah diambil
         return view('users.Admin.dashboard')->with([
@@ -478,6 +489,7 @@ class AdminController extends Controller
             'leaderboard' => $leaderboard,
             'notification' => $notification,
             'pendingUsers' => $pendingUsers,
+            'projectTypes' => $projectTypes
         ]);
     }
 
@@ -1056,11 +1068,15 @@ class AdminController extends Controller
         // Ambil semua data projects
         $projectOverview = Project::get();
 
+        // Project Type
+        $projectTypes = ProjectType::all();
+
         return view('users.Admin.manageProject')->with([
             'adminData' => $user,
             'notification' => $notifications,
             'projectOverview' => $projectOverview,
-            'talentQc' => $talent_qc
+            'talentQc' => $talent_qc,
+            'projectTypes' => $projectTypes
 
         ]);
     }
@@ -1388,7 +1404,137 @@ class AdminController extends Controller
 
     }
 
+    public function storeProjectType(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:project_types,name'
+        ]);
 
+        $projectType = new ProjectType();
+        $projectType->name = $request->name;
+        $projectType->save();
+
+        return redirect()->back()->with('success', 'Project type created successfully');
+    }
+
+    // update project Types
+    public function updateProjectType(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:project_types,name'
+        ]);
+
+    }
+
+    // delete project Types
+    public function deleteProjectType($id)
+    {
+        $projectType = ProjectType::find($id);
+        $projectType->delete();
+        return redirect()->back()->with('success', 'Project type deleted successfully');
+    }
+
+    public function deleteProject($id)
+    {
+        try {
+            $project = Project::findOrFail($id);
+
+            // Delete related records first
+            ProjectLog::where('project_id', $id)->delete();
+            ProjectRecord::where('project_id', $id)->delete();
+            SopChecklist::where('project_id', $id)->delete();
+            QcRecords::where('project_id', $id)->delete();
+            ProjectRevise::where('project_id', $id)->delete();
+
+            // Finally delete the project
+            $project->delete();
+
+            return redirect()->back()->with('success', 'Project deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete project. ' . $e->getMessage());
+        }
+    }
+
+    public function updateProject(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'project_type_id' => 'required|exists:project_types,id',
+                'comic_name' => 'required|string|max:255',
+                'chapter_number' => 'required|integer',
+                'talent_qc' => 'required|exists:users,id',
+                'file' => 'required|string',
+            ]);
+
+            $project = Project::findOrFail($id);
+
+            // Get talent QC name from ID
+            $talentQc = User::find($validated['talent_qc']);
+
+            // Update project
+            $project->project_type_id = $validated['project_type_id'];
+            $project->comic_name = $validated['comic_name'];
+            $project->chapter_number = $validated['chapter_number'];
+            $project->talent_qc = $talentQc->name;
+            $project->file = $validated['file'];
+            $project->save();
+
+            // Create project log for the update
+            ProjectLog::create([
+                'project_id' => $project->id,
+                'project_type_id' => $project->project_type_id,
+                'user_id' => auth()->id(),
+                'talent_qc' => $project->talent_qc,
+                'timestamp' => Carbon::now(),
+                'status' => $project->status,
+            ]);
+
+            // Create notification for the new QC
+            Notification::create([
+                'notif_type' => "general",
+                'subject' => "Project Updated",
+                'message' => "Project '{$project->comic_name}' (Chapter {$project->chapter_number}) has been updated.",
+                'email' => $talentQc->email,
+            ]);
+
+            return redirect()->back()->with('success', 'Project updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update project. ' . $e->getMessage());
+        }
+    }
+
+    public function updateRevise(Request $request, $id)
+    {
+        try {
+            $revise = ProjectRevise::findOrFail($id);
+
+            $request->validate([
+                'revise_message' => 'required|string'
+            ]);
+
+            $revise->update([
+                'revise_message' => $request->revise_message
+            ]);
+
+            return redirect()->back()->with('success', 'Revision updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update revision');
+        }
+    }
+
+    public function deleteRevise($id)
+    {
+        try {
+            $revise = ProjectRevise::findOrFail($id);
+            $revise->delete();
+
+            return redirect()->back()->with('success', 'Revision deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete revision');
+        }
+    }
+
+    // upday
 
 
 

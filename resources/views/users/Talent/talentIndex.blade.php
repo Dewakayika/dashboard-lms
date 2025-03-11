@@ -139,6 +139,7 @@
               <form action="{{ route('talent#storeReview') }}" method="POST" enctype="multipart/form-data">
                   @csrf
                   <input type="hidden" name="project_id" value="{{ $project->id }}">
+                  <input type="hidden" name="project_type_id" value="{{ $project->project_type_id }}">
                   <input type="hidden" name="user_id" value="{{ $userData->id }}">
                   <input type="hidden" name="comic_name" value="{{ $project->comic_name }}">
 
@@ -223,6 +224,7 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Episode Number</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Talent QC</th>
@@ -234,11 +236,11 @@
               <tbody>
                 @foreach ($projects as $project )
                 <tr>
+                    <td class="align-middle text-center text-sm">
+                        <span class="text-sm font-weight-bold">{{ optional($project->projectType)->name ?? 'N/A' }}</span>
+                    </td>
                   <td>
                     <div class="d-flex px-2 py-1">
-                      <div>
-                        <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                      </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="mb-0 text-sm">{{$project->comic_name}}</h6>
                       </div>
@@ -564,6 +566,7 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent Qc</th>
@@ -577,11 +580,12 @@
               <tbody>
                 @foreach ($projectOverview as $projects )
                 <tr>
+                  <td class="align-middle text-center text-sm">
+                    <span class="text-sm font-weight-bold">{{ optional($projects->projectType)->name ?? 'N/A' }}</span>
+                  </td>
                   <td>
                     <div class="d-flex px-2 py-1">
-                        <div>
-                          <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                        </div>
+
                         <div class="d-flex flex-column justify-content-center">
                           <h6 class="mb-0 text-sm">{{$projects->comic_name}}</h6>
                         </div>
