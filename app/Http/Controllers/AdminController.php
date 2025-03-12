@@ -470,7 +470,6 @@ class AdminController extends Controller
             'talentData' => $talent_data,
             'countRole' => $role_count,
             'roleData' => $role_data,
-            'leaderboard' => $leaderboard,
             'notification' => $notification,
             'pendingUsers' => $pendingUsers,
             'projectTypes' => $projectTypes
