@@ -1359,49 +1359,63 @@ class AdminController extends Controller
 
     public function submitCSV(Request $request)
     {
+        try {
+            // Validate file
+            $request->validate([
+                'csv_file' => 'required|mimes:csv,txt|max:2048'
+            ]);
 
-        // Validasi file harus CSV
-        $validator = Validator::make($request->all(), [
-            'csv_file' => 'required|mimes:csv,txt|max:2048',
-        ]);
+            // Ensure we have an authenticated user
+            if (!Auth::check()) {
+                return redirect()->back()->with('error', 'You must be logged in to import projects');
+            }
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+            $file = $request->file('csv_file');
+            $csvData = array_map('str_getcsv', file($file->getRealPath()));
 
-        $file = $request->file('csv_file');
-        $filePath = $file->getRealPath();
+            // Remove header row
+            array_shift($csvData);
 
-        // Membaca file CSV
-        $csvData = array_map('str_getcsv', file($filePath));
+            DB::beginTransaction();
 
-        // Pastikan ada header dan minimal 1 data
-        if (count($csvData) < 2) {
-            return redirect()->back()->with('error', 'CSV file is empty or has incorrect format.');
-        }
+            foreach ($csvData as $row) {
+                // Skip empty rows
+                if (empty(array_filter($row))) {
+                    continue;
+                }
 
-        // Hapus header
-        array_shift($csvData);
+                // Create project with data directly from CSV
+                $project = new Project();
+                $project->user_id = Auth::id(); // Explicitly set user_id
+                $project->project_type_id = trim($row[0]);
+                $project->comic_name = trim($row[1]);
+                $project->chapter_number = (int)trim($row[2]);
+                $project->talent_qc = trim($row[3]);
+                $project->talent = trim($row[4]);
+                $project->number_of_panel = !empty($row[5]) ? (int)trim($row[5]) : null;
+                $project->finish_date = !empty($row[6]) ? Carbon::parse(trim($row[6])) : null;
+                $project->file = trim($row[7]);
+                $project->status = !empty($row[8]) ? trim($row[8]) : 'Done';
+                $project->save();
 
-        // Simpan data ke database
-        foreach ($csvData as $row) {
-            if (count($row) >= 8) {
-                Project::create([
-                    'user_id'        => Auth::id(), // User ID dari auth
-                    'comic_name'     => $row[0],
-                    'chapter_number' => $row[1],
-                    'talent_qc'      => $row[2],
-                    'talent'         => $row[3],
-                    'number_of_panel'=> $row[4],
-                    'finish_date'    => $row[5],
-                    'file'           => $row[6],
-                    'status'         => $row[7] ?? 'Done',
+                // Create project log entry
+                ProjectLog::create([
+                    'project_id' => $project->id,
+                    'project_type_id' => $project->project_type_id,
+                    'user_id' => Auth::id(),
+                    'talent_qc' => $project->talent_qc,
+                    'timestamp' => now(),
+                    'status' => $project->status
                 ]);
             }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Projects imported successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error importing CSV: ' . $e->getMessage());
         }
-
-        return redirect()->back()->with('success', 'CSV file uploaded successfully.');
-
     }
 
     public function storeProjectType(Request $request)

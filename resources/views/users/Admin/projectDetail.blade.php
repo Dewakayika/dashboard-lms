@@ -229,6 +229,14 @@
                         <div class="row">
                             <div class="w-full mx-auto d-flex align-items-center justify-content-between">
                                 <h6 class="text-weight-bolder">Project Records</h6>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <select id="projectTypeFilter" class="form-select form-select-sm" style="width: auto;">
+                                        <option value="">All Project Types</option>
+                                        @foreach($projectTypes as $type)
+                                            <option value="{{ $type->name }}">{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -400,14 +408,19 @@
                         <div class="row">
                             <div class="w-full mx-auto d-flex align-items-center justify-content-between">
                                 <h6 class="text-weight-bolder">Project Revision</h6>
-                                <div class="gap-2">
+                                <div class="d-flex gap-2 align-items-center">
+                                    <select id="revisionTypeFilter" class="form-select form-select-sm" style="width: auto;">
+                                        <option value="">All Project Types</option>
+                                        @foreach($projectTypes as $type)
+                                            <option value="{{ $type->name }}">{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
                                     <a class="badge badge-xs bg-primary text-xs font-weight-bold mb-0 text-white hover:bg-secondary" href="#" data-bs-toggle="modal" data-bs-target="#projectReviseModal">
                                         <i class="fa-solid fa-plus text-white"></i>
                                         <span class="px-2">Add Revision</span>
                                     </a>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -720,5 +733,37 @@
 
 
 
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to filter table rows
+        function filterTable(tableId, selectId) {
+            const filterSelect = document.getElementById(selectId);
+            const table = document.querySelector(tableId + ' tbody');
+            const rows = table.getElementsByTagName('tr');
+
+            filterSelect.addEventListener('change', function() {
+                const selectedType = this.value.toLowerCase();
+
+                for (let row of rows) {
+                    if (!row.querySelector('td')) continue; // Skip empty rows
+
+                    const projectType = row.getAttribute('data-project-type').toLowerCase();
+                    if (selectedType === '' || projectType === selectedType) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Initialize filters for both tables
+        filterTable('.project-records-table', 'projectTypeFilter');
+        filterTable('.project-revision-table', 'revisionTypeFilter');
+    });
+</script>
 @endsection
 
