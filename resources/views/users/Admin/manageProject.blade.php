@@ -3,6 +3,21 @@
 @section('content')
 
 <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+
+    {{-- Filter Data Based on Project Type   --}}
+    <div class="container-fluid py-4">
+        <div class="row mb-2">
+            <div class="col-lg-3">
+                <select id="projectTypeFilter" class="form-control">
+                    <option value="">All Project Types</option>
+                    @foreach ($projectTypes as $type)
+                        <option value="{{ $type->name }}">{{ $type->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -90,9 +105,9 @@
                                             </td>
                                             <td class="align-middle">
                                                 <div class="d-flex gap-2">
-                                                    @if ($project->status != 'Waiting Talent')
+                                                @if ($project->status != 'Waiting Talent')
                                                         <a href="{{ route('admin#projectDetail', $project->id) }}" class="badge badge-sm bg-gradient-info text-white text-xs" data-toggle="tooltip" data-original-title="View Details">
-                                                            Detail
+                                                        Detail
                                                         </a>
                                                     @endif
                                                     <a href="#" class="badge badge-sm bg-gradient-warning text-white text-xs" data-bs-toggle="modal" data-bs-target="#editProjectModal-{{ $project->id }}">
@@ -314,37 +329,37 @@
                                 </div>
 
                                 <div class="mb-2">
-                                    <label for="comic_name" class="text-md text-dark">Comic Name</label>
+                                  <label for="comic_name" class="text-md text-dark">Comic Name</label>
                                     <input type="text" name="comic_name" id="comic_name" class="form-control" placeholder="Enter comic name">
-                                    @error('comic_name')
-                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                    @enderror
+                                  @error('comic_name')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
                                 </div>
 
                                 <div class="mb-2 chapter-field">
-                                    <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
+                                  <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
                                     <select name="chapter_number" class="form-control selector">
                                         <option value="">Please select chapter number</option>
                                         @for ($i = 1; $i <= 100; $i++)
                                             <option value="{{ $i }}">Chapter {{ $i }}</option>
                                         @endfor
                                     </select>
-                                    @error('chapter_number')
-                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                    @enderror
+                                  @error('chapter_number')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
                                 </div>
 
                                 <div class="mb-2">
-                                    <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
+                                  <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
                                     <select name="talent_qc" class="form-control selector">
                                         <option value="">Please select Talent QC</option>
-                                        @foreach ($talentQc as $Qc)
+                                      @foreach ($talentQc as $Qc)
                                             <option value="{{ $Qc->id }}">{{ $Qc->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('talent_qc')
-                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                    @enderror
+                                      @endforeach
+                                  </select>
+                                  @error('talent_qc')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
                                 </div>
 
                                 <div class="mb-2">
@@ -361,17 +376,17 @@
                                 </div>
 
                                 <div class="mb-2">
-                                    <label for="file" class="text-md text-dark">Link Project</label>
-                                    <input type="text" name="file" class="form-control" placeholder="Box storage link">
-                                    @error('file')
-                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
-                                    @enderror
+                                  <label for="file" class="text-md text-dark">Link Project</label>
+                                  <input type="text" name="file" class="form-control" placeholder="Box storage link">
+                                  @error('file')
+                                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                  @enderror
                                 </div>
 
                                 <div class="text-center">
-                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project</button>
+                                  <button type="submit" class="btn bg-gradient-dark w-100 my-4">Create Project</button>
                                 </div>
-                            </form>
+                              </form>
                         </div>
                     </div>
                 </div>
@@ -379,13 +394,23 @@
 
 <!-- Modal Upload CSV -->
 <div class="modal fade" id="uploadProjectModal" tabindex="-1" aria-labelledby="uploadProjectModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 900px;">
+            <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
             <div class="modal-header border-0">
                 <h5 class="modal-title" id="uploadProjectModalLabel">Upload CSV File</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body px-4 pt-4">
+                <!-- Template Download Link -->
+                <div class="mb-3">
+                    <p class="mb-2"><i class="fas fa-info-circle"></i> Download the CSV template first:</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1Mf_TQ22XeGZWQUBzRHu8n9p6ZnJJj4p_PKKWVaZJFtY/edit?usp=sharing"
+                       target="_blank"
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-download"></i> Download CSV Template
+                    </a>
+                </div>
+
                 <!-- Form Upload CSV -->
                 <form id="csvUploadForm" action="{{ route('submit.csv') }}" method="POST" enctype="multipart/form-data" class="mb-4">
                     @csrf
@@ -400,6 +425,7 @@
                     <table class="table table-bordered table-striped">
                         <thead class="table-light">
                             <tr>
+                                <th>Project Type</th>
                                 <th>Comic Name</th>
                                 <th>Chapter</th>
                                 <th>Talent QC</th>
@@ -410,7 +436,7 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="csvTableBody">
+                        <tbody id="csvTableBody" class="table-responsive">
                             <!-- Data akan dimasukkan lewat JavaScript -->
                         </tbody>
                     </table>
@@ -421,63 +447,163 @@
 </div>
 
 <script>
-    document.getElementById('csvFileInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+            document.addEventListener('DOMContentLoaded', function() {
+                // Table Management Object
+                const TableManager = {
+                    // Constants
+                    SELECTORS: {
+                        projectTypeFilter: '#projectTypeFilter',
+                        projectTypeSelect: '#project_type_id',
+                        chapterField: '.chapter-field',
+                        comicNameInput: '#comic_name',
+                        csvFileInput: '#csvFileInput',
+                        csvTableBody: '#csvTableBody',
+                        previewTable: '#previewTableOverview',
+                        tables: '.table'
+                    },
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const rows = text.split('\n').map(row => row.split(','));
-            if (rows.length > 1) {
-                rows.shift(); // Hapus header
-                const tableBody = document.getElementById('csvTableBody');
-                tableBody.innerHTML = '';
-                rows.forEach(row => {
-                    if (row.length >= 7) {
-                        tableBody.innerHTML += `<tr>
-                            <td>${row[0]}</td>
-                            <td>${row[1]}</td>
-                            <td>${row[2]}</td>
-                            <td>${row[3]}</td>
-                            <td>${row[4]}</td>
-                            <td>${row[5]}</td>
-                            <td><a href="${row[6]}" target="_blank">File Link</a></td>
-                            <td>${row[7] || 'Pending'}</td>
-                        </tr>`;
+                    // Initialize all table functionality
+                    init: function() {
+                        this.initProjectTypeFilter();
+                        this.initProjectTypeSelect();
+                        this.initCSVUpload();
+                        this.setupTableScrolling();
+                    },
+
+                    // Setup scrollable tables
+                    setupTableScrolling: function() {
+                        const tables = document.querySelectorAll(this.SELECTORS.tables);
+                        tables.forEach(table => {
+                            const wrapper = table.parentElement;
+                            if (!wrapper.style.maxHeight) {
+                                wrapper.style.maxHeight = '400px';
+                                wrapper.style.overflowY = 'auto';
+                            }
+
+                            const thead = table.querySelector('thead');
+                            if (thead) {
+                                thead.style.position = 'sticky';
+                                thead.style.top = '0';
+                                thead.style.backgroundColor = 'white';
+                                thead.style.zIndex = '1';
+                            }
+                        });
+                    },
+
+                    // Project Type Filter functionality
+                    initProjectTypeFilter: function() {
+                        const filterSelect = document.querySelector(this.SELECTORS.projectTypeFilter);
+                        if (filterSelect) {
+                            filterSelect.addEventListener('change', () => this.filterTables(filterSelect.value));
+                        }
+                    },
+
+                    filterTables: function(selectedType) {
+                        selectedType = selectedType.toLowerCase();
+                        const tables = document.querySelectorAll(this.SELECTORS.tables);
+
+                        tables.forEach(table => {
+                            const rows = table.querySelectorAll('tbody tr');
+                            let hasVisibleRows = false;
+
+                            rows.forEach(row => {
+                                const typeCell = row.querySelector('td:first-child');
+                                if (!typeCell) return;
+
+                                const projectType = typeCell.textContent.toLowerCase();
+                                const shouldShow = !selectedType || projectType.includes(selectedType);
+                                row.style.display = shouldShow ? '' : 'none';
+                                if (shouldShow) hasVisibleRows = true;
+                            });
+
+                            // Handle "no records" message
+                            const noRecordsRow = table.querySelector('tbody tr td[colspan]')?.closest('tr');
+                            if (noRecordsRow) {
+                                noRecordsRow.style.display = hasVisibleRows ? 'none' : '';
+                            }
+                        });
+                    },
+
+                    // Project Type Select functionality
+                    initProjectTypeSelect: function() {
+                        const projectTypeSelect = document.querySelector(this.SELECTORS.projectTypeSelect);
+                        const chapterField = document.querySelector(this.SELECTORS.chapterField);
+                        const comicNameInput = document.querySelector(this.SELECTORS.comicNameInput);
+
+                        if (projectTypeSelect && chapterField && comicNameInput) {
+                            chapterField.style.display = 'none';
+
+                            projectTypeSelect.addEventListener('change', function() {
+                                const selectedType = this.options[this.selectedIndex];
+                                if (selectedType.value) {
+                                    chapterField.style.display = 'block';
+                                    const isComicType = selectedType.text.toLowerCase().includes('comic') ||
+                                                      selectedType.text.toLowerCase().includes('webtoon');
+                                    comicNameInput.placeholder = isComicType ?
+                                        `Enter comic name (e.g. ${selectedType.text} Chapter)` :
+                                        'Enter project name';
+                                } else {
+                                    chapterField.style.display = 'none';
+                                }
+                            });
+                        }
+                    },
+
+                    // CSV Upload functionality
+                    initCSVUpload: function() {
+                        const csvInput = document.querySelector(this.SELECTORS.csvFileInput);
+                        if (csvInput) {
+                            csvInput.addEventListener('change', (event) => this.handleCSVUpload(event));
+                        }
+                    },
+
+                    handleCSVUpload: function(event) {
+                        const file = event.target.files[0];
+                        if (!file) return;
+
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const text = e.target.result;
+                            const rows = text.split('\n').map(row => row.split(',').map(cell => cell.trim()));
+                            if (rows.length > 1) {
+                                this.populateCSVTable(rows.slice(1)); // Skip header row
+                            }
+                        };
+                        reader.readAsText(file);
+                    },
+
+                    populateCSVTable: function(rows) {
+                        const tableBody = document.querySelector(this.SELECTORS.csvTableBody);
+                        const previewTable = document.querySelector(this.SELECTORS.previewTable);
+
+                        if (tableBody && previewTable) {
+                            tableBody.innerHTML = '';
+                            rows.forEach(row => {
+                                if (row.length >= 8) {
+                                    const [projectType, comicName, chapterNumber, talentQc, talent, panels, finishDate, file, status] = row;
+                                    tableBody.innerHTML += `
+                                        <tr>
+                                            <td>${projectType || 'N/A'}</td>
+                                            <td>${comicName || 'N/A'}</td>
+                                            <td>${chapterNumber || 'N/A'}</td>
+                                            <td>${talentQc || 'N/A'}</td>
+                                            <td>${talent || 'N/A'}</td>
+                                            <td>${panels || '0'}</td>
+                                            <td>${finishDate || '-'}</td>
+                                            <td><a href="${file || '#'}" target="_blank">${file ? 'File Link' : 'No Link'}</a></td>
+                                            <td>${status || 'Done'}</td>
+                                        </tr>`;
+                                }
+                            });
+                            previewTable.classList.remove('d-none');
+                            this.setupTableScrolling(); // Ensure new table is scrollable
+                        }
                     }
-                });
-                document.getElementById('previewTableOverview').classList.remove('d-none');
-            }
-        };
-        reader.readAsText(file);
-    });
+                };
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const projectTypeSelect = document.getElementById('project_type_id');
-        const chapterField = document.querySelector('.chapter-field');
-        const comicNameInput = document.getElementById('comic_name');
-
-        // Initially hide chapter field
-        chapterField.style.display = 'none';
-
-        projectTypeSelect.addEventListener('change', function() {
-            const selectedType = this.options[this.selectedIndex];
-            if (selectedType.value) {
-                // Show chapter field for all project types
-                chapterField.style.display = 'block';
-
-                // If it's a comic type project, suggest the comic name
-                if (selectedType.text.toLowerCase().includes('comic') || selectedType.text.toLowerCase().includes('webtoon')) {
-                    comicNameInput.placeholder = 'Enter comic name (e.g. ' + selectedType.text + ' Chapter)';
-                } else {
-                    comicNameInput.placeholder = 'Enter project name';
-                }
-            } else {
-                chapterField.style.display = 'none';
-            }
-        });
-    });
+                // Initialize all table functionality
+                TableManager.init();
+            });
 </script>
 
 
