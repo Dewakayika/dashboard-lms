@@ -14,7 +14,9 @@ class AdditionalInfoController extends Controller
             return view('auth.register-intern');
         } elseif ($user->role === 'talent') {
             return view('auth.register-talent');
-        }
+        }elseif ($user->role === 'talent_qc') {
+            return view('auth.register-talentqc');
+        }else
 
         return redirect()->route('home');
     }
@@ -32,6 +34,7 @@ class AdditionalInfoController extends Controller
             $intern->job = $request->input('job');
             $intern->user_id = $user->id;
             $intern->save();
+
         } elseif ($user->role === 'talent') {
             $request->validate([
                 'school' => ['required', 'string'],

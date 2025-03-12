@@ -5,6 +5,8 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 :root {
     --bs-blue: #63b3ed;
     --bs-indigo: #596cff;
@@ -27,7 +29,7 @@
     --bs-light: #e9ecef;
     --bs-dark: #344767;
     --bs-white: #fff;
-    --bs-font-sans-serif: "Open Sans";
+    --bs-font-sans-serif: "Inter", serif;
     --bs-font-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
     --bs-gradient: linear-gradient(180deg,hsla(0,0%,100%,.15),hsla(0,0%,100%,0));
 }
@@ -4682,7 +4684,7 @@ fieldset:disabled .btn {
 }
 .page-link {
     background-color: #fff;
-    border: 1px solid #dee2e6;
+    border: 0px solid #dee2e6;
     color: #cb0c9f;
     display: block;
     position: relative;
@@ -4711,8 +4713,8 @@ fieldset:disabled .btn {
     margin-left: -1px;
 }
 .page-item.active .page-link {
-    background-color: #cb0c9f;
-    border-color: #cb0c9f;
+    background-color: #ED3237;
+    border-color: #ED3237;
     color: #fff;
     z-index: 3;
 }
@@ -5981,7 +5983,6 @@ fieldset:disabled .btn {
     justify-content: center;
     left: 0;
     list-style: none;
-    margin-bottom: 1rem;
     margin-left: 15%;
     margin-right: 15%;
     padding: 0;
@@ -5993,7 +5994,7 @@ fieldset:disabled .btn {
     background-clip: padding-box;
     background-color: #fff;
     border: 0;
-    border-bottom: 10px solid transparent;
+    border-bottom: 0px solid transparent;
     border-top: 10px solid transparent;
     box-sizing: content-box;
     cursor: pointer;
@@ -8029,6 +8030,9 @@ fieldset:disabled .btn {
 .bg-transparent {
     background-color: transparent!important;
 }
+.bg-gray-50{
+    background-color: #f7f7f7!important;
+}
 .bg-gray-100 {
     background-color: #f8f9fa!important;
 }
@@ -8056,6 +8060,40 @@ fieldset:disabled .btn {
 .bg-gray-900 {
     background-color: #212529!important;
 }
+.bg-green-200{
+    /* 100 green */
+    background-color: #A7F3D0!important;
+}
+.bg-red-200{
+    /* 100 red */
+    background-color: #f5cba7!important;
+}
+
+.bg-blue-200{
+    /* 100 blue */
+    background-color: #d6eaf8!important;
+}
+
+.bg-yellow-200{
+    /* 100 yellow */
+    background-color: #fcf3cf !important;
+}
+
+.bg-orange-200{
+    /* 100 orange */
+    background-color: #f6ddcc!important;
+}
+
+.bg-red-200{
+    /* 100 red */
+    background-color: #f2d7d5!important;
+}
+
+.bg-green-200{
+    /* 100 green */
+    background-color: #abebc6!important;
+}
+
 .bg-gradient {
     background-image: var(--bs-gradient)!important;
 }
@@ -15863,6 +15901,11 @@ label {
 .bg-gradient-warning {
     background-image: linear-gradient(310deg,#FFED86,#fbcf33);
 }
+.bg-gradient-orange-dark {
+    background-image: linear-gradient(310deg, #B85E47, #FF7E2D);
+    background-color: #B85E47; /* Fallback for dark mode */
+    color: #ffffff;
+}
 .bg-gradient-danger {
     background-image: linear-gradient(310deg,#ea0606,#ff667c);
 }
@@ -17453,11 +17496,11 @@ hr.horizontal.gray-light {
     color: #8392ab;
     display: flex;
     font-size: 0.875rem;
-    height: 36px;
+    height: 30px;
     justify-content: center;
     margin: 0 3px;
-    padding: 0;
-    width: 36px;
+    padding: 5px;
+    width: 30px;
 }
 .pagination-lg .page-item .page-link,
 .pagination-lg .page-item span {
@@ -19681,4 +19724,156 @@ pre[class*=language-] {
     .ps {
         overflow: auto!important;
     }
+}
+
+
+/* Custom Css */
+.modal.show {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .modal-dialog {
+    margin: 1.75rem auto;
+    max-width: 900px;
+    max-height: 400px;
+    margin-bottom: 10px;
+    width: 90%;
+  }
+
+
+  .modal-content {
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    background: white;
+    position: relative;
+  }
+
+  .modal-header {
+    border: none;
+    padding: 20px 20px 0;
+    text-align: center;
+    display: block;
+  }
+
+  .modal-header .btn-close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 14px;
+  }
+
+  .modal-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+
+  .modal-body {
+    padding: 12px 20px;
+    text-align: center;
+  }
+
+  .modal-body p {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .modal-footer {
+    padding: 12px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .modal-btn:active {
+    transform: scale(0.96);
+  }
+
+  .modal-btn-cancel {
+    background: #ff3b30;
+    color: white;
+  }
+
+  .modal-btn-continue {
+    background: #007aff;
+    color: white;
+  }
+
+  .welcome-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* z-index: 9999; */
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.welcome-modal {
+    background: white;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    max-width: 550px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.5s ease-out 0.5s forwards;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.confetti-canvas {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000 !important;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
