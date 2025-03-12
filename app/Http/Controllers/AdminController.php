@@ -457,22 +457,6 @@ class AdminController extends Controller
         $pendingUsers = Talent::whereNull('status')
         ->get();
 
-        // Ambil data leaderboard (total submission per user)
-        $leaderboard = DB::table('users')
-        ->leftJoin('Submission_Course', 'users.id', '=', 'Submission_Course.user_id')
-        ->leftJoin('Assignment_Votes', 'Submission_Course.id', '=', 'Assignment_Votes.submission_id') // Join dengan tabel votes
-        ->select(
-            'users.id',
-            'users.name',
-            'users.email',
-            DB::raw('COUNT(Submission_Course.id) as total_submissions'), // Hitung jumlah submission
-            DB::raw('SUM(Assignment_Votes.vote_value) as total_votes'), // Hitung total votes
-            DB::raw('MIN(Submission_Course.submission_date) as first_submission_date')
-        )
-        ->groupBy('users.id', 'users.name', 'users.email')
-        ->orderBy('total_votes', 'DESC') // Urutkan berdasarkan total votes terbanyak
-        ->orderBy('first_submission_date', 'ASC') // Kemudian urutkan berdasarkan tanggal submission paling awal
-        ->paginate(5);
 
         // Get project Types
         $projectTypes = ProjectType::all();
