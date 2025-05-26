@@ -5,6 +5,8 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 :root {
     --bs-blue: #63b3ed;
     --bs-indigo: #596cff;
@@ -27,7 +29,7 @@
     --bs-light: #e9ecef;
     --bs-dark: #344767;
     --bs-white: #fff;
-    --bs-font-sans-serif: "Open Sans";
+    --bs-font-sans-serif: "Inter", serif;
     --bs-font-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
     --bs-gradient: linear-gradient(180deg,hsla(0,0%,100%,.15),hsla(0,0%,100%,0));
 }
@@ -8028,6 +8030,9 @@ fieldset:disabled .btn {
 .bg-transparent {
     background-color: transparent!important;
 }
+.bg-gray-50{
+    background-color: #f7f7f7!important;
+}
 .bg-gray-100 {
     background-color: #f8f9fa!important;
 }
@@ -8055,6 +8060,40 @@ fieldset:disabled .btn {
 .bg-gray-900 {
     background-color: #212529!important;
 }
+.bg-green-200{
+    /* 100 green */
+    background-color: #A7F3D0!important;
+}
+.bg-red-200{
+    /* 100 red */
+    background-color: #f5cba7!important;
+}
+
+.bg-blue-200{
+    /* 100 blue */
+    background-color: #d6eaf8!important;
+}
+
+.bg-yellow-200{
+    /* 100 yellow */
+    background-color: #fcf3cf !important;
+}
+
+.bg-orange-200{
+    /* 100 orange */
+    background-color: #f6ddcc!important;
+}
+
+.bg-red-200{
+    /* 100 red */
+    background-color: #f2d7d5!important;
+}
+
+.bg-green-200{
+    /* 100 green */
+    background-color: #abebc6!important;
+}
+
 .bg-gradient {
     background-image: var(--bs-gradient)!important;
 }
@@ -19778,3 +19817,63 @@ pre[class*=language-] {
     background: #007aff;
     color: white;
   }
+
+  .welcome-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* z-index: 9999; */
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.welcome-modal {
+    background: white;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    max-width: 550px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.5s ease-out 0.5s forwards;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.confetti-canvas {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000 !important;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

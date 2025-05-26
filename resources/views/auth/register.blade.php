@@ -14,11 +14,11 @@
                 <div class="absolute inset-0">
                     <img
                         class="object-cover object-top w-full h-full"
-                        src="{{ url('images/login-image.jpg')}}"
+                        src="{{ url('images/webtoon.jpg')}}"
                         alt="Sample image"
                     />
                 </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                {{-- <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div> --}}
                 <div class="absolute">
                     <div class="">
                         <img style="width: 30px" src="{{url('images/padma.png')}}" alt="">
@@ -45,13 +45,13 @@
                         <div class="space-y-5">
                             <!-- Name Input -->
                             <div>
-                                <label for="name" class="text-base font-medium text-gray-900">Full Name</label>
+                                <label for="name" class="text-base font-medium text-gray-900">Username</label>
                                 <div class="mt-2.5 relative">
                                     <input
                                         type="text"
                                         name="name"
                                         id="name"
-                                        placeholder="Enter your full name"
+                                        placeholder="Example Jhon Delane"
                                         value="{{ old('name') }}" 
                                         class="block w-full py-4 pl-3 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline focus:caret-black-600 focus:bg-white caret-black-600 @error('name') is-invalid @enderror"
                                     />
@@ -134,7 +134,8 @@
                             <div>
                                 <button
                                     type="submit"
-                                    class="w-full py-4 text-base font-medium text-white bg-blue-600 rounded-md transition-all duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    style="background-color: #2e2e2e"
+                                    class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md  focus:outline hover:opacity-80 focus:opacity-80"
                                 >Sign Up</button>
                             </div>
                         </div>

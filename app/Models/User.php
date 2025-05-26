@@ -8,22 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\AssignmentVote;
-use App\Models\Talent;
-use App\Models\Intern;
-use App\Models\TalentQc;
-use App\Models\Project;
-use App\Models\SubmissionCourse;
-
-
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +23,7 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
-        'registration_code'
+        'registration_code',
     ];
 
     /**
@@ -68,10 +56,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Get the user's course progress as an array.
+     */
     public function getCourseProgressAttribute()
     {
         return json_decode($this->attributes['course_progress'], true) ?? [];
     }
+
+    // Relationships
 
     public function votesGiven()
     {
@@ -90,36 +83,74 @@ class User extends Authenticatable
 
     public function submissions()
     {
-        return $this->hasMany(SubmissionCourse::class, 'user_id', 'id');
+        return $this->hasMany(SubmissionCourse::class, 'user_id');
     }
+
     public function talentQc()
     {
-        return $this->hasOne(TalentQc::class, 'userID');
+        return $this->hasOne(TalentQc::class, 'user_id');
     }
+
     public function projects()
     {
         return $this->hasMany(Project::class, 'talent_qc');
     }
+
     public function appliedProjects()
     {
         return $this->hasMany(ApplyProject::class);
     }
+
     public function projectRecords()
     {
         return $this->hasMany(ProjectRecord::class);
     }
+
     public function sopChecklists()
     {
         return $this->hasMany(SopChecklist::class);
     }
+
     public function qcRecords()
     {
         return $this->hasMany(QcRecords::class);
     }
 
+    public function projectQc()
+    {
+        return $this->hasOne(ProjectQc::class);
+    }
 
+    // Withdrawals and e-wallets
 
+    public function withdraws()
+    {
+        return $this->hasMany(Withdraw::class);
+    }
 
+    public function ewallets()
+    {
+        return $this->hasMany(Ewallet::class);
+    }
 
+    public function projectComplexities()
+    {
+        return $this->hasMany(ProjectComplexity::class);
+    }
+
+    public function talentReviews()
+    {
+        return $this->hasMany(TalentReview::class);
+    }
+
+    public function qcReviews()
+    {
+        return $this->hasMany(QcReview::class);
+    }
+
+    public function projectRecaps()
+    {
+        return $this->hasMany(ProjectRecap::class);
+    }
 
 }

@@ -14,6 +14,7 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
@@ -39,6 +40,9 @@
                                 @foreach ($projectQcOverview->sortByDesc('created_at') as $projectQc)
                                     @if ($projectQc->status != 'Done')
                                         <tr>
+                                            <td class="align-middle text-sm ps-4">
+                                                <span class="text-sm font-weight-bold">{{ optional($projectQc->projectType)->name ?? 'N/A' }}</span>
+                                            </td>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
@@ -69,7 +73,7 @@
                                                 @elseif (in_array($projectQc->status, ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3']))
                                                     <span class="badge badge-sm bg-gradient-warning">{{$projectQc->status}}</span>
                                                 @elseif (in_array($projectQc->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
-                                                    <span class="badge badge-sm bg-gradient-warning">{{$projectQc->status}}</span>
+                                                    <span class="badge badge-sm bg-gradient-success">{{$projectQc->status}}</span>
                                                 @elseif (in_array($projectQc->status, ['Revision 1', 'Revision 2', 'Revision 3']))
                                                     <span class="badge badge-sm bg-gradient-danger">{{$projectQc->status}}</span>
                                                 @elseif ($projectQc->status == 'Done')
@@ -104,6 +108,7 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
@@ -130,6 +135,9 @@
                                 @foreach ($projectQcOverview as $projectQc)
                                     @if ($projectQc->status == 'Done')
                                         <tr>
+                                            <td class="align-middle text-sm ps-4">
+                                                <span class="text-sm font-weight-bold">{{ optional($projectQc->projectType)->name ?? 'N/A' }}</span>
+                                            </td>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>

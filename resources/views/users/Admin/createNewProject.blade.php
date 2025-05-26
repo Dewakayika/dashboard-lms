@@ -33,6 +33,18 @@
                     @enderror
                   </div>
                   <div class="mb-2">
+                    <label for="project_type_id" class="text-md text-dark">Project Type</label>
+                    <select name="project_type_id" class="form-control selector">
+                        <option value="">Select Project Type</option>
+                        @foreach ($projectTypes as $type)
+                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('project_type_id')
+                      <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                  </div>
+                  <div class="mb-2">
                     <label for="chapter_number" class="text-md text-dark">Chapter Number</label>
                     <input type="number" name="chapter_number" class="form-control" placeholder="Example 17, 18, 19">
                     @error('chapter_number')
@@ -42,7 +54,7 @@
                   <div class="mb-2">
                     <label for="talent_qc" class="text-md text-dark">Select Talent QC</label>
                     <select  name="talent_qc" class="form-control selector" placeholder="Select Talent QC" >
-                        <option value="" class="form-control">Pelase select Talent Qc</option>
+                        <option value="" class="form-control">Please select Talent QC</option>
                         @foreach ($talentQc as $Qc)
                             <option class="text-black" value="{{ $Qc->id }}">{{ $Qc->name }}</option>
                         @endforeach

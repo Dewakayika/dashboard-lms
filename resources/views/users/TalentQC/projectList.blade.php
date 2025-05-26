@@ -14,6 +14,7 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent Qc</th>
@@ -27,11 +28,14 @@
                   <tbody>
                     @foreach ($projectOverview as $projects )
                     <tr>
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-sm font-weight-bold">{{ optional($projects->projectType)->name ?? 'N/A' }}</span>
+                      </td>
                       <td>
                         <div class="d-flex px-2 py-1">
-                            <div>
+                            {{-- <div>
                               <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                            </div>
+                            </div> --}}
                             <div class="d-flex flex-column justify-content-center">
                               <h6 class="mb-0 text-sm">{{$projects->comic_name}}</h6>
                             </div>
@@ -57,19 +61,19 @@
                         @if ($projects->status == 'Project Assign')
                             <span class="badge badge-sm bg-gradient-info">{{$projects->status}}</span>
                         @elseif ($projects->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
-                            <span class="badge badge-sm .bg-gradient-attentions">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
                         @elseif ($projects->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
-                            <span class="badge badge-sm .bg-gradient-warning">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
                         @elseif ($projects->status == 'Revision 1' && 'Revision 2' && 'Revision 3')
-                            <span class="badge badge-sm .bg-gradient-danger">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-danger">{{$projects->status}}</span>
                         @elseif ($projects->status == 'Done')
-                            <span class="badge badge-sm .bg-gradient-success">{{$projects->status}}</span>
+                            <span class="badge badge-sm bg-gradient-success">{{$projects->status}}</span>
                         @else
-                            <span class="badge badge-sm .bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
+                            <span class="badge badge-sm bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
                         @endif
                       </td>
                       <td class="align-middle">
-                        <a href="{{ route('talentqc#projectDetail', ['id' ($projects->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+                        <a href="{{ route('talentqc#projectDetail', $projects->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
                             Detail
                         </a>
                       </td>
