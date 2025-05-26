@@ -9,7 +9,7 @@
             <!-- Left image section -->
             <div class="h-screen relative flex items-start px-4 pb-10 pt-6 sm:pb-16 md:justify-left lg:pb-24 bg-gray-50 sm:px-6 lg:px-8 hidden lg:block absolute inset-0">
                 <div class="absolute inset-0">
-                    <img class="object-cover object-top w-full h-full cover" src="{{ url('images/login-image.jpg') }}" alt=""/>
+                    <img class="object-cover object-top w-full h-full cover" src="{{ url('images/reset-password.jpg') }}" alt=""/>
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
 

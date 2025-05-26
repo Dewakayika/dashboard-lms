@@ -2,40 +2,62 @@
 
 @section('content')
 
-  <div class="row">
+<div class="row">
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
       <div class="card">
-        <div class="card-body bg-primary p-3 border-radius-xl">
+        <div class="card-body bg-white bg-primary p-3 border-radius-xl">
           <div class="row">
             <div class="col-8">
-                <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                    <i class="fa-solid fa-repeat fa-xl" style="color: #ed3237;"></i>
-                </div>
-              <div class="numbers mt-4">
-                    <h5 class="font-weight-bolder text-white mb-0">
-                    1
-                    </h5>
-                <p class="text-sm mb-0 text-white text-capitalize font-weight-light">On Going Project</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body bg-secondary p-3 border-radius-xl">
-          <div class="row">
-            <div class="col-8">
-                <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                    <i class="fa-solid fa-receipt fa-xl" style="color: #27272a;"></i>
+                <div class="icon icon-shape bg-red-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-file fa-lg" style="color: #e64322;" ></i>
                   </div>
               <div class="numbers mt-4">
-                <h5 class="font-weight-bolder text-white mb-0">
-                    20
-                  </h5>
-                <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Project This Month</p>
+                    <h3 class="font-weight-bolder text-gray-900 mb-0">
+                    {{$onGoingProject}}
+                    </h3>
+                <p class="text-sm mb-0 text-black text-capitalize font-weight-light">On Going Project</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card">
+          <div class="card-body bg-white bg-secondary p-3 border-radius-xl">
+            <div class="row">
+              <div class="col-8">
+                <div class="icon icon-shape bg-yellow-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-pen-to-square" style="color: #bca91d; "></i>
+                  </div>
+                <div class="numbers mt-4">
+                  <h3 class="font-weight-bolder text-gray-900 mb-0">
+                      {{$projectQc}}
+                    </h3>
+                  <p class="text-sm mb-0 text-capitalize text-black font-weight-light">Project Qc</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body bg-white bg-secondary p-3 border-radius-xl">
+          <div class="row">
+            <div class="col-8">
+                <div class="icon icon-shape bg-blue-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-rectangle-list fa-lg" style="color: #2e86c1 "></i>
+                  </div>
+              <div class="numbers mt-4">
+                <h3 class="font-weight-bolder text-gray-900 mb-0">
+                    {{$projectThisMonth}}
+                  </h3>
+                <p class="text-sm mb-0 text-capitalize text-black font-weight-light">Project This Month</p>
               </div>
             </div>
           </div>
@@ -45,17 +67,17 @@
 
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
         <div class="card">
-          <div class="card-body bg-secondary p-3 border-radius-xl">
+          <div class="card-body bg-white bg-secondary p-3 border-radius-xl">
             <div class="row">
               <div class="col-8">
-                  <div class="icon icon-shape bg-white shadow text-center border-radius-section">
-                      <i class="fa-solid fa-circle-check fa-xl" style="color: #27272a;"></i>
-                    </div>
+                <div class="icon icon-shape bg-green-200 shadow opacity-95 text-center border-radius-section">
+                    <i class="fa-regular fa-file-lines" style="color: #1ea079;"></i>
+                  </div>
                 <div class="numbers mt-4">
-                  <h5 class="font-weight-bolder text-white mb-0">
-                      100
-                    </h5>
-                  <p class="text-sm mb-0 text-capitalize text-white font-weight-light">Total Project</p>
+                  <h3 class="font-weight-bolder text-gray-900 mb-0">
+                      {{$AllProject}}
+                    </h3>
+                  <p class="text-sm mb-0 text-capitalize text-black font-weight-light">Total Project</p>
                 </div>
               </div>
             </div>
@@ -63,70 +85,164 @@
         </div>
       </div>
 
-      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-body bg-white p-0 border-radius-xl">
-                @if ($projectLogs->isempty())
-                    <div class="text-center d-flex align-items-center justify-content-center">
-                        <div class="">
-                            <img src="{{ asset('/assets/img/ilustration/NoConnection.svg')}}" class="h-auto w-11" style="width: 110px; height: auto;">
-                            <p class="text-xs">There's no timestamp tracked</p>
-                        </div>
-                    </div>
-                @else
-                <div>
-                    <!-- Carousel for countdown -->
-                    <div id="countdownCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            @foreach ($projectLogs as $key => $log)
-                                <div class="carousel-item @if ($key === 0) active @endif">
-                                    <div>
-                                        <h6 class="text-uppercase text-sm font-weight-bolder text-black text-left">COUNTDOWN</h6>
-                                        <p class="text-sm font-weight-normal text-gray-700">Submission for <span class="text-bolder"> {{ $log->project->comic_name ?? 'Unknown Project' }} Chapter {{$log->project->chapter_number}}</span></p>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center ">
-                                        <!-- Countdown timer -->
-                                        <div id="countdown-{{ $log->id }}" class="d-flex justify-content-center align-items-center">
-                                            <div class="text-center me-4">
-                                                <h4 id="days-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">DAY</span>
-                                            </div>
-                                            <div class="text-center mx-2">
-                                                <h4 id="hours-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">HOUR</span>
-                                            </div>
-                                            <div class="text-center mx-2">
-                                                <h4 id="minutes-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">MIN</span>
-                                            </div>
-                                            <div class="text-center ms-2">
-                                                <h4 id="seconds-{{ $log->id }}" class="font-weight-bold mb-0">00</h4>
-                                                <span class="text-xs text-gray-500">SEC</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <!-- Dot Indicators for Carousel -->
-                        <div class="carousel-indicators ">
-                            @foreach ($projectLogs as $key => $log)
-                                <button type="button" data-bs-target="#countdownCarousel" data-bs-slide-to="{{ $key }}" class="@if ($key === 0) active @endif" style="background-color: red;"></button>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                @endif
-            </div>
-        </div>
-        </div>
   </div>
 
 
+  @if($projectsWithoutComplexity->isNotEmpty())
+  @foreach($projectsWithoutComplexity as $project)
+  @if($project->status == 'Done')
+<div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+    <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
+        <div class="card-header border-bottom pb-0 rounded">
+            <div class=" justify-content-between align-items-center text-center">
+                <h5 class="mb-0">Congratulations!</h5>
+                <p class="text-md mt-2">You already finish <span class="text-bold">{{ $project->comic_name }} {{ $project->chapter_number }}</span>, Let's give the review for project and your QC Agent!</p>
+
+                <button type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="card-body bg-white p-3 rounded">
+            <form action="{{ route('talentqc#storeReview') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="project_id" value="{{ $project->id }}">
+                <input type="hidden" name="user_id" value="{{ $userData->id }}">
+                <input type="hidden" name="comic_name" value="{{ $project->comic_name }}">
+
+
+                <div class="text-left mb-4" style="text-align: start;">
+                    <label for="number_of_panel" class="text-md text-dark">Number of Final Panel</label>
+                    <input type="text" name="number_of_panel" class="form-control" placeholder="Example 50" >
+                    @error('number_of_panel')
+                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+                <hr>
+                <div class="mb-2 text-left" style="text-align: start;">
+                    <label for="complexity" class="text-md text-dark">Project Complexity</label>
+                    <select name="complexity" class="form-control">
+                        <option value="">Please select project complexity</option>
+                        <option value="1">Very Easy</option>
+                        <option value="2">Easy</option>
+                        <option value="3">Medium</option>
+                        <option value="4">Hard</option>
+                        <option value="5">Very Hard</option>
+
+                    </select>
+                    @error('complexity')
+                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+                <hr>
+                <div class="mb-2 text-left" style="text-align: start;">
+                    <label for="qc_reviews" class="text-md text-dark">QC Review</label>
+                    <select name="qc_reviews" class="form-control">
+                        <option value="">Please select Qc review</option>
+                        <option value="1">Needs Improvement</option>
+                        <option value="2">Developing</option>
+                        <option value="3">Competent</option>
+                        <option value="4">Outstanding</option>
+                        <option value="5">Exceptional</option>
+
+                    </select>
+                    @error('complexity')
+                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="text-left mb-4" style="text-align: start;">
+                    <label for="message" class="text-md text-dark">Message for QC</label>
+                    <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
+                    @error('message')
+                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+                <button type="submit" class="btn bg-gradient-dark w-100 my-4">Submit Project Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+@endforeach
+@endif
+
+
+{{-- review to talent --}}
+@if($projectsqcWithoutComplexity->isNotEmpty())
+@foreach($projectsqcWithoutComplexity as $comic)
+@if($comic->status == 'Done')
+<div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+    <div class="card position-absolute blur shadow-blur" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 1050;">
+        <div class="card-header border-bottom pb-0 rounded">
+            <div class=" justify-content-between align-items-center text-center">
+                <h5 class="mb-0">Congratulations!</h5>
+                <p class="text-md mt-2">You already finish {{$comic->comic_name}} Eps {{$comic->chapter_number}}, Let's give the review for comic and your Talent!</p>
+                <button type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="card-body bg-white p-3 rounded">
+            <form action="{{ route('talentqc#ReviewTalent') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="project_id" value="{{ $comic->id }}">
+                <input type="hidden" name="user_id" value="{{ $userData->id }}">
+                <input type="hidden" name="comic_name" value="{{ $comic->comic_name }}">
+
+
+                <div class="mb-2 text-left" style="text-align: start;">
+                    <label for="complexity" class="text-md text-dark">Project Complexity</label>
+                    <select name="complexity" class="form-control">
+                        <option value="">Please select project complexity</option>
+                        <option value="1">Very Easy</option>
+                        <option value="2">Easy</option>
+                        <option value="3">Medium</option>
+                        <option value="4">Hard</option>
+                        <option value="5">Very Hard</option>
+
+                    </select>
+                    @error('complexity')
+                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <hr>
+
+                <div class="mb-2 text-left" style="text-align: start;">
+                    <label for="talent_review" class="text-md text-dark">Talent Review</label>
+                    <select name="talent_review" class="form-control">
+                        <option value="">Please select Qc review</option>
+                        <option value="1">Needs Improvement</option>
+                        <option value="2">Developing</option>
+                        <option value="3">Competent</option>
+                        <option value="4">Outstanding</option>
+                        <option value="5">Exceptional</option>
+
+                    </select>
+                    @error('talent_review')
+                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="text-left mb-4" style="text-align: start;">
+                    <label for="message" class="text-md text-dark">Message for QC</label>
+                    <textarea type="text" name="message" class="form-control" placeholder="Your message"></textarea>
+                    @error('message')
+                    <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+
+                <button type="submit" class="btn bg-gradient-dark w-100 my-4" >Submit Project Review</button>
+            </form>
+            <!-- Add your form or content here -->
+        </div>
+
+    </div>
+</div>
+@endif
+@endforeach
+@endif
+
   <div class="row my-4">
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-      <div class="card">
+      <div class="card h-100" >
         <div class="card-header pb-0">
           <div class="row">
             <div class="col-lg-6 col-7">
@@ -144,11 +260,10 @@
                     </div>
                 </div>
             @else
-
-
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Episode Number</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Talent QC</th>
@@ -160,11 +275,14 @@
               <tbody>
                 @foreach ($projects as $project )
                 <tr>
+                  <td class="align-middle text-center text-sm">
+                    <span class="text-sm font-weight-bold">{{ optional($project->projectType)->name ?? 'N/A' }}</span>
+                  </td>
                   <td>
                     <div class="d-flex px-2 py-1">
-                      <div>
+                      {{-- <div>
                         <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                      </div>
+                      </div> --}}
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="mb-0 text-sm">{{$project->comic_name}}</h6>
                       </div>
@@ -181,23 +299,62 @@
                     </div>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <span class="text-sm text-center font-weight-bold"> - </span>
+                    @php
+                        $complexity = $project->projectComplexity->first();
+                        if ($complexity) {
+                            $rawComplexity = $complexity->average_complexity;
+                            // Custom rounding logic
+                            $decimal = $rawComplexity - floor($rawComplexity);
+                            $avgComplexity = $decimal <= 0.5 ? floor($rawComplexity) : ceil($rawComplexity);
+
+                            switch($avgComplexity) {
+                                case 1:
+                                    $result = 'Very Easy';
+                                    break;
+                                case 2:
+                                    $result = 'Easy';
+                                    break;
+                                case 3:
+                                    $result = 'Medium';
+                                    break;
+                                case 4:
+                                    $result = 'Hard';
+                                    break;
+                                case 5:
+                                    $result = 'Very Hard';
+                                    break;
+                                default:
+                                    $result = 'Unknown';
+                            }
+                            $display = $result;
+                        } else {
+                            $display = '-';
+                        }
+                    @endphp
+                    <span class="text-sm font-weight-bold">{{ $display }}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <div class="bg-gradient-succes">
-                      <form action="{{ route('talent#applyProject', $project->id) }}" method="POST" id="applyForm-{{ $project->id }}">
-                        @csrf
-                        <button type="button" class="badge badge-sm text-white bg-gradient-success" style="border: none" onclick="confirmApply({{ $project->id }})">Apply</button>
-                      </form>
-                    </div>
+                    @if ($projectOverview->isNotEmpty() && ($projectOverview->last()->status == 'Project Assign'))
+                        <a class="badge badge-sm text-white bg-gradient-success" href="#" data-bs-toggle="modal" data-bs-target="#notApply">
+                            <span class="px-2">Apply</span>
+                        </a>
+                    @else
+                        <div class="bg-gradient-succes">
+                            <form action="{{ route('talentqc#applyProject', $project->id) }}" method="POST" id="applyForm-{{ $project->id }}">
+                                @csrf
+                                <button type="button" class="badge badge-sm text-white bg-gradient-success" style="border: none" onclick="confirmApply({{ $project->id }})">Apply</button>
+                            </form>
+                        </div>
+                    @endif
                   </td>
                 </tr>
                 @endforeach
               </tbody>
             </table>
+            @if ($projects->hasMorePages())
             <ul class="pagination justify-content-center">
                 @if ($projects->onFirstPage())
                     <li class="page-item disabled px-1">
@@ -225,6 +382,9 @@
                     </li>
                 @endif
             </ul>
+            @else
+
+            @endif
             @endif
           </div>
         </div>
@@ -233,7 +393,7 @@
 
     <!-- Modal for confirmation -->
     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width: 400px">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="confirmationModalLabel">Apply Project?</h5>
@@ -249,89 +409,128 @@
           </div>
         </div>
       </div>
+
+                <!-- Modal for confirmation -->
+    <div class="modal fade" id="notApply" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 400px;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">Sorry! You canot apply this project?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Some of your project still on going, you can't apply new project. Please make sure your project draft submitted and apply this project again.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="modal-btn modal-btn-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="modal-btn modal-btn-continue" data-bs-dismiss="modal">Finish Project</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     <div class="col-lg-4 col-md-6">
         <div class="card h-100">
-            @if ($groupedProjectStatuses->isEmpty())
+
             <div class="card-header pb-0">
-                <h6>Project Status</h6>
+                <h6>Project On Going</h6>
             </div>
-            <div class="text-center d-flex align-items-center justify-content-center">
-                <div class="">
-                    <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
-                    <p class="text-xs">There's no Project Status Recorded</p>
-                </div>
-            </div>
-            @else
 
-            <div class="card-body p-3">
-                <div id="projectCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @foreach ($groupedProjectStatuses as $projectId => $statuses)
-                            <div class="carousel-item @if ($loop->first) active @endif">
-                                <div class="card-header pb-0">
-                                    <h6>Project Status</h6>
-                                    <p class="text-sm">
-                                        {{ $statuses->first()->project->comic_name ?? 'Unknown Project' }} <span class="font-weight-bold">{{ $statuses->first()->project->chapter_number ?? 'Unknown Project' }}</span>
-                                    </p>
-                                </div>
-                                <div class="timeline timeline-one-side">
-                                    @foreach ($statuses as $status)
-                                        <div class="timeline-block mb-3">
-                                            <span class="timeline-step">
-                                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Tompson">
-                                                    @if ($status->status_type_id == '1')
-                                                        <img src="{{ asset('/assets/img/small-logos/Assign.png')}}" alt="team1">
-                                                    @endif
-                                                </a>
-                                            </span>
-                                            <div class="timeline-content">
-                                                <h6 class="text-dark text-sm font-weight-bold mb-0">
-                                                    @if ($status->status_type_id == '1')
-                                                        Project Assign
-                                                    @endif
-                                                </h6>
-                                                <p class="text-secondary font-weight-bold text-xs mt-1 mb-0 text-uppercase">{{ \Carbon\Carbon::parse($status->created_at)->translatedFormat('D, M Y | H:i A') }}</p>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endforeach
+            <div class="card-body">
+                {{-- <div class="min-height-160">
+                    <canvas id="radiarChart" height="200px" width="80px"></canvas>
+                </div> --}}
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-chess-queen" style="color: #2e86c1"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Assign</h6>
+                            <p class="text-normal text-xs">Project Applied, still working on it</p>
+                        </div>
                     </div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectAssign}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-orange-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-pen-to-square" style="color: #d35400"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project QC</h6>
+                            <p class="text-normal text-xs">Waiting QC agent check the project</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectQc}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-blue-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-file-lines" style="color: #2e86c1"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Draft</h6>
+                            <p class="text-normal text-xs">Project with status draft submitted</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectDraft}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-red-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-file-excel" style="color: #c0392b"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Revision</h6>
+                            <p class="text-normal text-xs">Revision note release by admin</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectRevise}}</h4>
+                </li>
+                <li class="list-group-item border-0 d-flex align-items-center px-3 mb-1">
+                    <div class="d-flex align-items-start flex-row gap-3 justify-content-center">
+                        <div class="icon icon-shape bg-green-200 text-center border-radius-2xl">
+                            <i class="fa-regular fa-thumbs-up" style="color: #28b463"></i>
+                        </div>
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Project Completed</h6>
+                            <p class="text-normal text-xs">Number of project completed</p>
+                        </div>
+                    </div>
+                    <h4 class="pe-3 ps-0 mb-0 ms-auto d-flex justify-content-center">{{$projectCompleted}}</h4>
+                </li>
             </div>
-            @endif
+
         </div>
     </div>
   </div>
 
 
   <div class="row">
-    <div class="col-12">
-      <div class="card mb-4">
+    <div class="col-lg-6 col-md-6 mb-md-0 mb-4">
+      <div class="card mb-4 h-100">
         <div class="card-header pb-0">
           <h6>Projects Overview</h6>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-0">
+            @if ($projectOverview->isEmpty())
+            <div class="text-center d-flex align-items-center justify-content-center">
+                <div class="mb-3">
+                    <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
+                    <p class="text-xs">There's no Project Offer yet</p>
+                </div>
+            </div>
+            @else
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent Qc</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Assign Date</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Finish Date</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                   <th class="text-secondary opacity-7"></th>
                 </tr>
@@ -339,11 +538,14 @@
               <tbody>
                 @foreach ($projectOverview as $projects )
                 <tr>
+                    <td class="align-middle text-center text-sm">
+                        <span class="text-sm font-weight-bold">{{ optional($projects->projectType)->name ?? 'N/A' }}</span>
+                    </td>
                   <td>
                     <div class="d-flex px-2 py-1">
-                        <div>
+                        {{-- <div>
                           <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                        </div>
+                        </div> --}}
                         <div class="d-flex flex-column justify-content-center">
                           <h6 class="mb-0 text-sm">{{$projects->comic_name}}</h6>
                         </div>
@@ -356,33 +558,24 @@
                     <span class="text-sm px-1 font-weight-bold">{{$projects->talent_qc}}</span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <span class="text-sm px-1 font-weight-bold">{{$projects->number_of_panel}}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($projects->created_at)->translatedFormat('D, M Y | H:i A ') }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-sm px-1 font-weight-bold">{{ $projects->finish_date ? \Carbon\Carbon::parse($projects->finish_date)->translatedFormat('D, M Y | H:i A') : '-' }}
-                    </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    @if ($projects->status == 'Project Assign')
+                    @if ($projects->status == 'Waiting Talent')
+                        <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
+                    @elseif ($projects->status == 'Project Assign')
                         <span class="badge badge-sm bg-gradient-info">{{$projects->status}}</span>
-                    @elseif ($projects->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
-                        <span class="badge badge-sm .bg-gradient-attentions">{{$projects->status}}</span>
-                    @elseif ($projects->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
-                        <span class="badge badge-sm .bg-gradient-warning">{{$projects->status}}</span>
-                    @elseif ($projects->status == 'Revision 1' && 'Revision 2' && 'Revision 3')
-                        <span class="badge badge-sm .bg-gradient-danger">{{$projects->status}}</span>
+                    @elseif (in_array($projects->status, ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3']))
+                        <span class="badge badge-sm bg-gradient-warning">{{$projects->status}}</span>
+                    @elseif (in_array($projects->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
+                        <span class="badge badge-sm bg-gradient-success">{{$projects->status}}</span>
+                    @elseif (in_array($projects->status, ['Revision 1', 'Revision 2', 'Revision 3']))
+                        <span class="badge badge-sm bg-gradient-danger">{{$projects->status}}</span>
                     @elseif ($projects->status == 'Done')
-                        <span class="badge badge-sm .bg-gradient-success">{{$projects->status}}</span>
+                        <span class="badge badge-sm bg-gradient-success">{{$projects->status}}</span>
                     @else
-                        <span class="badge badge-sm .bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
+                        <span class="badge badge-sm bg-gradient-danger">{{$projects->status ?? 'undefined'}}</span>
                     @endif
-
                   </td>
                   <td class="align-middle">
-                    <a href="{{ route('talent#projectDetail', ['id' => encrypt($projects->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+                    <a href="{{ route('talentqc#ownprojectDetail', $projects->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
                         Detail
                     </a>
                   </td>
@@ -391,9 +584,109 @@
 
               </tbody>
             </table>
+            @endif
           </div>
+
         </div>
       </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6 mb-md-0 mb-4">
+        <div class="card mb-4 h-100">
+            <div class="card-header pb-0">
+                <h6>Projects QC Overview</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                    @if ($projectQcOverview->isEmpty())
+                    <div class="text-center d-flex align-items-center justify-content-center">
+                        <div class="mb-3">
+                            <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
+                            <p class="text-xs">There's no Project Need to Qc yet</p>
+                        </div>
+                    </div>
+                @else
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                <th class="text-secondary opacity-7"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($projectQcOverview->where('status', '!=', 'Done')->isEmpty())
+                            <tr>
+                                <td colspan="8" class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div>
+                                            <img src="{{ asset('/assets/img/ilustration/NoConnection.svg')}}" class="h-auto w-11" style="width: 110px; height: auto;">
+                                            <p class="text-xs">There are no ongoing projects</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @else
+                            @foreach ($projectQcOverview->sortByDesc('created_at') as $projectQcOverview)
+                                @if ($projectQcOverview->status != 'Done')
+                                    <tr>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-sm font-weight-bold">{{ optional($projectQcOverview->projectType)->name ?? 'N/A' }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                {{-- <div>
+                                                    <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
+                                                </div> --}}
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">{{$projectQcOverview->comic_name}}</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-sm font-weight-bold">{{$projectQcOverview->chapter_number}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-sm px-1 font-weight-bold">{{$projectQcOverview->talent ?? 'Still Waiting'}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            @if ($projectQcOverview->status == 'Waiting Talent')
+                                                <span class="badge badge-sm bg-gradient-warning">{{$projectQcOverview->status}}</span>
+                                            @elseif ($projectQcOverview->status == 'Project Assign')
+                                                <span class="badge badge-sm bg-gradient-info">{{$projectQcOverview->status}}</span>
+                                            @elseif (in_array($projectQcOverview->status, ['QC First Draft', 'QC Revise 1', 'QC Revise 2', 'QC Revise 3']))
+                                                <span class="badge badge-sm bg-gradient-warning">{{$projectQcOverview->status}}</span>
+                                            @elseif (in_array($projectQcOverview->status, ['First Draft Submitted', 'Revise 1 Submitted', 'Revise 2 Submitted', 'Revise 3 Submitted']))
+                                                <span class="badge badge-sm bg-gradient-success">{{$projectQcOverview->status}}</span>
+                                            @elseif (in_array($projectQcOverview->status, ['Revision 1', 'Revision 2', 'Revision 3']))
+                                                <span class="badge badge-sm bg-gradient-danger">{{$projectQcOverview->status}}</span>
+                                            @elseif ($projectQcOverview->status == 'Done')
+                                                <span class="badge badge-sm bg-gradient-success">{{$projectQcOverview->status}}</span>
+                                            @else
+                                                <span class="badge badge-sm bg-gradient-danger">{{$projectQcOverview->status ?? 'undefined'}}</span>
+                                            @endif
+                                        </td>
+                                        <td class="align-middle">
+                                            @if ($projectQcOverview->status != 'Waiting Talent')
+                                                <a href="{{ route('talentqc#projectDetail', $projectQcOverview->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+                                                    Detail
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
+                    @endif
+                </div>
+            </div>
+        </div>
+
     </div>
   </div>
 @endsection
@@ -453,177 +746,61 @@
     }
   </script>
 
-  <script>
-    window.onload = function() {
-      var ctx = document.getElementById("chart-bars").getContext("2d");
+<script>
+    const ctx2 = document.getElementById('radiarChart').getContext('2d');
 
-      new Chart(ctx, {
-        type: "bar",
+    new Chart(ctx2, {
+        type: 'doughnut',
         data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-            label: "Sales",
-            tension: 0.4,
-            borderWidth: 0,
-            borderRadius: 4,
-            borderSkipped: false,
-            backgroundColor: "#fff",
-            data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
-            maxBarThickness: 6
-          }, ],
+            labels: ['Project Assign', 'Project QC', 'Project Draft', 'Project Revision', 'Project Completed'],
+            datasets: [{
+                label: 'Project Status',
+                data: [{{$projectAssign}}, {{$projectQc}}, {{$projectDraft}}, {{$projectRevise}}, {{$projectCompleted}}],
+                backgroundColor: [
+                    '#f1c40f',
+                    '#d35400',
+                    '#2e86c1',
+                    '#c0392b',
+                    '#28b463'
+                ],
+                hoverOffset: 4
+            }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-              },
-              ticks: {
-                suggestedMin: 0,
-                suggestedMax: 500,
-                beginAtZero: true,
-                padding: 15,
-                font: {
-                  size: 14,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 1.4,  // Adjusted for better fit with bottom legend
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
                 },
-                color: "#fff"
-              },
+                legend: {
+                    position: 'bottom', // Changed from 'right' to 'bottom'
+                    labels: {
+                        boxWidth: 12,
+                        padding: 10,
+                        usePointStyle: false, // Makes legend items circular
+                        pointStyle: 'circle'
+                    },
+                    align: 'center', // Centers the legend items
+                    maxWidth: 400 // Controls the maximum width of the legend
+                }
             },
-            x: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false
-              },
-              ticks: {
-                display: false
-              },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 0,
+                    bottom: 20 // Added more bottom padding for legend
+                }
             },
-          },
-        },
-      });
-
-
-      var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-      var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-      gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-      gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-      gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-      var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-      gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-      gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-      gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
-
-      new Chart(ctx2, {
-        type: "line",
-        data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-              label: "Mobile apps",
-              tension: 0.4,
-              borderWidth: 0,
-              pointRadius: 0,
-              borderColor: "#cb0c9f",
-              borderWidth: 3,
-              backgroundColor: gradientStroke1,
-              fill: true,
-              data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-              maxBarThickness: 6
-
-            },
-            {
-              label: "Websites",
-              tension: 0.4,
-              borderWidth: 0,
-              pointRadius: 0,
-              borderColor: "#3A416F",
-              borderWidth: 3,
-              backgroundColor: gradientStroke2,
-              fill: true,
-              data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-              maxBarThickness: 6
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: true,
-                drawOnChartArea: true,
-                drawTicks: false,
-                borderDash: [5, 5]
-              },
-              ticks: {
-                display: true,
-                padding: 10,
-                color: '#b2b9bf',
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-              }
-            },
-            x: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-                borderDash: [5, 5]
-              },
-              ticks: {
-                display: true,
-                color: '#b2b9bf',
-                padding: 20,
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-              }
-            },
-          },
-        },
-      });
-    }
-  </script>
+            cutout: '50%'
+        }
+    });
+</script>
 @endpush
 

@@ -16,15 +16,22 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id(); // Primary Key
             $table->foreignId('user_id')
+            ->nullable()
             ->reference('id')
             ->on('users')
+            ->constrained()
+            ->onDelete('cascade');
+            $table->foreignId('project_type_id')
+            ->nullable()
+            ->reference('id')
+            ->on('project_types')
             ->constrained()
             ->onDelete('cascade');
             $table->string('comic_name');
             $table->integer('chapter_number');
             $table->string('talent_qc');
             $table->string('talent')->nullable();
-            $table->integer('number_of_panel');
+            $table->integer('number_of_panel')->nullable();
             $table->dateTime('finish_date')->nullable(); // Otomatis saat status "done"
             $table->string('file')->nullable();
             $table->string('status')->default('Waiting Talent');

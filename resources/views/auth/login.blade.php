@@ -1,5 +1,5 @@
-@section('title') Padma Community | Login @endsection 
-@extends('layouts.app') 
+@section('title') Padma Dashboard | Login @endsection
+@extends('layouts.app')
 
 @section('content')
 
@@ -11,10 +11,10 @@
                 <div class="absolute inset-0">
                     <img
                         class="object-cover object-top w-full h-full cover"
-                        src="{{ url('images/login-image.jpg')}}"
+                        src="{{ url('images/webtoon.jpg')}}"
                         alt=""/>
                 </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                {{-- <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div> --}}
 
                 <div class="absolute">
                     <div class="">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
 
             <div
@@ -44,18 +44,18 @@
                             </svg>
                         </button>
                     </div>
-                    
+
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
                             const toast = document.getElementById('toast-danger');
                             const closeButton = document.querySelector('[data-dismiss-target="#toast-danger"]');
-                    
+
                             // Show the toast with fade-in effect
                             setTimeout(() => {
                                 toast.classList.remove('opacity-0', 'translate-y-2');
                                 toast.classList.add('opacity-100', 'translate-y-0');
                             }, 100); // Delay to ensure the animation plays
-                    
+
                             // Hide toast on close button click
                             closeButton.addEventListener('click', () => {
                                 toast.classList.add('opacity-0', 'translate-y-2'); // Fade out animation
@@ -66,9 +66,9 @@
                         });
                     </script>
                     @endif
-                                      
 
-                    
+
+
                     <h3 class="text-3xl font-bold leading-tight text-black sm:text-3xl">Welcome Dashboard!👋</h3>
                     <p class="mt-2 text-base text-gray-600">Don’t have an account?
                         <a

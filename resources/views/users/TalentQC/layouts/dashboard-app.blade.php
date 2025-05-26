@@ -32,7 +32,6 @@
         </div>
     </main>
 
-    @include('components.fixed-plugin')
 
     <!-- Core JS Files -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>

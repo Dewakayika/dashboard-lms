@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Status;
+use App\Models\ProjectType;
 
 
 
@@ -17,7 +18,7 @@ class Project extends Model
 
     protected $fillable = [
         'admin_id', 'comic_name', 'chapter_number', 'talent_qc', 'talent',
-        'number_of_panel', 'finish_date', 'file', 'status'
+        'number_of_panel', 'finish_date', 'file', 'status', 'project_type_id'
     ];
 
     public function users(){
@@ -59,11 +60,23 @@ class Project extends Model
     {
         return $this->hasMany(QcRecords::class);
     }
-    
+    public function projectRevise()
+    {
+        return $this->hasMany(ProjectRevise::class);
+    }
+    public function complexities()
+    {
+        return $this->hasMany(ProjectComplexity::class);
+    }
+    public function projectComplexity()
+    {
+        return $this->hasMany(ProjectComplexity::class);
+    }
 
-
-
-
+    public function projectType()
+    {
+        return $this->belongsTo(ProjectType::class);
+    }
 
 
 }

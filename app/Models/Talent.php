@@ -14,14 +14,14 @@ class Talent extends Model
 
     protected $fillable = [
         'user_id',
+        'profile_photo',
         'full_name',
         'Address',
-        'Bank_Account',
-        'profile_photo',
         'phone_number',
         'gender',
         'date_of_birth',
         'id_card',
+        'bank_Account',
         'bank_name',
         'swift_code',
         'subjected_tax',

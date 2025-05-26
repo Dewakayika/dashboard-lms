@@ -1,4 +1,4 @@
-@extends('Users.Admin.layouts.dashboard-app')
+@extends('users.Admin.layouts.dashboard-app')
 
 @section('content')
     <section class="min-vh-100 mb-8">

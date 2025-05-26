@@ -9,7 +9,7 @@
                 <div class="absolute inset-0">
                     <img
                         class="object-cover object-top w-full h-full cover"
-                        src="{{ url('images/login-image.jpg')}}"
+                        src="{{ url('images/reset-password.jpg')}}"
                         alt=""/>
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>

@@ -13,7 +13,7 @@ class ProjectRecord extends Model
         'project_id',
         'user_id',
         'project_stage',
-        'number_of_panel',
+        'qc_message',
         'link_google_drive',
     ];
 

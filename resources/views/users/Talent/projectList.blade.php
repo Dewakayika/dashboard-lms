@@ -14,9 +14,10 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Type</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comic Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Episode Number</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent Qc</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Talent QC</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Panel</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Assign Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Finish Date</th>
@@ -25,57 +26,72 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($projectOverview as $projects )
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                            <div>
-                              <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
-                            </div>
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-sm">{{$projects->comic_name}}</h6>
-                            </div>
-                          </div>
-                      </td>
-                      <td class="align-middle text-center text-sm" >
-                        <span class="text-sm font-weight-bold">{{$projects->chapter_number}}</span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-sm px-1 font-weight-bold">{{$projects->talent_qc}}</span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-sm px-1 font-weight-bold">{{$projects->number_of_panel}}</span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($projects->created_at)->translatedFormat('D, M Y | H:i A ') }}</span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-sm px-1 font-weight-bold">{{ $projects->finish_date ? \Carbon\Carbon::parse($projects->finish_date)->translatedFormat('D, M Y | H:i A') : '-' }}
-                        </span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        @if ($projects->status == 'Project Assign')
-                            <span class="badge badge-sm bg-gradient-info">{{$projects->status}}</span>
-                        @elseif ($projects->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
-                            <span class="badge badge-sm .bg-gradient-attentions">{{$projects->status}}</span>
-                        @elseif ($projects->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
-                            <span class="badge badge-sm .bg-gradient-warning">{{$projects->status}}</span>
-                        @elseif ($projects->status == 'Revision 1' && 'Revision 2' && 'Revision 3')
-                            <span class="badge badge-sm .bg-gradient-danger">{{$projects->status}}</span>
-                        @elseif ($projects->status == 'Done')
-                            <span class="badge badge-sm .bg-gradient-success">{{$projects->status}}</span>
-                        @else
-                            <span class="badge badge-sm .bg-gradient-danger">{{$projects->status ?? 'undefine'}}</span>
-                        @endif
-                      </td>
-                      <td class="align-middle">
-                        <a href="{{ route('talent#projectDetail', ['id' => encrypt($projects->id)]) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
-                            Detail
-                        </a>
-                      </td>
-                    </tr>
-                    @endforeach
-
+                    @if ($projectOverview->isEmpty())
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="mb-3">
+                                        <img src="{{ asset('/assets/img/ilustration/NoDocuments.svg')}}" class="h-11 w-11">
+                                        <p class="text-xs">There's no Project yet</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @else
+                        @foreach ($projectOverview as $project)
+                            <tr>
+                                <td class="align-middle text-sm ps-4">
+                                    <span class="text-sm font-weight-bold">{{ optional($project->projectType)->name ?? 'N/A' }}</span>
+                                </td>
+                                <td>
+                                  <div class="d-flex px-2 py-1">
+                                      <div>
+                                        <img src="{{asset('/assets/img/small-logos/webtoon.png')}}" class="avatar avatar-sm me-3" alt="xd">
+                                      </div>
+                                      <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm">{{$project->comic_name}}</h6>
+                                      </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle text-center text-sm" >
+                                  <span class="text-sm font-weight-bold">{{$project->chapter_number}}</span>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                  <span class="text-sm px-1 font-weight-bold">{{$project->talent_qc}}</span>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                  <span class="text-sm px-1 font-weight-bold">{{$project->number_of_panel}}</span>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                  <span class="text-sm px-1 font-weight-bold">{{ \Carbon\Carbon::parse($project->created_at)->translatedFormat('D, M Y | H:i A ') }}</span>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                  <span class="text-sm px-1 font-weight-bold">{{ $project->finish_date ? \Carbon\Carbon::parse($project->finish_date)->translatedFormat('D, M Y | H:i A') : '-' }}
+                                  </span>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                  @if ($project->status == 'Project Assign')
+                                      <span class="badge badge-sm bg-gradient-info">{{$project->status}}</span>
+                                  @elseif ($project->status == 'QC First Draft' && 'QC Revise 1' && 'QC Revise 2' && 'QC Revise 3')
+                                      <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
+                                  @elseif ($project->status == 'First Draft Submitted' && 'Revise 1 Submitted' && 'Revise 2 Submitted' && 'Revise 3 Submitted')
+                                      <span class="badge badge-sm bg-gradient-warning">{{$project->status}}</span>
+                                  @elseif ($project->status == 'Revision 1' && 'Revision 2' && 'Revision 3')
+                                      <span class="badge badge-sm bg-gradient-danger">{{$project->status}}</span>
+                                  @elseif ($project->status == 'Done')
+                                      <span class="badge badge-sm bg-gradient-success">{{$project->status}}</span>
+                                  @else
+                                      <span class="badge badge-sm bg-gradient-danger">{{$project->status ?? 'undefine'}}</span>
+                                  @endif
+                                </td>
+                                <td class="align-middle">
+                                  <a href="{{ route('talent#projectDetail', $project->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View Details">
+                                      Detail
+                                  </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                   </tbody>
                 </table>
               </div>
