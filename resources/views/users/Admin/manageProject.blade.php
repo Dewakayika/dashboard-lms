@@ -25,14 +25,14 @@
                     <div class="w-full mx-auto  d-flex align-items-center justify-content-between">
                         <h6 class="text-weight-bolder">Project Overview</h6>
                         <div class="d-flex gap-2">
-                        <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                            <i class="fa-solid fa-plus text-white"></i>
-                            <span class="px-2">New Project</span>
-                        </a>
-                        <a class="badge badge-xs bg-secondary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
-                            <i class="fa-solid fa-plus text-white"></i>
-                            <span class="px-2">Upload CSV Project</span>
-                        </a>
+                            <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                <i class="fa-solid fa-plus text-white"></i>
+                                <span class="px-2">New Project</span>
+                            </a>
+                            <a class="badge badge-xs bg-secondary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
+                                <i class="fa-solid fa-plus text-white"></i>
+                                <span class="px-2">Upload CSV Project</span>
+                            </a>
                         </div>
                     </div>
                 </div>

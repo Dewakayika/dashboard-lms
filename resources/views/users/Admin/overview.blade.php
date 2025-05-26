@@ -196,14 +196,14 @@
           <div class="w-full mx-auto  d-flex align-items-center justify-content-between">
               <h6 class="text-weight-bolder">Project Offer</h6>
               <div class="d-flex gap-2">
-              <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                  <i class="fa-solid fa-plus text-white"></i>
-                  <span class="px-2">New Project</span>
-              </a>
-              <a class="badge badge-xs bg-secondary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
-                <i class="fa-solid fa-plus text-white"></i>
-                  <span class="px-2">Upload CSV Project</span>
-              </a>
+                <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                    <i class="fa-solid fa-plus text-white"></i>
+                    <span class="px-2">New Project</span>
+                </a>
+                <a class="badge badge-xs bg-secondary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
+                    <i class="fa-solid fa-plus text-white"></i>
+                    <span class="px-2">Upload CSV Project</span>
+                </a>
               </div>
           </div>
         </div>
@@ -581,7 +581,9 @@
         </div>
     </div>
   </div>
-  <!-- Modal Upload CSV -->
+
+
+<!-- Modal Upload CSV -->
 <div class="modal fade" id="uploadProjectModal" tabindex="-1" aria-labelledby="uploadProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
 <div class="modal-content rounded-3 shadow-lg">
