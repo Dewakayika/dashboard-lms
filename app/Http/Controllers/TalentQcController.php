@@ -501,7 +501,7 @@ class TalentQcController extends Controller
 
         // Ambil semua data projects dengan talent_qc sesuai user yang ter auth
         $projectQcOverview = Project::where('talent_qc', $user->name)
-            ->paginate(10);
+            ->get();
 
         return view('users.TalentQC.projectQcList')->with([
             'userData' => $user,

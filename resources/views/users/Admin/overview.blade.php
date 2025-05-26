@@ -195,10 +195,16 @@
         <div class="row">
           <div class="w-full mx-auto  d-flex align-items-center justify-content-between">
               <h6 class="text-weight-bolder">Project Offer</h6>
-              <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                  <i class="fa-solid fa-plus text-white"></i>
-                  <span class="px-2">New Project</span>
-              </a>
+              <div class="d-flex gap-2">
+                <a class="badge badge-xs bg-primary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                    <i class="fa-solid fa-plus text-white"></i>
+                    <span class="px-2">New Project</span>
+                </a>
+                <a class="badge badge-xs bg-secondary text-sm font-weight-bold mb-0 text-white hover:bg-secondary" href="# " data-bs-toggle="modal" data-bs-target="#uploadProjectModal">
+                    <i class="fa-solid fa-plus text-white"></i>
+                    <span class="px-2">Upload CSV Project</span>
+                </a>
+              </div>
           </div>
         </div>
       </div>
@@ -575,6 +581,221 @@
         </div>
     </div>
   </div>
+
+
+<!-- Modal Upload CSV -->
+<div class="modal fade" id="uploadProjectModal" tabindex="-1" aria-labelledby="uploadProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+<div class="modal-content rounded-3 shadow-lg">
+    <div class="modal-header border-0">
+        <h5 class="modal-title" id="uploadProjectModalLabel">Upload CSV File</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body px-4 pt-4">
+        <!-- Template Download Link -->
+        <div class="mb-3">
+            <p class="mb-2"><i class="fas fa-info-circle"></i> Download the CSV template first:</p>
+            <a href="https://docs.google.com/spreadsheets/d/1Mf_TQ22XeGZWQUBzRHu8n9p6ZnJJj4p_PKKWVaZJFtY/edit?usp=sharing"
+               target="_blank"
+               class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-download"></i> Download CSV Template
+            </a>
+        </div>
+
+        <!-- Form Upload CSV -->
+        <form id="csvUploadForm" action="{{ route('submit.csv') }}" method="POST" enctype="multipart/form-data" class="mb-4">
+            @csrf
+            <label for="csvFileInput" class="form-label fw-bold">Choose CSV File</label>
+            <input type="file" name="csv_file" class="form-control p-2 border-0 rounded-3 shadow-sm" id="csvFileInput" accept=".csv">
+            <button type="submit" class="btn btn-primary w-100 mt-3">Upload CSV</button>
+        </form>
+
+        <!-- Preview Table (Muncul setelah file dipilih) -->
+        <div id="previewTableOverview" class="d-none">
+            <h6 class="fw-bold">Preview Data</h6>
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Project Type</th>
+                        <th>Comic Name</th>
+                        <th>Chapter</th>
+                        <th>Talent QC</th>
+                        <th>Talent</th>
+                        <th>Panels</th>
+                        <th>Finish Date</th>
+                        <th>File</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="csvTableBody" class="table-responsive">
+                    <!-- Data akan dimasukkan lewat JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Table Management Object
+        const TableManager = {
+            // Constants
+            SELECTORS: {
+                projectTypeFilter: '#projectTypeFilter',
+                projectTypeSelect: '#project_type_id',
+                chapterField: '.chapter-field',
+                comicNameInput: '#comic_name',
+                csvFileInput: '#csvFileInput',
+                csvTableBody: '#csvTableBody',
+                previewTable: '#previewTableOverview',
+                tables: '.table'
+            },
+
+            // Initialize all table functionality
+            init: function() {
+                this.initProjectTypeFilter();
+                this.initProjectTypeSelect();
+                this.initCSVUpload();
+                this.setupTableScrolling();
+            },
+
+            // Setup scrollable tables
+            setupTableScrolling: function() {
+                const tables = document.querySelectorAll(this.SELECTORS.tables);
+                tables.forEach(table => {
+                    const wrapper = table.parentElement;
+                    if (!wrapper.style.maxHeight) {
+                        wrapper.style.maxHeight = '400px';
+                        wrapper.style.overflowY = 'auto';
+                    }
+
+                    const thead = table.querySelector('thead');
+                    if (thead) {
+                        thead.style.position = 'sticky';
+                        thead.style.top = '0';
+                        thead.style.backgroundColor = 'white';
+                        thead.style.zIndex = '1';
+                    }
+                });
+            },
+
+            // Project Type Filter functionality
+            initProjectTypeFilter: function() {
+                const filterSelect = document.querySelector(this.SELECTORS.projectTypeFilter);
+                if (filterSelect) {
+                    filterSelect.addEventListener('change', () => this.filterTables(filterSelect.value));
+                }
+            },
+
+            filterTables: function(selectedType) {
+                selectedType = selectedType.toLowerCase();
+                const tables = document.querySelectorAll(this.SELECTORS.tables);
+
+                tables.forEach(table => {
+                    const rows = table.querySelectorAll('tbody tr');
+                    let hasVisibleRows = false;
+
+                    rows.forEach(row => {
+                        const typeCell = row.querySelector('td:first-child');
+                        if (!typeCell) return;
+
+                        const projectType = typeCell.textContent.toLowerCase();
+                        const shouldShow = !selectedType || projectType.includes(selectedType);
+                        row.style.display = shouldShow ? '' : 'none';
+                        if (shouldShow) hasVisibleRows = true;
+                    });
+
+                    // Handle "no records" message
+                    const noRecordsRow = table.querySelector('tbody tr td[colspan]')?.closest('tr');
+                    if (noRecordsRow) {
+                        noRecordsRow.style.display = hasVisibleRows ? 'none' : '';
+                    }
+                });
+            },
+
+            // Project Type Select functionality
+            initProjectTypeSelect: function() {
+                const projectTypeSelect = document.querySelector(this.SELECTORS.projectTypeSelect);
+                const chapterField = document.querySelector(this.SELECTORS.chapterField);
+                const comicNameInput = document.querySelector(this.SELECTORS.comicNameInput);
+
+                if (projectTypeSelect && chapterField && comicNameInput) {
+                    chapterField.style.display = 'none';
+
+                    projectTypeSelect.addEventListener('change', function() {
+                        const selectedType = this.options[this.selectedIndex];
+                        if (selectedType.value) {
+                            chapterField.style.display = 'block';
+                            const isComicType = selectedType.text.toLowerCase().includes('comic') ||
+                                              selectedType.text.toLowerCase().includes('webtoon');
+                            comicNameInput.placeholder = isComicType ?
+                                `Enter comic name (e.g. ${selectedType.text} Chapter)` :
+                                'Enter project name';
+                        } else {
+                            chapterField.style.display = 'none';
+                        }
+                    });
+                }
+            },
+
+            // CSV Upload functionality
+            initCSVUpload: function() {
+                const csvInput = document.querySelector(this.SELECTORS.csvFileInput);
+                if (csvInput) {
+                    csvInput.addEventListener('change', (event) => this.handleCSVUpload(event));
+                }
+            },
+
+            handleCSVUpload: function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const text = e.target.result;
+                    const rows = text.split('\n').map(row => row.split(',').map(cell => cell.trim()));
+                    if (rows.length > 1) {
+                        this.populateCSVTable(rows.slice(1)); // Skip header row
+                    }
+                };
+                reader.readAsText(file);
+            },
+
+            populateCSVTable: function(rows) {
+                const tableBody = document.querySelector(this.SELECTORS.csvTableBody);
+                const previewTable = document.querySelector(this.SELECTORS.previewTable);
+
+                if (tableBody && previewTable) {
+                    tableBody.innerHTML = '';
+                    rows.forEach(row => {
+                        if (row.length >= 8) {
+                            const [projectType, comicName, chapterNumber, talentQc, talent, panels, finishDate, file, status] = row;
+                            tableBody.innerHTML += `
+                                <tr>
+                                    <td>${projectType || 'N/A'}</td>
+                                    <td>${comicName || 'N/A'}</td>
+                                    <td>${chapterNumber || 'N/A'}</td>
+                                    <td>${talentQc || 'N/A'}</td>
+                                    <td>${talent || 'N/A'}</td>
+                                    <td>${panels || '0'}</td>
+                                    <td>${finishDate || '-'}</td>
+                                    <td><a href="${file || '#'}" target="_blank">${file ? 'File Link' : 'No Link'}</a></td>
+                                    <td>${status || 'Done'}</td>
+                                </tr>`;
+                        }
+                    });
+                    previewTable.classList.remove('d-none');
+                    this.setupTableScrolling(); // Ensure new table is scrollable
+                }
+            }
+        };
+
+        // Initialize all table functionality
+        TableManager.init();
+    });
+</script>
 
 
 
