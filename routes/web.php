@@ -15,6 +15,8 @@ use App\Http\Controllers\AdditionalInfoController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TalentQcController;
 use App\Http\Controllers\EwaletController;
+use App\Http\Controllers\CompanyRegisterController;
+
 use App\Model\Project;
 
 
@@ -72,13 +74,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
            return redirect()->route('talentqc#index');
         } else if (Auth::user()->role == 'talentqc') {
             return redirect()->route('talentqc#index');
-
         }else {
             return view('auth.login');
         }
     }
 })->name('dashboard');
 
+
+    Route::get('/register/company', [CompanyRegisterController::class, 'showRegistrationForm'])->name('company#register');
+    Route::post('/register/company/store', [CompanyRegisterController::class, 'register'])->name('company#registerStore');
 
 //Talent
 Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () {
@@ -138,6 +142,7 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
 
     Route::get('/e-walet', [EwaletController::class, 'indexTalentQc'])->name('talentqc#ewalet');
     Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talentqc#withdrawRequest');
+
 
 
 });
@@ -226,6 +231,8 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::post('/admin/validate-password', [AdminController::class, 'validatePassword'])->name('admin#validatePassword');
 
     Route::get('/profile', [AdminController::class, 'adminProfile'])->name('admin#profile');
+
+
 
 });
 

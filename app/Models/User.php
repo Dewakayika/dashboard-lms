@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'registration_code',
+        'company_id'
     ];
 
     /**
@@ -151,6 +152,11 @@ class User extends Authenticatable
     public function projectRecaps()
     {
         return $this->hasMany(ProjectRecap::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
 }

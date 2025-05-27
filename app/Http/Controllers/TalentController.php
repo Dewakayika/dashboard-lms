@@ -43,8 +43,6 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\CarbonInterval;
 
 
-
-
 class TalentController extends Controller
 {
     //
