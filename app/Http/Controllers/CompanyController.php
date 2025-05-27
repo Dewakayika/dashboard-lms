@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Notification;
+
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class CompanyRegisterController extends Controller
+class CompanyController extends Controller
 {
     public function showRegistrationForm()
     {
@@ -98,7 +101,7 @@ class CompanyRegisterController extends Controller
             // Login the user
             Auth::login($user);
 
-            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil! Selamat datang di dashboard.');
+            return redirect()->route('/')->with('success', 'Registrasi berhasil! Selamat datang di dashboard.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -112,4 +115,20 @@ class CompanyRegisterController extends Controller
                 ->withInput();
         }
     }
+
+    // Index
+    public function index()
+    {
+        $user = User::where('id', Auth::id())->first();
+        $notification = Notification::where('email', $user->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
+        return view('users.CompanyAdmin.index', [
+            'user' => $user,
+            'notification' => $notification
+        ]);
+    }
+
+
 }

@@ -10,8 +10,7 @@
             <img src="{{url('images/padma-black.png')}}" alt="">
         </div>
         <div class="profile-desc">
-            <h3>{{ $adminData->name }}</h3>
-            <p>{{ $adminData->email }}</p>
+
         </div>
     </div>
     <div class="nav">

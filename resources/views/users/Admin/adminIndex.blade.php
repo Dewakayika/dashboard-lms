@@ -1,8 +1,10 @@
-<link rel = "stylesheet" href = "{{ asset('css/admin-index.css') }}" > @section('title')
+<link rel = "stylesheet" href = "{{ asset('css/admin-index.css') }}" >
+
+@section('title')
 Admin Dashboard
 @endsection
 
-@extends('Users.Admin.layouts.app')
+@extends('users.Admin.layouts.app')
 
 @section('content')
 

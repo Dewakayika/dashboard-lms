@@ -4,9 +4,6 @@
     <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-
     <link rel="apple-touch-icon" sizes="76x76" href="{{ url('images/padma-black.png') }}">
     <link rel="icon" href="{{ url('images/padma-black.png') }}" type="image/png">
     <title>
@@ -28,7 +25,7 @@
     <body class="g-sidenav-show  bg-gray-100 {{ (\Request::is('rtl') ? 'rtl' : (Request::is('virtual-reality') ? 'virtual-reality' : '')) }} ">
         @yield('auth')
 
-        <!--   Core JS Files   -->
+    <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
