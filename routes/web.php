@@ -15,23 +15,16 @@ use App\Http\Controllers\AdditionalInfoController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TalentQcController;
 use App\Http\Controllers\EwaletController;
-use App\Http\Controllers\CompanyRegisterController;
+use App\Http\Controllers\CompanyController;
 
 use App\Model\Project;
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
     return view('auth.login');
 })->name('main');
 
@@ -54,35 +47,32 @@ Route::get('/talent-cv', function () {
     return view('cv.talent_cv');
 });
 
-
-
-
-
-Route::post('/talent-cv/submit', [TalentCVController::class, 'store'])->name('talent#cvSubmit');
+// General Information
+Route::get('/register/company', [CompanyController::class, 'showRegistrationForm'])->name('company#register');
+Route::post('/register/company/store', [CompanyController::class, 'register'])->name('company#registerStore');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     if (Auth::check()) {
-
         if (Auth::user()->role == 'talent') {
             return redirect()->route('talent#index');
-        } else if (Auth::user()->role == 'intern') {
-            return redirect()->route('intern#index');
         } else if (Auth::user()->role == 'admin') {
             return redirect()->route('admin#index');
         } else if (Auth::user()->role == 'talent_qc') {
            return redirect()->route('talentqc#index');
         } else if (Auth::user()->role == 'talentqc') {
             return redirect()->route('talentqc#index');
+        } else if (Auth::user()->role == 'company'){
+            return redirect()->route('company#index');
         }else {
-            return view('auth.login');
+            return view('dashboard');
         }
     }
 })->name('dashboard');
 
-
-    Route::get('/register/company', [CompanyRegisterController::class, 'showRegistrationForm'])->name('company#register');
-    Route::post('/register/company/store', [CompanyRegisterController::class, 'register'])->name('company#registerStore');
+Route::group(['middleware' => 'role:company', 'prefix' => 'company'], function () {
+    Route::get('/', [CompanyController::class, 'index'])->name('company#index');
+});
 
 //Talent
 Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () {
@@ -90,26 +80,17 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::get('/project/Overview',[TalentController::class, 'projectOverview'])->name('talent#projectOverview');
     Route::get('/project/{id}/detail', [TalentController::class, 'detail'])->name('talent#projectDetail');
     Route::post('/project-record/store', [TalentController::class, 'projectRecord'])->name('talent#projectRecods');
-
     Route::get('/additional/data-talent',[TalentController::class, 'additionalInfo'])->name('talent#additionalData');
     Route::post('/additional/submit',[TalentController::class, 'submitData'])->name('talent#submitData');
     Route::post('/projects/{projectId}/apply', [TalentController::class, 'apply'])->name('talent#applyProject');
     Route::post('/sop/store', [TalentController::class, 'storeSop'])->name('talent#storeSop');
-    // Review
     Route::post('/review/store', [TalentController::class, 'projectReview'])->name('talent#storeReview');
-
-    // Route Profile
     Route::get('/profile', [TalentController::class, 'profile'])->name('talent#profile');
-
     Route::get('/e-walet', [EwaletController::class, 'indexTalent'])->name('talent#ewalet');
     Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talent#withdrawRequest');
-
     Route::post('/talents/update/profile', [TalentController::class, 'updateProfile'])->name('talent#update');
-
     Route::post('/update-profile-image', [TalentController::class, 'updateProfileImage'])->name('updateProfileImage');
     Route::get('/waiting-approval', [TalentContoller::class, 'waitingApproval'])->name('talent#waitingApproval');
-
-
     Route::post('talent/active/{id}', [TalentController::class, 'activeAccount'])->name('talent#activeAccount');
 });
 
@@ -128,99 +109,61 @@ Route::group(['middleware' => 'role:talent_qc', 'prefix' => 'talent_qc'], functi
     Route::post('/project-record/store', [TalentQcController::class, 'projectRecord'])->name('talentqc#projectRecods');
     Route::post('/review/store', [TalentQcController::class, 'projectReview'])->name('talentqc#storeReview');
     Route::post('/review', [TalentQcController::class, 'projectReviewTalent'])->name('talentqc#ReviewTalent');
-
     Route::post('/talents/update/profile', [TalentQcController::class, 'updateProfile'])->name('talentqc#update');
-
     Route::get('/profile', [TalentQcController::class, 'profile'])->name('talentqc#profile');
-
     // Route to store sop
     Route::post('/sop/store', [TalentQcController::class, 'storeSop'])->name('talentqc#storeSop');
     Route::post('/qc-records/store', [TalentQcController::class, 'storeQcRecords'])->name('talentqc#storeQcRecords');
-
     // Update Status Project Log
     Route::post('/project-log/store', [TalentQcController::class, 'qcstoreProjectRecord'])->name('talentqc#storeProjectLog');
-
     Route::get('/e-walet', [EwaletController::class, 'indexTalentQc'])->name('talentqc#ewalet');
     Route::post('/withdraw/request', [EwaletController::class, 'requestWithdraw'])->name('talentqc#withdrawRequest');
-
-
-
 });
 
 // Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('/community', [AdminController::class, 'community'])->name('admin#community'); //Admin Dashboard
     Route::get('/', [AdminController::class, 'index'])->name('admin#index'); //Admin Dashboard
-
     Route::get('/adminProfile', [AdminController::class, 'adminProfile'])->name('admin#adminProfile'); //Admin Profile
     Route::get('/editProfile', [AdminController::class, 'editProfile'])->name('admin#editProfile'); //edit profile
     Route::post('/updateAdmin', [AdminController::class, 'updateAdmin'])->name('admin#updateAdmin'); //Update profile function
     Route::get('deleteFeedback/{id}', [AdminController::class, 'deleteFeedback'])->name('admin#deleteFeedback'); //Delete Feedback
     Route::get('editFeedback/{id}', [AdminController::class, 'editFeedback'])->name('admin#editFeedback'); // Edit Feedback
     Route::post('updateFeedback/{id}', [AdminController::class, 'updateFeedback'])->name('admin#updateFeedback'); //Update Feedback
-
     Route::get('/talent-cv', [AdminController::class, 'talentCV'])->name('admin#talentCVList');
     Route::get('deleteCV/{id}', [AdminController::class, 'deleteCV'])->name('admin#deleteCV');
     Route::post('/cv/decline/{id}', [AdminController::class, 'declineCV'])->name('cv#decline');
     Route::post('/approve-cv/{id}', [AdminController::class, 'approveCV'])->name('approveCV');
-
     Route::post('/admin/send-invitation/{id}', [AdminController::class, 'sendInvitationToUser'])->name('sendInvitationToUser');
     Route::post('/booking/{id}', [AdminController::class, 'booking'])->name('booking.submit');
-
     Route::get('/admin/user/{id}/submissions', [AdminController::class, 'getUserSubmissions'])->name('admin.user.submissions');
-
     Route::get('/create-project', [AdminController::class, 'createProject'])->name('admin#createNewProject');
     Route::post('/projects', [AdminController::class, 'storeProject'])->name('projects#store');
-
     // Manage Project
     Route::get('/manage-project', [AdminController::class, 'projectOverview'])->name('admin#projectOverview');
     Route::get('/project/{id}/detail', [AdminController::class, 'detail'])->name('admin#projectDetail');
     Route::post('/project-revise', [AdminController::class, 'storeProjectRevise'])->name('admin#storeProjectRevise');
     // Project Done
     Route::post('/project-done/{id}', [AdminController::class, 'storeProjectDone'])->name('admin#storeProjectDone');
-
     Route::get('/time-statistic', [AdminController::class, 'projectTimeStatistic'])->name('admin#timeStatistic');
-
     // Delete project route
     Route::delete('/projects/{id}/delete', [AdminController::class, 'deleteProject'])->name('admin.deleteProject');
-
     // Update project route
     Route::put('/projects/{id}', [AdminController::class, 'updateProject'])->name('admin.updateProject');
-
     // Profile Detail User ID
     Route::get('/profile/{id}', [AdminController::class, 'profileUser'])->name('admin#profileDetailUser');
-
     Route::post('/admin/approve-user/{id}', [AdminController::class, 'approveUser'])->name('admin.approveUser');
     Route::post('/admin/decline-user/{id}', [AdminController::class, 'declineUser'])->name('admin.declineUser');
     Route::post('/csv/store', [AdminController::class, 'submitCSV'])->name('submit.csv');
-
     Route::post('/admin/store-project-type', [AdminController::class, 'storeProjectType'])->name('admin.storeProjectType');
     Route::delete('/admin/delete-project-type/{id}', [AdminController::class, 'deleteProjectType'])->name('admin.deleteProjectType');
     Route::put('/admin/update-project-type/{id}', [AdminController::class, 'updateProjectType'])->name('admin.updateProjectType');
-
     Route::put('/revise/{id}', [AdminController::class, 'updateRevise'])->name('admin.updateRevise');
     Route::delete('/revise/{id}', [AdminController::class, 'deleteRevise'])->name('admin.deleteRevise');
-
     Route::get('/userlist', [AdminController::class, 'listUser'])->name('admin#listUser'); //User List
     Route::get('deleteUser/{id}', [AdminController::class, 'deleteUser'])->name('admin#deleteUser'); //Delete User
     Route::get('editUser/{id}', [AdminController::class, 'editUser'])->name('admin#editUser'); // Edit User
     Route::post('updateUser/{id}', [AdminController::class, 'updateUser'])->name('admin#updateUser'); //Update User
-
-    Route::get('/meallist', [AdminController::class, 'listMeal'])->name('admin#listMeal'); //Meal List
-    Route::get('deleteMeal/{id}', [AdminController::class, 'deleteMeal'])->name('admin#deleteMeal'); //Delete Meal
-    Route::get('editMeal/{id}', [AdminController::class, 'editMeal'])->name('admin#editMeal'); //Edit Meal
-    Route::post('updateMeal/{id}', [AdminController::class, 'updateMeal'])->name('admin#updateMeal'); //Update Meal
-
-    Route::get('/talentlist', [AdminController::class, 'listTalent'])->name('admin#listTalent'); //Partner List
-    Route::get('deletePartner/{id}', [AdminController::class, 'deletePartner'])->name('admin#deletePartner'); //Partner Delete
-    Route::get('editPartner/{id}', [AdminController::class, 'editPartner'])->name('admin#editPartner'); //Edit partner
-    Route::post('updatePartner/{id}', [AdminController::class, 'updatePartner'])->name('admin#updatePartner'); //Update Partner
-
-    Route::get('/internlist', [AdminController::class, 'listIntern'])->name('admin#listIntern'); //Member List
-    Route::get('deleteMember/{id}', [AdminController::class, 'deleteMember'])->name('admin#deleteMember'); //Member Delete
-    Route::get('editMember/{id}', [AdminController::class, 'editMember'])->name('admin#editMember'); //Edit Member
-    Route::post('updateMember/{id}', [AdminController::class, 'updateMember'])->name('admin#updateMember'); //Update Member
-
     Route::get('/admin/roles/create', [AdminController::class, 'createRole'])->name('admin#createRole');
     Route::post('/admin/roles', [AdminController::class, 'store'])->name('admin#storeRole');
     Route::get('deleteRole/{id}', [AdminController::class, 'deleteRole'])->name('admin#deleteRole');
@@ -229,52 +172,6 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
     Route::get('/ewalletRequest', [EwaletController::class, 'ewalletRequest'])->name('admin#ewalletRequest');
     Route::post('/admin/approve-withdraw', [EwaletController::class, 'approveWithdraw'])->name('admin#approveWithdraw');
     Route::post('/admin/validate-password', [AdminController::class, 'validatePassword'])->name('admin#validatePassword');
-
     Route::get('/profile', [AdminController::class, 'adminProfile'])->name('admin#profile');
-
-
-
-});
-
-// Member
-Route::group(['middleware' => 'role:intern', 'prefix' => 'intern'], function () {
-    Route::get('/', [InternController::class, 'index'])->name('intern#index'); //Member dashboard
-    Route::get('/additional/data-intern',[InternController::class, 'additionalInfo'])->name('intern#additionalData');
-    Route::post('/additional/submit', [InternController::class, 'submitForm'])->name('intern#submitData');
-
-    Route::get('/internProfile', [InternController::class, 'profile'])->name('intern#internProfile');
-    Route::post('/update/profile', [InternController::class, 'updateIntern'])->name('intern#editIntern');
-    Route::post('/update/profile-picture', [InternController::class, 'updateProfilePicture'])->name('intern#updateProfilePicture');
-    Route::post('/update-progress', [CourseController::class, 'updateProgress'])->name('update.progress');
-    Route::delete('/submissions/{id}', [InternController::class, 'destroy'])->name('submissions#destroy');
-
-
-
-    // Route untuk menyimpan submission course Chapter Intro
-    Route::get('/course/introduction', [InternController::class, 'intro'])->name('course#introduction');
-    Route::post('/submission-course/intro', [InternController::class, 'store'])->name('submission_course.store');
-
-
-    // Route untuk menyimpan submission course Chapter 1
-    Route::get('/course/basic-webtoon', [InternController::class, 'basicWebtoon'])->name('course#basic');
-    Route::post('/submission-course/basic-webtoon', [InternController::class, 'storeBasicWebtoon'])->name('submission#basicWebtoon');
-
-
-
-    Route::get('/course/basic-sketchup', [InternController::class, 'basicSketchup'])->name('course#basicSketchup');
-    Route::get('/course/sketchup-photoshop', [InternController::class, 'sketchupPhotoshop'])->name('course#sketchupPhotoshop');
-
-
-    Route::get('/course/advance-tool', [InternController::class, 'advanceTool'])->name('course#advanceTool');
-    Route::get('/course/standard-industry', [InternController::class, 'industryPractise'])->name('course#industrypractise');
-    Route::get('/course/snaptoon', [InternController::class, 'snaptoon'])->name('course#snaptoon');
-
-
-    // Route to get Assiignment submission Voter
-    Route::get('/gallery', [InternController::class, 'gallery'])->name('gallery#submission');
-    Route::post('/gallery/vote/{submission}', [InternController::class, 'storeVote'])->name('vote#submit');
-
-
-
 });
 
