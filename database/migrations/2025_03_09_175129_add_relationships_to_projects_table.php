@@ -14,22 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            // Project Type relationship
-            $table->foreignId('project_type_id')->nullable()->constrained('project_types')->onDelete('set null');
-
             // User relationships
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
 
-            // Project metadata
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('due_date')->nullable();
-            $table->string('status')->default('pending');
-            $table->integer('priority')->default(0);
-
-            // Project progress
-            $table->integer('progress')->default(0);
-            $table->timestamp('completed_at')->nullable();
+            // The following columns are removed because they already exist in the projects table:
+            // $table->timestamp('start_date')->nullable();
+            // $table->timestamp('due_date')->nullable();
+            // $table->string('status')->default('pending');
+            // $table->integer('priority')->default(0);
+            // $table->integer('progress')->default(0);
+            // $table->timestamp('completed_at')->nullable();
         });
     }
 

@@ -21,74 +21,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->create([
-            'id' => '1',
-            'name' => 'Intern',
-            'role' => 'intern',
-            'email' => 'intern@gmail.com',
-            'password' => Hash::make('123123'),
-            'registration_code' => 'PADMA',
-        ]);
-
-        Intern::factory()->create();
-
-        User::factory()->create([
-            'id' => '2',
-            'name' => 'Talent',
-            'role' => 'talent',
-            'email' => 'talent@gmail.com',
-            'password' => Hash::make('123123'),
-            'registration_code' => 'PADMA',
-        ]);
-
-        Talent::factory()->create();
-
         $this->call([
-            ProjectTypeSeeder::class,
+            UsersTableSeeder::class,
         ]);
-
-        User::factory()->create([
-            'id' => '3',
-            'name' => 'Admin',
-            'role' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('123123'),
-            'registration_code' => 'admin',
-        ]);
-
-        Admin::factory()->create();
-
-        User::factory()->create([
-            'id' => '4',
-            'name' => 'Talent Qc',
-            'role' => 'talent_qc',
-            'email' => 'talentqc@gmail.com',
-            'password' => Hash::make('123123'),
-            'registration_code' => 'admin',
-        ]);
-
-        TalentQc::factory()->create();
-
-        User::factory()->create([
-            'id' => '5',
-            'name' => 'Talent',
-            'role' => 'talent2',
-            'email' => 'talent2@gmail.com',
-            'password' => Hash::make('123123'),
-            'registration_code' => 'PADMA',
-        ]);
-
-        Talent::factory()->create();
-
-        User::factory()->create([
-            'id' => '6',
-            'name' => 'Talent',
-            'role' => 'talent3',
-            'email' => 'talent3@gmail.com',
-            'password' => Hash::make('123123'),
-            'registration_code' => 'PADMA',
-        ]);
-
-        Talent::factory()->create();
     }
 }

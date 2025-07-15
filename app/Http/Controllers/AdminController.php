@@ -55,9 +55,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 
-
-
-
 class AdminController extends Controller
 {
     public function index(){
@@ -792,65 +789,6 @@ class AdminController extends Controller
         return view('users.Admin.updatePartner')->with(['editPartner' => $partner_data]);
     }
 
-    // Admin Update Partner
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePartner(Request $request, $id)
-    {
-        $update_partner = $this->requestUpdatePartner($request);
-        Partner::where('id', $id)->update($update_partner);
-        return redirect()->route('admin#listPartner')->with(['partnerUpdated' => 'Partner Has Been Updated Successfully!']);
-    }
-    private function requestUpdatePartner($request)
-    {
-        $array = [
-            'partner_organization' => $request->partner_organization,
-            'partnership_timeline' => $request->partnership_timeline,
-            'updated_at' => Carbon::now()
-        ];
-        return $array;
-    }
-
-    // Member Role
-    public function listIntern()
-    {
-        $intern_data = Intern::paginate(10);
-        return view('users.Admin.listMember')->with(['internData' => $intern_data]);
-    }
-
-    // Admin Delete Member
-    public function deleteMember($id)
-    {
-        User::where('id', $id)->delete();
-        return back()->with(['memberDeleted' => 'Member Has Been Deleted Successfully!!!']);
-    }
-
-    // Admin Edit Member
-    public function editMember($id)
-    {
-        $member_data = Member::where('id', $id)->first();
-        return view('users.Admin.updateMember')->with(['editMember' => $member_data]);
-    }
-
-    // Admin Update Member
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateMember(Request $request, $id)
-    {
-        $update_member = $this->requestUpdateMember($request);
-        Member::where('id', $id)->update($update_member);
-        return redirect()->route('admin#listMember')->with(['memberUpdated' => 'Member Has Been Updated Successfully!']);
-    }
     private function requestUpdateMember($request)
     {
         $array = [
@@ -900,62 +838,6 @@ class AdminController extends Controller
     }
 
 
-    // Admin Delete User
-    public function deleteCV($id)
-    {
-        TalentCV::where('id', $id)->delete();
-        return back()->with(['CVDeleted' => 'Talent CV Has Been Deleted Successfully!']);
-    }
-
-
-    public function declineCV($id){
-
-        $cv = TalentCV::find($id);
-
-        if ($cv) {
-            // Ambil email dari data TalentCV
-            $userEmail = $cv->email;
-            $userName = $cv->name;
-
-            // Kirim email penolakan
-            Mail::to($userEmail)->send(new DeclineEmail($userName));
-
-            $cv->status = 'decline';
-            $cv->save();
-
-
-            return redirect()->back()->with(['successCV' => 'CV declined and user notified.']);
-        }
-
-        return redirect()->back()->with(['errorCV' => 'CV not found.']);
-
-    }
-
-    public function approveCV(Request $request, $id)
-    {
-        // Validasi kode registrasi
-        $request->validate([
-            'registration_code' => 'required|exists:roles,registration_code',
-        ]);
-
-        // Ambil data CV berdasarkan ID
-        $cv = TalentCV::find($id);
-
-        if ($cv) {
-            // Update status menjadi approved
-            $cv->status = 'approve';
-            $cv->save();
-
-
-            $registrationCode = $request->input('registration_code');
-
-            Mail::to($cv->email)->send(new ApproveEmail($registrationCode));
-
-            return redirect()->back()->with(['successCV' =>'CV approved, registration code sent to user.']);
-        }
-
-        return redirect()->back()->with(['errorCV' => 'CV not found.']);
-    }
 
 
     public function booking(Request $request, $id)

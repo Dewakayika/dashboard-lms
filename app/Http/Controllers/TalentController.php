@@ -95,7 +95,7 @@ class TalentController extends Controller
 
         // Cek apakah pengguna memiliki data Talent
         if (!Talent::where('user_id', $user->id)->exists()) {
-            return view('users.Partner.register-talent');
+            return view('users.Talent.register-talent');
         }
 
         if (!Talent::where('user_id', $user->id)
@@ -821,6 +821,25 @@ class TalentController extends Controller
         // Return back with success message
         return redirect()->back()->with('success', 'Profile updated successfully');
     }
+
+    // Project Tracking
+    public function projectTracking()
+    {
+        // User Data
+        $userData = Auth::user();
+
+        // Project Data
+        $projectData = Project::where('talent', $userData->name)->get();
+
+        // Notification
+        $notification = Notification::where('email', $userData->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+
+        return view('users.Talent.projectTracking', compact('userData', 'projectData', 'notification'));
+    }
+
+
 
 
     }

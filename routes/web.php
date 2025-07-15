@@ -48,8 +48,10 @@ Route::get('/talent-cv', function () {
 });
 
 // General Information
+
 Route::get('/register/company', [CompanyController::class, 'showRegistrationForm'])->name('company#register');
 Route::post('/register/company/store', [CompanyController::class, 'register'])->name('company#registerStore');
+
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
@@ -72,6 +74,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::group(['middleware' => 'role:company', 'prefix' => 'company'], function () {
     Route::get('/', [CompanyController::class, 'index'])->name('company#index');
+    Route::get('/userlist', [CompanyController::class, 'listUser'])->name('company#listUser'); //User List
+
 });
 
 //Talent
@@ -92,6 +96,7 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
     Route::post('/update-profile-image', [TalentController::class, 'updateProfileImage'])->name('updateProfileImage');
     Route::get('/waiting-approval', [TalentContoller::class, 'waitingApproval'])->name('talent#waitingApproval');
     Route::post('talent/active/{id}', [TalentController::class, 'activeAccount'])->name('talent#activeAccount');
+    Route::get('/project-tracking', [TalentController::class, 'projectTracking'])->name('talent#projectTracking');
 });
 
 //TalentQc
