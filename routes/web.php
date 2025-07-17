@@ -107,6 +107,14 @@ Route::group(['middleware' => 'role:talent', 'prefix' => 'talent'], function () 
 
 
     Route::post('talent/active/{id}', [TalentController::class, 'activeAccount'])->name('talent#activeAccount');
+
+    Route::get('/project-tracing', [TalentController::class, 'projectTracing'])->name('talent#projectTracing');
+    Route::post('/project-tracing/start', [TalentController::class, 'startTracing']);
+    Route::post('/project-tracing/{id}/pause', [TalentController::class, 'pauseTracing']);
+    Route::post('/project-tracing/{id}/resume', [TalentController::class, 'resumeTracing']);
+    Route::post('/project-tracing/{id}/rest', [TalentController::class, 'restTracing']);
+    Route::post('/project-tracing/{id}/end', [TalentController::class, 'endTracing']);
+    Route::get('/project-tracing/calendar', [TalentController::class, 'getTracingCalendar']);
 });
 
 //TalentQc

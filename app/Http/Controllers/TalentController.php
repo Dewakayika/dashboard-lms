@@ -27,6 +27,7 @@ use App\Models\TalentProject;
 use App\Models\TalentProjectReview;
 use App\Models\TalentSop;
 use App\Models\ProjectRecap;
+use App\Models\ProjectTracing;
 
 use Illuminate\Support\Facades\Crypt;
 
@@ -823,6 +824,143 @@ class TalentController extends Controller
         // Return back with success message
         return redirect()->back()->with('success', 'Profile updated successfully');
     }
+
+    // Project Tracing
+    public function projectTracing()
+    {
+        // User Data
+        $userData = Auth::user();
+
+        // Notification
+        $notification = Notification::where('email', $userData->email)
+        ->orWhere('notif_type', 'urgent')
+        ->get();
+        // Only fetch active session (not ended)
+        $currentTracing = \App\Models\ProjectTracing::where('user_id', $userData->id)
+            ->whereIn('status', ['working', 'paused', 'resting'])
+            ->latest('start_time')
+            ->first();
+        $elapsedSeconds = 0;
+        if ($currentTracing && in_array($currentTracing->status, ['working', 'paused', 'resting'])) {
+            $elapsedSeconds = now()->diffInSeconds($currentTracing->start_time);
+        }
+        // Filtering for recap
+        $selectedMonth = request('month', now()->month);
+        $selectedYear = request('year', now()->year);
+        // Fetch ended tracing sessions for recap, filtered and newest first
+        $endedRecaps = \App\Models\ProjectTracing::where('user_id', $userData->id)
+            ->where('status', 'ended')
+            ->whereYear('date', $selectedYear)
+            ->whereMonth('date', $selectedMonth)
+            ->orderBy('date', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        // For year dropdown
+        $availableYears = \App\Models\ProjectTracing::where('user_id', $userData->id)
+            ->selectRaw('DISTINCT YEAR(date) as year')
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+        return view('users.Talent.projectTracking', compact('userData', 'notification', 'currentTracing', 'elapsedSeconds', 'endedRecaps', 'availableYears'));
+    }
+
+    // Project Tracing API Endpoints
+    public function startTracing(Request $request)
+    {
+        $tracing = ProjectTracing::create([
+            'user_id' => Auth::id(),
+            'start_time' => now(),
+            'status' => 'working',
+            'date' => now()->toDateString(),
+            'pause_count' => 0,
+            'rest_count' => 0,
+            'pause_logs' => [],
+            'rest_logs' => [],
+            'session_logs' => [['event' => 'start', 'time' => now()]],
+        ]);
+        return redirect()->back()->with('success', 'Tracing started successfully');
+    }
+
+    public function pauseTracing(Request $request, $id)
+    {
+        $tracing = ProjectTracing::findOrFail($id);
+        $logs = $tracing->pause_logs ?? [];
+        $logs[] = ['time' => now(), 'reason' => $request->reason];
+        $session_logs = $tracing->session_logs ?? [];
+        $session_logs[] = ['event' => 'pause', 'time' => now(), 'reason' => $request->reason];
+
+        $tracing->update([
+            'status' => 'paused',
+            'pause_reason' => $request->reason,
+            'pause_count' => $tracing->pause_count + 1,
+            'pause_logs' => $logs,
+            'session_logs' => $session_logs,
+        ]);
+        return redirect()->back()->with('success', 'Tracing paused successfully');
+    }
+
+    public function resumeTracing(Request $request, $id)
+    {
+        $tracing = ProjectTracing::findOrFail($id);
+        $session_logs = $tracing->session_logs ?? [];
+        $session_logs[] = ['event' => 'resume', 'time' => now()];
+
+        $tracing->update([
+            'status' => 'working',
+            'session_logs' => $session_logs,
+        ]);
+        return redirect()->back()->with('success', 'Tracing resumed successfully');
+    }
+
+    public function restTracing(Request $request, $id)
+    {
+        $tracing = ProjectTracing::findOrFail($id);
+        $logs = $tracing->rest_logs ?? [];
+        $logs[] = ['start' => now()];
+        $session_logs = $tracing->session_logs ?? [];
+        $session_logs[] = ['event' => 'rest', 'time' => now()];
+
+        $tracing->update([
+            'status' => 'resting',
+            'rest_count' => $tracing->rest_count + 1,
+            'rest_logs' => $logs,
+            'session_logs' => $session_logs,
+        ]);
+        return redirect()->back()->with('success', 'Tracing rested successfully');
+    }
+
+    public function endTracing(Request $request, $id)
+    {
+        $tracing = ProjectTracing::findOrFail($id);
+        $session_logs = $tracing->session_logs ?? [];
+        $session_logs[] = ['event' => 'end', 'time' => now()];
+
+        $total_working_time = now()->diffInSeconds($tracing->start_time);
+
+        $tracing->update([
+            'status' => 'ended',
+            'end_time' => now(),
+            'total_working_time' => $total_working_time,
+            'project_report' => $request->project_report,
+            'session_logs' => $session_logs,
+        ]);
+        return redirect()->back()->with('success', 'Tracing ended successfully');
+    }
+
+    public function getTracingCalendar(Request $request)
+    {
+        $userId = Auth::id();
+        $month = $request->month ?? now()->month;
+        $year = $request->year ?? now()->year;
+
+        $records = ProjectTracing::where('user_id', $userId)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->get();
+
+        return redirect()->back()->with('success', 'Tracing calendar fetched successfully');
+    }
+
+
 
 
     }

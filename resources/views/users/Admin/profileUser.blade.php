@@ -205,123 +205,236 @@
     </div>
   </div>
 
+  <!-- Project Tracing Section for Admin View -->
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mt-4">
+          <div class="card-header pb-0 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+            <div>
+              <h6 class="mb-1">Project Tracing Recap</h6>
+              <form method="GET" action="" class="d-flex align-items-center mt-2" style="gap: 0.75rem;">
+                <div style="display: flex; gap: 0.75rem;">
+                  <select name="month" id="month" class="form-select form-select-sm" style="min-width: 110px;" onchange="this.form.submit()">
+                    @foreach($monthsList as $m)
+                      <option value="{{ $m['num'] }}" {{ $selectedMonth == $m['num'] ? 'selected' : '' }}>{{ $m['name'] }}</option>
+                    @endforeach
+                  </select>
+                  <select name="year" id="year" class="form-select form-select-sm" style="min-width: 90px;" onchange="this.form.submit()">
+                    @foreach($availableYears as $year)
+                      <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="mt-3 mt-md-0">
+              <span class="badge bg-primary fs-12 p-3 shadow-sm" style="font-size:0.8rem; letter-spacing:1px;">Average Tracing Time: <span class="fw-bold">{{ $averageTracingTimeFormatted }}</span></span>
+              <span class="text-muted ms-2">({{ $tracingCount }} sessions, total: {{ gmdate('H:i:s', $totalTracingTime) }})</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="mb-4">
+              <div style="overflow-x: auto; width: 100%;">
+                <canvas id="tracingChart" style="min-width:600px;" height="150"></canvas>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Total Working Time</th>
+                    <th>Project Report</th>
+                    <th>Pause Count</th>
+                    <th>Rest Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @forelse($endedTracings as $tracing)
+                    <tr>
+                      <td>{{ \Carbon\Carbon::parse($tracing->date)->format('d/m/Y') }}</td>
+                      <td>{{ gmdate('H:i:s', $tracing->total_working_time) }}</td>
+                      <td>{{ $tracing->project_report }}</td>
+                      <td>{{ $tracing->pause_count }}</td>
+                      <td>{{ $tracing->rest_count }}</td>
+                    </tr>
+                  @empty
+                    <tr>
+                      <td colspan="5" class="text-center">No tracing records found.</td>
+                    </tr>
+                  @endforelse
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <script>
- const ctx = document.getElementById('myChart').getContext('2d');
-
-const months = @json($months);
-const totals = @json($totals);
-const selectedYear = @json($selectedYear);
-
-// Format the month labels for x-axis (short format: Jan 25, Feb 25)
-const formattedLabels = months.map(month => {
-    const date = new Date(month);
-    return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-});
-
-// Format for tooltip (full format: January 2025, February 2025)
-const fullMonthLabels = months.map(month => {
-    const date = new Date(month);
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-});
-
-new Chart(ctx, {
-    type: 'bar',
-    data: {
+    // Statistic Project Chart (monthly project count)
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const months = @json($months);
+    const totals = @json($totals);
+    const selectedYear = @json($selectedYear);
+    // Format the month labels for x-axis (short format: Jan 25, Feb 25)
+    const formattedLabels = months.map(month => {
+      const date = new Date(month);
+      return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+    });
+    // Format for tooltip (full format: January 2025, February 2025)
+    const fullMonthLabels = months.map(month => {
+      const date = new Date(month);
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    });
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
         labels: formattedLabels,
         datasets: [{
-            label: `Total Projects (${selectedYear})`,
-            data: totals,
-            borderWidth: 0,
-            backgroundColor: 'rgba(255, 154, 154)',
-            borderRadius: 8,
-            borderSkipped: false,
-            barPercentage: 0.7,
-            categoryPercentage: 0.8
+          label: `Total Projects (${selectedYear})`,
+          data: totals,
+          borderWidth: 0,
+          backgroundColor: 'rgba(255, 154, 154)',
+          borderRadius: 8,
+          borderSkipped: false,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
         }]
-    },
-    options: {
+      },
+      options: {
         scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 1,
-                    precision: 0,
-                    font: {
-                        family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                        size: 12
-                    }
-                },
-                grid: {
-                    display: true,
-                    color: 'rgba(0, 0, 0, 0.05)',
-                    drawBorder: false
-                }
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+              precision: 0,
+              font: {
+                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                size: 12
+              }
             },
-            x: {
-                grid: {
-                    display: false,
-                    drawBorder: false
-                },
-                ticks: {
-                    font: {
-                        family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                        size: 12
-                    }
-                }
+            grid: {
+              display: true,
+              color: 'rgba(0, 0, 0, 0.05)',
+              drawBorder: false
             }
+          },
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              font: {
+                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                size: 12
+              }
+            }
+          }
         },
         responsive: true,
         plugins: {
-            tooltip: {
-                enabled: true,
-                position: 'nearest',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                titleColor: '#333',
-                titleFont: {
-                    family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                    size: 14,
-                    weight: '600'
-                },
-                bodyColor: '#666',
-                bodyFont: {
-                    family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                    size: 13
-                },
-                padding: 12,
-                cornerRadius: 12,
-                displayColors: false,
-                borderColor: 'rgba(0, 0, 0, 0.1)',
-                borderWidth: 1,
-                callbacks: {
-                    title: function(tooltipItems) {
-                        const index = tooltipItems[0].dataIndex;
-                        return fullMonthLabels[index];
-                    },
-                    label: function(context) {
-                        return `Total Projects: ${context.parsed.y}`;
-                    }
-                }
+          tooltip: {
+            enabled: true,
+            position: 'nearest',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            titleColor: '#333',
+            titleFont: {
+              family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+              size: 14,
+              weight: '600'
             },
-            title: {
-                display: false
+            bodyColor: '#666',
+            bodyFont: {
+              family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+              size: 13
             },
-            legend: {
-                display: false
+            padding: 12,
+            cornerRadius: 12,
+            displayColors: false,
+            borderColor: 'rgba(0, 0, 0, 0.1)',
+            borderWidth: 1,
+            callbacks: {
+              title: function(tooltipItems) {
+                const index = tooltipItems[0].dataIndex;
+                return fullMonthLabels[index];
+              },
+              label: function(context) {
+                return `Total Projects: ${context.parsed.y}`;
+              }
             }
+          },
+          title: {
+            display: false
+          },
+          legend: {
+            display: false
+          }
         },
         animation: {
-            duration: 1000,
-            easing: 'easeInOutQuart'
+          duration: 1000,
+          easing: 'easeInOutQuart'
         },
         interaction: {
-            intersect: false,
-            mode: 'index'
+          intersect: false,
+          mode: 'index'
         }
-    }
-});
+      }
+    });
+    // Tracing Chart
+    const tracingChartLabels = @json($chartLabels);
+    const tracingChartData = @json($chartData);
+    const ctxTracing = document.getElementById('tracingChart').getContext('2d');
+    new Chart(ctxTracing, {
+      type: 'bar',
+      data: {
+        labels: tracingChartLabels,
+        datasets: [{
+          label: 'Working Time (hours)',
+          data: tracingChartData,
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
+          borderRadius: 8,
+          borderSkipped: false,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Hours' },
+            ticks: { stepSize: 1, precision: 0 }
+          },
+          x: {
+            title: { display: true, text: 'Date' }
+          }
+        },
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Working Time: ${context.parsed.y} hours`;
+              }
+            }
+          }
+        },
+        animation: {
+          duration: 1000,
+          easing: 'easeInOutQuart'
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        }
+      }
+    });
   </script>
 @endsection
 

@@ -32,6 +32,18 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link {{ (Route::is('talent#projectTracing') ? 'active' : '') }}" href="{{ route('talent#projectTracing') }}">
+          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+            <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <title>clock</title>
+                <path fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM11 6h2v6h4v2h-6V6z"/>
+            </svg>
+          </div>
+          <span class="nav-link-text ms-1">Project Tracing</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link {{ (Route::is('talent#projectOverview') ? 'active' : '') }}" href="{{ route('talent#projectOverview') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

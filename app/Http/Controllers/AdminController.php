@@ -710,9 +710,35 @@ class AdminController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate(3);
 
+        // --- Project Tracing for this user ---
+        $selectedMonth = request('month', now()->month);
+        $selectedYear = request('year', now()->year); // already used for year filter
+        $projectTracings = \App\Models\ProjectTracing::where('user_id', $userData->id)
+            ->whereYear('date', $selectedYear)
+            ->whereMonth('date', $selectedMonth)
+            ->orderBy('date', 'desc')
+            ->get();
+        $endedTracings = $projectTracings->where('status', 'ended');
+        $totalTracingTime = $endedTracings->sum('total_working_time');
+        $tracingCount = $endedTracings->count();
+        $averageTracingTime = $tracingCount > 0 ? $totalTracingTime / $tracingCount : 0;
+        $averageTracingTimeFormatted = gmdate('H:i:s', $averageTracingTime);
+        // Chart data: labels (dates) and working times (in hours)
+        $chartLabels = $endedTracings->map(function($t) { return \Carbon\Carbon::parse($t->date)->format('d M'); });
+        $chartData = $endedTracings->map(function($t) { return round($t->total_working_time / 3600, 2); });
+        // --- End Project Tracing ---
+
+        // Prepare months for dropdown (1-12)
+        $monthsList = collect(range(1, 12))->map(function($m) { return [
+            'num' => $m,
+            'name' => \Carbon\Carbon::create()->month($m)->format('F')
+        ]; });
+
         return view('users.Admin.profileUser', compact(
             'userData', 'adminData', 'notification', 'talent', 'talentQc',
-            'months', 'totals', 'projectOverview', 'availableYears', 'selectedYear'
+            'months', 'totals', 'projectOverview', 'availableYears', 'selectedYear',
+            'projectTracings', 'endedTracings', 'averageTracingTimeFormatted', 'tracingCount', 'totalTracingTime',
+            'selectedMonth', 'monthsList', 'chartLabels', 'chartData'
         ));
     }
 
